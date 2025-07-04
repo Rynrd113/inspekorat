@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+
+class AuthController extends Controller
+{
+    /**
+     * Show login form
+     */
+    public function showLoginForm(): View
+    {
+        return view('admin.auth.login');
+    }
+
+    /**
+     * Handle login
+     */
+    public function login(LoginRequest $request): RedirectResponse
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            
+            // Check if user is admin
+            if (!$user->isAdmin()) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Akses ditolak. Hanya admin yang bisa login.',
+                ]);
+            }
+
+            $request->session()->regenerate();
+            
+            // Generate API token for admin panel usage
+            $token = $user->createToken('admin-panel')->plainTextToken;
+            
+            // Store token in session for JavaScript access
+            session([
+                'admin_token' => $token,
+                'user_data' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role
+                ]
+            ]);
+
+            return redirect()->intended(route('admin.dashboard'))
+                ->with('success', 'Selamat datang, ' . $user->name);
+        }
+
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ])->onlyInput('email');
+    }
+
+    /**
+     * Handle logout
+     */
+    public function logout(Request $request): RedirectResponse
+    {
+        // Revoke all tokens for the user
+        if (Auth::user()) {
+            Auth::user()->tokens()->delete();
+        }
+        
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        // Remove admin token from session
+        $request->session()->forget('admin_token');
+
+        return redirect()->route('admin.login')
+            ->with('success', 'Anda telah logout.');
+    }
+}
