@@ -1,5 +1,5 @@
 # 🏛️ Panduan Instalasi Portal Inspektorat Papua Tengah
-## Untuk Windows dengan Laragon (MySQL + PHP 8.3 + phpMyAdmin + Node.js)
+## Untuk Windows dengan Laragon (MySQL + PHP 8.3 + HeidiSQL + Node.js)
 
 ---
 
@@ -149,11 +149,18 @@ npm install -g yarn
    - ✅ **MySQL** (Database)
    - ✅ **PHP 8.3** aktif
 
-#### B. Verifikasi phpMyAdmin
+#### B. Verifikasi HeidiSQL
 1. **Klik tombol "Database"** di Laragon
-2. **phpMyAdmin** akan terbuka di browser
+2. **HeidiSQL** akan terbuka (aplikasi desktop)
 3. **Login** tanpa password (default Laragon)
 4. **Pastikan bisa akses** database interface
+
+> **📝 Catatan HeidiSQL:**
+> - HeidiSQL adalah client database desktop yang lebih powerful dari phpMyAdmin
+> - Interface mirip dengan MySQL Workbench tetapi lebih ringan
+> - Mendukung multiple database types (MySQL, MariaDB, PostgreSQL, SQLite)
+> - Fitur advanced: query builder, data export/import, user management
+> - Shortcut penting: F5 (refresh), F9 (execute query), Ctrl+T (new tab)
 
 #### C. Test PHP dan Extensions
 1. **Klik Menu** > **Tools** > **Terminal**
@@ -276,13 +283,13 @@ npm install -g yarn
 #### A. Buat Database Baru
 1. **Pastikan Laragon running** (Apache & MySQL hijau)
 2. **Klik tombol "Database"** di Laragon
-3. **phpMyAdmin terbuka** di browser
-4. **Klik tab "Databases"** di menu atas
-5. **Buat database baru**:
+3. **HeidiSQL terbuka** (aplikasi desktop)
+4. **Buat database baru**:
+   - **Klik kanan** pada sidebar kiri (session) → **Create new** → **Database**
    - **Database name**: `portal_inspektorat`
    - **Collation**: `utf8mb4_unicode_ci` (pilih dari dropdown)
-6. **Klik "Create"**
-7. **Verifikasi**: Database muncul di sidebar kiri
+5. **Klik "OK"**
+6. **Verifikasi**: Database muncul di sidebar kiri
 
 #### B. Konfigurasi Environment File
 1. **Buka file `.env`** dengan Notepad++ atau VS Code
@@ -352,9 +359,9 @@ npm install -g yarn
    php artisan migrate:fresh --seed
    ```
 
-#### F. Verifikasi di phpMyAdmin
-1. **Refresh phpMyAdmin**
-2. **Klik database** `portal_inspektorat`
+#### F. Verifikasi di HeidiSQL
+1. **Refresh HeidiSQL** (F5 atau klik refresh button)
+2. **Klik database** `portal_inspektorat` di sidebar
 3. **Pastikan tabel-tabel sudah ada**:
    - ✅ users
    - ✅ pengaduans (atau wbs)
@@ -362,6 +369,13 @@ npm install -g yarn
    - ✅ web_portals
    - ✅ migrations
    - ✅ dll sesuai project
+
+> **💡 Tips HeidiSQL:**
+> - **Double-click tabel** untuk melihat data
+> - **Tab "Data"** untuk browse records
+> - **Tab "Query"** untuk menjalankan SQL custom
+> - **Klik kanan tabel** → Export untuk backup data
+> - **Tools** → **Export database as SQL** untuk backup lengkap
 
 ---
 
@@ -465,7 +479,7 @@ npm install -g yarn
    - [ ] **Data tersimpan** ke database
 
 #### C. Test Database Connection
-1. **Buka phpMyAdmin**: Klik "Database" di Laragon
+1. **Buka HeidiSQL**: Klik "Database" di Laragon
 2. **Cek database** `portal_inspektorat`:
    - [ ] **Semua tabel** ada (users, web_portals, info_kantors, dll)
    - [ ] **Data seeder** tersimpan (jika ada)
@@ -531,6 +545,32 @@ php artisan config:clear
 1. **Klik kanan folder** `storage` → Properties → Security
 2. **Edit** → Add "Everyone" → Full Control
 3. **Ulangi untuk** `bootstrap/cache`
+
+#### **Error: HeidiSQL tidak bisa connect ke database**
+**Gejala**: "Can't connect to MySQL server" atau connection timeout
+**Solusi**:
+1. **Pastikan MySQL running** di Laragon (hijau)
+2. **Cek connection settings** di HeidiSQL:
+   - Hostname: `127.0.0.1` atau `localhost`
+   - Port: `3306`
+   - User: `root`
+   - Password: `(kosong)`
+3. **Test connection** dengan tombol "Open" di HeidiSQL
+4. **Restart MySQL service** di Laragon jika perlu
+
+#### **Error: HeidiSQL tidak terbuka dari Laragon**
+**Gejala**: Klik "Database" tidak membuka HeidiSQL
+**Solusi**:
+1. **Buka HeidiSQL manual** dari Start Menu
+2. **Create new connection** dengan settings:
+   ```
+   Network type: MySQL (TCP/IP)
+   Hostname/IP: 127.0.0.1
+   Port: 3306
+   User: root
+   Password: (blank)
+   ```
+3. **Save connection** dengan nama "Laragon Local"
 
 #### **Error: Database connection refused**
 **Gejala**: `SQLSTATE[HY000] [2002] Connection refused`
@@ -703,8 +743,8 @@ Support: "Ketik: composer install"
 ##### **TAHAP 5: Database Setup (10 menit)**
 ```
 Support: "Klik Database di Laragon"
-Support: "phpMyAdmin terbuka di browser"
-Support: "Tab Databases > Create database"
+Support: "HeidiSQL terbuka - aplikasi desktop"
+Support: "Klik kanan di sidebar > Create new > Database"
 Support: "Nama: portal_inspektorat"
 Support: "Collation: utf8mb4_unicode_ci"
 ```
@@ -795,7 +835,7 @@ Port Error: "Ketik: php artisan serve --port=8080"
 ### **Default Access URLs:**
 - **🏠 Frontend**: `http://localhost:8000`
 - **⚙️ Admin Panel**: `http://localhost:8000/admin`
-- **🗄️ Database**: phpMyAdmin via tombol "Database" di Laragon
+- **🗄️ Database**: HeidiSQL via tombol "Database" di Laragon
 - **📊 Logs**: `storage/logs/laravel.log`
 
 ### **Default Login Credentials:**
@@ -817,12 +857,19 @@ git pull origin main
 composer install
 php artisan migrate
 
-# Backup database
+# Backup database (via Laravel)
 php artisan backup:run
 
 # Clear cache saat update
 php artisan optimize:clear
 ```
+
+### **Database Backup dengan HeidiSQL:**
+1. **Buka HeidiSQL** → Klik "Database" di Laragon
+2. **Klik kanan database** `portal_inspektorat`
+3. **Export database as SQL** → Pilih lokasi save
+4. **Atau via Tools** → **Export database as SQL** untuk backup lengkap
+5. **Untuk restore**: **File** → **Load SQL file** → Pilih file backup
 
 ---
 
