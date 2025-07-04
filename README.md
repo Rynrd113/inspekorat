@@ -218,7 +218,6 @@ Untuk pertanyaan teknis atau dukungan:
 
 - **Dokumentasi**: [INSTALL.md](INSTALL.md) | [DEVELOPER.md](DEVELOPER.md)
 - **Issues**: [GitHub Issues](https://github.com/your-repo/portal-inspektorat/issues)
-- **Email**: developer@paputengah.go.id
 
 ## 🎉 Acknowledgments
 
