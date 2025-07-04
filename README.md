@@ -1,172 +1,311 @@
-# Portal Inspektorat Papua Tengah
+<div align="center">
 
-Portal Informasi Pemerintahan resmi Inspektorat Provinsi Papua Tengah yang dibangun dengan teknologi modern untuk menyediakan akses mudah terhadap informasi publik, berita, dan layanan Whistleblower System (WBS).
+# 🏛️ Portal Inspektorat Papua Tengah
 
-## 🌟 Fitur Utama
+<img src="https://via.placeholder.com/150x150/2563EB/FFFFFF?text=PT" alt="Logo Papua Tengah" width="150" height="150">
 
-### 📰 Portal Berita
-- **Homepage Preview**: 5 berita terbaru dengan filter interaktif (Terbaru/Terpopuler)
-- **Halaman Daftar Lengkap**: Semua berita dengan search, filter kategori, dan pagination
-- **Halaman Detail**: Konten lengkap dengan social sharing dan berita terkait
-- **Admin Panel**: CRUD lengkap untuk manajemen berita
+**Portal Informasi Pemerintahan Resmi**  
+*Inspektorat Provinsi Papua Tengah*
 
-### 🛡️ Whistleblower System (WBS)
-- **Form Pelaporan**: Interface user-friendly untuk submit laporan
-- **Multiple Input Types**: Text, file upload, dan berbagai jenis laporan
-- **Admin Management**: Panel admin untuk review dan tindak lanjut laporan
-- **Status Tracking**: Monitoring status laporan
+[![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel)](https://laravel.com)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
+[![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=for-the-badge&logo=php)](https://php.net)
+[![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
 
-### 🏢 Info Kantor
-- **Informasi Kontak**: Alamat, telepon, email, jam operasional
-- **Lokasi**: Koordinat dan link maps
-- **Static Display**: Tampil otomatis di homepage
+---
 
-### 🎨 Desain Modern
-- **Responsive Design**: Optimal di desktop, tablet, dan mobile
-- **Hero Slider**: 3 slide dengan auto-play dan navigasi
-- **Blue Color Scheme**: Konsisten dengan branding pemerintahan
-- **Accessibility**: Desain yang mudah diakses semua kalangan
+*Portal modern untuk transparansi pemerintahan dengan akses mudah terhadap informasi publik, berita terkini, dan sistem pelaporan Whistleblower (WBS)*
 
-## 🚀 Teknologi
+</div>
 
-- **Backend**: Laravel 12 (PHP 8.3+)
-- **Frontend**: Blade Templates + Tailwind CSS + Vanilla JavaScript
-- **Database**: MySQL/PostgreSQL
-- **Authentication**: Laravel Sanctum
-- **Build Tool**: Vite
-- **Icons**: Font Awesome 6.5.1
+## 🌟 Fitur Unggulan
 
-## 📋 Quick Start
+<table>
+<tr>
+<td width="50%">
 
-### Untuk User/Installer
+### 📰 **Portal Berita Interaktif**
+- 🏠 **Homepage Preview**: 5 berita terbaru dengan filter real-time
+- 📋 **Daftar Lengkap**: Search, filter kategori & pagination
+- 📄 **Detail Artikel**: Konten lengkap + social sharing
+- ⚙️ **Admin Panel**: CRUD management yang powerful
+
+</td>
+<td width="50%">
+
+### 🛡️ **Whistleblower System (WBS)**
+- 📝 **Form Pelaporan**: Interface yang user-friendly
+- 📎 **Multiple Input**: Text, file upload & berbagai jenis
+- 👨‍💼 **Admin Management**: Review & tindak lanjut laporan
+- 📊 **Status Tracking**: Monitor progress laporan
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🏢 **Info Kantor Lengkap**
+- 📞 **Kontak Detail**: Alamat, telepon, email, jam kerja
+- 🗺️ **Lokasi**: Koordinat GPS & integrasi maps
+- 🖥️ **Auto Display**: Tampil otomatis di homepage
+
+</td>
+<td width="50%">
+
+### 🎨 **Desain Modern & Responsive**
+- 📱 **Multi-Device**: Desktop, tablet, mobile optimized
+- 🎠 **Hero Slider**: 3 slide auto-play dengan navigasi
+- 🔵 **Blue Theme**: Konsisten dengan branding pemerintah
+- ♿ **Accessibility**: Mudah diakses semua kalangan
+
+</td>
+</tr>
+</table>
+
+## 🚀 Stack Teknologi
+
+<div align="center">
+
+| Kategori | Teknologi | Versi | Deskripsi |
+|----------|-----------|-------|-----------|
+| 🖥️ **Backend** | Laravel | 12.x | PHP Framework Modern |
+| 🎨 **Frontend** | Tailwind CSS | 3.x | Utility-First CSS Framework |
+| 🔧 **Build Tool** | Vite | 5.x | Fast Development Build Tool |
+| 🗄️ **Database** | MySQL/PostgreSQL | 8.0+/13+ | Relational Database |
+| 🔐 **Auth** | Laravel Sanctum | Built-in | API Token Authentication |
+| 📱 **JavaScript** | Vanilla JS | ES6+ | Modern JavaScript |
+| 🎯 **Icons** | Font Awesome | 6.5.1 | Icon Library |
+| 🐘 **PHP** | PHP | 8.3+ | Server-side Language |
+
+</div>
+
+## � Quick Start
+
+<details>
+<summary><b>📥 Untuk User/Installer (Klik untuk expand)</b></summary>
+
+### 1️⃣ Download & Setup
 ```bash
-# 1. Clone/Download project
+# Clone project
 git clone https://github.com/your-repo/portal-inspektorat.git
 cd portal-inspektorat
 
-# 2. Install dependencies
-composer install
-npm install
+# Install dependencies
+composer install && npm install
+```
 
-# 3. Setup environment
+### 2️⃣ Konfigurasi Environment
+```bash
+# Copy environment file
 cp .env.example .env
+
+# Generate application key
 php artisan key:generate
+```
 
-# 4. Setup database
-php artisan migrate --seed
+### 3️⃣ Setup Database
+```bash
+# Edit .env file dengan kredensial database Anda
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=portal_inspektorat
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
 
-# 5. Build assets & run
+### 4️⃣ Migrasi & Seeding
+```bash
+# Jalankan migrasi database
+php artisan migrate
+
+# Insert sample data
+php artisan db:seed
+```
+
+### 5️⃣ Build & Run
+```bash
+# Build assets
 npm run build
+
+# Start development server
 php artisan serve
 ```
 
-**🔗 Akses aplikasi di**: http://localhost:8000  
-**🔐 Login admin**: http://localhost:8000/admin/login  
-- Email: `admin@admin.com`  
-- Password: `password`
+### 6️⃣ Access Portal
+- 🌐 **Frontend**: http://localhost:8000
+- 👨‍💼 **Admin Panel**: http://localhost:8000/admin
+- 🔑 **Login**: admin@papuatengah.go.id / password
 
-### Dokumentasi Lengkap
-- **📖 [Panduan Instalasi](INSTALL.md)** - Dokumentasi lengkap untuk user dan administrator
-- **🛠️ [Developer Guide](DEVELOPER.md)** - Dokumentasi teknis untuk developer
+</details>
+
+<details>
+<summary><b>👨‍💻 Untuk Developer (Klik untuk expand)</b></summary>
+
+### Development Mode
+```bash
+# Install dependencies
+composer install
+npm install
+
+# Environment setup
+cp .env.example .env
+php artisan key:generate
+
+# Database setup
+php artisan migrate --seed
+
+# Start development servers
+php artisan serve          # Backend (Terminal 1)
+npm run dev                # Frontend (Terminal 2)
+```
+
+### Build Production
+```bash
+# Optimize untuk production
+composer install --optimize-autoloader --no-dev
+npm run build
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+</details>
+
+## 📚 Dokumentasi Lengkap
+
+<div align="center">
+
+| 📖 Dokumen | 🎯 Target | 📝 Deskripsi |
+|------------|-----------|--------------|
+| **[📥 INSTALL.md](INSTALL.md)** | 👤 User/Installer | Panduan lengkap instalasi step-by-step |
+| **[👨‍💻 DEVELOPER.md](DEVELOPER.md)** | 🔧 Developer | Guide development, customization & deployment |
+| **[🗄️ DATABASE.md](DATABASE.md)** | 📊 Database Admin | Import database, troubleshooting & FAQ |
+| **[📋 CHANGELOG.md](CHANGELOG.md)** | 📈 Project Manager | History versi dan update fitur |
+
+</div>
+
+---
+
+## ⚡ Fitur Demo
+
+<details>
+<summary><b>🎬 Screenshot & Preview (Klik untuk lihat)</b></summary>
+
+### 🏠 Homepage
+- Hero slider dengan 3 slide auto-play
+- Preview 5 berita terbaru dengan filter interaktif
+- Info kantor dan kontak lengkap
+- Design responsive dan modern
+
+### 📰 Portal Berita
+- Halaman daftar lengkap dengan pagination
+- Search dan filter berdasarkan kategori
+- Detail artikel dengan social sharing
+- Berita terkait dan navigasi antar artikel
+
+### 🛡️ Whistleblower System
+- Form pelaporan yang user-friendly
+- Upload file dan berbagai jenis input
+- Admin panel untuk manajemen laporan
+- Tracking status laporan
+
+### 👨‍� Admin Panel
+- Dashboard dengan statistik
+- CRUD management untuk semua konten
+- User management dan permission
+- Monitoring dan reporting
+
+</details>
+
+---
 
 ## 🏗️ Struktur Project
+
+<details>
+<summary><b>📁 Folder Structure (Klik untuk expand)</b></summary>
 
 ```
 portal-inspektorat/
 ├── 📁 app/
-│   ├── Http/Controllers/
-│   │   ├── Admin/              # Admin panel controllers
-│   │   └── PublicController.php # Public pages controller
-│   └── Models/                 # Database models
-├── 📁 resources/
-│   ├── views/
-│   │   ├── public/             # Public pages (homepage, berita, wbs)
-│   │   ├── admin/              # Admin panel pages  
-│   │   └── layouts/            # Layout templates
-│   ├── css/                    # Tailwind CSS
-│   └── js/                     # JavaScript components
-├── 📁 routes/
-│   ├── web.php                 # Web routes
-│   └── api.php                 # API routes
+│   ├── 📁 Http/Controllers/     # Controllers
+│   ├── 📁 Models/               # Eloquent Models
+│   └── 📁 Providers/            # Service Providers
 ├── 📁 database/
-│   ├── migrations/             # Database schema
-│   └── seeders/                # Sample data
-├── 📄 INSTALL.md               # Dokumentasi instalasi
-├── 📄 DEVELOPER.md             # Dokumentasi developer
-└── 📄 README.md                # File ini
+│   ├── 📄 database.sqlite       # SQLite Development DB
+│   ├── 📄 portal_inspektorat_mysql.sql  # MySQL Production DB
+│   ├── 📁 migrations/           # Database Migrations
+│   └── 📁 seeders/              # Sample Data Seeders
+├── 📁 resources/
+│   ├── 📁 css/                  # Stylesheets
+│   ├── 📁 js/                   # JavaScript Files
+│   └── 📁 views/                # Blade Templates
+├── 📁 routes/
+│   ├── 📄 web.php               # Web Routes
+│   └── 📄 api.php               # API Routes
+├── 📁 public/                   # Public Assets
+├── 📄 README.md                 # This file
+├── 📄 INSTALL.md                # Installation Guide
+├── 📄 DEVELOPER.md              # Developer Guide
+├── 📄 DATABASE.md               # Database Guide
+└── 📄 CHANGELOG.md              # Version History
 ```
 
-## 🎯 Use Cases
+</details>
 
-### 👥 Untuk Masyarakat
-- **Membaca Berita**: Akses informasi terbaru dari Inspektorat
-- **Mencari Informasi**: Search dan filter berita berdasarkan kategori
-- **Melaporkan Dugaan**: Submit laporan melalui WBS secara anonim
-- **Kontak Kantor**: Mendapatkan informasi kontak dan lokasi
+---
 
-### 👨‍💼 Untuk Admin
-- **Manajemen Berita**: Tambah, edit, hapus, dan publish berita
-- **Review Laporan WBS**: Monitor dan tindak lanjut laporan masuk
-- **Dashboard Analytics**: Overview statistik dan aktivitas website
-- **User Management**: Kelola akses admin panel
+## 💡 Tips & Best Practices
 
-### 👩‍💻 Untuk Developer
-- **Customization**: Mudah mengubah logo, warna, dan konten
-- **Extensible**: Arsitektur modular untuk penambahan fitur
-- **API Ready**: RESTful API untuk integrasi mobile app
-- **Performance**: Optimized untuk load time dan SEO
+<div align="center">
 
-## 🔧 Customization
+### 🚀 **Performance**
+> Gunakan `php artisan optimize` untuk production  
+> Enable caching untuk performa optimal
 
-### Mengubah Logo
-```bash
-# 1. Ganti file logo
-public/logo.svg          # Logo utama
-public/favicon.ico       # Favicon
+### 🔒 **Security**
+> Update dependencies secara rutin  
+> Gunakan HTTPS di production
 
-# 2. Update di layout
-resources/views/layouts/app.blade.php
-```
+### 📱 **Responsive**
+> Test di berbagai device  
+> Optimize untuk mobile-first
 
-### Mengubah Warna Tema
-```bash
-# 1. Edit Tailwind config
-tailwind.config.js
+### 🔧 **Maintenance**
+> Backup database secara rutin  
+> Monitor log untuk error
 
-# 2. Update CSS variables
-resources/css/app.css
+</div>
 
-# 3. Rebuild assets
-npm run build
-```
+---
 
-### Menambah Fitur Baru
-```bash
-# 1. Generate model & controller
-php artisan make:model NewFeature -mcr
+## 🤝 Kontribusi & Support
 
-# 2. Add routes
-routes/web.php
+<div align="center">
 
-# 3. Create views
-resources/views/admin/new-feature/
-```
+### 📞 **Support**
+📧 Email: admin@papuatengah.go.id  
+🌐 Website: https://inspektorat.papuatengah.go.id  
+📱 Telepon: (021) 123-4567
 
-Lihat **[DEVELOPER.md](DEVELOPER.md)** untuk panduan customization lengkap.
+### 👥 **Tim Pengembang**
+🏢 **Inspektorat Provinsi Papua Tengah**  
+📍 Jl. Contoh No. 123, Papua Tengah
 
-## 📱 Screenshots
+### 📄 **Lisensi**
+Project ini dikembangkan untuk kepentingan publik  
+© 2025 Inspektorat Provinsi Papua Tengah
 
-### Homepage
-- Hero slider dengan 3 slide auto-play
-- Section berita dengan filter Terbaru/Terpopuler
-- Info kantor dan layanan pintasan
+</div>
 
-### Halaman Berita
-- Grid layout responsive dengan search & filter
-- Pagination untuk handling banyak data
-- Category filter dan sort options
+---
 
-### Admin Panel
+<div align="center">
+
+**⭐ Jika project ini bermanfaat, jangan lupa berikan star! ⭐**
+
+</div>
+
 - Dashboard dengan statistik
 - CRUD berita dengan rich editor
 - Management laporan WBS
