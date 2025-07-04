@@ -1,23 +1,237 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Portal Inspektorat Papua Tengah
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Portal Informasi Pemerintahan resmi Inspektorat Provinsi Papua Tengah yang dibangun dengan teknologi modern untuk menyediakan akses mudah terhadap informasi publik, berita, dan layanan Whistleblower System (WBS).
 
-## About Laravel
+## 🌟 Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 📰 Portal Berita
+- **Homepage Preview**: 5 berita terbaru dengan filter interaktif (Terbaru/Terpopuler)
+- **Halaman Daftar Lengkap**: Semua berita dengan search, filter kategori, dan pagination
+- **Halaman Detail**: Konten lengkap dengan social sharing dan berita terkait
+- **Admin Panel**: CRUD lengkap untuk manajemen berita
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🛡️ Whistleblower System (WBS)
+- **Form Pelaporan**: Interface user-friendly untuk submit laporan
+- **Multiple Input Types**: Text, file upload, dan berbagai jenis laporan
+- **Admin Management**: Panel admin untuk review dan tindak lanjut laporan
+- **Status Tracking**: Monitoring status laporan
+
+### 🏢 Info Kantor
+- **Informasi Kontak**: Alamat, telepon, email, jam operasional
+- **Lokasi**: Koordinat dan link maps
+- **Static Display**: Tampil otomatis di homepage
+
+### 🎨 Desain Modern
+- **Responsive Design**: Optimal di desktop, tablet, dan mobile
+- **Hero Slider**: 3 slide dengan auto-play dan navigasi
+- **Blue Color Scheme**: Konsisten dengan branding pemerintahan
+- **Accessibility**: Desain yang mudah diakses semua kalangan
+
+## 🚀 Teknologi
+
+- **Backend**: Laravel 12 (PHP 8.3+)
+- **Frontend**: Blade Templates + Tailwind CSS + Vanilla JavaScript
+- **Database**: MySQL/PostgreSQL
+- **Authentication**: Laravel Sanctum
+- **Build Tool**: Vite
+- **Icons**: Font Awesome 6.5.1
+
+## 📋 Quick Start
+
+### Untuk User/Installer
+```bash
+# 1. Clone/Download project
+git clone https://github.com/your-repo/portal-inspektorat.git
+cd portal-inspektorat
+
+# 2. Install dependencies
+composer install
+npm install
+
+# 3. Setup environment
+cp .env.example .env
+php artisan key:generate
+
+# 4. Setup database
+php artisan migrate --seed
+
+# 5. Build assets & run
+npm run build
+php artisan serve
+```
+
+**🔗 Akses aplikasi di**: http://localhost:8000  
+**🔐 Login admin**: http://localhost:8000/admin/login  
+- Email: `admin@admin.com`  
+- Password: `password`
+
+### Dokumentasi Lengkap
+- **📖 [Panduan Instalasi](INSTALL.md)** - Dokumentasi lengkap untuk user dan administrator
+- **🛠️ [Developer Guide](DEVELOPER.md)** - Dokumentasi teknis untuk developer
+
+## 🏗️ Struktur Project
+
+```
+portal-inspektorat/
+├── 📁 app/
+│   ├── Http/Controllers/
+│   │   ├── Admin/              # Admin panel controllers
+│   │   └── PublicController.php # Public pages controller
+│   └── Models/                 # Database models
+├── 📁 resources/
+│   ├── views/
+│   │   ├── public/             # Public pages (homepage, berita, wbs)
+│   │   ├── admin/              # Admin panel pages  
+│   │   └── layouts/            # Layout templates
+│   ├── css/                    # Tailwind CSS
+│   └── js/                     # JavaScript components
+├── 📁 routes/
+│   ├── web.php                 # Web routes
+│   └── api.php                 # API routes
+├── 📁 database/
+│   ├── migrations/             # Database schema
+│   └── seeders/                # Sample data
+├── 📄 INSTALL.md               # Dokumentasi instalasi
+├── 📄 DEVELOPER.md             # Dokumentasi developer
+└── 📄 README.md                # File ini
+```
+
+## 🎯 Use Cases
+
+### 👥 Untuk Masyarakat
+- **Membaca Berita**: Akses informasi terbaru dari Inspektorat
+- **Mencari Informasi**: Search dan filter berita berdasarkan kategori
+- **Melaporkan Dugaan**: Submit laporan melalui WBS secara anonim
+- **Kontak Kantor**: Mendapatkan informasi kontak dan lokasi
+
+### 👨‍💼 Untuk Admin
+- **Manajemen Berita**: Tambah, edit, hapus, dan publish berita
+- **Review Laporan WBS**: Monitor dan tindak lanjut laporan masuk
+- **Dashboard Analytics**: Overview statistik dan aktivitas website
+- **User Management**: Kelola akses admin panel
+
+### 👩‍💻 Untuk Developer
+- **Customization**: Mudah mengubah logo, warna, dan konten
+- **Extensible**: Arsitektur modular untuk penambahan fitur
+- **API Ready**: RESTful API untuk integrasi mobile app
+- **Performance**: Optimized untuk load time dan SEO
+
+## 🔧 Customization
+
+### Mengubah Logo
+```bash
+# 1. Ganti file logo
+public/logo.svg          # Logo utama
+public/favicon.ico       # Favicon
+
+# 2. Update di layout
+resources/views/layouts/app.blade.php
+```
+
+### Mengubah Warna Tema
+```bash
+# 1. Edit Tailwind config
+tailwind.config.js
+
+# 2. Update CSS variables
+resources/css/app.css
+
+# 3. Rebuild assets
+npm run build
+```
+
+### Menambah Fitur Baru
+```bash
+# 1. Generate model & controller
+php artisan make:model NewFeature -mcr
+
+# 2. Add routes
+routes/web.php
+
+# 3. Create views
+resources/views/admin/new-feature/
+```
+
+Lihat **[DEVELOPER.md](DEVELOPER.md)** untuk panduan customization lengkap.
+
+## 📱 Screenshots
+
+### Homepage
+- Hero slider dengan 3 slide auto-play
+- Section berita dengan filter Terbaru/Terpopuler
+- Info kantor dan layanan pintasan
+
+### Halaman Berita
+- Grid layout responsive dengan search & filter
+- Pagination untuk handling banyak data
+- Category filter dan sort options
+
+### Admin Panel
+- Dashboard dengan statistik
+- CRUD berita dengan rich editor
+- Management laporan WBS
+
+## 🔒 Security Features
+
+- **Authentication**: Laravel Sanctum untuk admin panel
+- **Input Validation**: Comprehensive server-side validation
+- **CSRF Protection**: Built-in Laravel CSRF protection  
+- **SQL Injection Prevention**: Eloquent ORM dengan prepared statements
+- **XSS Protection**: Blade template escaping
+- **File Upload Security**: Validation dan sanitization
+
+## 🚀 Performance
+
+- **Caching**: Database query caching untuk performa optimal
+- **Asset Optimization**: Minified CSS/JS dengan Vite
+- **Database Indexing**: Proper indexing untuk query cepat
+- **Lazy Loading**: Optimized image dan content loading
+- **CDN Ready**: Asset serving siap untuk CDN
+
+## 📊 Browser Support
+
+- ✅ Chrome 90+
+- ✅ Firefox 88+
+- ✅ Safari 14+
+- ✅ Edge 90+
+- ✅ Mobile Safari (iOS 14+)
+- ✅ Chrome Mobile (Android 10+)
+
+## 🤝 Contributing
+
+Kontribusi sangat diterima! Silakan baca [DEVELOPER.md](DEVELOPER.md) untuk panduan development.
+
+### Development Workflow
+1. Fork repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
+
+## 📄 License
+
+Project ini dikembangkan untuk Inspektorat Provinsi Papua Tengah.
+
+## 📞 Support
+
+Untuk pertanyaan teknis atau dukungan:
+
+- **Dokumentasi**: [INSTALL.md](INSTALL.md) | [DEVELOPER.md](DEVELOPER.md)
+- **Issues**: [GitHub Issues](https://github.com/your-repo/portal-inspektorat/issues)
+- **Email**: developer@paputengah.go.id
+
+## 🎉 Acknowledgments
+
+- **Laravel Framework**: Foundation yang solid untuk web development
+- **Tailwind CSS**: Utility-first CSS framework yang powerful
+- **Font Awesome**: Icon library yang comprehensive
+- **Vite**: Modern build tool untuk asset bundling
+
+---
+
+**Portal Inspektorat Papua Tengah v1.0**  
+Dibangun dengan ❤️ untuk melayani masyarakat Papua Tengah  
+© 2025 Inspektorat Provinsi Papua Tengah
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
