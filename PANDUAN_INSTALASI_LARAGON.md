@@ -1,5 +1,5 @@
 # 🏛️ Panduan Instalasi Portal Inspektorat Papua Tengah
-## Untuk Windows dengan Laragon (MySQL + PHP 8.3 + phpMyAdmin + Node.js)
+## Untuk Windows dengan Laragon (MySQL + PHP 8.3 + HeidiSQL + Node.js)
 
 **⚠️ CATATAN PENTING**: Portal ini menggunakan **MySQL** sebagai database default untuk production. Panduan ini akan setup dengan MySQL.
 
@@ -7,14 +7,12 @@
 
 ## 📋 Daftar Isi
 1. [Instalasi Laragon](#1-instalasi-laragon)
-2. [Setup PHP Multiple Versions](#2-setup-php-multiple-versions)
-3. [Setup Node.js](#3-setup-nodejs)
-4. [Konfigurasi Laragon](#4-konfigurasi-laragon)
-5. [Instalasi Project](#5-instalasi-project)
-6. [Konfigurasi Database](#6-konfigurasi-database)
-7. [Menjalankan Aplikasi](#7-menjalankan-aplikasi)
-8. [Verifikasi Instalasi](#8-verifikasi-instalasi)
-9. [Troubleshooting](#9-troubleshooting)
+2. [Konfigurasi Laragon](#2-konfigurasi-laragon)
+3. [Instalasi Project](#3-instalasi-project)
+4. [Konfigurasi Database](#4-konfigurasi-database)
+5. [Menjalankan Aplikasi](#5-menjalankan-aplikasi)
+6. [Verifikasi Instalasi](#6-verifikasi-instalasi)
+7. [Troubleshooting](#7-troubleshooting)
 
 ---
 
@@ -41,107 +39,19 @@
 
 #### C. First Run Laragon
 1. **Laragon terbuka** pertama kali
-2. **Jangan Start dulu** - kita setup PHP dan Node.js dulu
-3. **Tutup Laragon** sementara
+2. **Laragon sudah include**:
+   - ✅ **PHP 8.3** (sudah built-in)
+   - ✅ **Node.js** (sudah built-in)
+   - ✅ **Apache** Web Server
+   - ✅ **MySQL** Database
+   - ✅ **HeidiSQL** Database Manager
+3. **Siap untuk Start All** - semua tools sudah tersedia
 
 ---
 
-## 2. Setup PHP Multiple Versions
+## 2. Konfigurasi Laragon
 
-### 🐘 Install PHP 8.3 dan Versi Lain
-
-#### A. Download PHP Versions
-1. **Buka Laragon**
-2. **Klik Menu** > **Tools** > **Quick add** > **PHP**
-3. **Download PHP yang dibutuhkan**:
-   - ✅ **PHP 8.3** (untuk project ini)
-   - ✅ **PHP 8.2** (backup compatibility)
-   - ✅ **PHP 8.1** (legacy support)
-
-#### B. Manual Download (jika Quick add tidak work)
-1. **Buka**: `https://windows.php.net/downloads/releases/`
-2. **Download PHP 8.3 Thread Safe**:
-   - File: `php-8.3.x-Win32-vs16-x64.zip`
-   - Extract ke: `C:\laragon\bin\php\php-8.3.x\`
-3. **Download PHP 8.2 Thread Safe**:
-   - File: `php-8.2.x-Win32-vs16-x64.zip`  
-   - Extract ke: `C:\laragon\bin\php\php-8.2.x\`
-
-#### C. Verifikasi PHP Installation
-1. **Buka Laragon**
-2. **Klik Menu** > **PHP** > Pastikan ada:
-   - ✅ php-8.3.x
-   - ✅ php-8.2.x (optional)
-3. **Pilih PHP 8.3** sebagai default
-4. **Restart Laragon** jika diminta
-
-#### D. Konfigurasi PHP 8.3
-1. **Klik Menu** > **PHP** > **php.ini**
-2. **Cari dan pastikan extensions ini aktif** (hilangkan ; di depan):
-   ```ini
-   extension=openssl
-   extension=pdo_mysql
-   extension=mbstring
-   extension=tokenizer
-   extension=xml
-   extension=ctype
-   extension=json
-   extension=bcmath
-   extension=fileinfo
-   extension=gd
-   extension=curl
-   extension=zip
-   ```
-3. **Save file** dan restart Laragon
-
----
-
-## 3. Setup Node.js
-
-### 🟢 Install Node.js untuk Laravel Mix/Vite
-
-#### A. Download Node.js
-1. **Buka**: `https://nodejs.org/`
-2. **Download LTS Version** (Long Term Support)
-   - Recommended: **Node.js 20.x LTS**
-   - File: `node-v20.x.x-x64.msi`
-
-#### B. Install Node.js
-1. **Double click** file installer
-2. **Setup Wizard**:
-   - Welcome: **Next**
-   - License Agreement: **I accept** → **Next**
-   - Destination Folder: Default → **Next**
-   - Custom Setup: **Next** (install semua)
-   - Tools for Native Modules: **✅ Automatically install** → **Next**
-3. **Install** dan tunggu selesai
-4. **Restart komputer** jika diminta
-
-#### C. Verifikasi Node.js
-1. **Buka Command Prompt** (Windows + R → cmd)
-2. **Test Node.js**:
-   ```bash
-   node --version
-   ```
-   Output: `v20.x.x`
-3. **Test NPM**:
-   ```bash
-   npm --version
-   ```
-   Output: `10.x.x`
-
-#### D. Install Global Packages (Optional)
-```bash
-npm install -g @vue/cli
-npm install -g create-react-app
-npm install -g yarn
-```
-
----
-
-## 4. Konfigurasi Laragon
-
-### 🚀 Final Setup Laragon
+### 🚀 Setup Laragon Environment
 
 #### A. Start All Services
 1. **Buka Laragon**
@@ -149,42 +59,68 @@ npm install -g yarn
 3. **Pastikan status**:
    - ✅ **Apache** (Web Server)
    - ✅ **MySQL** (Database)
-   - ✅ **PHP 8.3** aktif
+   - ✅ **PHP 8.3** aktif (built-in)
 
-#### B. Verifikasi phpMyAdmin
+#### B. Verifikasi Tools Built-in
+1. **PHP 8.3**: Sudah include dengan extensions lengkap
+2. **Node.js**: Sudah include untuk frontend assets
+3. **HeidiSQL**: Database manager built-in
+4. **Composer**: Package manager PHP built-in
+
+#### B. Verifikasi Tools Built-in
+1. **PHP 8.3**: Sudah include dengan extensions lengkap
+2. **Node.js**: Sudah include untuk frontend assets
+3. **HeidiSQL**: Database manager built-in
+4. **Composer**: Package manager PHP built-in
+
+#### C. Verifikasi HeidiSQL
 1. **Klik tombol "Database"** di Laragon
-2. **phpMyAdmin** akan terbuka di browser
+2. **HeidiSQL** akan terbuka (aplikasi desktop)
 3. **Login** tanpa password (default Laragon)
 4. **Pastikan bisa akses** database interface
 
-#### C. Test PHP dan Extensions
+> **📝 Catatan HeidiSQL:**
+> - HeidiSQL adalah client database desktop yang lebih powerful dari phpMyAdmin
+> - Interface mirip dengan MySQL Workbench tetapi lebih ringan
+> - Mendukung multiple database types (MySQL, MariaDB, PostgreSQL, SQLite)
+> - Fitur advanced: query builder, data export/import, user management
+> - Shortcut penting: F5 (refresh), F9 (execute query), Ctrl+T (new tab)
+
+#### D. Test PHP dan Extensions (Built-in)
 1. **Klik Menu** > **Tools** > **Terminal**
 2. **Test PHP version**:
-   ```bash
+   ```powershell
    php --version
    ```
    Output harus: `PHP 8.3.x`
 3. **Cek extensions**:
-   ```bash
+   ```powershell
    php -m
    ```
-4. **Pastikan ada extensions**:
+4. **Extensions sudah include**:
    - ✅ openssl, pdo_mysql, mbstring, tokenizer
-   - ✅ xml, ctype, json, bcmath, fileinfo, gd
+   - ✅ xml, ctype, json, bcmath, fileinfo, gd, curl, zip
 
-#### D. Test Composer
+#### E. Test Composer (Built-in)
 1. **Di Terminal Laragon**:
-   ```bash
+   ```powershell
    composer --version
    ```
-2. **Jika belum ada Composer**:
-   - Download: `https://getcomposer.org/Composer-Setup.exe`
-   - Install dengan setup wizard
-   - Restart Command Prompt
+2. **Output expected**: `Composer version 2.x.x`
+
+#### F. Test Node.js (Built-in)
+1. **Di Terminal Laragon**:
+   ```powershell
+   node --version
+   npm --version
+   ```
+2. **Output expected**: 
+   - Node.js: `v20.x.x` atau `v18.x.x`
+   - NPM: `10.x.x` atau `9.x.x`
 
 ---
 
-## 5. Instalasi Project
+## 3. Instalasi Project
 
 ### 📁 Penempatan dan Setup Project
 
@@ -210,81 +146,70 @@ npm install -g yarn
 
 #### B. Setup Project Environment
 1. **Masuk ke folder project** via Terminal Laragon:
-   ```bash
+   ```powershell
    cd portal-inspektorat
    ```
 2. **Copy environment file**:
-   ```bash
+   ```powershell
    copy .env.example .env
-   ```
-   (Untuk Windows Command Prompt)
-   
-   **Atau jika menggunakan Git Bash**:
-   ```bash
-   cp .env.example .env
    ```
 
 #### C. Install Composer Dependencies
 1. **Pastikan masih di folder project**:
-   ```bash
+   ```powershell
    pwd
    ```
-   Output: `/c/laragon/www/portal-inspektorat` (Git Bash) atau `C:\laragon\www\portal-inspektorat`
+   Output: `C:\laragon\www\portal-inspektorat`
 
 2. **Install dependencies PHP**:
-   ```bash
+   ```powershell
    composer install
    ```
    ⏳ **Tunggu proses selesai** (5-10 menit tergantung internet)
    
 3. **Jika ada error permissions**, jalankan:
-   ```bash
+   ```powershell
    composer install --no-scripts
    ```
 
-#### D. Install Node.js Dependencies (Untuk Frontend Assets)
+#### D. Install Node.js Dependencies (Built-in)
 1. **Cek apakah ada package.json**:
-   ```bash
+   ```powershell
    dir package.json
    ```
    
 2. **Jika ada, install npm packages**:
-   ```bash
+   ```powershell
    npm install
    ```
    ⏳ **Tunggu proses selesai** (3-5 menit)
 
 3. **Build assets untuk production**:
-   ```bash
+   ```powershell
    npm run build
    ```
    
    **Atau untuk development**:
-   ```bash
+   ```powershell
    npm run dev
    ```
 
-#### E. Set Folder Permissions (Windows)
-1. **Klik kanan folder** `storage` → Properties → Security
-2. **Edit permissions** untuk "Everyone" → **Full Control**
-3. **Ulangi untuk folder** `bootstrap/cache`
-
 ---
 
-## 6. Konfigurasi Database
+## 4. Konfigurasi Database
 
 ### 🗄️ Setup Database MySQL
 
 #### A. Buat Database Baru
 1. **Pastikan Laragon running** (Apache & MySQL hijau)
 2. **Klik tombol "Database"** di Laragon
-3. **phpMyAdmin terbuka** di browser
-4. **Klik tab "Databases"** di menu atas
-5. **Buat database baru**:
+3. **HeidiSQL terbuka** (aplikasi desktop)
+4. **Buat database baru**:
+   - **Klik kanan** pada sidebar kiri (session) → **Create new** → **Database**
    - **Database name**: `portal_inspektorat`
    - **Collation**: `utf8mb4_unicode_ci` (pilih dari dropdown)
-6. **Klik "Create"**
-7. **Verifikasi**: Database muncul di sidebar kiri
+5. **Klik "OK"**
+6. **Verifikasi**: Database muncul di sidebar kiri
 
 #### B. Konfigurasi Environment File
 1. **Buka file `.env`** dengan Notepad++ atau VS Code
@@ -318,7 +243,7 @@ npm install -g yarn
 
 #### C. Generate Application Key
 1. **Di Terminal Laragon**:
-   ```bash
+   ```powershell
    php artisan key:generate
    ```
 2. **Output**: `Application key set successfully.`
@@ -326,7 +251,7 @@ npm install -g yarn
 
 #### D. Test Database Connection
 1. **Test koneksi database**:
-   ```bash
+   ```powershell
    php artisan tinker
    ```
 2. **Di dalam tinker, ketik**:
@@ -338,25 +263,25 @@ npm install -g yarn
 
 #### E. Migrasi Database
 1. **Jalankan migrasi untuk membuat tabel**:
-   ```bash
+   ```powershell
    php artisan migrate
    ```
 2. **Konfirmasi jika ditanya**: `yes`
 3. **Tunggu proses selesai** - semua tabel akan dibuat
 
 4. **Jalankan seeders (jika ada)**:
-   ```bash
+   ```powershell
    php artisan db:seed
    ```
    
 5. **Atau kombinasi reset + seed**:
-   ```bash
+   ```powershell
    php artisan migrate:fresh --seed
    ```
 
-#### F. Verifikasi di phpMyAdmin
-1. **Refresh phpMyAdmin**
-2. **Klik database** `portal_inspektorat`
+#### F. Verifikasi di HeidiSQL
+1. **Refresh HeidiSQL** (F5 atau klik refresh button)
+2. **Klik database** `portal_inspektorat` di sidebar
 3. **Pastikan tabel-tabel sudah ada**:
    - ✅ users
    - ✅ pengaduans (atau wbs)
@@ -365,16 +290,23 @@ npm install -g yarn
    - ✅ migrations
    - ✅ dll sesuai project
 
+> **💡 Tips HeidiSQL:**
+> - **Double-click tabel** untuk melihat data
+> - **Tab "Data"** untuk browse records
+> - **Tab "Query"** untuk menjalankan SQL custom
+> - **Klik kanan tabel** → Export untuk backup data
+> - **Tools** → **Export database as SQL** untuk backup lengkap
+
 ---
 
-## 7. Menjalankan Aplikasi
+## 5. Menjalankan Aplikasi
 
 ### 🌐 Start Application Server
 
 #### A. Metode 1: Artisan Serve (Recommended untuk Development)
 1. **Pastikan masih di Terminal Laragon** dalam folder project
 2. **Jalankan Laravel development server**:
-   ```bash
+   ```powershell
    php artisan serve --host=0.0.0.0 --port=8000
    ```
 3. **Output yang benar**:
@@ -411,14 +343,14 @@ npm install -g yarn
    - Tambah baris: `127.0.0.1 portal-inspektorat.test`
 9. **Akses**: `http://portal-inspektorat.test`
 
-#### C. Build Frontend Assets (Jika menggunakan Vite/Mix)
+#### C. Build Frontend Assets (Built-in Node.js)
 1. **Untuk development** (watch mode):
-   ```bash
+   ```powershell
    npm run dev
    ```
    
 2. **Untuk production** (optimized):
-   ```bash
+   ```powershell
    npm run build
    ```
 
@@ -437,7 +369,7 @@ npm install -g yarn
 
 ---
 
-## 8. Verifikasi Instalasi
+## 6. Verifikasi Instalasi
 
 ### ✅ Testing dan Checklist
 
@@ -467,7 +399,7 @@ npm install -g yarn
    - [ ] **Data tersimpan** ke database
 
 #### C. Test Database Connection
-1. **Buka phpMyAdmin**: Klik "Database" di Laragon
+1. **Buka HeidiSQL**: Klik "Database" di Laragon
 2. **Cek database** `portal_inspektorat`:
    - [ ] **Semua tabel** ada (users, web_portals, info_kantors, dll)
    - [ ] **Data seeder** tersimpan (jika ada)
@@ -480,32 +412,32 @@ npm install -g yarn
 
 #### D. Test Development Environment
 1. **Cek PHP version**:
-   ```bash
+   ```powershell
    php --version
    ```
    Expected: `PHP 8.3.x`
    
 2. **Cek Laravel commands**:
-   ```bash
+   ```powershell
    php artisan --version
    ```
    Expected: `Laravel Framework 12.x`
    
-3. **Cek Node.js (jika pakai)**:
-   ```bash
+3. **Cek Node.js (built-in)**:
+   ```powershell
    node --version
    npm --version
    ```
 
 4. **Test artisan commands**:
-   ```bash
+   ```powershell
    php artisan route:list
    php artisan config:show
    ```
 
 ---
 
-## 9. Troubleshooting
+## 7. Troubleshooting
 
 ### ❌ Common Errors & Solutions
 
@@ -533,6 +465,32 @@ php artisan config:clear
 1. **Klik kanan folder** `storage` → Properties → Security
 2. **Edit** → Add "Everyone" → Full Control
 3. **Ulangi untuk** `bootstrap/cache`
+
+#### **Error: HeidiSQL tidak bisa connect ke database**
+**Gejala**: "Can't connect to MySQL server" atau connection timeout
+**Solusi**:
+1. **Pastikan MySQL running** di Laragon (hijau)
+2. **Cek connection settings** di HeidiSQL:
+   - Hostname: `127.0.0.1` atau `localhost`
+   - Port: `3306`
+   - User: `root`
+   - Password: `(kosong)`
+3. **Test connection** dengan tombol "Open" di HeidiSQL
+4. **Restart MySQL service** di Laragon jika perlu
+
+#### **Error: HeidiSQL tidak terbuka dari Laragon**
+**Gejala**: Klik "Database" tidak membuka HeidiSQL
+**Solusi**:
+1. **Buka HeidiSQL manual** dari Start Menu
+2. **Create new connection** dengan settings:
+   ```
+   Network type: MySQL (TCP/IP)
+   Hostname/IP: 127.0.0.1
+   Port: 3306
+   User: root
+   Password: (blank)
+   ```
+3. **Save connection** dengan nama "Laragon Local"
 
 #### **Error: Database connection refused**
 **Gejala**: `SQLSTATE[HY000] [2002] Connection refused`
@@ -705,8 +663,8 @@ Support: "Ketik: composer install"
 ##### **TAHAP 5: Database Setup (10 menit)**
 ```
 Support: "Klik Database di Laragon"
-Support: "phpMyAdmin terbuka di browser"
-Support: "Tab Databases > Create database"
+Support: "HeidiSQL terbuka - aplikasi desktop"
+Support: "Klik kanan di sidebar > Create new > Database"
 Support: "Nama: portal_inspektorat"
 Support: "Collation: utf8mb4_unicode_ci"
 ```
@@ -797,7 +755,7 @@ Port Error: "Ketik: php artisan serve --port=8080"
 ### **Default Access URLs:**
 - **🏠 Frontend**: `http://localhost:8000`
 - **⚙️ Admin Panel**: `http://localhost:8000/admin`
-- **🗄️ Database**: phpMyAdmin via tombol "Database" di Laragon
+- **🗄️ Database**: HeidiSQL via tombol "Database" di Laragon
 - **📊 Logs**: `storage/logs/laravel.log`
 
 ### **Default Login Credentials:**
@@ -819,12 +777,19 @@ git pull origin main
 composer install
 php artisan migrate
 
-# Backup database
+# Backup database (via Laravel)
 php artisan backup:run
 
 # Clear cache saat update
 php artisan optimize:clear
 ```
+
+### **Database Backup dengan HeidiSQL:**
+1. **Buka HeidiSQL** → Klik "Database" di Laragon
+2. **Klik kanan database** `portal_inspektorat`
+3. **Export database as SQL** → Pilih lokasi save
+4. **Atau via Tools** → **Export database as SQL** untuk backup lengkap
+5. **Untuk restore**: **File** → **Load SQL file** → Pilih file backup
 
 ---
 
