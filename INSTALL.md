@@ -36,11 +36,51 @@ Sebelum menginstal aplikasi Portal Inspektorat Papua Tengah, pastikan sistem And
 
 ## Instalasi
 
-### 1. Download dan Extract Project
+### Metode 1: Auto Installation (RECOMMENDED)
+
+Portal ini dilengkapi dengan script otomatis yang akan menangani semua proses instalasi:
+
+```bash
+# Clone repository
+git clone https://github.com/Rynrd113/inspekorat.git portal-inspektorat
+cd portal-inspektorat
+
+# Jalankan auto installer
+chmod +x install.sh
+./install.sh
+```
+
+**Auto installer akan melakukan:**
+- ✅ Validasi system requirements
+- ✅ Install PHP dependencies (Composer)
+- ✅ Install Node.js dependencies (NPM)
+- ✅ Auto-detect dan setup database (MySQL/SQLite)
+- ✅ Configure environment file (.env)
+- ✅ Generate application key
+- ✅ Run database migrations
+- ✅ Seed sample data
+- ✅ Build frontend assets
+- ✅ Set file permissions
+
+**Setelah instalasi berhasil:**
+```bash
+php artisan serve
+# Aplikasi akan berjalan di http://localhost:8000
+```
+
+---
+
+### Metode 2: Manual Installation
+
+Jika Anda prefer instalasi manual atau auto installer gagal:
+
+#### 1. Download dan Extract Project
+
+#### 1. Download dan Extract Project
 
 ```bash
 # Clone repository atau extract file project
-git clone https://github.com/your-repo/portal-inspektorat.git
+git clone https://github.com/Rynrd113/inspekorat.git portal-inspektorat
 cd portal-inspektorat
 
 # Atau jika menggunakan file zip
@@ -48,7 +88,7 @@ unzip portal-inspektorat.zip
 cd portal-inspektorat
 ```
 
-### 2. Install Dependencies
+#### 2. Install Dependencies
 
 ```bash
 # Install PHP dependencies

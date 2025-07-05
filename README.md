@@ -79,10 +79,39 @@
 
 </div>
 
-## � Quick Start
+## 🚀 Quick Start
 
 <details>
-<summary><b>📥 Untuk User/Installer (Klik untuk expand)</b></summary>
+<summary><b>⚡ Auto Installation (RECOMMENDED)</b></summary>
+
+### 🎯 One-Command Installation
+```bash
+# Clone project dan jalankan auto installer
+git clone https://github.com/Rynrd113/inspekorat.git portal-inspektorat
+cd portal-inspektorat
+chmod +x install.sh
+./install.sh
+```
+
+**Auto installer akan:**
+- ✅ Cek system requirements (PHP 8.3+, MySQL, Node.js)
+- ✅ Install dependencies (Composer & NPM)
+- ✅ Setup database (MySQL/SQLite otomatis)
+- ✅ Configure environment (.env)
+- ✅ Run migrations & seeders
+- ✅ Build frontend assets
+- ✅ Set permissions
+
+**Setelah instalasi selesai:**
+```bash
+php artisan serve
+# Buka http://localhost:8000
+```
+
+</details>
+
+<details>
+<summary><b>📥 Manual Installation (Advanced)</b></summary>
 
 ### 1️⃣ Download & Setup
 ```bash
@@ -178,7 +207,9 @@ php artisan view:cache
 
 | 📖 Dokumen | 🎯 Target | 📝 Deskripsi |
 |------------|-----------|--------------|
-| **[📥 INSTALL.md](INSTALL.md)** | 👤 User/Installer | Panduan lengkap instalasi step-by-step |
+| **[� INSTALL_AUTO.md](INSTALL_AUTO.md)** | ⚡ Quick Start | Auto installation scripts (Linux/Windows) |
+| **[�📥 INSTALL.md](INSTALL.md)** | 👤 User/Installer | Panduan lengkap instalasi step-by-step |
+| **[🏛️ PANDUAN_INSTALASI_LARAGON.md](PANDUAN_INSTALASI_LARAGON.md)** | 🪟 Windows User | Instalasi dengan Laragon (Windows) |
 | **[👨‍💻 DEVELOPER.md](DEVELOPER.md)** | 🔧 Developer | Guide development, customization & deployment |
 | **[🗄️ DATABASE.md](DATABASE.md)** | 📊 Database Admin | Import database, troubleshooting & FAQ |
 | **[📋 CHANGELOG.md](CHANGELOG.md)** | 📈 Project Manager | History versi dan update fitur |
