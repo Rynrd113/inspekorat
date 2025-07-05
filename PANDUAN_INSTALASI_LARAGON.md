@@ -1,6 +1,8 @@
 # 🏛️ Panduan Instalasi Portal Inspektorat Papua Tengah
 ## Untuk Windows dengan Laragon (MySQL + PHP 8.3 + phpMyAdmin + Node.js)
 
+**⚠️ CATATAN PENTING**: Portal ini menggunakan **MySQL** sebagai database default untuk production. Panduan ini akan setup dengan MySQL.
+
 ---
 
 ## 📋 Daftar Isi

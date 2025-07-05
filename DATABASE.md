@@ -14,16 +14,18 @@ Project ini menyediakan beberapa file database:
 
 ```
 database/
-├── database.sqlite                    # SQLite database (development)
-├── portal_inspektorat.sql             # SQLite dump file
-├── portal_inspektorat_mysql.sql       # MySQL database (production ready)
-├── migrations/                        # Laravel migration files
+├── database.sqlite                    # SQLite database (untuk development/testing)
+├── portal_inspektorat.sql             # SQLite dump file (legacy)
+├── portal_inspektorat_mysql.sql       # MySQL database (PRODUCTION - Default)
+├── migrations/                        # Laravel migration files (RECOMMENDED)
 └── seeders/                          # Sample data seeders
 ```
 
-## Metode 1: Laravel Migration (Recommended)
+**⚠️ PENTING**: Project ini menggunakan **MySQL** sebagai database default untuk production. SQLite hanya untuk development/testing.
 
-**Kelebihan**: Otomatis, aman, dan sesuai Laravel best practices.
+## Metode 1: Laravel Migration (RECOMMENDED untuk MySQL)
+
+**Kelebihan**: Otomatis, aman, dan sesuai Laravel best practices. **Menggunakan MySQL sebagai default.**
 
 ### Step 1: Konfigurasi Database
 ```bash

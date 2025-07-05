@@ -15,7 +15,7 @@ Sebelum menginstal aplikasi Portal Inspektorat Papua Tengah, pastikan sistem And
 
 ### Persyaratan Minimum
 - **PHP**: Versi 8.3 atau lebih tinggi
-- **Database**: MySQL 8.0+ atau PostgreSQL 13+
+- **Database**: MySQL 8.0+ atau PostgreSQL 13+  (Default: MySQL)
 - **Web Server**: Apache 2.4+ atau Nginx 1.18+
 - **Node.js**: Versi 18.0+ (untuk build asset)
 - **Composer**: Versi 2.0+

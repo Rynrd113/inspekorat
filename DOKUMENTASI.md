@@ -30,7 +30,7 @@ Aplikasi web portal informasi pemerintahan untuk Inspektorat Provinsi Papua Sela
 - PHP 8.2+
 - Composer
 - Node.js & NPM
-- SQLite/MySQL
+- MySQL/PostgreSQL (Default: MySQL)
 
 ### Langkah Instalasi
 

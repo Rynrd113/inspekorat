@@ -15,7 +15,7 @@
 ### Tech Stack
 - **Backend**: Laravel 12 (PHP 8.3+)
 - **Frontend**: Blade Templates + Tailwind CSS + Vanilla JavaScript
-- **Database**: MySQL/PostgreSQL
+- **Database**: MySQL (Default), PostgreSQL (Alternative)
 - **Authentication**: Laravel Sanctum
 - **Build Tool**: Vite
 - **Icons**: Font Awesome 6.5.1
