@@ -2,21 +2,22 @@
 
 ## Daftar Isi
 1. [Persyaratan Sistem](#persyaratan-sistem)
-2. [Instalasi](#instalasi)
-3. [Konfigurasi](#konfigurasi)
-4. [Menjalankan Aplikasi](#menjalankan-aplikasi)
-5. [Penggunaan Admin Panel](#penggunaan-admin-panel)
-6. [Troubleshooting](#troubleshooting)
-7. [FAQ](#faq)
+2. [Instalasi Cepat (RECOMMENDED)](#instalasi-cepat-recommended)
+3. [Instalasi Manual](#instalasi-manual)
+4. [Konfigurasi](#konfigurasi)
+5. [Menjalankan Aplikasi](#menjalankan-aplikasi)
+6. [Penggunaan Admin Panel](#penggunaan-admin-panel)
+7. [Troubleshooting](#troubleshooting)
+8. [FAQ](#faq)
 
 ## Persyaratan Sistem
 
 Sebelum menginstal aplikasi Portal Inspektorat Papua Tengah, pastikan sistem Anda memenuhi persyaratan berikut:
 
 ### Persyaratan Minimum
-- **PHP**: Versi 8.3 atau lebih tinggi
-- **Database**: MySQL 8.0+ atau PostgreSQL 13+  (Default: MySQL)
-- **Web Server**: Apache 2.4+ atau Nginx 1.18+
+- **PHP**: Versi 8.2 atau lebih tinggi
+- **Database**: MySQL 8.0+ atau PostgreSQL 13+  (Default: SQLite untuk development)
+- **Web Server**: Apache 2.4+ atau Nginx 1.18+ (Optional untuk development)
 - **Node.js**: Versi 18.0+ (untuk build asset)
 - **Composer**: Versi 2.0+
 - **Memory**: Minimum 2GB RAM
@@ -34,43 +35,43 @@ Sebelum menginstal aplikasi Portal Inspektorat Papua Tengah, pastikan sistem And
 - Fileinfo PHP Extension
 - GD PHP Extension (untuk image processing)
 
-## Instalasi
+## Instalasi Cepat (RECOMMENDED)
 
-### Metode 1: Auto Installation (RECOMMENDED)
+Portal ini dilengkapi dengan script instalasi yang dioptimasi untuk proses setup yang lebih cepat:
 
-Portal ini dilengkapi dengan script otomatis yang akan menangani semua proses instalasi:
-
+### Untuk Linux/macOS:
 ```bash
 # Clone repository
 git clone https://github.com/Rynrd113/inspekorat.git portal-inspektorat
 cd portal-inspektorat
 
-# Jalankan auto installer
-chmod +x install.sh
-./install.sh
+# Jalankan quick installer (optimized)
+chmod +x quick-install.sh
+./quick-install.sh
 ```
 
-**Auto installer akan melakukan:**
-- ✅ Validasi system requirements
-- ✅ Install PHP dependencies (Composer)
-- ✅ Install Node.js dependencies (NPM)
-- ✅ Auto-detect dan setup database (MySQL/SQLite)
-- ✅ Configure environment file (.env)
-- ✅ Generate application key
-- ✅ Run database migrations
-- ✅ Seed sample data
-- ✅ Build frontend assets
-- ✅ Set file permissions
+### Untuk Windows:
+```cmd
+# Clone repository
+git clone https://github.com/Rynrd113/inspekorat.git portal-inspektorat
+cd portal-inspektorat
 
-**Setelah instalasi berhasil:**
+# Jalankan quick installer
+quick-install.bat
+```
+
+### Instalasi Composer Manual yang Dioptimasi:
+Jika Anda ingin menggunakan composer secara manual dengan optimasi:
+
 ```bash
-php artisan serve
-# Aplikasi akan berjalan di http://localhost:8000
+# Install dependencies tanpa dev packages (lebih cepat)
+composer run install-fast
+
+# Atau untuk production
+composer run install-prod
 ```
 
----
-
-### Metode 2: Manual Installation
+## Instalasi Manual
 
 Jika Anda prefer instalasi manual atau auto installer gagal:
 

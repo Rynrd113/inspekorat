@@ -9,14 +9,34 @@
 
 [![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel)](https://laravel.com)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
-[![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?style=for-the-badge&logo=php)](https://php.net)
-[![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
+[![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php)](https://php.net)
+[![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite)](https://sqlite.org)
 
 ---
 
 *Portal modern untuk transparansi pemerintahan dengan akses mudah terhadap informasi publik, berita terkini, dan sistem pelaporan Whistleblower (WBS)*
 
 </div>
+
+## 🚀 Quick Installation (⚡ Optimized)
+
+### Windows:
+```cmd
+git clone https://github.com/Rynrd113/inspekorat.git portal-inspektorat
+cd portal-inspektorat
+quick-install.bat
+```
+
+### Linux/macOS:
+```bash
+git clone https://github.com/Rynrd113/inspekorat.git portal-inspektorat
+cd portal-inspektorat
+chmod +x quick-install.sh && ./quick-install.sh
+```
+
+**⚡ Instalasi selesai dalam 3-6 menit!** (vs 10+ menit dengan metode biasa)
+
+📖 **Dokumentasi lengkap**: [INSTALL.md](INSTALL.md) | [QUICK-SETUP.md](QUICK-SETUP.md)
 
 ## 🌟 Fitur Unggulan
 

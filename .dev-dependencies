@@ -1,0 +1,20 @@
+# Portal Inspektorat - Development Dependencies
+# File ini berisi daftar dependencies yang tidak diperlukan untuk production
+
+## PHP Dependencies (composer.json - require-dev)
+- fakerphp/faker - untuk generate data dummy
+- laravel/pail - untuk log monitoring
+- laravel/pint - untuk code formatting  
+- laravel/sail - untuk Docker development
+- mockery/mockery - untuk unit testing
+- nunomaduro/collision - untuk error reporting
+- phpunit/phpunit - untuk unit testing
+
+## Node.js Dependencies 
+Semua dependencies di package.json adalah devDependencies, diperlukan untuk build assets.
+
+## Tips Optimasi:
+1. Gunakan `composer install --no-dev` untuk production
+2. Gunakan `npm ci --prefer-offline` untuk npm install yang lebih cepat
+3. Enable opcache di production untuk performance PHP
+4. Gunakan Redis/Memcached untuk session dan cache di production

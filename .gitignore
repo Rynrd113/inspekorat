@@ -22,3 +22,11 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Cache files for faster installation
+composer.lock
+package-lock.json
+.npm/
+bootstrap/cache/config.php
+bootstrap/cache/routes-*.php
+bootstrap/cache/events.php

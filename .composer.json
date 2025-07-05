@@ -1,0 +1,13 @@
+{
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packagist.org"
+        }
+    ],
+    "config": {
+        "cache-ttl": 86400,
+        "cache-files-ttl": 86400,
+        "cache-files-maxsize": "500MB"
+    }
+}

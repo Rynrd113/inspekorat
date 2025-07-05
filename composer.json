@@ -51,6 +51,19 @@
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
         ],
+        "install-fast": [
+            "composer install --no-dev --optimize-autoloader --no-scripts --prefer-dist",
+            "@php artisan config:cache",
+            "@php artisan route:cache",
+            "@php artisan view:cache"
+        ],
+        "install-prod": [
+            "composer install --no-dev --optimize-autoloader --prefer-dist",
+            "@php artisan config:cache",
+            "@php artisan route:cache", 
+            "@php artisan view:cache",
+            "@php artisan event:cache"
+        ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
@@ -58,6 +71,13 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
+        ],
+        "clear-all": [
+            "@php artisan cache:clear",
+            "@php artisan config:clear",
+            "@php artisan route:clear",
+            "@php artisan view:clear",
+            "@php artisan event:clear"
         ]
     },
     "extra": {
@@ -69,6 +89,11 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
+        "platform-check": false,
+        "discard-changes": true,
+        "cache-vcs-repos": true,
+        "cache-read-only": false,
+        "bin-compat": "auto",
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
