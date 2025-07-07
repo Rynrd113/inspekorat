@@ -53,6 +53,45 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'superadmin']);
+    }
+    
+    /**
+     * Check if user is superadmin
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'superadmin';
+    }
+    
+    /**
+     * Check if user has specific role
+     */
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+    
+    /**
+     * Check if user has any of the given roles
+     */
+    public function hasAnyRole(array $roles): bool
+    {
+        return in_array($this->role, $roles);
+    }
+    
+    /**
+     * Get available roles
+     */
+    public static function getRoles(): array
+    {
+        return [
+            'user' => 'User',
+            'admin_wbs' => 'Admin WBS',
+            'admin_berita' => 'Admin Berita',
+            'admin_portal_opd' => 'Admin Portal OPD',
+            'admin' => 'Admin',
+            'superadmin' => 'Super Admin'
+        ];
     }
 }

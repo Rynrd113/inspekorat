@@ -25,6 +25,7 @@
                     <div class="flex items-center space-x-8">
                         <a href="#beranda" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Beranda</a>
                         <a href="{{ route('public.berita.index') }}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Berita</a>
+                        <a href="{{ route('public.portal-opd.index') }}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Portal OPD</a>
                         <a href="#pintasan-layanan" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Layanan</a>
                         <a href="#informasi" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Kontak</a>
                         <a href="{{ route('public.wbs') }}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">WBS</a>
@@ -46,6 +47,7 @@
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
                 <a href="#beranda" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Beranda</a>
                 <a href="{{ route('public.berita.index') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Berita</a>
+                <a href="{{ route('public.portal-opd.index') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Portal OPD</a>
                 <a href="#pintasan-layanan" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Layanan</a>
                 <a href="#informasi" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Kontak</a>
                 <a href="{{ route('public.wbs') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">WBS</a>

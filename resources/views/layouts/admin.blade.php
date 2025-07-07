@@ -19,15 +19,33 @@
                         Dashboard
                     </a>
                     
+                    @if(auth()->user()->hasAnyRole(['admin_wbs', 'admin', 'superadmin']))
                     <a href="{{ route('admin.wbs.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.wbs.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-shield-alt mr-3 h-5 w-5"></i>
                         WBS (Whistleblowing System)
                     </a>
+                    @endif
                     
+                    @if(auth()->user()->hasAnyRole(['admin_berita', 'admin', 'superadmin']))
                     <a href="{{ route('admin.portal-papua-tengah.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.portal-papua-tengah.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-newspaper mr-3 h-5 w-5"></i>
                         Portal Berita
                     </a>
+                    @endif
+                    
+                    @if(auth()->user()->hasAnyRole(['admin_portal_opd', 'admin', 'superadmin']))
+                    <a href="{{ route('admin.portal-opd.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.portal-opd.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
+                        <i class="fas fa-building mr-3 h-5 w-5"></i>
+                        Portal OPD
+                    </a>
+                    @endif
+                    
+                    @if(auth()->user()->isSuperAdmin())
+                    <a href="{{ route('admin.users.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.users.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
+                        <i class="fas fa-users mr-3 h-5 w-5"></i>
+                        Manajemen User
+                    </a>
+                    @endif
                 </nav>
             </div>
             
@@ -35,7 +53,17 @@
                 <div class="flex items-center">
                     <div>
                         <div class="text-sm font-medium text-white">{{ auth()->user()->name }}</div>
-                        <div class="text-xs text-blue-100">Administrator</div>
+                        @php
+                            $roleLabels = [
+                                'user' => 'User',
+                                'admin_wbs' => 'Admin WBS',
+                                'admin_berita' => 'Admin Berita',
+                                'admin_portal_opd' => 'Admin Portal OPD',
+                                'admin' => 'Administrator',
+                                'superadmin' => 'Super Admin'
+                            ];
+                        @endphp
+                        <div class="text-xs text-blue-100">{{ $roleLabels[auth()->user()->role] ?? 'User' }}</div>
                     </div>
                     <form method="POST" action="{{ route('admin.logout') }}" class="ml-auto">
                         @csrf
