@@ -63,13 +63,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
         // Portal OPD routes - protected by role middleware
         Route::middleware('role:admin_portal_opd,admin,superadmin')->group(function () {
-            Route::get('portal-opd', [AdminPortalOpdController::class, 'index'])->name('portal-opd.index');
-            Route::get('portal-opd/create', [AdminPortalOpdController::class, 'create'])->name('portal-opd.create');
-            Route::post('portal-opd', [AdminPortalOpdController::class, 'store'])->name('portal-opd.store');
-            Route::get('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'show'])->name('portal-opd.show');
-            Route::get('portal-opd/{portalOpd}/edit', [AdminPortalOpdController::class, 'edit'])->name('portal-opd.edit');
-            Route::put('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'update'])->name('portal-opd.update');
-            Route::delete('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'destroy'])->name('portal-opd.destroy');
+            Route::get('portal-opd', [AdminPortalOpdController::class, 'index'])->name('admin.portal-opd.index');
+            Route::get('portal-opd/create', [AdminPortalOpdController::class, 'create'])->name('admin.portal-opd.create');
+            Route::post('portal-opd', [AdminPortalOpdController::class, 'store'])->name('admin.portal-opd.store');
+            Route::get('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'show'])->name('admin.portal-opd.show');
+            Route::get('portal-opd/{portalOpd}/edit', [AdminPortalOpdController::class, 'edit'])->name('admin.portal-opd.edit');
+            Route::put('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'update'])->name('admin.portal-opd.update');
+            Route::delete('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'destroy'])->name('admin.portal-opd.destroy');
         });
         
         // User Management routes - only for superadmin
