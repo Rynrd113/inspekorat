@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\InfoKantor;
 use App\Models\Wbs;
 use App\Models\PortalPapuaTengah;
+use App\Models\PortalOpd;
+use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -35,6 +37,14 @@ class DashboardController extends Controller
             $totalPortalPapuaTengah = PortalPapuaTengah::count();
             $activePortalPapuaTengah = PortalPapuaTengah::published()->count();
             $activeInfoKantor = InfoKantor::active()->count();
+            
+            // Portal OPD stats
+            $totalPortalOpd = PortalOpd::count();
+            $activePortalOpd = PortalOpd::active()->count();
+            
+            // User stats
+            $totalUsers = User::count();
+            $adminUsers = User::where('role', 'LIKE', '%admin%')->count();
 
             return [
                 'wbs' => [
@@ -51,6 +61,14 @@ class DashboardController extends Controller
                 'portal_papua_tengah' => [
                     'total' => $totalPortalPapuaTengah,
                     'active' => $activePortalPapuaTengah,
+                ],
+                'portal_opd' => [
+                    'total' => $totalPortalOpd,
+                    'active' => $activePortalOpd,
+                ],
+                'users' => [
+                    'total' => $totalUsers,
+                    'admin' => $adminUsers,
                 ],
             ];
         });

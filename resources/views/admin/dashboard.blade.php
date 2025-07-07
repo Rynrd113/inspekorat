@@ -7,7 +7,8 @@
 
 @section('main-content')
 <!-- Quick Actions -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    @if(auth()->user()->hasAnyRole(['admin_wbs', 'admin', 'superadmin']))
     <x-card class="hover:shadow-lg transition-shadow duration-200">
         <div class="text-center">
             <div class="bg-blue-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
@@ -21,7 +22,9 @@
             </a>
         </div>
     </x-card>
+    @endif
 
+    @if(auth()->user()->hasAnyRole(['admin_berita', 'admin', 'superadmin']))
     <x-card class="hover:shadow-lg transition-shadow duration-200">
         <div class="text-center">
             <div class="bg-purple-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
@@ -35,10 +38,43 @@
             </a>
         </div>
     </x-card>
+    @endif
+
+    @if(auth()->user()->hasAnyRole(['admin_portal_opd', 'admin', 'superadmin']))
+    <x-card class="hover:shadow-lg transition-shadow duration-200">
+        <div class="text-center">
+            <div class="bg-emerald-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <i class="fas fa-building text-emerald-600 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Portal OPD</h3>
+            <p class="text-gray-600 text-sm mb-4">Kelola informasi dan profil OPD</p>
+            <a href="{{ route('admin.portal-opd.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-md hover:bg-emerald-700 transition-colors">
+                <i class="fas fa-arrow-right mr-2"></i>Kelola Portal OPD
+            </a>
+        </div>
+    </x-card>
+    @endif
+
+    @if(auth()->user()->isSuperAdmin())
+    <x-card class="hover:shadow-lg transition-shadow duration-200">
+        <div class="text-center">
+            <div class="bg-indigo-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <i class="fas fa-users text-indigo-600 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Manajemen User</h3>
+            <p class="text-gray-600 text-sm mb-4">Kelola pengguna dan hak akses sistem</p>
+            <a href="{{ route('admin.users.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors">
+                <i class="fas fa-arrow-right mr-2"></i>Kelola User
+            </a>
+        </div>
+    </x-card>
+    @endif
 </div>
 
 <!-- Stats Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
     <!-- Total WBS -->
     <x-card class="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
         <div class="flex items-center">
@@ -64,13 +100,13 @@
             </div>
             <div class="ml-4">
                 <div class="text-3xl font-bold">{{ $stats['wbs']['pending'] }}</div>
-                <div class="text-yellow-100">Pending</div>
+                <div class="text-yellow-100">WBS Pending</div>
             </div>
         </div>
     </x-card>
 
     <!-- Portal Papua Tengah -->
-    <x-card class="bg-gradient-to-r from-green-500 to-teal-500 text-white">
+    <x-card class="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
         <div class="flex items-center">
             <div class="flex-shrink-0">
                 <div class="bg-white bg-opacity-20 rounded-full p-3">
@@ -78,14 +114,14 @@
                 </div>
             </div>
             <div class="ml-4">
-                <div class="text-3xl font-bold">{{ $stats['portal_papua_tengah']['active'] }}/{{ $stats['portal_papua_tengah']['total'] }}</div>
-                <div class="text-green-100">Portal Papua Tengah Aktif</div>
+                <div class="text-3xl font-bold">{{ $stats['portal_papua_tengah']['active'] }}</div>
+                <div class="text-purple-100">Berita Aktif</div>
             </div>
         </div>
     </x-card>
 
-    <!-- Info Kantor -->
-    <x-card class="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+    <!-- Portal OPD -->
+    <x-card class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
         <div class="flex items-center">
             <div class="flex-shrink-0">
                 <div class="bg-white bg-opacity-20 rounded-full p-3">
@@ -93,8 +129,23 @@
                 </div>
             </div>
             <div class="ml-4">
-                <div class="text-3xl font-bold">{{ $stats['info_kantor']['active'] }}/{{ $stats['info_kantor']['total'] }}</div>
-                <div class="text-purple-100">Info Kantor Aktif</div>
+                <div class="text-3xl font-bold">{{ $stats['portal_opd']['active'] ?? 0 }}</div>
+                <div class="text-emerald-100">OPD Aktif</div>
+            </div>
+        </div>
+    </x-card>
+
+    <!-- Total Users -->
+    <x-card class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <div class="bg-white bg-opacity-20 rounded-full p-3">
+                    <i class="fas fa-users text-2xl"></i>
+                </div>
+            </div>
+            <div class="ml-4">
+                <div class="text-3xl font-bold">{{ $stats['users']['total'] ?? 0 }}</div>
+                <div class="text-indigo-100">Total User</div>
             </div>
         </div>
     </x-card>

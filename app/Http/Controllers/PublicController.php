@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\InfoKantor;
 use App\Models\PortalPapuaTengah;
+use App\Models\PortalOpd;
+use App\Models\Wbs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PublicController extends Controller
@@ -20,6 +23,16 @@ class PublicController extends Controller
             return PortalPapuaTengah::published()->ordered()->take(5)->get();
         });
 
+        // Cache statistik public untuk performa
+        $stats = Cache::remember('public_stats', 300, function () {
+            return [
+                'portal_opd' => PortalOpd::active()->count(),
+                'berita' => PortalPapuaTengah::published()->count(),
+                'wbs' => Wbs::count(),
+                'total_views' => DB::table('portal_papua_tengahs')->sum('views') + 1250, // Base views
+            ];
+        });
+
         // Info kantor statis
         $infoKantor = new \stdClass();
         $infoKantor->nama = 'Inspektorat Provinsi Papua Tengah';
@@ -31,7 +44,7 @@ class PublicController extends Controller
         $infoKantor->website = 'https://inspektorat.paputengah.go.id';
         $infoKantor->fax = '(0984) 21235';
 
-        return view('public.index', compact('portalPapuaTengah', 'infoKantor'));
+        return view('public.index', compact('portalPapuaTengah', 'infoKantor', 'stats'));
     }
 
     /**

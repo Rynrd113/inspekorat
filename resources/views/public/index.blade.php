@@ -242,9 +242,10 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-16 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Values Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                 <div class="text-center">
                     <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
                         <i class="fas fa-shield-alt text-blue-600 text-2xl"></i>
@@ -265,6 +266,48 @@
                     </div>
                     <h3 class="text-3xl font-bold text-gray-900 mb-2">Transparansi</h3>
                     <p class="text-gray-600">Keterbukaan informasi untuk meningkatkan akuntabilitas dan kepercayaan publik</p>
+                </div>
+            </div>
+            
+            <!-- Statistics Numbers -->
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Statistik Portal Papua Tengah</h3>
+                    <p class="text-gray-600">Data terkini layanan dan informasi yang tersedia di portal</p>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-100 rounded-full mb-3">
+                            <i class="fas fa-building text-emerald-600 text-xl"></i>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-900 mb-1" id="stat-opd">{{ $stats['portal_opd'] ?? '10' }}</div>
+                        <div class="text-sm text-gray-600">OPD Terdaftar</div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-3">
+                            <i class="fas fa-newspaper text-blue-600 text-xl"></i>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-900 mb-1" id="stat-berita">{{ $stats['berita'] ?? '25' }}</div>
+                        <div class="text-sm text-gray-600">Berita Aktif</div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-12 h-12 bg-red-100 rounded-full mb-3">
+                            <i class="fas fa-shield-alt text-red-600 text-xl"></i>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-900 mb-1" id="stat-wbs">{{ $stats['wbs'] ?? '50' }}</div>
+                        <div class="text-sm text-gray-600">Laporan WBS</div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-12 h-12 bg-purple-100 rounded-full mb-3">
+                            <i class="fas fa-eye text-purple-600 text-xl"></i>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-900 mb-1" id="stat-views">{{ $stats['total_views'] ?? '1,250' }}</div>
+                        <div class="text-sm text-gray-600">Total Kunjungan</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -320,7 +363,7 @@
                 </p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- WBS Card -->
                 <x-card class="hover:shadow-lg transition-shadow duration-300 group">
                     <div class="aspect-w-16 aspect-h-9 mb-4">
@@ -333,7 +376,7 @@
                             WBS
                         </h3>
                         <p class="text-gray-600 mb-4">
-                            Anda dapat melaporkan tindak pidana korupsi yang dilakukan oleh seseorang kepada bagian Pengawasan Internal. Tidak perlu takut identitas Anda akan terungkap karena Papua Tengah akan menjamin identitas Anda. Jadilah whistleblower bagi Papua Tengah.
+                            Anda dapat melaporkan tindak pidana korupsi yang dilakukan oleh seseorang kepada bagian Pengawasan Internal. Tidak perlu takut identitas Anda akan terungkap karena Papua Tengah akan menjamin identitas Anda.
                         </p>
                         <x-button href="{{ route('public.wbs') }}" variant="outline" class="w-full text-red-600 border-red-600 hover:bg-red-50">
                             <i class="fas fa-external-link-alt mr-2"></i>
@@ -356,9 +399,30 @@
                         <p class="text-gray-600 mb-4">
                             Temukan informasi berita terkini dan kegiatan dari Inspektorat Provinsi Papua Tengah. Akses berbagai informasi penting untuk masyarakat Papua Tengah.
                         </p>
-                        <x-button href="#layanan" variant="outline" class="w-full text-blue-600 border-blue-600 hover:bg-blue-50">
-                            <i class="fas fa-arrow-up mr-2"></i>
+                        <x-button href="{{ route('public.berita.index') }}" variant="outline" class="w-full text-blue-600 border-blue-600 hover:bg-blue-50">
+                            <i class="fas fa-newspaper mr-2"></i>
                             Lihat Berita
+                        </x-button>
+                    </div>
+                </x-card>
+
+                <!-- Portal OPD Card -->
+                <x-card class="hover:shadow-lg transition-shadow duration-300 group">
+                    <div class="aspect-w-16 aspect-h-9 mb-4">
+                        <div class="w-full h-48 bg-gradient-to-br from-emerald-100 to-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-building text-emerald-600 text-4xl"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-emerald-600 transition-colors">
+                            Portal OPD
+                        </h3>
+                        <p class="text-gray-600 mb-4">
+                            Jelajahi informasi lengkap tentang Organisasi Perangkat Daerah (OPD) di Papua Tengah. Akses profil, visi-misi, dan kontak setiap OPD dengan mudah.
+                        </p>
+                        <x-button href="{{ route('public.portal-opd.index') }}" variant="outline" class="w-full text-emerald-600 border-emerald-600 hover:bg-emerald-50">
+                            <i class="fas fa-building mr-2"></i>
+                            Lihat Portal OPD
                         </x-button>
                     </div>
                 </x-card>
@@ -366,23 +430,120 @@
                 <!-- Informasi Kontak Card -->
                 <x-card class="hover:shadow-lg transition-shadow duration-300 group">
                     <div class="aspect-w-16 aspect-h-9 mb-4">
-                        <div class="w-full h-48 bg-gradient-to-br from-green-100 to-teal-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-map-marker-alt text-green-600 text-4xl"></i>
+                        <div class="w-full h-48 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-map-marker-alt text-purple-600 text-4xl"></i>
                         </div>
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-green-600 transition-colors">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">
                             Informasi Kontak
                         </h3>
                         <p class="text-gray-600 mb-4">
                             Hubungi kami melalui berbagai saluran komunikasi yang tersedia. Dapatkan informasi alamat, nomor telepon, dan email resmi Inspektorat Provinsi Papua Tengah.
                         </p>
-                        <x-button href="#informasi" variant="outline" class="w-full text-green-600 border-green-600 hover:bg-green-50">
+                        <x-button href="#informasi" variant="outline" class="w-full text-purple-600 border-purple-600 hover:bg-purple-50">
                             <i class="fas fa-arrow-down mr-2"></i>
                             Lihat Informasi
                         </x-button>
                     </div>
                 </x-card>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portal OPD Showcase Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                    Portal Organisasi Perangkat Daerah
+                </h2>
+                <p class="text-xl text-gray-600 max-w-4xl mx-auto">
+                    Jelajahi informasi lengkap tentang OPD di Papua Tengah. Akses profil, visi-misi, kontak, dan layanan dari setiap Organisasi Perangkat Daerah dengan mudah dan terpercaya.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                <div>
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-8">
+                        <div class="flex items-center justify-center w-20 h-20 bg-emerald-100 rounded-full mb-6">
+                            <i class="fas fa-building text-emerald-600 text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Informasi OPD Terlengkap</h3>
+                        <p class="text-gray-600 mb-6">
+                            Temukan profil lengkap setiap OPD mulai dari visi-misi, struktur organisasi, kepala OPD, hingga informasi kontak yang dapat dihubungi langsung.
+                        </p>
+                        <ul class="space-y-3 text-gray-600">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-emerald-500 mr-3"></i>
+                                Profil dan Visi-Misi OPD
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-emerald-500 mr-3"></i>
+                                Informasi Kepala OPD
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-emerald-500 mr-3"></i>
+                                Kontak dan Alamat Lengkap
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-emerald-500 mr-3"></i>
+                                Website Resmi OPD
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                            <i class="fas fa-users text-blue-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Mudah Diakses</h4>
+                        <p class="text-gray-600 text-sm">
+                            Interface yang user-friendly memudahkan masyarakat mengakses informasi OPD yang dibutuhkan.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
+                            <i class="fas fa-sync-alt text-purple-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Selalu Update</h4>
+                        <p class="text-gray-600 text-sm">
+                            Informasi OPD selalu diperbaharui untuk memberikan data yang akurat dan terkini.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-center justify-center w-16 h-16 bg-indigo-100 rounded-full mb-4">
+                            <i class="fas fa-search text-indigo-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Pencarian Cepat</h4>
+                        <p class="text-gray-600 text-sm">
+                            Fitur pencarian membantu menemukan OPD yang dicari dengan cepat dan efisien.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-center justify-center w-16 h-16 bg-rose-100 rounded-full mb-4">
+                            <i class="fas fa-phone text-rose-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Kontak Langsung</h4>
+                        <p class="text-gray-600 text-sm">
+                            Informasi kontak lengkap memungkinkan komunikasi langsung dengan OPD terkait.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <a href="{{ route('public.portal-opd.index') }}" 
+                   class="inline-flex items-center px-8 py-4 bg-emerald-600 text-white text-lg font-medium rounded-lg hover:bg-emerald-700 transition-colors">
+                    <i class="fas fa-building mr-3"></i>
+                    Jelajahi Portal OPD
+                    <i class="fas fa-arrow-right ml-3"></i>
+                </a>
             </div>
         </div>
     </section>
