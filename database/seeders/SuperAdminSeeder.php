@@ -19,7 +19,7 @@ class SuperAdminSeeder extends Seeder
             [
                 'name' => 'Super Administrator',
                 'password' => Hash::make('superadmin123'),
-                'role' => 'superadmin',
+                'role' => 'super_admin',
             ]
         );
 
@@ -59,11 +59,5 @@ class SuperAdminSeeder extends Seeder
                 'role' => 'admin_portal_opd',
             ]
         );
-
-        // Update existing admin user if exists
-        User::where('email', 'admin@example.com')
-            ->update([
-                'role' => 'admin'
-            ]);
     }
 }
