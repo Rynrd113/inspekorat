@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             PortalPapuaTengahSeeder::class,
             InfoKantorSeeder::class,
             WbsSeeder::class,
+            PortalOpdSeeder::class,
         ]);
     }
 }
