@@ -53,7 +53,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return in_array($this->role, ['admin', 'superadmin']);
+        return in_array($this->role, ['admin', 'super_admin', 'admin_wbs', 'admin_berita', 'admin_portal_opd']);
     }
     
     /**
@@ -61,7 +61,7 @@ class User extends Authenticatable
      */
     public function isSuperAdmin(): bool
     {
-        return $this->role === 'superadmin';
+        return $this->role === 'super_admin';
     }
     
     /**
@@ -86,12 +86,11 @@ class User extends Authenticatable
     public static function getRoles(): array
     {
         return [
-            'user' => 'User',
             'admin_wbs' => 'Admin WBS',
             'admin_berita' => 'Admin Berita',
             'admin_portal_opd' => 'Admin Portal OPD',
             'admin' => 'Admin',
-            'superadmin' => 'Super Admin'
+            'super_admin' => 'Super Admin'
         ];
     }
 }

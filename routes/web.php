@@ -40,7 +40,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         
         // WBS routes - protected by role middleware
-        Route::middleware('role:admin_wbs,admin,superadmin')->group(function () {
+        Route::middleware('role:admin_wbs,admin,super_admin')->group(function () {
             Route::get('wbs', [AdminWbsController::class, 'index'])->name('wbs.index');
             Route::get('wbs/create', [AdminWbsController::class, 'create'])->name('wbs.create');
             Route::post('wbs', [AdminWbsController::class, 'store'])->name('wbs.store');
@@ -51,7 +51,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Portal Papua Tengah (News) routes - protected by role middleware
-        Route::middleware('role:admin_berita,admin,superadmin')->group(function () {
+        Route::middleware('role:admin_berita,admin,super_admin')->group(function () {
             Route::get('portal-papua-tengah', [AdminPortalPapuaTengahController::class, 'index'])->name('portal-papua-tengah.index');
             Route::get('portal-papua-tengah/create', [AdminPortalPapuaTengahController::class, 'create'])->name('portal-papua-tengah.create');
             Route::post('portal-papua-tengah', [AdminPortalPapuaTengahController::class, 'store'])->name('portal-papua-tengah.store');
@@ -62,7 +62,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Portal OPD routes - protected by role middleware
-        Route::middleware('role:admin_portal_opd,admin,superadmin')->group(function () {
+        Route::middleware('role:admin_portal_opd,admin,super_admin')->group(function () {
             Route::get('portal-opd', [AdminPortalOpdController::class, 'index'])->name('portal-opd.index');
             Route::get('portal-opd/create', [AdminPortalOpdController::class, 'create'])->name('portal-opd.create');
             Route::post('portal-opd', [AdminPortalOpdController::class, 'store'])->name('portal-opd.store');
@@ -72,8 +72,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'destroy'])->name('portal-opd.destroy');
         });
         
-        // User Management routes - only for superadmin
-        Route::middleware('role:superadmin')->group(function () {
+        // User Management routes - only for super_admin
+        Route::middleware('role:super_admin')->group(function () {
             Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
             Route::get('users/create', [AdminUserController::class, 'create'])->name('users.create');
             Route::post('users', [AdminUserController::class, 'store'])->name('users.store');
