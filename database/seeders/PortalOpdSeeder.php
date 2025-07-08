@@ -119,7 +119,10 @@ class PortalOpdSeeder extends Seeder
         ];
 
         foreach ($opds as $opd) {
-            PortalOpd::create($opd);
+            PortalOpd::updateOrCreate(
+                ['nama_opd' => $opd['nama_opd']], 
+                $opd
+            );
         }
     }
 }

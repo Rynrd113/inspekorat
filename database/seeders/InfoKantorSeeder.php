@@ -58,7 +58,10 @@ class InfoKantorSeeder extends Seeder
         ];
 
         foreach ($infoKantor as $info) {
-            InfoKantor::create($info);
+            InfoKantor::updateOrCreate(
+                ['judul' => $info['judul'], 'kategori' => $info['kategori']], 
+                $info
+            );
         }
     }
 }

@@ -108,7 +108,10 @@ class WbsSeeder extends Seeder
         ];
 
         foreach ($wbsData as $data) {
-            Wbs::create($data);
+            Wbs::updateOrCreate(
+                ['email' => $data['email'], 'subjek' => $data['subjek']], 
+                $data
+            );
         }
     }
 }

@@ -101,7 +101,10 @@ class PortalPapuaTengahSeeder extends Seeder
         ];
 
         foreach ($portalData as $data) {
-            PortalPapuaTengah::create($data);
+            PortalPapuaTengah::updateOrCreate(
+                ['judul' => $data['judul']], 
+                $data
+            );
         }
     }
 }
