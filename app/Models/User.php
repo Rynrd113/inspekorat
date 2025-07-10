@@ -53,7 +53,11 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return in_array($this->role, ['admin', 'super_admin', 'admin_wbs', 'admin_berita', 'admin_portal_opd']);
+        return in_array($this->role, [
+            'admin', 'super_admin', 'admin_wbs', 'admin_berita', 
+            'admin_portal_opd', 'admin_pelayanan', 'admin_dokumen', 
+            'admin_galeri', 'admin_faq'
+        ]);
     }
     
     /**
@@ -86,9 +90,14 @@ class User extends Authenticatable
     public static function getRoles(): array
     {
         return [
+            'user' => 'User',
             'admin_wbs' => 'Admin WBS',
             'admin_berita' => 'Admin Berita',
             'admin_portal_opd' => 'Admin Portal OPD',
+            'admin_pelayanan' => 'Admin Pelayanan',
+            'admin_dokumen' => 'Admin Dokumen',
+            'admin_galeri' => 'Admin Galeri',
+            'admin_faq' => 'Admin FAQ',
             'admin' => 'Admin',
             'super_admin' => 'Super Admin'
         ];

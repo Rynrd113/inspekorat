@@ -1,33 +1,49 @@
 # Portal Inspektorat Papua Tengah
 
-Portal informasi dan layanan publik resmi Inspektorat Provinsi Papua Tengah dengan sistem manajemen konten komprehensif, Portal OPD, Whistleblower System (WBS), dan sistem role-based access control.
+Portal informasi dan layanan publik resmi Inspektorat Provinsi Papua Tengah dengan sistem manajemen konten komprehensif, Portal OPD, Whistleblower System (WBS), dan sistem role-based access control yang lengkap.
 
 [![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=flat&logo=laravel)](https://laravel.com)
 [![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat&logo=php)](https://php.net)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=flat&logo=bootstrap)](https://getbootstrap.com)
 [![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)](https://mysql.com)
 
 ## 🚀 Fitur Utama
 
 ### 🌐 **Portal Publik**
+- **Beranda**: Halaman utama dengan hero section dan informasi terkini
+- **Profil Inspektorat**: Visi, misi, sejarah, struktur organisasi lengkap
 - **Portal Berita**: Manajemen berita dengan editor rich text, kategori, dan pencarian
 - **Portal OPD**: Direktori lengkap Organisasi Perangkat Daerah dengan profil, visi-misi, dan kontak
+- **Pelayanan**: Katalog layanan Inspektorat dengan detail prosedur dan persyaratan
+- **Dokumen Publik**: Repository dokumen dengan kategorisasi dan sistem download
+- **Galeri**: Koleksi foto dan video kegiatan dengan viewer modal interaktif
+- **FAQ**: Sistem tanya jawab dengan search dan kategorisasi
 - **Whistleblower System (WBS)**: Sistem pelaporan yang aman dan terstruktur
-- **Informasi Kantor**: Profil lengkap instansi dengan kontak dan lokasi
-- **Statistik Real-time**: Menampilkan data terkini OPD, berita, dan laporan WBS
+- **Kontak**: Informasi kontak lengkap dengan peta lokasi
+- **Statistik Real-time**: Dashboard data terkini OPD, berita, dan laporan WBS
 - **Responsive Design**: Optimized untuk desktop, tablet, dan mobile
 
 ### 🔐 **Admin Panel dengan Role-Based Access Control**
 - **Dashboard Dinamis**: Tampilan berdasarkan role dan hak akses user
 - **User Management**: Manajemen user dengan sistem role (SuperAdmin eksklusif)
+- **Profil Management**: Kelola profil organisasi, visi, misi, dan struktur
+- **Pelayanan Management**: CRUD layanan dengan kategorisasi dan status
+- **Dokumen Management**: Upload, kategorisasi, dan kontrol akses dokumen
+- **Galeri Management**: Upload foto/video dengan thumbnail dan metadata
+- **FAQ Management**: Kelola pertanyaan dengan urutan dan status tampil
 - **Portal OPD Management**: CRUD lengkap untuk data OPD
 - **Portal Papua Tengah**: Manajemen berita dan konten
-- **WBS Management**: Kelola laporan whistleblower
-- **Multi-Role Support**: 6 level role dengan hak akses berbeda
+- **WBS Management**: Kelola laporan whistleblower dengan tracking status
+- **Multi-Role Support**: 10+ level role dengan hak akses berbeda
 
 ### 👥 **Sistem Role & Permissions**
 - **SuperAdmin**: Akses penuh termasuk user management
 - **Admin**: Akses ke semua modul kecuali user management  
+- **Admin Profil**: Khusus mengelola profil organisasi
+- **Admin Pelayanan**: Khusus mengelola layanan publik
+- **Admin Dokumen**: Khusus mengelola repository dokumen
+- **Admin Galeri**: Khusus mengelola galeri foto/video
+- **Admin FAQ**: Khusus mengelola sistem tanya jawab
 - **Admin Portal OPD**: Khusus mengelola data OPD
 - **Admin Berita**: Khusus mengelola berita/konten
 - **Admin WBS**: Khusus mengelola laporan WBS
