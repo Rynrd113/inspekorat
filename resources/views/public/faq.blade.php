@@ -22,7 +22,7 @@
 <nav aria-label="breadcrumb" class="bg-light py-2">
     <div class="container">
         <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{{ route('public.beranda') }}">Beranda</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('public.index') }}">Beranda</a></li>
             <li class="breadcrumb-item active">FAQ</li>
         </ol>
     </div>

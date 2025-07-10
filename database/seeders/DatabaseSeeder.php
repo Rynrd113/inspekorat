@@ -17,6 +17,11 @@ class DatabaseSeeder extends Seeder
             InfoKantorSeeder::class,
             WbsSeeder::class,
             PortalOpdSeeder::class,
+            // Seeders untuk modul baru
+            PelayananSeeder::class,
+            DokumenSeeder::class,
+            GaleriSeeder::class,
+            FaqSeeder::class,
         ]);
     }
 }

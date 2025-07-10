@@ -22,13 +22,16 @@
                 </div>
                 
                 <nav class="hidden md:block">
-                    <div class="flex items-center space-x-8">
-                        <a href="#beranda" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Beranda</a>
-                        <a href="{{ route('public.berita.index') }}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Berita</a>
-                        <a href="{{ route('public.portal-opd.index') }}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Portal OPD</a>
-                        <a href="#pintasan-layanan" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Layanan</a>
-                        <a href="#informasi" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">Kontak</a>
-                        <a href="{{ route('public.wbs') }}" class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">WBS</a>
+                    <div class="flex items-center space-x-6">
+                        <a href="#beranda" class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium">Beranda</a>
+                        <a href="{{ route('public.profil') }}" class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium">Profil</a>
+                        <a href="{{ route('public.berita.index') }}" class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium">Berita</a>
+                        <a href="{{ route('public.portal-opd.index') }}" class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium">Portal OPD</a>
+                        <a href="{{ route('public.pelayanan.index') }}" class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium">Pelayanan</a>
+                        <a href="{{ route('public.dokumen.index') }}" class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium">Dokumen</a>
+                        <a href="{{ route('public.galeri.index') }}" class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium">Galeri</a>
+                        <a href="{{ route('public.faq') }}" class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium">FAQ</a>
+                        <a href="{{ route('public.wbs') }}" class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium">WBS</a>
                         <a href="{{ route('admin.login') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">Admin</a>
                     </div>
                 </nav>
@@ -46,10 +49,13 @@
         <div class="md:hidden hidden" id="mobile-menu">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
                 <a href="#beranda" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Beranda</a>
+                <a href="{{ route('public.profil') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Profil</a>
                 <a href="{{ route('public.berita.index') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Berita</a>
                 <a href="{{ route('public.portal-opd.index') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Portal OPD</a>
-                <a href="#pintasan-layanan" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Layanan</a>
-                <a href="#informasi" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Kontak</a>
+                <a href="{{ route('public.pelayanan.index') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Pelayanan</a>
+                <a href="{{ route('public.dokumen.index') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Dokumen</a>
+                <a href="{{ route('public.galeri.index') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Galeri</a>
+                <a href="{{ route('public.faq') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">FAQ</a>
                 <a href="{{ route('public.wbs') }}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">WBS</a>
                 <a href="{{ route('admin.login') }}" class="block px-3 py-2 text-blue-600 font-medium">Admin</a>
             </div>
@@ -363,24 +369,129 @@
                 </p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Profil Card -->
+                <x-card class="hover:shadow-lg transition-shadow duration-300 group">
+                    <div class="aspect-w-16 aspect-h-9 mb-4">
+                        <div class="w-full h-40 bg-gradient-to-br from-indigo-100 to-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-university text-indigo-600 text-3xl"></i>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors">
+                            Profil Inspektorat
+                        </h3>
+                        <p class="text-gray-600 mb-3 text-sm">
+                            Pelajari profil lengkap, visi, misi, dan struktur organisasi Inspektorat Papua Tengah.
+                        </p>
+                        <x-button href="{{ route('public.profil') }}" variant="outline" class="w-full text-indigo-600 border-indigo-600 hover:bg-indigo-50 text-sm">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Lihat Profil
+                        </x-button>
+                    </div>
+                </x-card>
+
+                <!-- Pelayanan Card -->
+                <x-card class="hover:shadow-lg transition-shadow duration-300 group">
+                    <div class="aspect-w-16 aspect-h-9 mb-4">
+                        <div class="w-full h-40 bg-gradient-to-br from-teal-100 to-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-concierge-bell text-teal-600 text-3xl"></i>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">
+                            Layanan Publik
+                        </h3>
+                        <p class="text-gray-600 mb-3 text-sm">
+                            Akses berbagai layanan publik yang disediakan oleh Inspektorat Papua Tengah.
+                        </p>
+                        <x-button href="{{ route('public.pelayanan.index') }}" variant="outline" class="w-full text-teal-600 border-teal-600 hover:bg-teal-50 text-sm">
+                            <i class="fas fa-hands-helping mr-2"></i>
+                            Lihat Layanan
+                        </x-button>
+                    </div>
+                </x-card>
+
+                <!-- Dokumen Card -->
+                <x-card class="hover:shadow-lg transition-shadow duration-300 group">
+                    <div class="aspect-w-16 aspect-h-9 mb-4">
+                        <div class="w-full h-40 bg-gradient-to-br from-orange-100 to-red-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file-pdf text-orange-600 text-3xl"></i>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
+                            Dokumen Publik
+                        </h3>
+                        <p class="text-gray-600 mb-3 text-sm">
+                            Download dokumen resmi, peraturan, dan laporan dari Inspektorat Papua Tengah.
+                        </p>
+                        <x-button href="{{ route('public.dokumen.index') }}" variant="outline" class="w-full text-orange-600 border-orange-600 hover:bg-orange-50 text-sm">
+                            <i class="fas fa-download mr-2"></i>
+                            Lihat Dokumen
+                        </x-button>
+                    </div>
+                </x-card>
+
+                <!-- Galeri Card -->
+                <x-card class="hover:shadow-lg transition-shadow duration-300 group">
+                    <div class="aspect-w-16 aspect-h-9 mb-4">
+                        <div class="w-full h-40 bg-gradient-to-br from-pink-100 to-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-images text-pink-600 text-3xl"></i>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-pink-600 transition-colors">
+                            Galeri Kegiatan
+                        </h3>
+                        <p class="text-gray-600 mb-3 text-sm">
+                            Lihat dokumentasi foto dan video kegiatan Inspektorat Papua Tengah.
+                        </p>
+                        <x-button href="{{ route('public.galeri.index') }}" variant="outline" class="w-full text-pink-600 border-pink-600 hover:bg-pink-50 text-sm">
+                            <i class="fas fa-camera mr-2"></i>
+                            Lihat Galeri
+                        </x-button>
+                    </div>
+                </x-card>
+
+                <!-- FAQ Card -->
+                <x-card class="hover:shadow-lg transition-shadow duration-300 group">
+                    <div class="aspect-w-16 aspect-h-9 mb-4">
+                        <div class="w-full h-40 bg-gradient-to-br from-cyan-100 to-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-question-circle text-cyan-600 text-3xl"></i>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-cyan-600 transition-colors">
+                            FAQ
+                        </h3>
+                        <p class="text-gray-600 mb-3 text-sm">
+                            Temukan jawaban atas pertanyaan yang sering diajukan tentang layanan inspektorat.
+                        </p>
+                        <x-button href="{{ route('public.faq') }}" variant="outline" class="w-full text-cyan-600 border-cyan-600 hover:bg-cyan-50 text-sm">
+                            <i class="fas fa-comments mr-2"></i>
+                            Lihat FAQ
+                        </x-button>
+                    </div>
+                </x-card>
+
                 <!-- WBS Card -->
                 <x-card class="hover:shadow-lg transition-shadow duration-300 group">
                     <div class="aspect-w-16 aspect-h-9 mb-4">
-                        <div class="w-full h-48 bg-gradient-to-br from-red-100 to-pink-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-shield-alt text-red-600 text-4xl"></i>
+                        <div class="w-full h-40 bg-gradient-to-br from-red-100 to-pink-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-red-600 text-3xl"></i>
                         </div>
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-red-600 transition-colors">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-red-600 transition-colors">
                             WBS
                         </h3>
-                        <p class="text-gray-600 mb-4">
-                            Anda dapat melaporkan tindak pidana korupsi yang dilakukan oleh seseorang kepada bagian Pengawasan Internal. Tidak perlu takut identitas Anda akan terungkap karena Papua Tengah akan menjamin identitas Anda.
+                        <p class="text-gray-600 mb-3 text-sm">
+                            Laporkan dugaan pelanggaran atau korupsi melalui sistem pelaporan yang aman.
                         </p>
-                        <x-button href="{{ route('public.wbs') }}" variant="outline" class="w-full text-red-600 border-red-600 hover:bg-red-50">
-                            <i class="fas fa-external-link-alt mr-2"></i>
-                            Selengkapnya
+                        <x-button href="{{ route('public.wbs') }}" variant="outline" class="w-full text-red-600 border-red-600 hover:bg-red-50 text-sm">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            Buat Laporan
                         </x-button>
                     </div>
                 </x-card>
@@ -388,18 +499,18 @@
                 <!-- Portal Papua Tengah Card -->
                 <x-card class="hover:shadow-lg transition-shadow duration-300 group">
                     <div class="aspect-w-16 aspect-h-9 mb-4">
-                        <div class="w-full h-48 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-newspaper text-blue-600 text-4xl"></i>
+                        <div class="w-full h-40 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-newspaper text-blue-600 text-3xl"></i>
                         </div>
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                            Portal Papua Tengah
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                            Portal Berita
                         </h3>
-                        <p class="text-gray-600 mb-4">
-                            Temukan informasi berita terkini dan kegiatan dari Inspektorat Provinsi Papua Tengah. Akses berbagai informasi penting untuk masyarakat Papua Tengah.
+                        <p class="text-gray-600 mb-3 text-sm">
+                            Baca berita terkini dan informasi kegiatan dari Inspektorat Papua Tengah.
                         </p>
-                        <x-button href="{{ route('public.berita.index') }}" variant="outline" class="w-full text-blue-600 border-blue-600 hover:bg-blue-50">
+                        <x-button href="{{ route('public.berita.index') }}" variant="outline" class="w-full text-blue-600 border-blue-600 hover:bg-blue-50 text-sm">
                             <i class="fas fa-newspaper mr-2"></i>
                             Lihat Berita
                         </x-button>
@@ -409,41 +520,20 @@
                 <!-- Portal OPD Card -->
                 <x-card class="hover:shadow-lg transition-shadow duration-300 group">
                     <div class="aspect-w-16 aspect-h-9 mb-4">
-                        <div class="w-full h-48 bg-gradient-to-br from-emerald-100 to-green-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-building text-emerald-600 text-4xl"></i>
+                        <div class="w-full h-40 bg-gradient-to-br from-emerald-100 to-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-building text-emerald-600 text-3xl"></i>
                         </div>
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-emerald-600 transition-colors">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
                             Portal OPD
                         </h3>
-                        <p class="text-gray-600 mb-4">
-                            Jelajahi informasi lengkap tentang Organisasi Perangkat Daerah (OPD) di Papua Tengah. Akses profil, visi-misi, dan kontak setiap OPD dengan mudah.
+                        <p class="text-gray-600 mb-3 text-sm">
+                            Jelajahi informasi lengkap OPD di Papua Tengah beserta profil dan kontaknya.
                         </p>
-                        <x-button href="{{ route('public.portal-opd.index') }}" variant="outline" class="w-full text-emerald-600 border-emerald-600 hover:bg-emerald-50">
+                        <x-button href="{{ route('public.portal-opd.index') }}" variant="outline" class="w-full text-emerald-600 border-emerald-600 hover:bg-emerald-50 text-sm">
                             <i class="fas fa-building mr-2"></i>
                             Lihat Portal OPD
-                        </x-button>
-                    </div>
-                </x-card>
-
-                <!-- Informasi Kontak Card -->
-                <x-card class="hover:shadow-lg transition-shadow duration-300 group">
-                    <div class="aspect-w-16 aspect-h-9 mb-4">
-                        <div class="w-full h-48 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-map-marker-alt text-purple-600 text-4xl"></i>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">
-                            Informasi Kontak
-                        </h3>
-                        <p class="text-gray-600 mb-4">
-                            Hubungi kami melalui berbagai saluran komunikasi yang tersedia. Dapatkan informasi alamat, nomor telepon, dan email resmi Inspektorat Provinsi Papua Tengah.
-                        </p>
-                        <x-button href="#informasi" variant="outline" class="w-full text-purple-600 border-purple-600 hover:bg-purple-50">
-                            <i class="fas fa-arrow-down mr-2"></i>
-                            Lihat Informasi
                         </x-button>
                     </div>
                 </x-card>

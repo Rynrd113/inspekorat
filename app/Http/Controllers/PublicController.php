@@ -6,6 +6,10 @@ use App\Models\InfoKantor;
 use App\Models\PortalPapuaTengah;
 use App\Models\PortalOpd;
 use App\Models\Wbs;
+use App\Models\Pelayanan;
+use App\Models\Dokumen;
+use App\Models\Galeri;
+use App\Models\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -154,23 +158,12 @@ class PublicController extends Controller
      */
     public function pelayanan(Request $request): View
     {
-        // Mock data - replace with actual Pelayanan model when implemented
-        $pelayanans = collect([
-            (object)[
-                'id' => 1,
-                'nama_layanan' => 'Konsultasi Pengawasan',
-                'deskripsi' => 'Layanan konsultasi terkait pengawasan internal',
-                'kategori' => 'konsultasi',
-                'waktu_pelayanan' => '3 hari kerja'
-            ],
-            (object)[
-                'id' => 2,
-                'nama_layanan' => 'Audit Internal',
-                'deskripsi' => 'Layanan audit internal untuk OPD',
-                'kategori' => 'audit',
-                'waktu_pelayanan' => '14 hari kerja'
-            ]
-        ]);
+        $pelayanans = Cache::remember('public_pelayanans', 600, function () {
+            return Pelayanan::where('status', true)
+                ->orderBy('urutan', 'asc')
+                ->orderBy('nama', 'asc')
+                ->get();
+        });
 
         return view('public.pelayanan.index', compact('pelayanans'));
     }
@@ -180,25 +173,17 @@ class PublicController extends Controller
      */
     public function pelayananShow($id): View
     {
-        // Mock data - replace with actual Pelayanan model
-        $pelayanan = (object)[
-            'id' => $id,
-            'nama_layanan' => 'Konsultasi Pengawasan',
-            'deskripsi' => 'Layanan konsultasi terkait pengawasan internal',
-            'prosedur' => [
-                'Mengajukan permohonan',
-                'Verifikasi berkas',
-                'Proses konsultasi',
-                'Hasil konsultasi'
-            ],
-            'persyaratan' => [
-                'Surat permohonan',
-                'Identitas pemohon',
-                'Dokumen pendukung'
-            ]
-        ];
-
-        return view('public.pelayanan.show', compact('pelayanan'));
+        $pelayanan = Pelayanan::where('status', true)->findOrFail($id);
+        
+        // Get related services (same category, different id, limit 3)
+        $relatedServices = Pelayanan::where('status', true)
+            ->where('kategori', $pelayanan->kategori)
+            ->where('id', '!=', $id)
+            ->orderBy('urutan')
+            ->limit(3)
+            ->get();
+            
+        return view('public.pelayanan.show', compact('pelayanan', 'relatedServices'));
     }
 
     /**
@@ -206,16 +191,29 @@ class PublicController extends Controller
      */
     public function dokumen(Request $request): View
     {
-        // Mock data - replace with actual Dokumen model
-        $dokumens = collect([
-            (object)[
-                'id' => 1,
-                'judul' => 'Peraturan Inspektorat No. 1/2024',
-                'kategori' => 'peraturan',
-                'tahun' => 2024,
-                'tanggal_terbit' => '2024-01-15'
-            ]
-        ]);
+        $query = Dokumen::where('status', true);
+
+        // Filter by category if specified
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                  ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
+        }
+
+        $dokumens = Cache::remember(
+            'public_dokumens_' . md5($request->fullUrl()), 
+            600, 
+            function () use ($query) {
+                return $query->orderBy('tanggal_publikasi', 'desc')->get();
+            }
+        );
 
         return view('public.dokumen.index', compact('dokumens'));
     }
@@ -225,8 +223,23 @@ class PublicController extends Controller
      */
     public function dokumenDownload($id)
     {
-        // Implementation for document download
-        return response()->download(storage_path('app/public/dokumen/sample.pdf'));
+        $dokumen = Dokumen::where('status', true)->findOrFail($id);
+        
+        // Increment download count
+        $dokumen->increment('download_count');
+
+        // Return file download
+        $filePath = storage_path('app/' . $dokumen->file_path);
+        
+        if (file_exists($filePath)) {
+            return response()->download($filePath, $dokumen->file_name);
+        }
+
+        // If file doesn't exist, return mock response for demo
+        return response()->json([
+            'message' => 'File download akan segera tersedia',
+            'file' => $dokumen->file_name
+        ]);
     }
 
     /**
@@ -234,16 +247,27 @@ class PublicController extends Controller
      */
     public function galeri(Request $request): View
     {
-        // Mock data - replace with actual Galeri model
-        $galeris = collect([
-            (object)[
-                'id' => 1,
-                'judul' => 'Kegiatan Pengawasan 2024',
-                'kategori' => 'foto',
-                'album' => 'Pengawasan',
-                'thumbnail' => 'galeri/sample1.jpg'
-            ]
-        ]);
+        $query = Galeri::where('status', true);
+
+        // Filter by type if specified
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // Filter by category if specified
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        $galeris = Cache::remember(
+            'public_galeri_' . md5($request->fullUrl()), 
+            600, 
+            function () use ($query) {
+                return $query->orderBy('urutan', 'asc')
+                           ->orderBy('tanggal_event', 'desc')
+                           ->get();
+            }
+        );
 
         return view('public.galeri.index', compact('galeris'));
     }
@@ -253,39 +277,70 @@ class PublicController extends Controller
      */
     public function galeriShow($id): View
     {
-        // Mock data - replace with actual Galeri model
-        $galeri = (object)[
-            'id' => $id,
-            'judul' => 'Kegiatan Pengawasan 2024',
-            'kategori' => 'foto',
-            'file_media' => 'galeri/sample1.jpg'
-        ];
+        $galeri = Galeri::where('status', true)->findOrFail($id);
+        
+        // Get related items from same category
+        $related = Galeri::where('status', true)
+            ->where('kategori', $galeri->kategori)
+            ->where('id', '!=', $galeri->id)
+            ->orderBy('urutan', 'asc')
+            ->take(6)
+            ->get();
 
-        return view('public.galeri.show', compact('galeri'));
+        return view('public.galeri.show', compact('galeri', 'related'));
     }
 
     /**
      * Show FAQ page
      */
-    public function faq(): View
+    public function faq(Request $request): View
     {
-        // Mock data - replace with actual Faq model
-        $faqs = collect([
-            (object)[
-                'id' => 1,
-                'pertanyaan' => 'Apa itu WBS?',
-                'jawaban' => 'Whistleblowing System adalah sistem pelaporan...',
-                'kategori' => 'wbs'
-            ],
-            (object)[
-                'id' => 2,
-                'pertanyaan' => 'Bagaimana cara mengakses Portal OPD?',
-                'jawaban' => 'Portal OPD dapat diakses melalui menu...',
-                'kategori' => 'portal_opd'
-            ]
-        ]);
+        $query = Faq::where('status', true);
 
-        return view('public.faq', compact('faqs'));
+        // Filter by category if specified
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('pertanyaan', 'like', "%{$search}%")
+                  ->orWhere('jawaban', 'like', "%{$search}%");
+            });
+        }
+
+        $faqs = Cache::remember(
+            'public_faqs_' . md5($request->fullUrl()), 
+            600, 
+            function () use ($query) {
+                return $query->orderBy('is_popular', 'desc')
+                           ->orderBy('urutan', 'asc')
+                           ->get();
+            }
+        );
+
+        // Get popular FAQs for sidebar
+        $popularFaqs = Cache::remember('popular_faqs', 600, function () {
+            return Faq::where('status', true)
+                ->where('is_popular', true)
+                ->orderBy('view_count', 'desc')
+                ->take(5)
+                ->get();
+        });
+
+        // Get FAQ categories
+        $categories = Cache::remember('faq_categories', 600, function () {
+            return Faq::where('status', true)
+                ->select('kategori')
+                ->distinct()
+                ->whereNotNull('kategori')
+                ->orderBy('kategori')
+                ->pluck('kategori');
+        });
+
+        return view('public.faq', compact('faqs', 'popularFaqs', 'categories'));
     }
 
     /**

@@ -59,5 +59,51 @@ class SuperAdminSeeder extends Seeder
                 'role' => 'admin_portal_opd',
             ]
         );
+
+        // Admin untuk modul baru
+        User::firstOrCreate(
+            ['email' => 'admin.profil@inspektorat.id'],
+            [
+                'name' => 'Admin Profil',
+                'password' => Hash::make('adminprofil123'),
+                'role' => 'admin_profil',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'admin.pelayanan@inspektorat.id'],
+            [
+                'name' => 'Admin Pelayanan',
+                'password' => Hash::make('adminpelayanan123'),
+                'role' => 'admin_pelayanan',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'admin.dokumen@inspektorat.id'],
+            [
+                'name' => 'Admin Dokumen',
+                'password' => Hash::make('admindokumen123'),
+                'role' => 'admin_dokumen',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'admin.galeri@inspektorat.id'],
+            [
+                'name' => 'Admin Galeri',
+                'password' => Hash::make('admingaleri123'),
+                'role' => 'admin_galeri',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'admin.faq@inspektorat.id'],
+            [
+                'name' => 'Admin FAQ',
+                'password' => Hash::make('adminfaq123'),
+                'role' => 'admin_faq',
+            ]
+        );
     }
 }
