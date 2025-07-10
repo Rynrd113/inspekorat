@@ -15,12 +15,12 @@
             <h1 class="text-2xl font-bold text-gray-900">Portal OPD</h1>
             <p class="text-gray-600 mt-1">Kelola data Organisasi Perangkat Daerah</p>
         </div>
-        @can('create', App\Models\PortalOpd::class)
+        @if(auth()->user()->hasAnyRole(['admin_portal_opd', 'admin', 'super_admin']))
         <a href="{{ route('admin.portal-opd.create') }}"
            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
             <i class="fas fa-plus mr-2"></i>Tambah OPD
         </a>
-        @endcan
+        @endif
     </div>
 
     <!-- Search and Filter -->
@@ -113,14 +113,14 @@
                                    title="Lihat">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                @can('update', $opd)
+                                @if(auth()->user()->hasAnyRole(['admin_portal_opd', 'admin', 'super_admin']))
                                 <a href="{{ route('admin.portal-opd.edit', $opd) }}"
                                    class="text-yellow-600 hover:text-yellow-900"
                                    title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                @endcan
-                                @can('delete', $opd)
+                                @endif
+                                @if(auth()->user()->hasAnyRole(['admin_portal_opd', 'admin', 'super_admin']))
                                 <form action="{{ route('admin.portal-opd.destroy', $opd) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
@@ -131,7 +131,7 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
-                                @endcan
+                                @endif
                             </div>
                         </td>
                     </tr>
