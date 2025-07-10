@@ -90,6 +90,9 @@ class Faq extends Model
             'pengawasan' => 'Pengawasan',
             'wbs' => 'Whistleblowing System',
             'portal_opd' => 'Portal OPD',
+            'dokumen' => 'Dokumen',
+            'galeri' => 'Galeri',
+            'kontak' => 'Kontak',
             'teknis' => 'Teknis',
             'lainnya' => 'Lainnya',
         ];
@@ -110,5 +113,44 @@ class Faq extends Model
     public function incrementView()
     {
         $this->increment('view_count');
+    }
+
+    /**
+     * Get FAQs by user role context
+     */
+    public static function getByUserRole($userRole)
+    {
+        $categoryMap = [
+            'admin_wbs' => ['wbs', 'umum'],
+            'admin_portal_opd' => ['portal_opd', 'umum'],
+            'admin_pelayanan' => ['pelayanan', 'umum'],
+            'admin_dokumen' => ['dokumen', 'umum'],
+            'admin_galeri' => ['galeri', 'umum'],
+            'wbs_manager' => ['wbs', 'umum'],
+            'opd_manager' => ['portal_opd', 'umum'],
+            'service_manager' => ['pelayanan', 'dokumen', 'kontak', 'umum'],
+            'content_manager' => ['galeri', 'umum'],
+        ];
+
+        $categories = $categoryMap[$userRole] ?? ['umum'];
+        
+        return self::active()
+            ->whereIn('kategori', $categories)
+            ->ordered()
+            ->get();
+    }
+
+    /**
+     * Search FAQs
+     */
+    public static function search($query)
+    {
+        return self::active()
+            ->where(function($q) use ($query) {
+                $q->where('pertanyaan', 'like', "%{$query}%")
+                  ->orWhere('jawaban', 'like', "%{$query}%")
+                  ->orWhere('tags', 'like', "%{$query}%");
+            })
+            ->ordered();
     }
 }

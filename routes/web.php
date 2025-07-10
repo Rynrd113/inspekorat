@@ -11,6 +11,9 @@ use App\Http\Controllers\Admin\PelayananController as AdminPelayananController;
 use App\Http\Controllers\Admin\DokumenController as AdminDokumenController;
 use App\Http\Controllers\Admin\GaleriController as AdminGaleriController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
+use App\Http\Controllers\Admin\AuditLogController as AdminAuditLogController;
+use App\Http\Controllers\Admin\SystemConfigurationController as AdminSystemConfigurationController;
+use App\Http\Controllers\Admin\ContentApprovalController as AdminContentApprovalController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\PortalOpdController;
 use Illuminate\Support\Facades\Route;
@@ -56,7 +59,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         
         // WBS routes - protected by role middleware
-        Route::middleware('role:admin_wbs,admin,super_admin')->group(function () {
+        Route::middleware('role:admin_wbs,wbs_manager,admin,super_admin')->group(function () {
             Route::get('wbs', [AdminWbsController::class, 'index'])->name('wbs.index');
             Route::get('wbs/create', [AdminWbsController::class, 'create'])->name('wbs.create');
             Route::post('wbs', [AdminWbsController::class, 'store'])->name('wbs.store');
@@ -67,7 +70,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Portal Papua Tengah (News) routes - protected by role middleware
-        Route::middleware('role:admin_berita,admin,super_admin')->group(function () {
+        Route::middleware('role:admin_berita,content_manager,admin,super_admin')->group(function () {
             Route::get('portal-papua-tengah', [AdminPortalPapuaTengahController::class, 'index'])->name('portal-papua-tengah.index');
             Route::get('portal-papua-tengah/create', [AdminPortalPapuaTengahController::class, 'create'])->name('portal-papua-tengah.create');
             Route::post('portal-papua-tengah', [AdminPortalPapuaTengahController::class, 'store'])->name('portal-papua-tengah.store');
@@ -78,7 +81,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Portal OPD routes - protected by role middleware
-        Route::middleware('role:admin_portal_opd,admin,super_admin')->group(function () {
+        Route::middleware('role:admin_portal_opd,opd_manager,admin,super_admin')->group(function () {
             Route::get('portal-opd', [AdminPortalOpdController::class, 'index'])->name('portal-opd.index');
             Route::get('portal-opd/create', [AdminPortalOpdController::class, 'create'])->name('portal-opd.create');
             Route::post('portal-opd', [AdminPortalOpdController::class, 'store'])->name('portal-opd.store');
@@ -100,7 +103,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Pelayanan routes - protected by role middleware
-        Route::middleware('role:admin_pelayanan,admin,super_admin')->group(function () {
+        Route::middleware('role:admin_pelayanan,service_manager,admin,super_admin')->group(function () {
             Route::get('pelayanan', [AdminPelayananController::class, 'index'])->name('pelayanan.index');
             Route::get('pelayanan/create', [AdminPelayananController::class, 'create'])->name('pelayanan.create');
             Route::post('pelayanan', [AdminPelayananController::class, 'store'])->name('pelayanan.store');
@@ -111,7 +114,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Dokumen routes - protected by role middleware
-        Route::middleware('role:admin_dokumen,admin,super_admin')->group(function () {
+        Route::middleware('role:admin_dokumen,service_manager,admin,super_admin')->group(function () {
             Route::get('dokumen', [AdminDokumenController::class, 'index'])->name('dokumen.index');
             Route::get('dokumen/create', [AdminDokumenController::class, 'create'])->name('dokumen.create');
             Route::post('dokumen', [AdminDokumenController::class, 'store'])->name('dokumen.store');
@@ -123,72 +126,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Galeri routes - protected by role middleware
-        Route::middleware('role:admin_galeri,admin,super_admin')->group(function () {
-            Route::get('galeri', [AdminGaleriController::class, 'index'])->name('galeri.index');
-            Route::get('galeri/create', [AdminGaleriController::class, 'create'])->name('galeri.create');
-            Route::post('galeri', [AdminGaleriController::class, 'store'])->name('galeri.store');
-            Route::get('galeri/{galeri}', [AdminGaleriController::class, 'show'])->name('galeri.show');
-            Route::get('galeri/{galeri}/edit', [AdminGaleriController::class, 'edit'])->name('galeri.edit');
-            Route::put('galeri/{galeri}', [AdminGaleriController::class, 'update'])->name('galeri.update');
-            Route::delete('galeri/{galeri}', [AdminGaleriController::class, 'destroy'])->name('galeri.destroy');
-            Route::post('galeri/bulk-upload', [AdminGaleriController::class, 'bulkUpload'])->name('galeri.bulk-upload');
-        });
-        
-        // FAQ routes - protected by role middleware
-        Route::middleware('role:admin_faq,admin,super_admin')->group(function () {
-            Route::get('faq', [AdminFaqController::class, 'index'])->name('faq.index');
-            Route::get('faq/create', [AdminFaqController::class, 'create'])->name('faq.create');
-            Route::post('faq', [AdminFaqController::class, 'store'])->name('faq.store');
-            Route::get('faq/{faq}', [AdminFaqController::class, 'show'])->name('faq.show');
-            Route::get('faq/{faq}/edit', [AdminFaqController::class, 'edit'])->name('faq.edit');
-            Route::put('faq/{faq}', [AdminFaqController::class, 'update'])->name('faq.update');
-            Route::delete('faq/{faq}', [AdminFaqController::class, 'destroy'])->name('faq.destroy');
-            Route::post('faq/reorder', [AdminFaqController::class, 'reorder'])->name('faq.reorder');
-        });
-        
-        // User Management routes - only for super_admin
-        Route::middleware('role:super_admin')->group(function () {
-            Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
-            Route::get('users/create', [AdminUserController::class, 'create'])->name('users.create');
-            Route::post('users', [AdminUserController::class, 'store'])->name('users.store');
-            Route::get('users/{user}', [AdminUserController::class, 'show'])->name('users.show');
-            Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
-            Route::put('users/{user}', [AdminUserController::class, 'update'])->name('users.update');
-            Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
-        });
-
-        // Profil Organisasi routes - accessible by admin and super_admin
-        Route::middleware('role:admin,super_admin')->group(function () {
-            Route::get('profil', [AdminProfilController::class, 'index'])->name('profil.index');
-            Route::get('profil/edit', [AdminProfilController::class, 'edit'])->name('profil.edit');
-            Route::put('profil', [AdminProfilController::class, 'update'])->name('profil.update');
-        });
-
-        // Pelayanan routes - accessible by admin_pelayanan, admin, super_admin
-        Route::middleware('role:admin_pelayanan,admin,super_admin')->group(function () {
-            Route::get('pelayanan', [AdminPelayananController::class, 'index'])->name('pelayanan.index');
-            Route::get('pelayanan/create', [AdminPelayananController::class, 'create'])->name('pelayanan.create');
-            Route::post('pelayanan', [AdminPelayananController::class, 'store'])->name('pelayanan.store');
-            Route::get('pelayanan/{pelayanan}', [AdminPelayananController::class, 'show'])->name('pelayanan.show');
-            Route::get('pelayanan/{pelayanan}/edit', [AdminPelayananController::class, 'edit'])->name('pelayanan.edit');
-            Route::put('pelayanan/{pelayanan}', [AdminPelayananController::class, 'update'])->name('pelayanan.update');
-            Route::delete('pelayanan/{pelayanan}', [AdminPelayananController::class, 'destroy'])->name('pelayanan.destroy');
-        });
-
-        // Dokumen routes - accessible by admin_dokumen, admin, super_admin
-        Route::middleware('role:admin_dokumen,admin,super_admin')->group(function () {
-            Route::get('dokumen', [AdminDokumenController::class, 'index'])->name('dokumen.index');
-            Route::get('dokumen/create', [AdminDokumenController::class, 'create'])->name('dokumen.create');
-            Route::post('dokumen', [AdminDokumenController::class, 'store'])->name('dokumen.store');
-            Route::get('dokumen/{dokumen}', [AdminDokumenController::class, 'show'])->name('dokumen.show');
-            Route::get('dokumen/{dokumen}/edit', [AdminDokumenController::class, 'edit'])->name('dokumen.edit');
-            Route::put('dokumen/{dokumen}', [AdminDokumenController::class, 'update'])->name('dokumen.update');
-            Route::delete('dokumen/{dokumen}', [AdminDokumenController::class, 'destroy'])->name('dokumen.destroy');
-            Route::get('dokumen/{dokumen}/download', [AdminDokumenController::class, 'download'])->name('dokumen.download');
-        });
-        
-        // Galeri routes - accessible by admin_galeri, admin, super_admin
-        Route::middleware('role:admin_galeri,admin,super_admin')->group(function () {
+        Route::middleware('role:admin_galeri,content_manager,admin,super_admin')->group(function () {
             Route::get('galeri', [AdminGaleriController::class, 'index'])->name('galeri.index');
             Route::get('galeri/create', [AdminGaleriController::class, 'create'])->name('galeri.create');
             Route::post('galeri', [AdminGaleriController::class, 'store'])->name('galeri.store');
@@ -200,7 +138,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // FAQ routes - accessible by admin_faq, admin, super_admin
-        Route::middleware('role:admin_faq,admin,super_admin')->group(function () {
+        Route::middleware('role:admin_faq,content_manager,admin,super_admin')->group(function () {
             Route::get('faq', [AdminFaqController::class, 'index'])->name('faq.index');
             Route::get('faq/create', [AdminFaqController::class, 'create'])->name('faq.create');
             Route::post('faq', [AdminFaqController::class, 'store'])->name('faq.store');
@@ -209,6 +147,45 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('faq/{faq}', [AdminFaqController::class, 'update'])->name('faq.update');
             Route::delete('faq/{faq}', [AdminFaqController::class, 'destroy'])->name('faq.destroy');
             Route::post('faq/reorder', [AdminFaqController::class, 'reorder'])->name('faq.reorder');
+        });
+        
+        // Content Approval routes - accessible by content_manager, admin, super_admin
+        Route::middleware('role:content_manager,admin,super_admin')->group(function () {
+            Route::get('approvals', [AdminContentApprovalController::class, 'index'])->name('approvals.index');
+            Route::get('approvals/{approval}', [AdminContentApprovalController::class, 'show'])->name('approvals.show');
+            Route::post('approvals/{approval}/approve', [AdminContentApprovalController::class, 'approve'])->name('approvals.approve');
+            Route::post('approvals/{approval}/reject', [AdminContentApprovalController::class, 'reject'])->name('approvals.reject');
+            Route::post('approvals/bulk-action', [AdminContentApprovalController::class, 'bulkAction'])->name('approvals.bulk-action');
+            Route::get('approvals/stats', [AdminContentApprovalController::class, 'stats'])->name('approvals.stats');
+        });
+        
+        // System Configuration routes - only for super_admin
+        Route::middleware('role:super_admin')->group(function () {
+            // User Management routes
+            Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
+            Route::get('users/create', [AdminUserController::class, 'create'])->name('users.create');
+            Route::post('users', [AdminUserController::class, 'store'])->name('users.store');
+            Route::get('users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+            Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+            Route::put('users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+            Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+            
+            // System Configuration routes
+            Route::get('configurations', [AdminSystemConfigurationController::class, 'index'])->name('configurations.index');
+            Route::post('configurations', [AdminSystemConfigurationController::class, 'update'])->name('configurations.update');
+            Route::post('configurations/store', [AdminSystemConfigurationController::class, 'store'])->name('configurations.store');
+            Route::delete('configurations/{configuration}', [AdminSystemConfigurationController::class, 'destroy'])->name('configurations.destroy');
+            Route::post('configurations/initialize', [AdminSystemConfigurationController::class, 'initialize'])->name('configurations.initialize');
+            Route::get('configurations/export', [AdminSystemConfigurationController::class, 'export'])->name('configurations.export');
+            Route::post('configurations/import', [AdminSystemConfigurationController::class, 'import'])->name('configurations.import');
+        });
+        
+        // Audit Log routes - only for super_admin
+        Route::middleware('role:super_admin')->group(function () {
+            Route::get('audit-logs', [AdminAuditLogController::class, 'index'])->name('audit-logs.index');
+            Route::get('audit-logs/{auditLog}', [AdminAuditLogController::class, 'show'])->name('audit-logs.show');
+            Route::get('audit-logs/stats', [AdminAuditLogController::class, 'stats'])->name('audit-logs.stats');
+            Route::get('audit-logs/export', [AdminAuditLogController::class, 'export'])->name('audit-logs.export');
         });
     });
 });

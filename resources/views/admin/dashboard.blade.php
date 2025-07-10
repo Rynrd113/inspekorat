@@ -8,7 +8,7 @@
 @section('main-content')
 <!-- Quick Actions -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    @if(auth()->user()->hasAnyRole(['admin_wbs', 'admin', 'superadmin']))
+    @if(auth()->user()->hasAnyRole(['admin_wbs', 'wbs_manager', 'admin', 'superadmin']))
     <x-card class="hover:shadow-lg transition-shadow duration-200">
         <div class="text-center">
             <div class="bg-blue-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
@@ -24,7 +24,7 @@
     </x-card>
     @endif
 
-    @if(auth()->user()->hasAnyRole(['admin_berita', 'admin', 'superadmin']))
+    @if(auth()->user()->hasAnyRole(['admin_berita', 'content_manager', 'admin', 'superadmin']))
     <x-card class="hover:shadow-lg transition-shadow duration-200">
         <div class="text-center">
             <div class="bg-purple-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
@@ -40,7 +40,7 @@
     </x-card>
     @endif
 
-    @if(auth()->user()->hasAnyRole(['admin_portal_opd', 'admin', 'superadmin']))
+    @if(auth()->user()->hasAnyRole(['admin_portal_opd', 'opd_manager', 'admin', 'superadmin']))
     <x-card class="hover:shadow-lg transition-shadow duration-200">
         <div class="text-center">
             <div class="bg-emerald-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
@@ -51,6 +51,86 @@
             <a href="{{ route('admin.portal-opd.index') }}" 
                class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-md hover:bg-emerald-700 transition-colors">
                 <i class="fas fa-arrow-right mr-2"></i>Kelola Portal OPD
+            </a>
+        </div>
+    </x-card>
+    @endif
+
+    @if(auth()->user()->hasAnyRole(['admin_faq', 'content_manager', 'admin', 'superadmin']))
+    <x-card class="hover:shadow-lg transition-shadow duration-200">
+        <div class="text-center">
+            <div class="bg-teal-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <i class="fas fa-question-circle text-teal-600 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">FAQ</h3>
+            <p class="text-gray-600 text-sm mb-4">Kelola pertanyaan yang sering diajukan</p>
+            <a href="{{ route('admin.faq.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-md hover:bg-teal-700 transition-colors">
+                <i class="fas fa-arrow-right mr-2"></i>Kelola FAQ
+            </a>
+        </div>
+    </x-card>
+    @endif
+
+    @if(auth()->user()->hasAnyRole(['admin_pelayanan', 'service_manager', 'admin', 'superadmin']))
+    <x-card class="hover:shadow-lg transition-shadow duration-200">
+        <div class="text-center">
+            <div class="bg-cyan-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <i class="fas fa-concierge-bell text-cyan-600 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Pelayanan</h3>
+            <p class="text-gray-600 text-sm mb-4">Kelola layanan publik dan prosedur</p>
+            <a href="{{ route('admin.pelayanan.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-md hover:bg-cyan-700 transition-colors">
+                <i class="fas fa-arrow-right mr-2"></i>Kelola Pelayanan
+            </a>
+        </div>
+    </x-card>
+    @endif
+
+    @if(auth()->user()->hasAnyRole(['admin_dokumen', 'service_manager', 'admin', 'superadmin']))
+    <x-card class="hover:shadow-lg transition-shadow duration-200">
+        <div class="text-center">
+            <div class="bg-amber-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <i class="fas fa-file-alt text-amber-600 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Dokumen</h3>
+            <p class="text-gray-600 text-sm mb-4">Kelola repository dokumen publik</p>
+            <a href="{{ route('admin.dokumen.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-amber-600 text-white text-sm font-medium rounded-md hover:bg-amber-700 transition-colors">
+                <i class="fas fa-arrow-right mr-2"></i>Kelola Dokumen
+            </a>
+        </div>
+    </x-card>
+    @endif
+
+    @if(auth()->user()->hasAnyRole(['admin_galeri', 'content_manager', 'admin', 'superadmin']))
+    <x-card class="hover:shadow-lg transition-shadow duration-200">
+        <div class="text-center">
+            <div class="bg-pink-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <i class="fas fa-images text-pink-600 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Galeri</h3>
+            <p class="text-gray-600 text-sm mb-4">Kelola galeri foto dan video</p>
+            <a href="{{ route('admin.galeri.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-md hover:bg-pink-700 transition-colors">
+                <i class="fas fa-arrow-right mr-2"></i>Kelola Galeri
+            </a>
+        </div>
+    </x-card>
+    @endif
+
+    @if(auth()->user()->canApproveContent())
+    <x-card class="hover:shadow-lg transition-shadow duration-200">
+        <div class="text-center">
+            <div class="bg-orange-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <i class="fas fa-check-circle text-orange-600 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Persetujuan</h3>
+            <p class="text-gray-600 text-sm mb-4">Kelola persetujuan konten</p>
+            <a href="{{ route('admin.approvals.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-md hover:bg-orange-700 transition-colors">
+                <i class="fas fa-arrow-right mr-2"></i>Kelola Persetujuan
             </a>
         </div>
     </x-card>
@@ -67,6 +147,38 @@
             <a href="{{ route('admin.users.index') }}" 
                class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors">
                 <i class="fas fa-arrow-right mr-2"></i>Kelola User
+            </a>
+        </div>
+    </x-card>
+    @endif
+
+    @if(auth()->user()->isSuperAdmin())
+    <x-card class="hover:shadow-lg transition-shadow duration-200">
+        <div class="text-center">
+            <div class="bg-slate-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <i class="fas fa-cogs text-slate-600 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Konfigurasi</h3>
+            <p class="text-gray-600 text-sm mb-4">Kelola pengaturan sistem</p>
+            <a href="{{ route('admin.configurations.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-slate-600 text-white text-sm font-medium rounded-md hover:bg-slate-700 transition-colors">
+                <i class="fas fa-arrow-right mr-2"></i>Kelola Konfigurasi
+            </a>
+        </div>
+    </x-card>
+    @endif
+
+    @if(auth()->user()->isSuperAdmin())
+    <x-card class="hover:shadow-lg transition-shadow duration-200">
+        <div class="text-center">
+            <div class="bg-gray-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <i class="fas fa-history text-gray-600 text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Audit Log</h3>
+            <p class="text-gray-600 text-sm mb-4">Lihat log aktivitas sistem</p>
+            <a href="{{ route('admin.audit-logs.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors">
+                <i class="fas fa-arrow-right mr-2"></i>Lihat Log
             </a>
         </div>
     </x-card>
