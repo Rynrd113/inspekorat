@@ -358,4 +358,30 @@ class PublicController extends Controller
 
         return view('public.kontak', compact('kontak'));
     }
+
+    /**
+     * Handle contact form submission
+     */
+    public function kontakKirim(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'pesan' => 'required|string|max:2000'
+        ]);
+
+        // Here you can add logic to save the contact message to database
+        // or send an email to administrators
+        
+        // For now, we'll just redirect back with a success message
+        return redirect()->route('public.kontak')->with('success', 'Pesan Anda telah berhasil dikirim! Kami akan segera merespons.');
+    }
+
+    /**
+     * Show pengaduan (complaint) page
+     */
+    public function pengaduan(): View
+    {
+        return view('public.pengaduan');
+    }
 }

@@ -35,6 +35,8 @@ Route::get('/galeri', [PublicController::class, 'galeri'])->name('public.galeri.
 Route::get('/galeri/{id}', [PublicController::class, 'galeriShow'])->name('public.galeri.show');
 Route::get('/faq', [PublicController::class, 'faq'])->name('public.faq');
 Route::get('/kontak', [PublicController::class, 'kontak'])->name('public.kontak');
+Route::post('/kontak', [PublicController::class, 'kontakKirim'])->name('kontak.kirim');
+Route::get('/pengaduan', [PublicController::class, 'pengaduan'])->name('public.pengaduan');
 
 // Portal OPD Public Routes
 Route::get('/portal-opd', [PortalOpdController::class, 'index'])->name('public.portal-opd.index');
@@ -210,3 +212,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
     });
 });
+
+// Route::get('/pelayanan', [App\Http\Controllers\PelayananController::class, 'index'])->name('public.pelayanan');

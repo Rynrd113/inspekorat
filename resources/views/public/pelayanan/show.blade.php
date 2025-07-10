@@ -9,7 +9,7 @@
     <section class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center mb-6">
-                <a href="{{ route('public.pelayanan') }}" 
+                <a href="{{ route('public.pelayanan.index') }}" 
                    class="inline-flex items-center text-blue-100 hover:text-white transition-colors">
                     <i class="fas fa-arrow-left mr-2"></i>
                     <span>Kembali ke Layanan</span>
