@@ -479,7 +479,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         faqItems.forEach(item => {
             const question = item.querySelector('h4').textContent.toLowerCase();
-            const answer = item.querySelector('.faq-content').textContent.toLowerCase();
+            const answerElement = item.querySelector('.faq-content');
+            const answer = answerElement ? answerElement.textContent.toLowerCase() : '';
             const category = item.dataset.category;
 
             const matchesSearch = question.includes(searchTerm) || answer.includes(searchTerm);
@@ -807,72 +808,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 @endsection
 
-@push('styles')
-<style>
-.faq-content {
-    transition: all 0.3s ease;
-}
-
-.faq-content.hidden {
-    display: none;
-}
-
-.faq-content .prose {
-    color: #374151 !important;
-}
-
-.faq-content .prose * {
-    color: inherit !important;
-}
-
-.faq-content .prose p {
-    margin-bottom: 1rem;
-    line-height: 1.6;
-}
-
-.faq-content .prose ul {
-    list-style-type: disc;
-    margin-left: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.faq-content .prose ol {
-    list-style-type: decimal;
-    margin-left: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.faq-content .prose li {
-    margin-bottom: 0.5rem;
-}
-
-.faq-toggle i {
-    transition: transform 0.3s ease;
-}
-
-.hero-section {
-    background: linear-gradient(135deg, #9333ea 0%, #3b82f6 100%);
-}
-</style>
-@endpush
-    border-color: #007bff;
-    color: white;
-}
-
-@media (max-width: 768px) {
-    .btn-group {
-        flex-direction: column;
-        width: 100%;
-    }
-    
-    .btn-group .btn {
-        border-radius: 0.375rem !important;
-        margin-bottom: 5px;
-    }
-}
-</style>
-@endpush
-
 @push('scripts')
 <script>
 // Search functionality
@@ -976,4 +911,70 @@ window.addEventListener('load', function() {
     }
 });
 </script>
+@endpush
+
+@push('styles')
+<style>
+.faq-content {
+    transition: all 0.3s ease;
+}
+
+.faq-content.hidden {
+    display: none;
+}
+
+.faq-content .prose {
+    color: #374151 !important;
+}
+
+.faq-content .prose * {
+    color: inherit !important;
+}
+
+.faq-content .prose p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.faq-content .prose ul {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.faq-content .prose ol {
+    list-style-type: decimal;
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.faq-content .prose li {
+    margin-bottom: 0.5rem;
+}
+
+.faq-toggle i {
+    transition: transform 0.3s ease;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #9333ea 0%, #3b82f6 100%);
+}
+
+.btn-group .btn {
+    border-color: #007bff;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .btn-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-group .btn {
+        border-radius: 0.375rem !important;
+        margin-bottom: 5px;
+    }
+}
+</style>
 @endpush
