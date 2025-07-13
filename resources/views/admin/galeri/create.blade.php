@@ -251,76 +251,9 @@ function toggleMediaFields() {
     }
 }
 
-// Preview foto
-document.getElementById('file_foto').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const preview = document.getElementById('fotoPreview');
-    
-    if (file) {
-        const fileSize = file.size / 1024 / 1024; // Convert to MB
-        if (fileSize > 5) {
-            alert('Ukuran foto terlalu besar. Maksimal 5MB.');
-            e.target.value = '';
-            preview.innerHTML = '';
-            return;
-        }
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.innerHTML = `<img src="${e.target.result}" class="w-48 h-48 object-cover rounded-lg border border-gray-300 mt-2">`;
-        };
-        reader.readAsDataURL(file);
-    } else {
-        preview.innerHTML = '';
-    }
-});
-
-// Preview thumbnail
-document.getElementById('thumbnail').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const preview = document.getElementById('thumbnailPreview');
-    
-    if (file) {
-        const fileSize = file.size / 1024 / 1024; // Convert to MB
-        if (fileSize > 2) {
-            alert('Ukuran thumbnail terlalu besar. Maksimal 2MB.');
-            e.target.value = '';
-            preview.innerHTML = '';
-            return;
-        }
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.innerHTML = `<img src="${e.target.result}" class="w-48 h-48 object-cover rounded-lg border border-gray-300 mt-2">`;
-        };
-        reader.readAsDataURL(file);
-    } else {
-        preview.innerHTML = '';
-    }
-});
-
-// Check video file size
+// Validasi file video
 document.getElementById('file_video').addEventListener('change', function(e) {
     const file = e.target.files[0];
-    if (file) {
-        const fileSize = file.size / 1024 / 1024; // Convert to MB
-        if (fileSize > 50) {
-            alert('Ukuran video terlalu besar. Maksimal 50MB.');
-            e.target.value = '';
-        }
-    }
-});
-
-// Set default values on page load
-document.addEventListener('DOMContentLoaded', function() {
-    const tipe = document.getElementById('tipe').value;
-    if (tipe) {
-        toggleMediaFields();
-    }
-});
-</script>
-@endpush
-@endsection
     if (file) {
         const fileSize = file.size / 1024 / 1024; // Convert to MB
         if (fileSize > 50) {

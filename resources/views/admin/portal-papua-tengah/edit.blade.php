@@ -94,6 +94,19 @@
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
+                        
+                        <!-- Thumbnail -->
+                        <div>
+                            <label for="thumbnail" class="block text-sm font-medium text-gray-700">Thumbnail</label>
+                            <input type="file" id="thumbnail" name="thumbnail" 
+                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            @if($portalPapuaTengah->thumbnail)
+                                <p class="mt-2 text-sm text-gray-500">Thumbnail saat ini: <a href="{{ Storage::url($portalPapuaTengah->thumbnail) }}" target="_blank" class="text-blue-600 hover:underline">Lihat</a></p>
+                            @endif
+                            @error('thumbnail')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
                 </x-card>
             </div>

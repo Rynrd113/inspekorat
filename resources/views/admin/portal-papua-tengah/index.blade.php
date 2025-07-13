@@ -18,6 +18,7 @@
             <h1 class="text-2xl font-bold text-gray-900">Portal Berita Papua Tengah</h1>
             <p class="text-gray-600">Kelola berita dan informasi publik</p>
         </div>
+        <!-- Pastikan hanya satu tombol tambah data -->
         <a href="{{ route('admin.portal-papua-tengah.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
             <i class="fas fa-plus mr-2"></i>Tambah Berita
         </a>
