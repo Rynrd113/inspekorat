@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class GaleriController extends Controller
 {
@@ -12,8 +13,34 @@ class GaleriController extends Controller
      */
     public function index(Request $request)
     {
-        // Implementation for listing gallery items
-        return view('admin.galeri.index');
+        $query = \App\Models\Galeri::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $query->where('judul', 'like', '%' . $request->search . '%')
+                  ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter by kategori
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by album
+        if ($request->filled('album')) {
+            $query->where('album', 'like', '%' . $request->album . '%');
+        }
+
+        $galeris = $query->with(['creator', 'updater'])
+                         ->latest()
+                         ->paginate(10);
+
+        return view('admin.galeri.index', compact('galeris'));
     }
 
     /**
@@ -65,8 +92,12 @@ class GaleriController extends Controller
                 ->store('galeri/thumbnails', 'public');
         }
 
-        // Store gallery item (you'll need to create the model)
-        // Galeri::create($validated);
+        // Store gallery item
+        $validated['created_by'] = auth()->id();
+        $validated['status'] = $request->has('status');
+        $validated['is_featured'] = $request->has('is_featured');
+
+        \App\Models\Galeri::create($validated);
 
         return redirect()->route('admin.galeri.index')
             ->with('success', 'Item galeri berhasil ditambahkan');
@@ -75,23 +106,23 @@ class GaleriController extends Controller
     /**
      * Display the specified gallery item
      */
-    public function show($id)
+    public function show(\App\Models\Galeri $galeri)
     {
-        return view('admin.galeri.show');
+        return view('admin.galeri.show', compact('galeri'));
     }
 
     /**
      * Show the form for editing the specified gallery item
      */
-    public function edit($id)
+    public function edit(\App\Models\Galeri $galeri)
     {
-        return view('admin.galeri.edit');
+        return view('admin.galeri.edit', compact('galeri'));
     }
 
     /**
      * Update the specified gallery item
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, \App\Models\Galeri $galeri)
     {
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
@@ -109,17 +140,29 @@ class GaleriController extends Controller
 
         // Handle file uploads
         if ($request->hasFile('file_media')) {
+            // Delete old file if exists
+            if ($galeri->file_media) {
+                \Storage::disk('public')->delete($galeri->file_media);
+            }
             $folder = $validated['kategori'] === 'foto' ? 'galeri/photos' : 'galeri/videos';
             $validated['file_media'] = $request->file('file_media')->store($folder, 'public');
         }
 
         if ($request->hasFile('thumbnail')) {
+            // Delete old thumbnail if exists
+            if ($galeri->thumbnail) {
+                \Storage::disk('public')->delete($galeri->thumbnail);
+            }
             $validated['thumbnail'] = $request->file('thumbnail')
                 ->store('galeri/thumbnails', 'public');
         }
 
+        $validated['status'] = $request->has('status');
+        $validated['is_featured'] = $request->has('is_featured');
+        $validated['updated_by'] = auth()->id();
+
         // Update gallery item
-        // $galeri->update($validated);
+        $galeri->update($validated);
 
         return redirect()->route('admin.galeri.index')
             ->with('success', 'Item galeri berhasil diperbarui');
@@ -128,10 +171,18 @@ class GaleriController extends Controller
     /**
      * Remove the specified gallery item
      */
-    public function destroy($id)
+    public function destroy(\App\Models\Galeri $galeri)
     {
-        // Delete gallery item and associated files
-        // $galeri->delete();
+        // Delete associated files
+        if ($galeri->file_media) {
+            \Storage::disk('public')->delete($galeri->file_media);
+        }
+        if ($galeri->thumbnail) {
+            \Storage::disk('public')->delete($galeri->thumbnail);
+        }
+
+        // Delete gallery item
+        $galeri->delete();
 
         return redirect()->route('admin.galeri.index')
             ->with('success', 'Item galeri berhasil dihapus');

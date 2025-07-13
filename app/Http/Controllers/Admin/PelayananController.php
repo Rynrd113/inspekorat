@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PelayananController extends Controller
 {
@@ -12,8 +13,27 @@ class PelayananController extends Controller
      */
     public function index(Request $request)
     {
-        // Implementation for listing services
-        return view('admin.pelayanan.index');
+        $query = \App\Models\Pelayanan::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $query->where('nama_layanan', 'like', '%' . $request->search . '%')
+                  ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter by kategori
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $pelayanans = $query->latest()->paginate(10);
+
+        return view('admin.pelayanan.index', compact('pelayanans'));
     }
 
     /**
@@ -51,8 +71,11 @@ class PelayananController extends Controller
                 ->store('pelayanan/formulir', 'public');
         }
 
-        // Store service (you'll need to create the model)
-        // Pelayanan::create($validated);
+        // Store service
+        $validated['created_by'] = auth()->id();
+        $validated['status'] = $request->has('status');
+
+        \App\Models\Pelayanan::create($validated);
 
         return redirect()->route('admin.pelayanan.index')
             ->with('success', 'Layanan berhasil ditambahkan');
@@ -61,23 +84,23 @@ class PelayananController extends Controller
     /**
      * Display the specified service
      */
-    public function show($id)
+    public function show(\App\Models\Pelayanan $pelayanan)
     {
-        return view('admin.pelayanan.show');
+        return view('admin.pelayanan.show', compact('pelayanan'));
     }
 
     /**
      * Show the form for editing the specified service
      */
-    public function edit($id)
+    public function edit(\App\Models\Pelayanan $pelayanan)
     {
-        return view('admin.pelayanan.edit');
+        return view('admin.pelayanan.edit', compact('pelayanan'));
     }
 
     /**
      * Update the specified service
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, \App\Models\Pelayanan $pelayanan)
     {
         $validated = $request->validate([
             'nama_layanan' => 'required|string|max:255',
@@ -97,12 +120,19 @@ class PelayananController extends Controller
 
         // Handle file upload
         if ($request->hasFile('file_formulir')) {
+            // Delete old file if exists
+            if ($pelayanan->file_formulir) {
+                \Storage::disk('public')->delete($pelayanan->file_formulir);
+            }
             $validated['file_formulir'] = $request->file('file_formulir')
                 ->store('pelayanan/formulir', 'public');
         }
 
+        $validated['status'] = $request->has('status');
+        $validated['updated_by'] = auth()->id();
+
         // Update service
-        // $pelayanan->update($validated);
+        $pelayanan->update($validated);
 
         return redirect()->route('admin.pelayanan.index')
             ->with('success', 'Layanan berhasil diperbarui');
@@ -111,10 +141,15 @@ class PelayananController extends Controller
     /**
      * Remove the specified service
      */
-    public function destroy($id)
+    public function destroy(\App\Models\Pelayanan $pelayanan)
     {
+        // Delete associated file if exists
+        if ($pelayanan->file_formulir) {
+            \Storage::disk('public')->delete($pelayanan->file_formulir);
+        }
+
         // Delete service
-        // $pelayanan->delete();
+        $pelayanan->delete();
 
         return redirect()->route('admin.pelayanan.index')
             ->with('success', 'Layanan berhasil dihapus');

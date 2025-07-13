@@ -12,8 +12,27 @@ class DokumenController extends Controller
      */
     public function index(Request $request)
     {
-        // Implementation for listing documents
-        return view('admin.dokumen.index');
+        $query = \App\Models\Dokumen::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $query->where('judul', 'like', '%' . $request->search . '%')
+                  ->orWhere('deskripsi', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter by kategori
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $dokumens = $query->latest()->paginate(10);
+
+        return view('admin.dokumen.index', compact('dokumens'));
     }
 
     /**
@@ -54,8 +73,12 @@ class DokumenController extends Controller
                 ->store('dokumen/covers', 'public');
         }
 
-        // Store document (you'll need to create the model)
-        // Dokumen::create($validated);
+        // Store document
+        $validated['created_by'] = auth()->id();
+        $validated['status'] = $request->has('status');
+        $validated['is_public'] = $request->has('is_public');
+
+        \App\Models\Dokumen::create($validated);
 
         return redirect()->route('admin.dokumen.index')
             ->with('success', 'Dokumen berhasil ditambahkan');
@@ -64,23 +87,23 @@ class DokumenController extends Controller
     /**
      * Display the specified document
      */
-    public function show($id)
+    public function show(\App\Models\Dokumen $dokumen)
     {
-        return view('admin.dokumen.show');
+        return view('admin.dokumen.show', compact('dokumen'));
     }
 
     /**
      * Show the form for editing the specified document
      */
-    public function edit($id)
+    public function edit(\App\Models\Dokumen $dokumen)
     {
-        return view('admin.dokumen.edit');
+        return view('admin.dokumen.edit', compact('dokumen'));
     }
 
     /**
      * Update the specified document
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, \App\Models\Dokumen $dokumen)
     {
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
@@ -98,17 +121,29 @@ class DokumenController extends Controller
 
         // Handle file uploads
         if ($request->hasFile('file_dokumen')) {
+            // Delete old file if exists
+            if ($dokumen->file_dokumen) {
+                \Storage::disk('public')->delete($dokumen->file_dokumen);
+            }
             $validated['file_dokumen'] = $request->file('file_dokumen')
                 ->store('dokumen/files', 'public');
         }
 
         if ($request->hasFile('file_cover')) {
+            // Delete old cover if exists
+            if ($dokumen->file_cover) {
+                \Storage::disk('public')->delete($dokumen->file_cover);
+            }
             $validated['file_cover'] = $request->file('file_cover')
                 ->store('dokumen/covers', 'public');
         }
 
         // Update document
-        // $dokumen->update($validated);
+        $validated['updated_by'] = auth()->id();
+        $validated['status'] = $request->has('status');
+        $validated['is_public'] = $request->has('is_public');
+
+        $dokumen->update($validated);
 
         return redirect()->route('admin.dokumen.index')
             ->with('success', 'Dokumen berhasil diperbarui');
@@ -117,10 +152,17 @@ class DokumenController extends Controller
     /**
      * Remove the specified document
      */
-    public function destroy($id)
+    public function destroy(\App\Models\Dokumen $dokumen)
     {
-        // Delete document and associated files
-        // $dokumen->delete();
+        // Delete associated files
+        if ($dokumen->file_dokumen) {
+            \Storage::disk('public')->delete($dokumen->file_dokumen);
+        }
+        if ($dokumen->file_cover) {
+            \Storage::disk('public')->delete($dokumen->file_cover);
+        }
+
+        $dokumen->delete();
 
         return redirect()->route('admin.dokumen.index')
             ->with('success', 'Dokumen berhasil dihapus');
@@ -129,9 +171,15 @@ class DokumenController extends Controller
     /**
      * Download document file
      */
-    public function download($id)
+    public function download(\App\Models\Dokumen $dokumen)
     {
-        // Implementation for downloading document
-        // return Storage::download($dokumen->file_dokumen);
+        if (!$dokumen->file_dokumen || !\Storage::disk('public')->exists($dokumen->file_dokumen)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        // Increment download counter
+        $dokumen->increment('download_count');
+
+        return \Storage::disk('public')->download($dokumen->file_dokumen, $dokumen->judul . '.pdf');
     }
 }

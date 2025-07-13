@@ -12,8 +12,27 @@ class FaqController extends Controller
      */
     public function index(Request $request)
     {
-        // Implementation for listing FAQs
-        return view('admin.faq.index');
+        $query = \App\Models\Faq::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $query->where('pertanyaan', 'like', '%' . $request->search . '%')
+                  ->orWhere('jawaban', 'like', '%' . $request->search . '%');
+        }
+
+        // Filter by kategori
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $faqs = $query->ordered()->paginate(10);
+
+        return view('admin.faq.index', compact('faqs'));
     }
 
     /**
@@ -39,8 +58,12 @@ class FaqController extends Controller
             'tags' => 'nullable|string',
         ]);
 
-        // Store FAQ (you'll need to create the model)
-        // Faq::create($validated);
+        // Store FAQ
+        $validated['created_by'] = auth()->id();
+        $validated['status'] = $request->has('status');
+        $validated['is_featured'] = $request->has('is_featured');
+
+        \App\Models\Faq::create($validated);
 
         return redirect()->route('admin.faq.index')
             ->with('success', 'FAQ berhasil ditambahkan');
@@ -49,23 +72,23 @@ class FaqController extends Controller
     /**
      * Display the specified FAQ
      */
-    public function show($id)
+    public function show(\App\Models\Faq $faq)
     {
-        return view('admin.faq.show');
+        return view('admin.faq.show', compact('faq'));
     }
 
     /**
      * Show the form for editing the specified FAQ
      */
-    public function edit($id)
+    public function edit(\App\Models\Faq $faq)
     {
-        return view('admin.faq.edit');
+        return view('admin.faq.edit', compact('faq'));
     }
 
     /**
      * Update the specified FAQ
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, \App\Models\Faq $faq)
     {
         $validated = $request->validate([
             'pertanyaan' => 'required|string|max:500',
@@ -78,7 +101,11 @@ class FaqController extends Controller
         ]);
 
         // Update FAQ
-        // $faq->update($validated);
+        $validated['updated_by'] = auth()->id();
+        $validated['status'] = $request->has('status');
+        $validated['is_featured'] = $request->has('is_featured');
+
+        $faq->update($validated);
 
         return redirect()->route('admin.faq.index')
             ->with('success', 'FAQ berhasil diperbarui');
@@ -87,10 +114,10 @@ class FaqController extends Controller
     /**
      * Remove the specified FAQ
      */
-    public function destroy($id)
+    public function destroy(\App\Models\Faq $faq)
     {
         // Delete FAQ
-        // $faq->delete();
+        $faq->delete();
 
         return redirect()->route('admin.faq.index')
             ->with('success', 'FAQ berhasil dihapus');
@@ -109,7 +136,7 @@ class FaqController extends Controller
 
         // Update order for each FAQ
         foreach ($request->items as $item) {
-            // Faq::where('id', $item['id'])->update(['urutan' => $item['urutan']]);
+            \App\Models\Faq::where('id', $item['id'])->update(['urutan' => $item['urutan']]);
         }
 
         return response()->json(['success' => true]);

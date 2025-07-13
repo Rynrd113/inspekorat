@@ -3,144 +3,171 @@
 @section('title', 'Tambah FAQ')
 
 @section('content')
-<div class="container-fluid px-4">
-    <h1 class="mt-4">Tambah FAQ</h1>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.faq.index') }}">FAQ</a></li>
-        <li class="breadcrumb-item active">Tambah</li>
-    </ol>
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">Tambah FAQ</h1>
+        <nav class="flex mt-2" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2 text-sm text-gray-500">
+                <li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+                <li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+                <li><a href="{{ route('admin.faq.index') }}" class="text-blue-600 hover:text-blue-800">FAQ</a></li>
+                <li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+                <li class="text-gray-600">Tambah</li>
+            </ol>
+        </nav>
+    </div>
 
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-plus me-1"></i>
-            Form Tambah FAQ
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
+        <div class="p-6 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">
+                <i class="fas fa-plus mr-2 text-blue-600"></i>
+                Form Tambah FAQ
+            </h2>
         </div>
-        <div class="card-body">
+        <div class="p-6">
             <form action="{{ route('admin.faq.store') }}" method="POST">
                 @csrf
                 
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="mb-3">
-                            <label for="pertanyaan" class="form-label">Pertanyaan <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('pertanyaan') is-invalid @enderror" 
-                                   id="pertanyaan" name="pertanyaan" value="{{ old('pertanyaan') }}" required>
-                            @error('pertanyaan')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="md:col-span-3">
+                        <label for="pertanyaan" class="block text-sm font-medium text-gray-700 mb-2">
+                            Pertanyaan <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('pertanyaan') border-red-500 @enderror" 
+                               id="pertanyaan" 
+                               name="pertanyaan" 
+                               value="{{ old('pertanyaan') }}" 
+                               required>
+                        @error('pertanyaan')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
                     
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="kategori" class="form-label">Kategori <span class="text-danger">*</span></label>
-                            <select class="form-select @error('kategori') is-invalid @enderror" id="kategori" name="kategori" required>
-                                <option value="">Pilih Kategori</option>
-                                <option value="umum" {{ old('kategori') == 'umum' ? 'selected' : '' }}>Umum</option>
-                                <option value="layanan" {{ old('kategori') == 'layanan' ? 'selected' : '' }}>Layanan</option>
-                                <option value="pengaduan" {{ old('kategori') == 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
-                                <option value="audit" {{ old('kategori') == 'audit' ? 'selected' : '' }}>Audit</option>
-                                <option value="lainnya" {{ old('kategori') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
-                            </select>
-                            @error('kategori')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                    <div class="md:col-span-1">
+                        <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">
+                            Kategori <span class="text-red-500">*</span>
+                        </label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('kategori') border-red-500 @enderror" 
+                                id="kategori" 
+                                name="kategori" 
+                                required>
+                            <option value="">Pilih Kategori</option>
+                            <option value="umum" {{ old('kategori') == 'umum' ? 'selected' : '' }}>Umum</option>
+                            <option value="layanan" {{ old('kategori') == 'layanan' ? 'selected' : '' }}>Layanan</option>
+                            <option value="pengaduan" {{ old('kategori') == 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
+                            <option value="audit" {{ old('kategori') == 'audit' ? 'selected' : '' }}>Audit</option>
+                            <option value="lainnya" {{ old('kategori') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                        </select>
+                        @error('kategori')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="jawaban" class="form-label">Jawaban <span class="text-danger">*</span></label>
-                    <textarea class="form-control @error('jawaban') is-invalid @enderror" 
-                              id="jawaban" name="jawaban" rows="6" required>{{ old('jawaban') }}</textarea>
+                <div class="mt-6">
+                    <label for="jawaban" class="block text-sm font-medium text-gray-700 mb-2">
+                        Jawaban <span class="text-red-500">*</span>
+                    </label>
+                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('jawaban') border-red-500 @enderror" 
+                              id="jawaban" 
+                              name="jawaban" 
+                              rows="6" 
+                              required>{{ old('jawaban') }}</textarea>
                     @error('jawaban')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
-                    <div class="form-text">Gunakan formatting HTML sederhana jika diperlukan (contoh: &lt;b&gt;, &lt;i&gt;, &lt;br&gt;, &lt;ul&gt;, &lt;li&gt;).</div>
+                    <p class="mt-1 text-sm text-gray-500">Gunakan formatting HTML sederhana jika diperlukan (contoh: &lt;b&gt;, &lt;i&gt;, &lt;br&gt;, &lt;ul&gt;, &lt;li&gt;).</p>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="urutan" class="form-label">Urutan Tampil</label>
-                            <input type="number" class="form-control @error('urutan') is-invalid @enderror" 
-                                   id="urutan" name="urutan" value="{{ old('urutan', 1) }}" min="1">
-                            @error('urutan')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                            <div class="form-text">Semakin kecil angka, semakin di atas posisinya.</div>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                    <div>
+                        <label for="urutan" class="block text-sm font-medium text-gray-700 mb-2">
+                            Urutan Tampil
+                        </label>
+                        <input type="number" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('urutan') border-red-500 @enderror" 
+                               id="urutan" 
+                               name="urutan" 
+                               value="{{ old('urutan', 1) }}" 
+                               min="1">
+                        @error('urutan')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                        <p class="mt-1 text-sm text-gray-500">Semakin kecil angka, semakin di atas posisinya.</p>
                     </div>
                     
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
-                            <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
-                                <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                                <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>Non-aktif</option>
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                            Status <span class="text-red-500">*</span>
+                        </label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('status') border-red-500 @enderror" 
+                                id="status" 
+                                name="status" 
+                                required>
+                            <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                            <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>Non-aktif</option>
+                        </select>
+                        @error('status')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
                     
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            <label for="is_featured" class="form-label">FAQ Unggulan</label>
-                            <select class="form-select @error('is_featured') is-invalid @enderror" id="is_featured" name="is_featured">
-                                <option value="0" {{ old('is_featured') == '0' ? 'selected' : '' }}>Tidak</option>
-                                <option value="1" {{ old('is_featured') == '1' ? 'selected' : '' }}>Ya</option>
-                            </select>
-                            @error('is_featured')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                            <div class="form-text">FAQ unggulan akan ditampilkan lebih menonjol.</div>
-                        </div>
+                    <div>
+                        <label for="is_featured" class="block text-sm font-medium text-gray-700 mb-2">
+                            FAQ Unggulan
+                        </label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('is_featured') border-red-500 @enderror" 
+                                id="is_featured" 
+                                name="is_featured">
+                            <option value="0" {{ old('is_featured') == '0' ? 'selected' : '' }}>Tidak</option>
+                            <option value="1" {{ old('is_featured') == '1' ? 'selected' : '' }}>Ya</option>
+                        </select>
+                        @error('is_featured')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                        <p class="mt-1 text-sm text-gray-500">FAQ unggulan akan ditampilkan lebih menonjol.</p>
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="tags" class="form-label">Tags</label>
-                    <input type="text" class="form-control @error('tags') is-invalid @enderror" 
-                           id="tags" name="tags" value="{{ old('tags') }}" 
+                <div class="mt-6">
+                    <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
+                        Tags
+                    </label>
+                    <input type="text" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tags') border-red-500 @enderror" 
+                           id="tags" 
+                           name="tags" 
+                           value="{{ old('tags') }}" 
                            placeholder="Pisahkan dengan koma">
                     @error('tags')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
-                    <div class="form-text">Contoh: pengaduan, prosedur, audit</div>
+                    <p class="mt-1 text-sm text-gray-500">Contoh: pengaduan, prosedur, audit</p>
                 </div>
 
                 <!-- Preview Section -->
-                <div class="card bg-light mb-3">
-                    <div class="card-header">
-                        <h6 class="mb-0">Preview FAQ</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="accordion" id="previewAccordion">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="previewHeading">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#previewCollapse">
-                                        <span id="previewPertanyaan">Pertanyaan akan muncul di sini...</span>
-                                    </button>
-                                </h2>
-                                <div id="previewCollapse" class="accordion-collapse collapse" data-bs-parent="#previewAccordion">
-                                    <div class="accordion-body">
-                                        <span id="previewJawaban">Jawaban akan muncul di sini...</span>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="bg-gray-50 rounded-lg p-6 mt-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Preview FAQ</h3>
+                    <div class="bg-white rounded-lg border border-gray-200">
+                        <div class="border-b border-gray-200">
+                            <button type="button" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-gray-50 focus:outline-none focus:bg-gray-50">
+                                <span id="previewPertanyaan" class="font-medium text-gray-900">Pertanyaan akan muncul di sini...</span>
+                                <i class="fas fa-chevron-down text-gray-400"></i>
+                            </button>
+                        </div>
+                        <div class="px-4 py-3">
+                            <div id="previewJawaban" class="text-gray-700">Jawaban akan muncul di sini...</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <a href="{{ route('admin.faq.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left me-1"></i> Kembali
+                <div class="flex justify-between items-center mt-6 pt-6 border-t border-gray-200">
+                    <a href="{{ route('admin.faq.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <i class="fas fa-arrow-left mr-2"></i> Kembali
                     </a>
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-save me-1"></i> Simpan
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <i class="fas fa-save mr-2"></i> Simpan
                     </button>
                 </div>
             </form>

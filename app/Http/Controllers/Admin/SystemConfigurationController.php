@@ -24,53 +24,71 @@ class SystemConfigurationController extends Controller
      */
     public function update(Request $request)
     {
-        $configurations = $request->get('configurations', []);
+        $request->validate([
+            'id' => 'required|exists:system_configurations,id',
+            'key' => 'required|string',
+            'type' => 'required|string',
+            'value' => 'nullable',
+            'group' => 'required|string',
+            'description' => 'nullable|string',
+            'is_public' => 'boolean'
+        ]);
 
-        foreach ($configurations as $key => $value) {
-            $config = SystemConfiguration::where('key', $key)->first();
-            
-            if ($config) {
-                // Handle file uploads
-                if ($config->type === 'file' || $config->type === 'image') {
-                    if ($request->hasFile("files.{$key}")) {
-                        $file = $request->file("files.{$key}");
-                        
-                        // Delete old file if exists
-                        if ($config->value && Storage::disk('public')->exists($config->value)) {
-                            Storage::disk('public')->delete($config->value);
-                        }
-                        
-                        // Store new file
-                        $path = $file->store('configurations', 'public');
-                        $value = $path;
-                    } else {
-                        $value = $config->value; // Keep existing value
-                    }
+        $config = SystemConfiguration::findOrFail($request->id);
+        $value = $request->value;
+
+        // Handle file uploads
+        if ($request->type === 'file' || $request->type === 'image') {
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                
+                // Delete old file if exists
+                if ($config->value && Storage::disk('public')->exists($config->value)) {
+                    Storage::disk('public')->delete($config->value);
                 }
                 
-                // Handle boolean values
-                if ($config->type === 'boolean') {
-                    $value = $request->has("configurations.{$key}") ? true : false;
-                }
-                
-                // Handle array values
-                if ($config->type === 'array') {
-                    $value = is_array($value) ? $value : explode(',', $value);
-                }
-                
-                // Handle JSON values
-                if ($config->type === 'json') {
-                    $value = is_string($value) ? json_decode($value, true) : $value;
-                }
-                
-                $config->update([
-                    'value' => $value,
-                    'updated_by' => auth()->id()
-                ]);
+                // Store new file
+                $path = $file->store('configurations', 'public');
+                $value = $path;
+            } else {
+                $value = $config->value; // Keep existing value
             }
         }
+        
+        // Handle boolean values
+        if ($request->type === 'boolean') {
+            $value = $request->has('value') && in_array(strtolower($request->value), ['true', '1', 'yes', 'on']) ? true : false;
+        }
+        
+        // Handle array values
+        if ($request->type === 'array') {
+            if (is_string($value)) {
+                $value = explode(',', $value);
+            }
+        }
+        
+        // Handle JSON values
+        if ($request->type === 'json') {
+            if (is_string($value)) {
+                $decoded = json_decode($value, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $value = $decoded;
+                }
+            }
+        }
+        
+        $config->update([
+            'key' => $request->key,
+            'value' => $value,
+            'type' => $request->type,
+            'group' => $request->group,
+            'description' => $request->description,
+            'is_public' => $request->boolean('is_public'),
+            'updated_by' => auth()->id()
+        ]);
 
-        return redirect()->back()->with('success', 'Konfigurasi berhasil diperbarui.');
+        return redirect()->route('admin.configurations.index')
+            ->with('success', 'Konfigurasi berhasil diperbarui.');
     }
 
     /**
@@ -94,22 +112,31 @@ class SystemConfigurationController extends Controller
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $value = $file->store('configurations', 'public');
+            } else {
+                $value = null;
             }
         }
         
         // Handle boolean values
         if ($request->type === 'boolean') {
-            $value = $request->has('value') ? true : false;
+            $value = $request->has('value') && in_array(strtolower($request->value), ['true', '1', 'yes', 'on']) ? true : false;
         }
         
         // Handle array values
         if ($request->type === 'array') {
-            $value = is_array($value) ? $value : explode(',', $value);
+            if (is_string($value)) {
+                $value = explode(',', $value);
+            }
         }
         
         // Handle JSON values
         if ($request->type === 'json') {
-            $value = is_string($value) ? json_decode($value, true) : $value;
+            if (is_string($value)) {
+                $decoded = json_decode($value, true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $value = $decoded;
+                }
+            }
         }
 
         SystemConfiguration::create([
@@ -122,7 +149,7 @@ class SystemConfigurationController extends Controller
             'updated_by' => auth()->id()
         ]);
 
-        return redirect()->route('admin.configurations.index', ['group' => $request->group])
+        return redirect()->route('admin.configurations.index')
             ->with('success', 'Konfigurasi berhasil ditambahkan.');
     }
 
