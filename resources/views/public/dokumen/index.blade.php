@@ -133,10 +133,12 @@
                             </a>
                             
                             @if(isset($dokumen->file_path) && str_contains($dokumen->file_type ?? 'pdf', 'pdf'))
-                            <button onclick="previewDocument('{{ $dokumen->id }}')" 
-                                    class="px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                            <a href="{{ route('public.dokumen.preview', $dokumen->id) }}" 
+                               target="_blank"
+                               class="px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                               title="Preview Dokumen">
                                 <i class="fas fa-eye"></i>
-                            </button>
+                            </a>
                             @endif
                         </div>
                     </div>
@@ -240,12 +242,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listeners
     searchInput.addEventListener('input', filterDocuments);
     categoryFilter.addEventListener('change', filterDocuments);
-
-    // Preview document function
-    window.previewDocument = function(documentId) {
-        // This would open a modal or new tab to preview the document
-        alert('Preview feature akan segera tersedia untuk dokumen ID: ' + documentId);
-    };
 
     // Load more functionality
     const loadMoreBtn = document.getElementById('load-more');

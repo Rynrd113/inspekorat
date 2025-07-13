@@ -54,11 +54,9 @@
                                 name="kategori" 
                                 required>
                             <option value="">Pilih Kategori</option>
-                            <option value="umum" {{ old('kategori', $faq->kategori ?? 'umum') == 'umum' ? 'selected' : '' }}>Umum</option>
-                            <option value="layanan" {{ old('kategori', $faq->kategori ?? '') == 'layanan' ? 'selected' : '' }}>Layanan</option>
-                            <option value="pengaduan" {{ old('kategori', $faq->kategori ?? '') == 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
-                            <option value="audit" {{ old('kategori', $faq->kategori ?? '') == 'audit' ? 'selected' : '' }}>Audit</option>
-                            <option value="lainnya" {{ old('kategori', $faq->kategori ?? '') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                            @foreach(\App\Models\Faq::getKategoriOptions() as $value => $label)
+                                <option value="{{ $value }}" {{ old('kategori', $faq->kategori) == $value ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
                         </select>
                         @error('kategori')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -106,8 +104,8 @@
                                 id="status" 
                                 name="status" 
                                 required>
-                            <option value="aktif" {{ old('status', $faq->status ?? 'aktif') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                            <option value="nonaktif" {{ old('status', $faq->status ?? '') == 'nonaktif' ? 'selected' : '' }}>Non-aktif</option>
+                            <option value="aktif" {{ old('status', $faq->status ? 'aktif' : 'nonaktif') == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                            <option value="nonaktif" {{ old('status', $faq->status ? 'aktif' : 'nonaktif') == 'nonaktif' ? 'selected' : '' }}>Non-aktif</option>
                         </select>
                         @error('status')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -121,8 +119,8 @@
                         <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('is_featured') border-red-500 @enderror" 
                                 id="is_featured" 
                                 name="is_featured">
-                            <option value="0" {{ old('is_featured', $faq->is_featured ?? '0') == '0' ? 'selected' : '' }}>Tidak</option>
-                            <option value="1" {{ old('is_featured', $faq->is_featured ?? '') == '1' ? 'selected' : '' }}>Ya</option>
+                            <option value="0" {{ old('is_featured', $faq->is_featured ? '1' : '0') == '0' ? 'selected' : '' }}>Tidak</option>
+                            <option value="1" {{ old('is_featured', $faq->is_featured ? '1' : '0') == '1' ? 'selected' : '' }}>Ya</option>
                         </select>
                         @error('is_featured')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

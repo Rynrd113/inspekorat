@@ -48,20 +48,22 @@ class FaqController extends Controller
      */
     public function store(Request $request)
     {
+        $categories = array_keys(\App\Models\Faq::getKategoriOptions());
+        
         $validated = $request->validate([
             'pertanyaan' => 'required|string|max:500',
             'jawaban' => 'required|string',
-            'kategori' => 'required|string|max:100',
+            'kategori' => 'required|string|in:' . implode(',', $categories),
             'urutan' => 'nullable|integer|min:1',
-            'status' => 'boolean',
-            'is_featured' => 'boolean',
+            'status' => 'required|string|in:aktif,nonaktif',
+            'is_featured' => 'nullable|string|in:0,1',
             'tags' => 'nullable|string',
         ]);
 
-        // Store FAQ
+        // Convert string values to appropriate types
         $validated['created_by'] = auth()->id();
-        $validated['status'] = $request->has('status');
-        $validated['is_featured'] = $request->has('is_featured');
+        $validated['status'] = $request->status === 'aktif';
+        $validated['is_featured'] = $request->is_featured === '1';
 
         \App\Models\Faq::create($validated);
 
@@ -90,20 +92,22 @@ class FaqController extends Controller
      */
     public function update(Request $request, \App\Models\Faq $faq)
     {
+        $categories = array_keys(\App\Models\Faq::getKategoriOptions());
+        
         $validated = $request->validate([
             'pertanyaan' => 'required|string|max:500',
             'jawaban' => 'required|string',
-            'kategori' => 'required|string|max:100',
+            'kategori' => 'required|string|in:' . implode(',', $categories),
             'urutan' => 'nullable|integer|min:1',
-            'status' => 'boolean',
-            'is_featured' => 'boolean',
+            'status' => 'required|string|in:aktif,nonaktif',
+            'is_featured' => 'nullable|string|in:0,1',
             'tags' => 'nullable|string',
         ]);
 
-        // Update FAQ
+        // Convert string values to appropriate types
         $validated['updated_by'] = auth()->id();
-        $validated['status'] = $request->has('status');
-        $validated['is_featured'] = $request->has('is_featured');
+        $validated['status'] = $request->status === 'aktif';
+        $validated['is_featured'] = $request->is_featured === '1';
 
         $faq->update($validated);
 

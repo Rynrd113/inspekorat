@@ -53,11 +53,9 @@
                                 name="kategori" 
                                 required>
                             <option value="">Pilih Kategori</option>
-                            <option value="umum" {{ old('kategori') == 'umum' ? 'selected' : '' }}>Umum</option>
-                            <option value="layanan" {{ old('kategori') == 'layanan' ? 'selected' : '' }}>Layanan</option>
-                            <option value="pengaduan" {{ old('kategori') == 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
-                            <option value="audit" {{ old('kategori') == 'audit' ? 'selected' : '' }}>Audit</option>
-                            <option value="lainnya" {{ old('kategori') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                            @foreach(\App\Models\Faq::getKategoriOptions() as $value => $label)
+                                <option value="{{ $value }}" {{ old('kategori') == $value ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
                         </select>
                         @error('kategori')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

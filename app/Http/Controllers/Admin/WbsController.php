@@ -53,7 +53,16 @@ class WbsController extends Controller
     {
         $data = $request->validated();
 
-        // Handle file upload
+        // Handle multiple file uploads
+        if ($request->hasFile('attachments')) {
+            $filePaths = [];
+            foreach ($request->file('attachments') as $file) {
+                $filePaths[] = $file->store('wbs-attachments', 'public');
+            }
+            $data['bukti_files'] = $filePaths;
+        }
+
+        // Legacy single file support
         if ($request->hasFile('bukti_file')) {
             $data['bukti_file'] = $request->file('bukti_file')->store('wbs-attachments', 'public');
         }
@@ -103,9 +112,16 @@ class WbsController extends Controller
      */
     public function destroy(Wbs $wbs)
     {
-        // Delete attachment if exists
+        // Delete single attachment if exists
         if ($wbs->bukti_file) {
             Storage::disk('public')->delete($wbs->bukti_file);
+        }
+        
+        // Delete multiple attachments if exist
+        if ($wbs->bukti_files && is_array($wbs->bukti_files)) {
+            foreach ($wbs->bukti_files as $filePath) {
+                Storage::disk('public')->delete($filePath);
+            }
         }
         
         if ($wbs->attachment) {

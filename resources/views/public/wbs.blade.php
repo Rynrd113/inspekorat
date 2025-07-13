@@ -150,18 +150,46 @@
 
                         <!-- Lampiran -->
                         <div>
-                            <label for="attachment" class="block text-sm font-medium text-gray-700 mb-2">Lampiran (Opsional)</label>
-                            <input
-                                type="file"
-                                id="attachment"
-                                name="attachment"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                            />
-                            <p class="mt-1 text-sm text-gray-500">
-                                Format yang didukung: PDF, DOC, DOCX, JPG, JPEG, PNG (Maksimal 10MB)
+                            <label for="attachments" class="block text-sm font-medium text-gray-700 mb-2">Lampiran (Opsional)</label>
+                            <div class="space-y-3">
+                                <!-- File input container -->
+                                <div id="file-inputs-container">
+                                    <div class="file-input-group flex items-center space-x-2">
+                                        <input
+                                            type="file"
+                                            name="attachments[]"
+                                            class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                        />
+                                        <button
+                                            type="button"
+                                            onclick="removeFileInput(this)"
+                                            class="px-3 py-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+                                            style="display: none;"
+                                        >
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Add more files button -->
+                                <button
+                                    type="button"
+                                    onclick="addFileInput()"
+                                    class="inline-flex items-center px-3 py-2 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors"
+                                >
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Tambah File Lain
+                                </button>
+                            </div>
+                            
+                            <p class="mt-2 text-sm text-gray-500">
+                                Format yang didukung: PDF, DOC, DOCX, JPG, JPEG, PNG (Maksimal 10MB per file)
                             </p>
-                            @error('attachment')
+                            @error('attachments')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            @error('attachments.*')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
@@ -228,9 +256,100 @@ document.addEventListener('DOMContentLoaded', function() {
     
     anonymousCheckbox.addEventListener('change', toggleAnonymous);
     
+    // File input management
+    let fileInputCount = 1;
+    const maxFiles = 5;
+    
+    window.addFileInput = function() {
+        if (fileInputCount >= maxFiles) {
+            alert(`Maksimal ${maxFiles} file yang dapat dilampirkan.`);
+            return;
+        }
+        
+        const container = document.getElementById('file-inputs-container');
+        const newGroup = document.createElement('div');
+        newGroup.className = 'file-input-group flex items-center space-x-2';
+        
+        newGroup.innerHTML = `
+            <input
+                type="file"
+                name="attachments[]"
+                class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+            />
+            <button
+                type="button"
+                onclick="removeFileInput(this)"
+                class="px-3 py-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+            >
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        container.appendChild(newGroup);
+        fileInputCount++;
+        
+        // Show remove buttons if more than one file input
+        updateRemoveButtons();
+        
+        // Add file size validation
+        const newInput = newGroup.querySelector('input[type="file"]');
+        newInput.addEventListener('change', validateFileSize);
+    };
+    
+    window.removeFileInput = function(button) {
+        if (fileInputCount <= 1) {
+            return;
+        }
+        
+        button.closest('.file-input-group').remove();
+        fileInputCount--;
+        updateRemoveButtons();
+    };
+    
+    function updateRemoveButtons() {
+        const removeButtons = document.querySelectorAll('.file-input-group button');
+        removeButtons.forEach(button => {
+            button.style.display = fileInputCount > 1 ? 'block' : 'none';
+        });
+    }
+    
+    function validateFileSize(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const fileSize = file.size / 1024 / 1024; // Convert to MB
+            if (fileSize > 10) {
+                alert('Ukuran file terlalu besar. Maksimal 10MB per file.');
+                event.target.value = '';
+            }
+        }
+    }
+    
+    // Add file size validation to existing input
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+        input.addEventListener('change', validateFileSize);
+    });
+    
     // Handle form submission
     document.getElementById('wbs-form').addEventListener('submit', function(e) {
         e.preventDefault();
+        
+        // Validate files
+        const fileInputs = document.querySelectorAll('input[name="attachments[]"]');
+        let totalSize = 0;
+        let hasValidFiles = false;
+        
+        fileInputs.forEach(input => {
+            if (input.files[0]) {
+                hasValidFiles = true;
+                totalSize += input.files[0].size;
+            }
+        });
+        
+        if (hasValidFiles && totalSize > 50 * 1024 * 1024) { // 50MB total limit
+            alert('Total ukuran file terlalu besar. Maksimal 50MB untuk semua file.');
+            return;
+        }
         
         // Show loading
         const submitButton = this.querySelector('button[type="submit"]');
@@ -238,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
         submitButton.disabled = true;
         
-        // Simulate API call (replace with actual API call)
+        // For demo - replace with actual form submission
         setTimeout(() => {
             // Reset button
             submitButton.innerHTML = originalText;
@@ -247,11 +366,25 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show success message
             alert('Laporan WBS berhasil dikirim! Terima kasih atas partisipasi Anda.');
             
-            // Reset form
+            // Reset form and file inputs
             this.reset();
+            resetFileInputs();
             toggleAnonymous();
         }, 2000);
     });
+    
+    function resetFileInputs() {
+        const container = document.getElementById('file-inputs-container');
+        const allGroups = container.querySelectorAll('.file-input-group');
+        
+        // Remove all but first group
+        for (let i = 1; i < allGroups.length; i++) {
+            allGroups[i].remove();
+        }
+        
+        fileInputCount = 1;
+        updateRemoveButtons();
+    }
 });
 </script>
 @endpush

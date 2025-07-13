@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreWbsRequest;
 use App\Models\InfoKantor;
 use App\Models\PortalPapuaTengah;
 use App\Models\PortalOpd;
@@ -13,6 +14,7 @@ use App\Models\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PublicController extends Controller
@@ -62,10 +64,28 @@ class PublicController extends Controller
     /**
      * Store WBS (form submission)
      */
-    public function storeWbs(Request $request)
+    public function storeWbs(StoreWbsRequest $request)
     {
-        // This will be handled by API, redirect to form with success message
-        return redirect()->route('public.wbs')->with('success', 'Laporan WBS berhasil dikirim!');
+        $data = $request->validated();
+
+        // Handle anonymous submissions
+        if ($data['is_anonymous'] ?? false) {
+            $data['nama_pelapor'] = 'Anonymous';
+            $data['email'] = 'anonymous@system.local';
+        }
+
+        // Handle multiple file uploads
+        if ($request->hasFile('attachments')) {
+            $filePaths = [];
+            foreach ($request->file('attachments') as $file) {
+                $filePaths[] = $file->store('wbs-attachments', 'public');
+            }
+            $data['bukti_files'] = $filePaths;
+        }
+
+        Wbs::create($data);
+
+        return redirect()->route('public.wbs')->with('success', 'Laporan WBS berhasil dikirim! Terima kasih atas partisipasi Anda.');
     }
 
     /**
@@ -228,18 +248,152 @@ class PublicController extends Controller
         // Increment download count
         $dokumen->increment('download_count');
 
-        // Return file download
-        $filePath = storage_path('app/' . $dokumen->file_path);
-        
-        if (file_exists($filePath)) {
-            return response()->download($filePath, $dokumen->file_name);
+        // Check if file exists
+        if (isset($dokumen->file_path) && Storage::exists($dokumen->file_path)) {
+            $pathInfo = pathinfo($dokumen->file_path);
+            $fileName = $dokumen->file_name ?? ($dokumen->judul . '.' . ($pathInfo['extension'] ?? 'pdf'));
+            
+            return Storage::download($dokumen->file_path, $fileName);
         }
 
-        // If file doesn't exist, return mock response for demo
-        return response()->json([
-            'message' => 'File download akan segera tersedia',
-            'file' => $dokumen->file_name
-        ]);
+        // Fallback: Generate a sample file if file not found
+        $fileName = ($dokumen->file_name ?? ($dokumen->judul . '.pdf'));
+        $sampleContent = $this->generateSamplePDF($dokumen->judul ?? 'Dokumen', $dokumen->deskripsi ?? '');
+        
+        return response($sampleContent)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="' . $fileName . '"');
+    }
+
+    /**
+     * Preview document
+     */
+    public function dokumenPreview($id)
+    {
+        $dokumen = Dokumen::where('status', true)->findOrFail($id);
+        
+        // Check if file exists
+        if (isset($dokumen->file_path) && Storage::exists($dokumen->file_path)) {
+            $pathInfo = pathinfo($dokumen->file_path);
+            $extension = strtolower($pathInfo['extension'] ?? 'pdf');
+            
+            // Handle different file types
+            switch ($extension) {
+                case 'pdf':
+                    return Storage::response($dokumen->file_path, null, [
+                        'Content-Type' => 'application/pdf',
+                        'Content-Disposition' => 'inline; filename="preview.pdf"'
+                    ]);
+                    
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'gif':
+                    return Storage::response($dokumen->file_path, null, [
+                        'Content-Type' => 'image/' . ($extension === 'jpg' ? 'jpeg' : $extension),
+                        'Content-Disposition' => 'inline'
+                    ]);
+                    
+                default:
+                    // For other file types, force download
+                    return $this->dokumenDownload($id);
+            }
+        }
+
+        // Fallback: Generate a sample PDF for preview
+        $sampleContent = $this->generateSamplePDF($dokumen->judul ?? 'Dokumen', $dokumen->deskripsi ?? '');
+        
+        return response($sampleContent)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'inline; filename="preview.pdf"');
+    }
+
+    /**
+     * Generate sample PDF content
+     */
+    private function generateSamplePDF($title, $description = '')
+    {
+        $date = now()->format('d F Y');
+        $content = wordwrap($description, 80, "\n", true);
+        
+        return "%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 4 0 R
+/Resources <<
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+>>
+>>
+>>
+endobj
+4 0 obj
+<<
+/Length 250
+>>
+stream
+BT
+/F1 16 Tf
+72 720 Td
+({$title}) Tj
+0 -40 Td
+/F2 12 Tf
+(Tanggal: {$date}) Tj
+0 -30 Td
+({$content}) Tj
+0 -60 Td
+(--- Dokumen dari Inspektorat Papua Tengah ---) Tj
+ET
+endstream
+endobj
+5 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica-Bold
+>>
+endobj
+6 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000280 00000 n 
+0000000580 00000 n 
+0000000650 00000 n 
+trailer
+<<
+/Size 7
+/Root 1 0 R
+>>
+startxref
+714
+%%EOF";
     }
 
     /**

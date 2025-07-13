@@ -44,21 +44,45 @@
                                 <div class="text-gray-900 bg-gray-50 p-4 rounded-md whitespace-pre-wrap">{{ $wbs->deskripsi }}</div>
                             </div>
 
-                            @if($wbs->bukti_file)
+                            @if($wbs->bukti_file || ($wbs->bukti_files && count($wbs->bukti_files) > 0))
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">File Bukti</label>
-                                    <div class="flex items-center space-x-3">
-                                        <div class="flex items-center bg-gray-50 p-3 rounded-md">
-                                            <i class="fas fa-file text-blue-600 mr-2"></i>
-                                            <span class="text-gray-900">{{ basename($wbs->bukti_file) }}</span>
+                                    
+                                    @if($wbs->bukti_file)
+                                        <div class="mb-3">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="flex items-center bg-gray-50 p-3 rounded-md">
+                                                    <i class="fas fa-file text-blue-600 mr-2"></i>
+                                                    <span class="text-gray-900">{{ basename($wbs->bukti_file) }}</span>
+                                                </div>
+                                                <a href="{{ Storage::url($wbs->bukti_file) }}" 
+                                                   target="_blank"
+                                                   class="text-blue-600 hover:text-blue-800">
+                                                    <i class="fas fa-download mr-1"></i>
+                                                    Download
+                                                </a>
+                                            </div>
                                         </div>
-                                        <a href="{{ Storage::url($wbs->bukti_file) }}" 
-                                           target="_blank"
-                                           class="text-blue-600 hover:text-blue-800">
-                                            <i class="fas fa-download mr-1"></i>
-                                            Download
-                                        </a>
-                                    </div>
+                                    @endif
+                                    
+                                    @if($wbs->bukti_files && count($wbs->bukti_files) > 0)
+                                        <div class="space-y-2">
+                                            @foreach($wbs->bukti_files as $index => $filePath)
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="flex items-center bg-gray-50 p-3 rounded-md">
+                                                        <i class="fas fa-file text-blue-600 mr-2"></i>
+                                                        <span class="text-gray-900">File {{ $index + 1 }}: {{ basename($filePath) }}</span>
+                                                    </div>
+                                                    <a href="{{ Storage::url($filePath) }}" 
+                                                       target="_blank"
+                                                       class="text-blue-600 hover:text-blue-800">
+                                                        <i class="fas fa-download mr-1"></i>
+                                                        Download
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                             @endif
 

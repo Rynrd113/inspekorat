@@ -21,7 +21,8 @@ class Wbs extends Model
         'lokasi_kejadian',
         'pihak_terlibat',
         'kronologi',
-        'bukti_file',
+        'bukti_file', // Single file (legacy)
+        'bukti_files', // Multiple files (JSON)
         'status',
         'response',
         'responded_at',
@@ -36,6 +37,7 @@ class Wbs extends Model
         'updated_at' => 'datetime',
         'responded_at' => 'datetime',
         'tanggal_kejadian' => 'date',
+        'bukti_files' => 'array',
     ];
 
     /**

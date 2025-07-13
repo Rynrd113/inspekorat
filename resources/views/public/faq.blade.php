@@ -1,102 +1,508 @@
-@extends('layouts.public')
+@extends('layouts.app')
 
-@section('title', 'FAQ - Portal Inspektorat Papua Tengah')
+@section('title', 'FAQ - Inspektorat Papua Tengah')
+@section('description', 'Temukan jawaban atas pertanyaan yang sering diajukan tentang Inspektorat Papua Tengah.')
 
 @section('content')
-<!-- Hero Section -->
-<section class="hero-section bg-primary text-white py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-3">Frequently Asked Questions</h1>
-                <p class="lead">Temukan jawaban atas pertanyaan yang sering diajukan tentang Inspektorat Papua Tengah.</p>
-            </div>
-            <div class="col-lg-4 text-center">
-                <i class="fas fa-question-circle fa-5x opacity-75"></i>
+<div class="min-h-screen bg-gray-50">
+    <!-- Header Section -->
+    <section class="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                    Frequently Asked Questions
+                </h1>
+                <p class="text-xl text-purple-100 max-w-3xl mx-auto">
+                    Temukan jawaban atas pertanyaan yang sering diajukan tentang Inspektorat Papua Tengah
+                </p>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Breadcrumb -->
-<nav aria-label="breadcrumb" class="bg-light py-2">
-    <div class="container">
-        <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{{ route('public.index') }}">Beranda</a></li>
-            <li class="breadcrumb-item active">FAQ</li>
-        </ol>
-    </div>
-</nav>
-
-<!-- Search Section -->
-<section class="py-4 bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="input-group input-group-lg">
-                    <input type="text" class="form-control" id="searchFaq" placeholder="Cari pertanyaan...">
-                    <button class="btn btn-primary" type="button">
-                        <i class="fas fa-search"></i>
-                    </button>
+    <!-- Search Section -->
+    <section class="py-8 bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-2xl mx-auto">
+                <div class="relative">
+                    <input type="text" 
+                           id="searchFaq" 
+                           placeholder="Cari pertanyaan..." 
+                           class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    <i class="fas fa-search absolute left-3 top-4 text-gray-400"></i>
                 </div>
-                <div class="text-center mt-3">
-                    <small class="text-muted">Ketik kata kunci untuk mencari pertanyaan yang Anda butuhkan</small>
-                </div>
+                <p class="text-center text-sm text-gray-500 mt-3">
+                    Ketik kata kunci untuk mencari pertanyaan yang Anda butuhkan
+                </p>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- FAQ Categories -->
-<section class="py-4">
-    <div class="container">
-        <div class="text-center mb-4">
-            <h5>Kategori Pertanyaan</h5>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-auto">
-                <div class="btn-group flex-wrap" role="group" id="categoryButtons">
-                    <input type="radio" class="btn-check" name="category" id="cat-semua" value="" checked>
-                    <label class="btn btn-outline-primary" for="cat-semua">
-                        <i class="fas fa-th-large me-1"></i> Semua
-                    </label>
-
-                    <input type="radio" class="btn-check" name="category" id="cat-umum" value="umum">
-                    <label class="btn btn-outline-primary" for="cat-umum">
-                        <i class="fas fa-info-circle me-1"></i> Umum
-                    </label>
-
-                    <input type="radio" class="btn-check" name="category" id="cat-layanan" value="layanan">
-                    <label class="btn btn-outline-primary" for="cat-layanan">
-                        <i class="fas fa-hands-helping me-1"></i> Layanan
-                    </label>
-
-                    <input type="radio" class="btn-check" name="category" id="cat-pengaduan" value="pengaduan">
-                    <label class="btn btn-outline-primary" for="cat-pengaduan">
-                        <i class="fas fa-exclamation-triangle me-1"></i> Pengaduan
-                    </label>
-
-                    <input type="radio" class="btn-check" name="category" id="cat-audit" value="audit">
-                    <label class="btn btn-outline-primary" for="cat-audit">
-                        <i class="fas fa-search me-1"></i> Audit
-                    </label>
-                </div>
+    <!-- Category Filter -->
+    <section class="py-6 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-6">
+                <h3 class="text-lg font-semibold text-gray-900">Kategori Pertanyaan</h3>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3">
+                <button class="category-filter active px-4 py-2 bg-purple-600 text-white rounded-full text-sm font-medium hover:bg-purple-700 transition-colors" data-category="">
+                    <i class="fas fa-th-large mr-1"></i> Semua
+                </button>
+                <button class="category-filter px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors" data-category="umum">
+                    <i class="fas fa-info-circle mr-1"></i> Umum
+                </button>
+                <button class="category-filter px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors" data-category="layanan">
+                    <i class="fas fa-hands-helping mr-1"></i> Layanan
+                </button>
+                <button class="category-filter px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors" data-category="pengaduan">
+                    <i class="fas fa-exclamation-triangle mr-1"></i> Pengaduan
+                </button>
+                <button class="category-filter px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors" data-category="audit">
+                    <i class="fas fa-search mr-1"></i> Audit
+                </button>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- FAQ Section -->
-<section class="py-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 mx-auto">
-                <!-- Featured FAQ -->
-                <div class="mb-5">
-                    <div class="text-center mb-4">
-                        <h3>Pertanyaan Populer</h3>
-                        <p class="text-muted">Pertanyaan yang paling sering diajukan</p>
+    <!-- FAQ Section -->
+    <section class="py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Featured FAQ -->
+            @if(isset($popularFaqs) && $popularFaqs->count() > 0)
+            <div class="mb-12">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Pertanyaan Populer</h3>
+                    <p class="text-gray-600">Pertanyaan yang paling sering diajukan</p>
+                </div>
+                
+                <div class="space-y-4">
+                    @foreach($popularFaqs as $faq)
+                    <div class="faq-item bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-6" data-category="{{ strtolower($faq->kategori ?? 'umum') }}">
+                        <button class="faq-toggle w-full flex items-start justify-between text-left group" onclick="toggleFaq(this)">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <i class="fas fa-star text-yellow-500 mr-2"></i>
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                        {{ ucfirst($faq->kategori ?? 'Umum') }}
+                                    </span>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
+                                    {{ $faq->pertanyaan }}
+                                </h4>
+                            </div>
+                            <div class="ml-4">
+                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+                            </div>
+                        </button>
+                        <div class="faq-content hidden mt-4 pt-4 border-t border-purple-200">
+                            <div class="prose prose-sm max-w-none text-gray-700">
+                                {!! $faq->jawaban !!}
+                            </div>
+                        </div>
                     </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            <!-- Regular FAQ -->
+            <div class="space-y-4" id="faq-list">
+                @if(isset($faqs) && $faqs->count() > 0)
+                    @foreach($faqs as $faq)
+                    <div class="faq-item bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow" data-category="{{ strtolower($faq->kategori ?? 'umum') }}">
+                        <button class="faq-toggle w-full flex items-start justify-between text-left group" onclick="toggleFaq(this)">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        {{ ucfirst($faq->kategori ?? 'Umum') }}
+                                    </span>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
+                                    {{ $faq->pertanyaan }}
+                                </h4>
+                            </div>
+                            <div class="ml-4">
+                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+                            </div>
+                        </button>
+                        <div class="faq-content hidden mt-4 pt-4 border-t border-gray-200" style="transition: all 0.3s ease;">
+                            <div class="prose prose-sm max-w-none text-gray-700" style="color: #374151 !important;">
+                                {!! $faq->jawaban !!}
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                @else
+                    <!-- Sample FAQs for demo -->
+                    <div class="faq-item bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow" data-category="pengaduan">
+                        <button class="faq-toggle w-full flex items-start justify-between text-left group" onclick="toggleFaq(this)">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        Pengaduan
+                                    </span>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
+                                    Bagaimana cara menyampaikan pengaduan?
+                                </h4>
+                            </div>
+                            <div class="ml-4">
+                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+                            </div>
+                        </button>
+                        <div class="faq-content hidden mt-4 pt-4 border-t border-gray-200">
+                            <div class="prose prose-sm max-w-none text-gray-700">
+                                <p>Anda dapat menyampaikan pengaduan melalui beberapa cara:</p>
+                                <ol>
+                                    <li><strong>Online melalui WBS (Whistle Blowing System):</strong>
+                                        <ul>
+                                            <li>Kunjungi halaman <a href="{{ route('public.wbs') }}" class="text-purple-600 hover:text-purple-800">WBS</a></li>
+                                            <li>Isi formulir pengaduan dengan lengkap</li>
+                                            <li>Upload bukti pendukung jika ada</li>
+                                            <li>Simpan nomor tiket untuk follow-up</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Datang langsung ke kantor:</strong>
+                                        <ul>
+                                            <li>Alamat: Jl. Raya Nabire No. 123, Nabire, Papua Tengah</li>
+                                            <li>Jam kerja: Senin-Jumat, 08:00-16:00 WIT</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Melalui telepon/email:</strong>
+                                        <ul>
+                                            <li>Telepon: (0984) 21234</li>
+                                            <li>Email: pengaduan@inspektorat-papuatengah.go.id</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow" data-category="layanan">
+                        <button class="faq-toggle w-full flex items-start justify-between text-left group" onclick="toggleFaq(this)">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        Layanan
+                                    </span>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
+                                    Apa saja layanan yang tersedia di Inspektorat?
+                                </h4>
+                            </div>
+                            <div class="ml-4">
+                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+                            </div>
+                        </button>
+                        <div class="faq-content hidden mt-4 pt-4 border-t border-gray-200">
+                            <div class="prose prose-sm max-w-none text-gray-700">
+                                <p>Inspektorat Papua Tengah menyediakan berbagai layanan, antara lain:</p>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                    <div>
+                                        <h6 class="font-semibold text-gray-900">Layanan Audit & Pengawasan:</h6>
+                                        <ul>
+                                            <li>Audit internal</li>
+                                            <li>Evaluasi kinerja</li>
+                                            <li>Investigasi khusus</li>
+                                            <li>Pemantauan tindak lanjut</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h6 class="font-semibold text-gray-900">Layanan Konsultasi:</h6>
+                                        <ul>
+                                            <li>Konsultasi tata kelola</li>
+                                            <li>Bimbingan teknis</li>
+                                            <li>Pelatihan SDM</li>
+                                            <li>Asistensi implementasi</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <p class="mt-3">Seluruh layanan ini <strong>gratis</strong> dan dapat diakses oleh OPD di lingkungan Pemerintah Papua Tengah.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow" data-category="audit">
+                        <button class="faq-toggle w-full flex items-start justify-between text-left group" onclick="toggleFaq(this)">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        Audit
+                                    </span>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
+                                    Berapa lama proses audit internal?
+                                </h4>
+                            </div>
+                            <div class="ml-4">
+                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+                            </div>
+                        </button>
+                        <div class="faq-content hidden mt-4 pt-4 border-t border-gray-200">
+                            <div class="prose prose-sm max-w-none text-gray-700">
+                                <p>Waktu pelaksanaan audit internal bervariasi tergantung pada:</p>
+                                <ul>
+                                    <li><strong>Jenis audit:</strong> Audit kinerja, audit keuangan, atau audit khusus</li>
+                                    <li><strong>Ruang lingkup:</strong> Luas area yang diaudit</li>
+                                    <li><strong>Kompleksitas:</strong> Tingkat kerumitan sistem dan proses</li>
+                                </ul>
+                                
+                                <div class="overflow-x-auto mt-4">
+                                    <table class="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Audit</th>
+                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estimasi Waktu</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Audit Rutin</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">7-14 hari kerja</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Audit Khusus/Investigasi</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">30-60 hari kerja</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Audit Kinerja</td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">14-30 hari kerja</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow" data-category="umum">
+                        <button class="faq-toggle w-full flex items-start justify-between text-left group" onclick="toggleFaq(this)">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        Umum
+                                    </span>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
+                                    Apakah identitas pelapor akan dirahasiakan?
+                                </h4>
+                            </div>
+                            <div class="ml-4">
+                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+                            </div>
+                        </button>
+                        <div class="faq-content hidden mt-4 pt-4 border-t border-gray-200">
+                            <div class="prose prose-sm max-w-none text-gray-700">
+                                <p><strong>Ya, identitas pelapor akan dijamin kerahasiaannya.</strong></p>
+                                
+                                <h6 class="font-semibold text-gray-900 mt-4">Perlindungan yang diberikan:</h6>
+                                <ul>
+                                    <li>Kerahasiaan identitas pelapor</li>
+                                    <li>Perlindungan dari intimidasi atau pembalasan</li>
+                                    <li>Komunikasi aman melalui sistem WBS</li>
+                                    <li>Hak untuk melaporkan secara anonim</li>
+                                </ul>
+                                
+                                <h6 class="font-semibold text-gray-900 mt-4">Sistem WBS (Whistle Blowing System):</h6>
+                                <ul>
+                                    <li>Enkripsi data untuk keamanan informasi</li>
+                                    <li>Nomor tiket unik untuk komunikasi</li>
+                                    <li>Tim khusus penanganan pengaduan</li>
+                                    <li>Prosedur standar perlindungan pelapor</li>
+                                </ul>
+                                
+                                <div class="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
+                                    <div class="flex">
+                                        <i class="fas fa-shield-alt text-green-600 mr-3 mt-1"></i>
+                                        <div>
+                                            <p class="text-green-800 font-medium">Jaminan Keamanan</p>
+                                            <p class="text-green-700 text-sm">Semua laporan ditangani dengan standar keamanan tinggi dan kerahasiaan terjamin.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            <!-- No Results Message -->
+            <div id="no-results" class="hidden text-center py-12">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-search text-gray-400 text-3xl"></i>
+                </div>
+                <h3 class="text-xl font-medium text-gray-900 mb-2">Tidak Ada Hasil</h3>
+                <p class="text-gray-600">Coba gunakan kata kunci yang berbeda atau pilih kategori lain.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8">
+                <div class="max-w-3xl mx-auto text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-question-circle text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                        Pertanyaan Tidak Terjawab?
+                    </h3>
+                    <p class="text-gray-600 mb-6">
+                        Jika pertanyaan Anda belum terjawab, jangan ragu untuk menghubungi kami secara langsung.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-phone text-purple-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">Telepon</h4>
+                            <p class="text-sm text-gray-600">(0984) 21234</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-envelope text-purple-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">Email</h4>
+                            <p class="text-sm text-gray-600">info@inspektorat-papuatengah.go.id</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-map-marker-alt text-purple-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-1">Alamat</h4>
+                            <p class="text-sm text-gray-600">Jl. Raya Nabire No. 123</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchFaq');
+    const categoryButtons = document.querySelectorAll('.category-filter');
+    const faqItems = document.querySelectorAll('.faq-item');
+    const noResults = document.getElementById('no-results');
+
+    // FAQ Toggle Function
+    window.toggleFaq = function(button) {
+        const faqItem = button.closest('.faq-item');
+        const content = faqItem.querySelector('.faq-content');
+        const icon = button.querySelector('i');
+        
+        // Close all other FAQs first
+        faqItems.forEach(item => {
+            if (item !== faqItem) {
+                const otherContent = item.querySelector('.faq-content');
+                const otherIcon = item.querySelector('.faq-toggle i');
+                if (otherContent && !otherContent.classList.contains('hidden')) {
+                    otherContent.classList.add('hidden');
+                    if (otherIcon) {
+                        otherIcon.style.transform = 'rotate(0deg)';
+                    }
+                }
+            }
+        });
+        
+        // Toggle current FAQ with animation
+        if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            content.style.opacity = '0';
+            content.style.maxHeight = '0';
+            content.style.overflow = 'hidden';
+            
+            // Force reflow
+            content.offsetHeight;
+            
+            content.style.transition = 'all 0.3s ease';
+            content.style.opacity = '1';
+            content.style.maxHeight = '1000px';
+            
+            if (icon) {
+                icon.style.transform = 'rotate(180deg)';
+            }
+            
+            // Clean up after animation
+            setTimeout(() => {
+                content.style.maxHeight = 'none';
+                content.style.overflow = 'visible';
+            }, 300);
+        } else {
+            content.style.transition = 'all 0.3s ease';
+            content.style.opacity = '0';
+            content.style.maxHeight = '0';
+            content.style.overflow = 'hidden';
+            
+            if (icon) {
+                icon.style.transform = 'rotate(0deg)';
+            }
+            
+            setTimeout(() => {
+                content.classList.add('hidden');
+                content.style.opacity = '';
+                content.style.maxHeight = '';
+                content.style.overflow = '';
+                content.style.transition = '';
+            }, 300);
+        }
+    };
+
+    // Category Filter
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const category = this.dataset.category;
+
+            // Update active button
+            categoryButtons.forEach(btn => {
+                btn.classList.remove('active', 'bg-purple-600', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+            });
+            
+            this.classList.add('active', 'bg-purple-600', 'text-white');
+            this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+
+            filterFaqs();
+        });
+    });
+
+    // Search Function
+    searchInput.addEventListener('input', filterFaqs);
+
+    function filterFaqs() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const activeCategory = document.querySelector('.category-filter.active').dataset.category;
+        let visibleCount = 0;
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('h4').textContent.toLowerCase();
+            const answer = item.querySelector('.faq-content').textContent.toLowerCase();
+            const category = item.dataset.category;
+
+            const matchesSearch = question.includes(searchTerm) || answer.includes(searchTerm);
+            const matchesCategory = !activeCategory || category === activeCategory;
+
+            if (matchesSearch && matchesCategory) {
+                item.style.display = 'block';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        // Show/hide no results message
+        if (visibleCount === 0) {
+            noResults.classList.remove('hidden');
+        } else {
+            noResults.classList.add('hidden');
+        }
+    }
+});
+</script>
+@endpush
                     
                     <div class="accordion" id="featuredFaq">
                         <div class="accordion-item featured-faq">
@@ -403,32 +809,52 @@
 
 @push('styles')
 <style>
+.faq-content {
+    transition: all 0.3s ease;
+}
+
+.faq-content.hidden {
+    display: none;
+}
+
+.faq-content .prose {
+    color: #374151 !important;
+}
+
+.faq-content .prose * {
+    color: inherit !important;
+}
+
+.faq-content .prose p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.faq-content .prose ul {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.faq-content .prose ol {
+    list-style-type: decimal;
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.faq-content .prose li {
+    margin-bottom: 0.5rem;
+}
+
+.faq-toggle i {
+    transition: transform 0.3s ease;
+}
+
 .hero-section {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    background: linear-gradient(135deg, #9333ea 0%, #3b82f6 100%);
 }
-
-.featured-faq {
-    border: 2px solid #ffc107;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.featured-faq .accordion-button {
-    background-color: #fff8e1;
-    font-weight: 600;
-}
-
-.faq-item .accordion-button:not(.collapsed) {
-    background-color: #e3f2fd;
-    border-bottom: 1px solid #dee2e6;
-}
-
-.accordion-button:focus {
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.btn-group .btn-check:checked + .btn {
-    background-color: #007bff;
+</style>
+@endpush
     border-color: #007bff;
     color: white;
 }

@@ -20,12 +20,17 @@ class StoreWbsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_pelapor' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'nama_pelapor' => 'required_unless:is_anonymous,1|string|max:255',
+            'email' => 'required_unless:is_anonymous,1|email|max:255',
             'no_telepon' => 'nullable|string|max:20',
             'subjek' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:10240',
+            'tanggal_kejadian' => 'nullable|date',
+            'lokasi_kejadian' => 'nullable|string|max:255',
+            'pihak_terlibat' => 'nullable|string',
+            'kronologi' => 'nullable|string',
+            'attachments' => 'nullable|array|max:5',
+            'attachments.*' => 'file|mimes:pdf,doc,docx,jpg,jpeg,png|max:10240',
             'is_anonymous' => 'boolean',
         ];
     }
@@ -36,14 +41,15 @@ class StoreWbsRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nama_pelapor.required' => 'Nama pelapor harus diisi',
-            'email.required' => 'Email harus diisi',
+            'nama_pelapor.required_unless' => 'Nama pelapor harus diisi jika tidak anonymous',
+            'email.required_unless' => 'Email harus diisi jika tidak anonymous',
             'email.email' => 'Format email tidak valid',
             'subjek.required' => 'Subjek harus diisi',
             'deskripsi.required' => 'Deskripsi harus diisi',
-            'attachment.file' => 'File tidak valid',
-            'attachment.mimes' => 'File harus berformat pdf, doc, docx, jpg, jpeg, atau png',
-            'attachment.max' => 'Ukuran file maksimal 10MB',
+            'attachments.max' => 'Maksimal 5 file yang dapat dilampirkan',
+            'attachments.*.file' => 'File tidak valid',
+            'attachments.*.mimes' => 'File harus berformat pdf, doc, docx, jpg, jpeg, atau png',
+            'attachments.*.max' => 'Ukuran file maksimal 10MB',
         ];
     }
 }

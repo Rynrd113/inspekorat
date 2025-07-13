@@ -46,7 +46,9 @@
             <!-- Services Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="services-grid">
                 @forelse($pelayanans ?? [] as $pelayanan)
-                <div class="service-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden" data-category="{{ $pelayanan->kategori ?? 'umum' }}">
+                <div class="service-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden" 
+                     data-category="{{ $pelayanan->kategori ?? 'umum' }}" 
+                     style="opacity: 1; transform: translateY(0); transition: all 0.3s ease;">
                     <div class="p-6">
                         <!-- Service Icon -->
                         <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
@@ -184,16 +186,55 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active', 'bg-blue-600', 'text-white');
             this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
 
-            // Filter cards
+            // Filter cards with animation
             serviceCards.forEach(card => {
-                if (category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                const cardCategory = card.dataset.category;                    if (category === 'all' || cardCategory === category) {
+                        card.style.display = 'block';
+                        card.style.opacity = '0';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, 50);
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(10px)';
+                        setTimeout(() => {
+                            if (card.style.opacity === '0') {
+                                card.style.display = 'none';
+                            }
+                        }, 300);
+                    }
             });
+
+            // Update counter
+            updateServiceCounter(category);
         });
     });
+
+    // Function to update service counter
+    function updateServiceCounter(category) {
+        let visibleCount = 0;
+        serviceCards.forEach(card => {
+            const cardCategory = card.dataset.category;
+            if (category === 'all' || cardCategory === category) {
+                visibleCount++;
+            }
+        });
+        
+        const counterElement = document.querySelector('.service-counter');
+        if (counterElement) {
+            counterElement.textContent = `Menampilkan ${visibleCount} layanan`;
+        }
+    }
+
+    // Add service counter element
+    const gridContainer = document.getElementById('services-grid');
+    if (gridContainer && serviceCards.length > 0) {
+        const counterDiv = document.createElement('div');
+        counterDiv.className = 'service-counter text-sm text-gray-600 mb-4';
+        counterDiv.textContent = `Menampilkan ${serviceCards.length} layanan`;
+        gridContainer.parentNode.insertBefore(counterDiv, gridContainer);
+    }
 });
 </script>
 @endpush
