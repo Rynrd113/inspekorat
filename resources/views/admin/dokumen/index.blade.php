@@ -29,9 +29,6 @@
                     <i class="fas fa-folder-open text-gray-400 mr-2"></i>
                     <h2 class="text-lg font-medium text-gray-900">Daftar Dokumen</h2>
                 </div>
-                <a href="{{ route('admin.dokumen.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
-                    <i class="fas fa-plus mr-2"></i>Tambah Dokumen
-                </a>
             </div>
         </div>
         <div class="px-6 py-4">
