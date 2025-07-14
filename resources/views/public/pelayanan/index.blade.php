@@ -188,7 +188,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Filter cards with animation
             serviceCards.forEach(card => {
-                const cardCategory = card.dataset.category;                    if (category === 'all' || cardCategory === category) {
+                const cardCategory = card.dataset.category;
+                if (category === 'all' || cardCategory === category) {
                         card.style.display = 'block';
                         card.style.opacity = '0';
                         setTimeout(() => {

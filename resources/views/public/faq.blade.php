@@ -21,36 +21,58 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Search Box -->
             <div class="mb-6">
-                <div class="relative max-w-md mx-auto">
-                    <input 
-                        type="text" 
-                        id="searchFaq" 
-                        placeholder="Cari pertanyaan..."
-                        class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
-                        <i class="fas fa-search text-gray-400"></i>
-                    </div>
-                </div>
+                <x-search-input 
+                    id="searchFaq" 
+                    placeholder="Cari pertanyaan..."
+                    container-class="max-w-md mx-auto"
+                    with-icon="true"
+                    clear-button="true"
+                />
             </div>
 
             <!-- Filter Buttons -->
             <div class="flex flex-wrap justify-center gap-3">
-                <button class="filter-btn active bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors hover:bg-blue-700" data-category="">
-                    <i class="fas fa-th-large mr-2"></i>Semua
-                </button>
-                <button class="filter-btn bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors hover:bg-gray-200" data-category="umum">
-                    <i class="fas fa-info-circle mr-2"></i>Umum
-                </button>
-                <button class="filter-btn bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors hover:bg-gray-200" data-category="layanan">
-                    <i class="fas fa-hands-helping mr-2"></i>Layanan
-                </button>
-                <button class="filter-btn bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors hover:bg-gray-200" data-category="pengaduan">
-                    <i class="fas fa-exclamation-triangle mr-2"></i>Pengaduan
-                </button>
-                <button class="filter-btn bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors hover:bg-gray-200" data-category="audit">
-                    <i class="fas fa-search mr-2"></i>Audit
-                </button>
+                <x-filter-button 
+                    filter="" 
+                    active="true" 
+                    icon="fas fa-th-large" 
+                    class="filter-btn"
+                    data-category=""
+                >
+                    Semua
+                </x-filter-button>
+                <x-filter-button 
+                    filter="umum" 
+                    icon="fas fa-info-circle" 
+                    class="filter-btn"
+                    data-category="umum"
+                >
+                    Umum
+                </x-filter-button>
+                <x-filter-button 
+                    filter="layanan" 
+                    icon="fas fa-hands-helping" 
+                    class="filter-btn"
+                    data-category="layanan"
+                >
+                    Layanan
+                </x-filter-button>
+                <x-filter-button 
+                    filter="pengaduan" 
+                    icon="fas fa-exclamation-triangle" 
+                    class="filter-btn"
+                    data-category="pengaduan"
+                >
+                    Pengaduan
+                </x-filter-button>
+                <x-filter-button 
+                    filter="audit" 
+                    icon="fas fa-search" 
+                    class="filter-btn"
+                    data-category="audit"
+                >
+                    Audit
+                </x-filter-button>
             </div>
         </div>
     </section>
@@ -69,9 +91,9 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex-1">
                                     <div class="mb-2">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        <x-badge variant="primary" size="md">
                                             {{ ucfirst($faq->kategori ?? 'Umum') }}
-                                        </span>
+                                        </x-badge>
                                     </div>
                                     <h3 class="text-lg font-medium text-gray-900 pr-4">{{ $faq->pertanyaan }}</h3>
                                 </div>
@@ -97,9 +119,9 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex-1">
                                     <div class="mb-2">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <x-badge variant="warning" size="md">
                                             Pengaduan
-                                        </span>
+                                        </x-badge>
                                     </div>
                                     <h3 class="text-lg font-medium text-gray-900 pr-4">Bagaimana cara menyampaikan pengaduan?</h3>
                                 </div>
@@ -128,9 +150,9 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex-1">
                                     <div class="mb-2">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        <x-badge variant="primary" size="md">
                                             Layanan
-                                        </span>
+                                        </x-badge>
                                     </div>
                                     <h3 class="text-lg font-medium text-gray-900 pr-4">Apa saja layanan yang tersedia?</h3>
                                 </div>
@@ -160,9 +182,9 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex-1">
                                     <div class="mb-2">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <x-badge variant="success" size="md">
                                             Audit
-                                        </span>
+                                        </x-badge>
                                     </div>
                                     <h3 class="text-lg font-medium text-gray-900 pr-4">Berapa lama proses audit internal?</h3>
                                 </div>
@@ -191,9 +213,9 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex-1">
                                     <div class="mb-2">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        <x-badge variant="secondary" size="md">
                                             Umum
-                                        </span>
+                                        </x-badge>
                                     </div>
                                     <h3 class="text-lg font-medium text-gray-900 pr-4">Apakah identitas pelapor dirahasiakan?</h3>
                                 </div>
@@ -218,17 +240,21 @@
                 </div>
                 <h3 class="text-lg font-medium text-gray-900 mb-2">Tidak Ada Hasil Ditemukan</h3>
                 <p class="text-gray-600 mb-4">Coba gunakan kata kunci yang berbeda atau pilih kategori lain.</p>
-                <button onclick="clearSearch()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                <x-button onclick="clearSearch()" variant="primary" size="md">
                     <i class="fas fa-redo mr-2"></i>Reset Pencarian
-                </button>
+                </x-button>
             </div>
         </div>
     </section>
 
     <!-- Back to Top -->
-    <button id="backToTop" class="hidden fixed bottom-6 right-6 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors">
+    <x-button 
+        id="backToTop" 
+        variant="primary" 
+        class="hidden fixed bottom-6 right-6 p-3 rounded-full shadow-lg"
+    >
         <i class="fas fa-arrow-up"></i>
-    </button>
+    </x-button>
 </div>
 
 <script>
