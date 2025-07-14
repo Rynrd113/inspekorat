@@ -2,44 +2,41 @@
 
 @section('title', 'Detail Dokumen')
 
-@section('content')
-<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Detail Dokumen</h1>
-        <nav class="flex mt-2" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-sm text-gray-500">
-                <li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
-                <li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
-                <li><a href="{{ route('admin.dokumen.index') }}" class="text-blue-600 hover:text-blue-800">Dokumen</a></li>
-                <li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
-                <li class="text-gray-600">Detail</li>
-            </ol>
-        </nav>
-    </div>
+@section('header', 'Detail Dokumen')
 
-    <div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
-        <div class="p-6 border-b border-gray-200">
+@section('breadcrumb')
+<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li><a href="{{ route('admin.dokumen.index') }}" class="text-blue-600 hover:text-blue-800">Dokumen</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li class="text-gray-600">Detail</li>
+@endsection
+
+@section('main-content')
+<div class="space-y-6">
+
+    <x-card>
+        <x-slot:header>
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold text-gray-900">
                     <i class="fas fa-file-alt mr-2 text-blue-600"></i>
                     Detail Dokumen
                 </h2>
                 <div class="flex space-x-3">
-                    <a href="{{ route('admin.dokumen.edit', $dokumen) }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                    <x-button href="{{ route('admin.dokumen.edit', $dokumen) }}" variant="warning" size="md">
                         <i class="fas fa-edit mr-2"></i>Edit
-                    </a>
+                    </x-button>
                     @if($dokumen->file_dokumen)
-                    <a href="{{ route('admin.dokumen.download', $dokumen) }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    <x-button href="{{ route('admin.dokumen.download', $dokumen) }}" variant="success" size="md">
                         <i class="fas fa-download mr-2"></i>Download
-                    </a>
+                    </x-button>
                     @endif
-                    <a href="{{ route('admin.dokumen.index') }}" class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <x-button href="{{ route('admin.dokumen.index') }}" variant="secondary" size="md">
                         <i class="fas fa-arrow-left mr-2"></i>Kembali
-                    </a>
+                    </x-button>
                 </div>
             </div>
-        </div>
-        <div class="p-6">
+        </x-slot:header>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="lg:col-span-2">
                     <div class="space-y-4">
@@ -50,9 +47,9 @@
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg">
                                 <h3 class="text-sm font-medium text-gray-500 mb-1">Kategori</h3>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                <x-badge variant="primary" size="md">
                                     {{ ucfirst($dokumen->kategori ?? 'peraturan') }}
-                                </span>
+                                </x-badge>
                             </div>
                             @if($dokumen->nomor_dokumen)
                             <div class="p-4 bg-gray-50 rounded-lg">
@@ -67,13 +64,13 @@
                             <div class="p-4 bg-gray-50 rounded-lg">
                                 <h3 class="text-sm font-medium text-gray-500 mb-1">Status</h3>
                                 @if(($dokumen->status ?? 1) == 1)
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <x-badge variant="success" size="md">
                                         <i class="fas fa-check-circle mr-1"></i>Aktif
-                                    </span>
+                                    </x-badge>
                                 @else
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    <x-badge variant="danger" size="md">
                                         <i class="fas fa-times-circle mr-1"></i>Non-aktif
-                                    </span>
+                                    </x-badge>
                                 @endif
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg">
@@ -101,10 +98,9 @@
                                     <i class="fas fa-file-pdf text-red-500 mr-2"></i>
                                     <span class="text-sm text-gray-700">{{ basename($dokumen->file_dokumen) }}</span>
                                 </div>
-                                <a href="{{ route('admin.dokumen.download', $dokumen) }}" 
-                                   class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-white bg-green-600 hover:bg-green-700">
+                                <x-button href="{{ route('admin.dokumen.download', $dokumen) }}" variant="success" size="sm">
                                     <i class="fas fa-download mr-1"></i>Download
-                                </a>
+                                </x-button>
                             </div>
                         </div>
                     @endif
@@ -122,23 +118,22 @@
             </div>
             @endif
 
-            <div class="mt-6 pt-6 border-t border-gray-200">
-                <div class="flex justify-between items-center">
-                    <a href="{{ route('admin.dokumen.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar
-                    </a>
-                    <div class="flex space-x-3">
-                        <a href="{{ route('admin.dokumen.edit', $dokumen) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                            <i class="fas fa-edit mr-2"></i>Edit
-                        </a>
-                        <button type="button" onclick="confirmDelete({{ $dokumen->id }})" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                            <i class="fas fa-trash mr-2"></i>Hapus
-                        </button>
-                    </div>
+        <div class="mt-6 pt-6 border-t border-gray-200">
+            <div class="flex justify-between items-center">
+                <x-button href="{{ route('admin.dokumen.index') }}" variant="secondary" size="md">
+                    <i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar
+                </x-button>
+                <div class="flex space-x-3">
+                    <x-button href="{{ route('admin.dokumen.edit', $dokumen) }}" variant="warning" size="md">
+                        <i class="fas fa-edit mr-2"></i>Edit
+                    </x-button>
+                    <x-button type="button" onclick="confirmDelete({{ $dokumen->id }})" variant="danger" size="md">
+                        <i class="fas fa-trash mr-2"></i>Hapus
+                    </x-button>
                 </div>
             </div>
         </div>
-    </div>
+    </x-card>
 </div>
 
 <!-- Delete Modal -->
@@ -170,13 +165,13 @@
                 <form id="deleteForm" method="POST" style="display: inline;">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    <x-button type="submit" variant="danger" size="md" class="sm:ml-3">
                         Hapus
-                    </button>
+                    </x-button>
                 </form>
-                <button type="button" onclick="closeDeleteModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                <x-button type="button" onclick="closeDeleteModal()" variant="secondary" size="md" class="mt-3 sm:mt-0 sm:ml-3">
                     Batal
-                </button>
+                </x-button>
             </div>
         </div>
     </div>

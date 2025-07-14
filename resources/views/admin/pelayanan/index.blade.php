@@ -1,97 +1,92 @@
 @extends('layouts.admin')
 
-@section('content')
-<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
-    <div class="mb-6">
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">Manajemen Pelayanan</h1>
-                <nav class="flex mt-2" aria-label="Breadcrumb">
-                    <ol class="flex items-center space-x-2 text-sm text-gray-500">
-                        <li>
-                            <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800 transition-colors">
-                                <i class="fas fa-home mr-1"></i>Dashboard
-                            </a>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-chevron-right mx-2 text-gray-300"></i>
-                            <span class="text-gray-600">Pelayanan</span>
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-            
-            <div class="flex items-center space-x-3">
-                <x-button 
-                    href="{{ route('admin.pelayanan.create') }}"
-                    variant="primary" 
-                    size="md"
-                >
-                    <i class="fas fa-plus mr-2"></i>Tambah Layanan
-                </x-button>
-            </div>
+@section('header', 'Manajemen Pelayanan')
+
+@section('breadcrumb')
+<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li class="text-gray-600">Pelayanan</li>
+@endsection
+
+@section('main-content')
+<div class="space-y-6">
+    <!-- Header Actions -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Daftar Pelayanan</h1>
+            <p class="text-gray-600 mt-1">Kelola layanan publik yang disediakan oleh Inspektorat</p>
         </div>
+        <x-button 
+            href="{{ route('admin.pelayanan.create') }}"
+            variant="primary" 
+            size="md"
+        >
+            <i class="fas fa-plus mr-2"></i>Tambah Layanan
+        </x-button>
     </div>
     
     <!-- Search and Filter -->
-    <div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
-        <div class="p-6">
-            <form method="GET" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Search Field -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Pencarian</label>
-                        <x-search-input 
-                            name="search"
-                            placeholder="Cari layanan..."
-                            value="{{ request('search') }}"
-                            with-icon="true"
-                            size="md"
-                        />
-                    </div>
-
-                    <!-- Filter Fields -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                        <select name="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="">Semua Kategori</option>
-                            <option value="perizinan" {{ request('kategori') == 'perizinan' ? 'selected' : '' }}>Perizinan</option>
-                            <option value="administrasi" {{ request('kategori') == 'administrasi' ? 'selected' : '' }}>Administrasi</option>
-                            <option value="pengawasan" {{ request('kategori') == 'pengawasan' ? 'selected' : '' }}>Pengawasan</option>
-                            <option value="konsultasi" {{ request('kategori') == 'konsultasi' ? 'selected' : '' }}>Konsultasi</option>
-                            <option value="audit" {{ request('kategori') == 'audit' ? 'selected' : '' }}>Audit</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                        <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="">Semua Status</option>
-                            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Aktif</option>
-                            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Non-aktif</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex flex-wrap items-center gap-3">
-                    <x-button type="submit" variant="primary" size="md">
-                        <i class="fas fa-search mr-2"></i>Cari
-                    </x-button>
-                    
-                    <x-button 
-                        type="button" 
-                        variant="secondary" 
+    <x-card>
+        <x-slot:header>
+            <h2 class="text-lg font-semibold text-gray-900">
+                <i class="fas fa-filter mr-2 text-blue-600"></i>Filter & Pencarian
+            </h2>
+        </x-slot:header>
+        
+        <form method="GET" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Search Field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Pencarian</label>
+                    <x-search-input 
+                        name="search"
+                        placeholder="Cari layanan..."
+                        value="{{ request('search') }}"
+                        with-icon="true"
                         size="md"
-                        onclick="window.location.href='{{ route('admin.pelayanan.index') }}'"
-                    >
-                        <i class="fas fa-undo mr-2"></i>Reset
-                    </x-button>
+                    />
                 </div>
-            </form>
-        </div>
-    </div>
+
+                <!-- Filter Fields -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                    <select name="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                        <option value="">Semua Kategori</option>
+                        <option value="perizinan" {{ request('kategori') == 'perizinan' ? 'selected' : '' }}>Perizinan</option>
+                        <option value="administrasi" {{ request('kategori') == 'administrasi' ? 'selected' : '' }}>Administrasi</option>
+                        <option value="pengawasan" {{ request('kategori') == 'pengawasan' ? 'selected' : '' }}>Pengawasan</option>
+                        <option value="konsultasi" {{ request('kategori') == 'konsultasi' ? 'selected' : '' }}>Konsultasi</option>
+                        <option value="audit" {{ request('kategori') == 'audit' ? 'selected' : '' }}>Audit</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                        <option value="">Semua Status</option>
+                        <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Aktif</option>
+                        <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Non-aktif</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-200">
+                <x-button type="submit" variant="primary" size="md">
+                    <i class="fas fa-search mr-2"></i>Cari
+                </x-button>
+                
+                <x-button 
+                    type="button" 
+                    variant="secondary" 
+                    size="md"
+                    onclick="window.location.href='{{ route('admin.pelayanan.index') }}'"
+                >
+                    <i class="fas fa-undo mr-2"></i>Reset
+                </x-button>
+            </div>
+        </form>
+    </x-card>
 
     <!-- Services List -->
     @php
@@ -124,7 +119,18 @@
     @endphp
 
     <!-- Services List -->
-    <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+    <x-card>
+        <x-slot:header>
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-900">
+                    <i class="fas fa-concierge-bell mr-2 text-blue-600"></i>Daftar Layanan
+                </h2>
+                <div class="text-sm text-gray-500">
+                    Total: {{ $sampleData->count() }} layanan
+                </div>
+            </div>
+        </x-slot:header>
+        
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -182,31 +188,37 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex items-center space-x-2">
-                                <a href="{{ route('admin.pelayanan.show', $row->id) }}" 
-                                   class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-md text-blue-600 hover:text-blue-800"
-                                   title="Lihat Detail">
-                                    <i class="fas fa-eye mr-1"></i>
-                                    Lihat
-                                </a>
+                                <x-button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    href="{{ route('admin.pelayanan.show', $row->id) }}"
+                                    title="Lihat Detail"
+                                >
+                                    <i class="fas fa-eye"></i>
+                                </x-button>
                                 
-                                <a href="{{ route('admin.pelayanan.edit', $row->id) }}" 
-                                   class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-md text-indigo-600 hover:text-indigo-800"
-                                   title="Edit Layanan">
-                                    <i class="fas fa-edit mr-1"></i>
-                                    Edit
-                                </a>
+                                <x-button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    href="{{ route('admin.pelayanan.edit', $row->id) }}"
+                                    title="Edit Layanan"
+                                >
+                                    <i class="fas fa-edit"></i>
+                                </x-button>
                                 
                                 <form method="POST" action="{{ route('admin.pelayanan.destroy', $row->id) }}" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button 
+                                    <x-button 
                                         type="submit"
+                                        variant="ghost" 
+                                        size="sm" 
+                                        class="text-red-600 hover:text-red-800"
                                         onclick="return confirm('Yakin ingin menghapus layanan ini?')"
-                                        class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-md text-red-600 hover:text-red-800"
-                                        title="Hapus Layanan">
-                                        <i class="fas fa-trash mr-1"></i>
-                                        Hapus
-                                    </button>
+                                        title="Hapus Layanan"
+                                    >
+                                        <i class="fas fa-trash"></i>
+                                    </x-button>
                                 </form>
                             </div>
                         </td>
@@ -215,7 +227,22 @@
                 </tbody>
             </table>
         </div>
-    </div>
+        
+        @if($sampleData->isEmpty())
+        <div class="text-center py-12">
+            <i class="fas fa-inbox text-gray-300 text-5xl mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Belum ada layanan</h3>
+            <p class="text-gray-500 mb-4">Mulai dengan menambahkan layanan pertama.</p>
+            <x-button 
+                href="{{ route('admin.pelayanan.create') }}"
+                variant="primary" 
+                size="md"
+            >
+                <i class="fas fa-plus mr-2"></i>Tambah Layanan
+            </x-button>
+        </div>
+        @endif
+    </x-card>
 
     <!-- Pagination -->
     {{-- Add pagination here when connected to real data --}}

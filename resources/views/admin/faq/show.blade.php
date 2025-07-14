@@ -2,39 +2,36 @@
 
 @section('title', 'Detail FAQ')
 
-@section('content')
-<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Detail FAQ</h1>
-        <nav class="flex mt-2" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-sm text-gray-500">
-                <li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
-                <li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
-                <li><a href="{{ route('admin.faq.index') }}" class="text-blue-600 hover:text-blue-800">FAQ</a></li>
-                <li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
-                <li class="text-gray-600">Detail</li>
-            </ol>
-        </nav>
-    </div>
+@section('header', 'Detail FAQ')
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="bg-white rounded-lg shadow-md border border-gray-200">
-                <div class="flex justify-between items-center p-6 border-b border-gray-200">
-                    <h5 class="text-xl font-semibold text-gray-900 mb-0">
-                        <i class="fas fa-question-circle mr-2 text-blue-600"></i>
-                        Detail FAQ
-                    </h5>
-                    <div class="flex space-x-2">
-                        <a href="{{ route('admin.faq.edit', $faq) }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                            <i class="fas fa-edit mr-2"></i> Edit
-                        </a>
-                        <a href="{{ route('admin.faq.index') }}" class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            <i class="fas fa-arrow-left mr-2"></i> Kembali
-                        </a>
-                    </div>
+@section('breadcrumb')
+<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li><a href="{{ route('admin.faq.index') }}" class="text-blue-600 hover:text-blue-800">FAQ</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li class="text-gray-600">Detail</li>
+@endsection
+
+@section('main-content')
+<div class="space-y-6">
+
+    <x-card>
+        <x-slot:header>
+            <div class="flex justify-between items-center">
+                <h5 class="text-xl font-semibold text-gray-900 mb-0">
+                    <i class="fas fa-question-circle mr-2 text-blue-600"></i>
+                    Detail FAQ
+                </h5>
+                <div class="flex space-x-2">
+                    <x-button href="{{ route('admin.faq.edit', $faq) }}" variant="warning" size="md">
+                        <i class="fas fa-edit mr-2"></i> Edit
+                    </x-button>
+                    <x-button href="{{ route('admin.faq.index') }}" variant="secondary" size="md">
+                        <i class="fas fa-arrow-left mr-2"></i> Kembali
+                    </x-button>
                 </div>
-                <div class="p-6">
+            </div>
+        </x-slot:header>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -49,9 +46,9 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 bg-gray-50">Kategori</td>
                                     <td class="px-6 py-4 text-sm text-gray-900">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        <x-badge variant="primary" size="md">
                                             {{ $faq->kategori ?? 'Umum' }}
-                                        </span>
+                                        </x-badge>
                                     </td>
                                 </tr>
                                 <tr>
@@ -62,9 +59,9 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 bg-gray-50">Status</td>
                                     <td class="px-6 py-4 text-sm text-gray-900">
                                         @if($faq->status ?? true)
-                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Aktif</span>
+                                            <x-badge variant="success" size="md">Aktif</x-badge>
                                         @else
-                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Tidak Aktif</span>
+                                            <x-badge variant="danger" size="md">Tidak Aktif</x-badge>
                                         @endif
                                     </td>
                                 </tr>
@@ -81,23 +78,21 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-                <div class="flex justify-between items-center p-6 border-t border-gray-200 bg-gray-50">
-                    <a href="{{ route('admin.faq.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar
-                    </a>
-                    <div class="flex space-x-2">
-                        <a href="{{ route('admin.faq.edit', $faq) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                            <i class="fas fa-edit mr-2"></i> Edit FAQ
-                        </a>
-                        <button type="button" onclick="confirmDelete({{ $faq->id }})" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                            <i class="fas fa-trash mr-2"></i> Hapus
-                        </button>
-                    </div>
-                </div>
+        </div>
+        <div class="flex justify-between items-center mt-6 pt-6 border-t border-gray-200 bg-gray-50 p-4 rounded-lg">
+            <x-button href="{{ route('admin.faq.index') }}" variant="secondary" size="md">
+                <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar
+            </x-button>
+            <div class="flex space-x-2">
+                <x-button href="{{ route('admin.faq.edit', $faq) }}" variant="warning" size="md">
+                    <i class="fas fa-edit mr-2"></i> Edit FAQ
+                </x-button>
+                <x-button type="button" onclick="confirmDelete({{ $faq->id }})" variant="danger" size="md">
+                    <i class="fas fa-trash mr-2"></i> Hapus
+                </x-button>
             </div>
         </div>
-    </div>
+    </x-card>
 </div>
 
 <!-- Delete Confirmation Modal -->
@@ -122,13 +117,13 @@
                 <form id="deleteForm" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    <x-button type="submit" variant="danger" size="md" class="sm:ml-3">
                         Hapus
-                    </button>
+                    </x-button>
                 </form>
-                <button type="button" onclick="closeModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                <x-button type="button" onclick="closeModal()" variant="secondary" size="md" class="mt-3 sm:mt-0">
                     Batal
-                </button>
+                </x-button>
             </div>
         </div>
     </div>

@@ -2,20 +2,18 @@
 
 @section('title', 'Tambah Media Galeri')
 
-@section('content')
-<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Tambah Media Galeri</h1>
-        <nav class="flex mt-2" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-sm text-gray-500">
-                <li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
-                <li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
-                <li><a href="{{ route('admin.galeri.index') }}" class="text-blue-600 hover:text-blue-800">Galeri</a></li>
-                <li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
-                <li class="text-gray-600">Tambah</li>
-            </ol>
-        </nav>
-    </div>
+@section('header', 'Tambah Media Galeri')
+
+@section('breadcrumb')
+<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li><a href="{{ route('admin.galeri.index') }}" class="text-blue-600 hover:text-blue-800">Galeri</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li class="text-gray-600">Tambah</li>
+@endsection
+
+@section('main-content')
+<div class="space-y-6">
 
     <div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
         <div class="p-6 border-b border-gray-200">
