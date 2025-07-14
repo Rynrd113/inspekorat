@@ -1,4 +1,4 @@
-xa@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Layanan Publik - Inspektorat Papua Tengah')
 @section('description', 'Akses berbagai layanan publik yang disediakan oleh Inspektorat Provinsi Papua Tengah.')

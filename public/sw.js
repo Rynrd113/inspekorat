@@ -47,6 +47,11 @@ self.addEventListener('activate', function(event) {
 
 // Fetch event - serve from cache with fallback
 self.addEventListener('fetch', function(event) {
+    // Skip non-http requests (chrome-extension, data, etc.)
+    if (!event.request.url.startsWith('http')) {
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then(function(response) {
@@ -65,10 +70,16 @@ self.addEventListener('fetch', function(event) {
                     // Clone the response for caching
                     const responseToCache = response.clone();
 
-                    caches.open(CACHE_NAME)
-                        .then(function(cache) {
-                            cache.put(event.request, responseToCache);
-                        });
+                    // Only cache http/https requests
+                    if (event.request.url.startsWith('http')) {
+                        caches.open(CACHE_NAME)
+                            .then(function(cache) {
+                                cache.put(event.request, responseToCache);
+                            })
+                            .catch(function(error) {
+                                console.log('Cache put failed:', error);
+                            });
+                    }
 
                     return response;
                 });
