@@ -1,37 +1,28 @@
 @extends('layouts.admin')
 
+@section('header', 'Manajemen FAQ')
+
+@section('breadcrumb')
+<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li class="text-gray-600">FAQ</li>
+@endsection
+
 @section('main-content')
-<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
-    <div class="mb-6">
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">Manajemen FAQ</h1>
-                <nav class="flex mt-2" aria-label="Breadcrumb">
-                    <ol class="flex items-center space-x-2 text-sm text-gray-500">
-                        <li>
-                            <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800 transition-colors">
-                                <i class="fas fa-home mr-1"></i>Dashboard
-                            </a>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-chevron-right mx-2 text-gray-300"></i>
-                            <span class="text-gray-600">FAQ</span>
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-            
-            <div class="flex items-center space-x-3">
-                <x-button 
-                    href="{{ route('admin.faq.create') }}"
-                    variant="primary" 
-                    size="md"
-                >
-                    <i class="fas fa-plus mr-2"></i>Tambah FAQ
-                </x-button>
-            </div>
+<div class="space-y-6">
+    <!-- Header Actions -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Daftar FAQ</h1>
+            <p class="text-gray-600 mt-1">Kelola pertanyaan yang sering diajukan</p>
         </div>
+        <x-button 
+            href="{{ route('admin.faq.create') }}"
+            variant="primary" 
+            size="md"
+        >
+            <i class="fas fa-plus mr-2"></i>Tambah FAQ
+        </x-button>
     </div>
 
     <!-- Stats Cards -->

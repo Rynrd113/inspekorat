@@ -187,38 +187,26 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <div class="flex items-center space-x-2">
-                                <x-button 
-                                    variant="ghost" 
-                                    size="sm" 
-                                    href="{{ route('admin.pelayanan.show', $row->id) }}"
-                                    title="Lihat Detail"
-                                >
+                            <div class="flex space-x-2">
+                                <a href="{{ route('admin.pelayanan.show', $row->id) }}" 
+                                   class="text-blue-600 hover:text-blue-900" title="Lihat Detail">
                                     <i class="fas fa-eye"></i>
-                                </x-button>
+                                </a>
                                 
-                                <x-button 
-                                    variant="ghost" 
-                                    size="sm" 
-                                    href="{{ route('admin.pelayanan.edit', $row->id) }}"
-                                    title="Edit Layanan"
-                                >
+                                <a href="{{ route('admin.pelayanan.edit', $row->id) }}" 
+                                   class="text-indigo-600 hover:text-indigo-900" title="Edit Layanan">
                                     <i class="fas fa-edit"></i>
-                                </x-button>
+                                </a>
                                 
                                 <form method="POST" action="{{ route('admin.pelayanan.destroy', $row->id) }}" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <x-button 
-                                        type="submit"
-                                        variant="ghost" 
-                                        size="sm" 
-                                        class="text-red-600 hover:text-red-800"
-                                        onclick="return confirm('Yakin ingin menghapus layanan ini?')"
-                                        title="Hapus Layanan"
-                                    >
+                                    <button type="submit" 
+                                            class="text-red-600 hover:text-red-900" 
+                                            onclick="return confirm('Yakin ingin menghapus layanan ini?')"
+                                            title="Hapus Layanan">
                                         <i class="fas fa-trash"></i>
-                                    </x-button>
+                                    </button>
                                 </form>
                             </div>
                         </td>

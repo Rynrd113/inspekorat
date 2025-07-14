@@ -115,7 +115,7 @@
                                 </a>
                                 @if(auth()->user()->hasAnyRole(['admin_portal_opd', 'admin', 'super_admin']))
                                 <a href="{{ route('admin.portal-opd.edit', $opd) }}"
-                                   class="text-yellow-600 hover:text-yellow-900"
+                                   class="text-indigo-600 hover:text-indigo-900"
                                    title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
