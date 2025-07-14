@@ -1,979 +1,1191 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', 'FAQ - Inspektorat Papua Tengah')
 @section('description', 'Temukan jawaban atas pertanyaan yang sering diajukan tentang Inspektorat Papua Tengah.')
 
 @section('content')
-<div class="min-h-screen bg-gray-50">
-    <!-- Header Section -->
-    <section class="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">
-                    Frequently Asked Questions
-                </h1>
-                <p class="text-xl text-purple-100 max-w-3xl mx-auto">
-                    Temukan jawaban atas pertanyaan yang sering diajukan tentang Inspektorat Papua Tengah
-                </p>
+<!-- Hero Section -->
+<section class="hero-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Frequently Asked Questions</h1>
+                <p class="lead">Temukan jawaban atas pertanyaan yang sering diajukan tentang Inspektorat Papua Tengah</p>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="fas fa-question-circle fa-5x opacity-75"></i>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Search Section -->
-    <section class="py-8 bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-2xl mx-auto">
-                <div class="relative">
-                    <input type="text" 
-                           id="searchFaq" 
-                           placeholder="Cari pertanyaan..." 
-                           class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                    <i class="fas fa-search absolute left-3 top-4 text-gray-400"></i>
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="bg-light py-2">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{{ route('public.index') }}">Beranda</a></li>
+            <li class="breadcrumb-item active">FAQ</li>
+        </ol>
+    </div>
+</nav>
+
+<!-- Search Section -->
+<section class="py-4 bg-white border-bottom">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="position-relative">
+                    <input type="text"
+                           id="searchFaq"
+                           class="form-control form-control-lg ps-5"
+                           placeholder="Cari pertanyaan...">
+                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                    <div id="search-loading" class="position-absolute top-50 end-0 translate-middle-y me-3 d-none">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-center text-sm text-gray-500 mt-3">
-                    Ketik kata kunci untuk mencari pertanyaan yang Anda butuhkan
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Category Filter -->
-    <section class="py-6 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-6">
-                <h3 class="text-lg font-semibold text-gray-900">Kategori Pertanyaan</h3>
-            </div>
-            <div class="flex flex-wrap justify-center gap-3">
-                <button class="category-filter active px-4 py-2 bg-purple-600 text-white rounded-full text-sm font-medium hover:bg-purple-700 transition-colors" data-category="">
-                    <i class="fas fa-th-large mr-1"></i> Semua
-                </button>
-                <button class="category-filter px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors" data-category="umum">
-                    <i class="fas fa-info-circle mr-1"></i> Umum
-                </button>
-                <button class="category-filter px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors" data-category="layanan">
-                    <i class="fas fa-hands-helping mr-1"></i> Layanan
-                </button>
-                <button class="category-filter px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors" data-category="pengaduan">
-                    <i class="fas fa-exclamation-triangle mr-1"></i> Pengaduan
-                </button>
-                <button class="category-filter px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors" data-category="audit">
-                    <i class="fas fa-search mr-1"></i> Audit
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="py-16">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Featured FAQ -->
-            @if(isset($popularFaqs) && $popularFaqs->count() > 0)
-            <div class="mb-12">
-                <div class="text-center mb-8">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Pertanyaan Populer</h3>
-                    <p class="text-gray-600">Pertanyaan yang paling sering diajukan</p>
+                <div class="text-center mt-2">
+                    <small class="text-muted">Ketik kata kunci untuk mencari pertanyaan yang Anda butuhkan</small>
                 </div>
-                
-                <div class="space-y-4">
-                    @foreach($popularFaqs as $faq)
-                    <div class="faq-item bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-6" data-category="{{ strtolower($faq->kategori ?? 'umum') }}">
-                        <button class="faq-toggle w-full flex items-start justify-between text-left group" onclick="toggleFaq(this)">
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <i class="fas fa-star text-yellow-500 mr-2"></i>
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                                        {{ ucfirst($faq->kategori ?? 'Umum') }}
-                                    </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Category Filter -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h5 class="fw-semibold">Kategori Pertanyaan</h5>
+        </div>
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            <button class="btn btn-primary category-filter active" data-category="">
+                <i class="fas fa-th-large me-1"></i> Semua
+            </button>
+            <button class="btn btn-outline-primary category-filter" data-category="umum">
+                <i class="fas fa-info-circle me-1"></i> Umum
+            </button>
+            <button class="btn btn-outline-primary category-filter" data-category="layanan">
+                <i class="fas fa-hands-helping me-1"></i> Layanan
+            </button>
+            <button class="btn btn-outline-primary category-filter" data-category="pengaduan">
+                <i class="fas fa-exclamation-triangle me-1"></i> Pengaduan
+            </button>
+            <button class="btn btn-outline-primary category-filter" data-category="audit">
+                <i class="fas fa-search me-1"></i> Audit
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-5">
+    <div class="container">
+        <!-- Statistics Cards -->
+        <div class="row mb-5">
+            <div class="col-lg-4 mb-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <div class="display-6 text-primary mb-3">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <h3 class="fw-bold text-primary">25+</h3>
+                        <p class="text-muted mb-0">Pertanyaan Tersedia</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <div class="display-6 text-success mb-3">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="fw-bold text-success">1000+</h3>
+                        <p class="text-muted mb-0">Pengguna Terbantu</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <div class="display-6 text-warning mb-3">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 class="fw-bold text-warning">24/7</h3>
+                        <p class="text-muted mb-0">Akses Informasi</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popular FAQ Section -->
+        @if(isset($popularFaqs) && $popularFaqs->count() > 0)
+        <div class="mb-5">
+            <div class="text-center mb-4">
+                <h3 class="fw-bold">Pertanyaan Populer</h3>
+                <p class="text-muted">Pertanyaan yang paling sering diajukan</p>
+            </div>
+
+            <div class="row">
+                @foreach($popularFaqs as $faq)
+                <div class="col-12 mb-3">
+                    <div class="card border-primary faq-item" data-category="{{ strtolower($faq->kategori ?? 'umum') }}">
+                        <div class="card-header bg-primary bg-opacity-10 border-primary">
+                            <button class="btn btn-link w-100 text-start text-decoration-none faq-toggle p-0"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#faq-popular-{{ $loop->index }}"
+                                    aria-expanded="false">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <div class="mb-2">
+                                            <i class="fas fa-star text-warning me-2"></i>
+                                            <span class="badge bg-primary">{{ ucfirst($faq->kategori ?? 'Umum') }}</span>
+                                        </div>
+                                        <h5 class="mb-0 text-dark">{{ $faq->pertanyaan }}</h5>
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-chevron-down text-primary"></i>
+                                    </div>
                                 </div>
-                                <h4 class="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
-                                    {{ $faq->pertanyaan }}
-                                </h4>
+                            </button>
+                        </div>
+                        <div id="faq-popular-{{ $loop->index }}" class="collapse">
+                            <div class="card-body">
+                                <div class="faq-content">
+                                    {!! $faq->jawaban !!}
+                                </div>
                             </div>
-                            <div class="ml-4">
-                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
+        <!-- Regular FAQ Section -->
+        <div id="faq-list">
+            @if(isset($faqs) && $faqs->count() > 0)
+                @foreach($faqs as $faq)
+                <div class="card mb-3 faq-item" data-category="{{ strtolower($faq->kategori ?? 'umum') }}">
+                    <div class="card-header">
+                        <button class="btn btn-link w-100 text-start text-decoration-none faq-toggle p-0"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq-{{ $loop->index }}"
+                                aria-expanded="false">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="mb-2">
+                                        <span class="badge bg-secondary">{{ ucfirst($faq->kategori ?? 'Umum') }}</span>
+                                    </div>
+                                    <h5 class="mb-0 text-dark">{{ $faq->pertanyaan }}</h5>
+                                </div>
+                                <div>
+                                    <i class="fas fa-chevron-down text-muted"></i>
+                                </div>
                             </div>
                         </button>
-                        <div class="faq-content hidden mt-4 pt-4 border-t border-purple-200">
-                            <div class="prose prose-sm max-w-none text-gray-700">
+                    </div>
+                    <div id="faq-{{ $loop->index }}" class="collapse">
+                        <div class="card-body">
+                            <div class="faq-content">
                                 {!! $faq->jawaban !!}
                             </div>
                         </div>
                     </div>
-                    @endforeach
                 </div>
-            </div>
-            @endif
-
-            <!-- Regular FAQ -->
-            <div class="space-y-4" id="faq-list">
-                @if(isset($faqs) && $faqs->count() > 0)
-                    @foreach($faqs as $faq)
-                    <div class="faq-item bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow" data-category="{{ strtolower($faq->kategori ?? 'umum') }}">
-                        <button class="faq-toggle w-full flex items-start justify-between text-left group" onclick="toggleFaq(this)">
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                        {{ ucfirst($faq->kategori ?? 'Umum') }}
-                                    </span>
+                @endforeach
+            @else
+                <!-- Default FAQ Items -->
+                <div class="card mb-3 faq-item" data-category="pengaduan">
+                    <div class="card-header">
+                        <button class="btn btn-link w-100 text-start text-decoration-none faq-toggle p-0"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq-1"
+                                aria-expanded="false">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="mb-2">
+                                        <span class="badge bg-warning">Pengaduan</span>
+                                    </div>
+                                    <h5 class="mb-0 text-dark">Bagaimana cara menyampaikan pengaduan?</h5>
                                 </div>
-                                <h4 class="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
-                                    {{ $faq->pertanyaan }}
-                                </h4>
-                            </div>
-                            <div class="ml-4">
-                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
+                                <div>
+                                    <i class="fas fa-chevron-down text-muted"></i>
+                                </div>
                             </div>
                         </button>
-                        <div class="faq-content hidden mt-4 pt-4 border-t border-gray-200" style="transition: all 0.3s ease;">
-                            <div class="prose prose-sm max-w-none text-gray-700" style="color: #374151 !important;">
-                                {!! $faq->jawaban !!}
-                            </div>
-                        </div>
                     </div>
-                    @endforeach
-                @else
-                    <!-- Sample FAQs for demo -->
-                    <div class="faq-item bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow" data-category="pengaduan">
-                        <button class="faq-toggle w-full flex items-start justify-between text-left group" onclick="toggleFaq(this)">
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                        Pengaduan
-                                    </span>
-                                </div>
-                                <h4 class="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
-                                    Bagaimana cara menyampaikan pengaduan?
-                                </h4>
-                            </div>
-                            <div class="ml-4">
-                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
-                            </div>
-                        </button>
-                        <div class="faq-content hidden mt-4 pt-4 border-t border-gray-200">
-                            <div class="prose prose-sm max-w-none text-gray-700">
+                    <div id="faq-1" class="collapse">
+                        <div class="card-body">
+                            <div class="faq-content">
                                 <p>Anda dapat menyampaikan pengaduan melalui beberapa cara:</p>
-                                <ol>
-                                    <li><strong>Online melalui WBS (Whistle Blowing System):</strong>
-                                        <ul>
-                                            <li>Kunjungi halaman <a href="{{ route('public.wbs') }}" class="text-purple-600 hover:text-purple-800">WBS</a></li>
-                                            <li>Isi formulir pengaduan dengan lengkap</li>
-                                            <li>Upload bukti pendukung jika ada</li>
-                                            <li>Simpan nomor tiket untuk follow-up</li>
-                                        </ul>
-                                    </li>
-                                    <li><strong>Datang langsung ke kantor:</strong>
-                                        <ul>
-                                            <li>Alamat: Jl. Raya Nabire No. 123, Nabire, Papua Tengah</li>
-                                            <li>Jam kerja: Senin-Jumat, 08:00-16:00 WIT</li>
-                                        </ul>
-                                    </li>
-                                    <li><strong>Melalui telepon/email:</strong>
-                                        <ul>
-                                            <li>Telepon: (0984) 21234</li>
-                                            <li>Email: pengaduan@inspektorat-papuatengah.go.id</li>
-                                        </ul>
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="faq-item bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow" data-category="layanan">
-                        <button class="faq-toggle w-full flex items-start justify-between text-left group" onclick="toggleFaq(this)">
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        Layanan
-                                    </span>
-                                </div>
-                                <h4 class="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
-                                    Apa saja layanan yang tersedia di Inspektorat?
-                                </h4>
-                            </div>
-                            <div class="ml-4">
-                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
-                            </div>
-                        </button>
-                        <div class="faq-content hidden mt-4 pt-4 border-t border-gray-200">
-                            <div class="prose prose-sm max-w-none text-gray-700">
-                                <p>Inspektorat Papua Tengah menyediakan berbagai layanan, antara lain:</p>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                                    <div>
-                                        <h6 class="font-semibold text-gray-900">Layanan Audit & Pengawasan:</h6>
-                                        <ul>
-                                            <li>Audit internal</li>
-                                            <li>Evaluasi kinerja</li>
-                                            <li>Investigasi khusus</li>
-                                            <li>Pemantauan tindak lanjut</li>
-                                        </ul>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body text-center">
+                                                <i class="fas fa-globe text-primary fa-2x mb-2"></i>
+                                                <h6 class="fw-bold">Online melalui WBS</h6>
+                                                <ul class="list-unstyled small">
+                                                    <li>• Kunjungi halaman <a href="{{ route('public.wbs') }}" class="text-primary">WBS</a></li>
+                                                    <li>• Isi formulir pengaduan</li>
+                                                    <li>• Upload bukti pendukung</li>
+                                                    <li>• Simpan nomor tiket</li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h6 class="font-semibold text-gray-900">Layanan Konsultasi:</h6>
-                                        <ul>
-                                            <li>Konsultasi tata kelola</li>
-                                            <li>Bimbingan teknis</li>
-                                            <li>Pelatihan SDM</li>
-                                            <li>Asistensi implementasi</li>
-                                        </ul>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body text-center">
+                                                <i class="fas fa-building text-success fa-2x mb-2"></i>
+                                                <h6 class="fw-bold">Datang Langsung</h6>
+                                                <ul class="list-unstyled small">
+                                                    <li>• Jl. Raya Nabire No. 123</li>
+                                                    <li>• Nabire, Papua Tengah</li>
+                                                    <li>• Senin-Jumat</li>
+                                                    <li>• 08:00-16:00 WIT</li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <p class="mt-3">Seluruh layanan ini <strong>gratis</strong> dan dapat diakses oleh OPD di lingkungan Pemerintah Papua Tengah.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="faq-item bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow" data-category="audit">
-                        <button class="faq-toggle w-full flex items-start justify-between text-left group" onclick="toggleFaq(this)">
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        Audit
-                                    </span>
-                                </div>
-                                <h4 class="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
-                                    Berapa lama proses audit internal?
-                                </h4>
-                            </div>
-                            <div class="ml-4">
-                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
-                            </div>
-                        </button>
-                        <div class="faq-content hidden mt-4 pt-4 border-t border-gray-200">
-                            <div class="prose prose-sm max-w-none text-gray-700">
-                                <p>Waktu pelaksanaan audit internal bervariasi tergantung pada:</p>
-                                <ul>
-                                    <li><strong>Jenis audit:</strong> Audit kinerja, audit keuangan, atau audit khusus</li>
-                                    <li><strong>Ruang lingkup:</strong> Luas area yang diaudit</li>
-                                    <li><strong>Kompleksitas:</strong> Tingkat kerumitan sistem dan proses</li>
-                                </ul>
-                                
-                                <div class="overflow-x-auto mt-4">
-                                    <table class="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Audit</th>
-                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estimasi Waktu</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="bg-white divide-y divide-gray-200">
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Audit Rutin</td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">7-14 hari kerja</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Audit Khusus/Investigasi</td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">30-60 hari kerja</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Audit Kinerja</td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">14-30 hari kerja</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="faq-item bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow" data-category="umum">
-                        <button class="faq-toggle w-full flex items-start justify-between text-left group" onclick="toggleFaq(this)">
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                        Umum
-                                    </span>
-                                </div>
-                                <h4 class="text-lg font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
-                                    Apakah identitas pelapor akan dirahasiakan?
-                                </h4>
-                            </div>
-                            <div class="ml-4">
-                                <i class="fas fa-chevron-down text-gray-400 transform transition-transform duration-200"></i>
-                            </div>
-                        </button>
-                        <div class="faq-content hidden mt-4 pt-4 border-t border-gray-200">
-                            <div class="prose prose-sm max-w-none text-gray-700">
-                                <p><strong>Ya, identitas pelapor akan dijamin kerahasiaannya.</strong></p>
-                                
-                                <h6 class="font-semibold text-gray-900 mt-4">Perlindungan yang diberikan:</h6>
-                                <ul>
-                                    <li>Kerahasiaan identitas pelapor</li>
-                                    <li>Perlindungan dari intimidasi atau pembalasan</li>
-                                    <li>Komunikasi aman melalui sistem WBS</li>
-                                    <li>Hak untuk melaporkan secara anonim</li>
-                                </ul>
-                                
-                                <h6 class="font-semibold text-gray-900 mt-4">Sistem WBS (Whistle Blowing System):</h6>
-                                <ul>
-                                    <li>Enkripsi data untuk keamanan informasi</li>
-                                    <li>Nomor tiket unik untuk komunikasi</li>
-                                    <li>Tim khusus penanganan pengaduan</li>
-                                    <li>Prosedur standar perlindungan pelapor</li>
-                                </ul>
-                                
-                                <div class="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
-                                    <div class="flex">
-                                        <i class="fas fa-shield-alt text-green-600 mr-3 mt-1"></i>
-                                        <div>
-                                            <p class="text-green-800 font-medium">Jaminan Keamanan</p>
-                                            <p class="text-green-700 text-sm">Semua laporan ditangani dengan standar keamanan tinggi dan kerahasiaan terjamin.</p>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body text-center">
+                                                <i class="fas fa-phone text-warning fa-2x mb-2"></i>
+                                                <h6 class="fw-bold">Telepon/Email</h6>
+                                                <ul class="list-unstyled small">
+                                                    <li>• (0984) 21234</li>
+                                                    <li>• pengaduan@inspektorat-papuatengah.go.id</li>
+                                                    <li>• Senin-Jumat</li>
+                                                    <li>• 08:00-16:00 WIT</li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endif
-            </div>
-
-            <!-- No Results Message -->
-            <div id="no-results" class="hidden text-center py-12">
-                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-search text-gray-400 text-3xl"></i>
                 </div>
-                <h3 class="text-xl font-medium text-gray-900 mb-2">Tidak Ada Hasil</h3>
-                <p class="text-gray-600">Coba gunakan kata kunci yang berbeda atau pilih kategori lain.</p>
+
+                <div class="card mb-3 faq-item" data-category="layanan">
+                    <div class="card-header">
+                        <button class="btn btn-link w-100 text-start text-decoration-none faq-toggle p-0"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq-2"
+                                aria-expanded="false">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="mb-2">
+                                        <span class="badge bg-info">Layanan</span>
+                                    </div>
+                                    <h5 class="mb-0 text-dark">Apa saja layanan yang tersedia di Inspektorat?</h5>
+                                </div>
+                                <div>
+                                    <i class="fas fa-chevron-down text-muted"></i>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    <div id="faq-2" class="collapse">
+                        <div class="card-body">
+                            <div class="faq-content">
+                                <p>Inspektorat Papua Tengah menyediakan berbagai layanan profesional:</p>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h6 class="fw-bold text-primary">
+                                                    <i class="fas fa-search me-2"></i>Layanan Audit & Pengawasan
+                                                </h6>
+                                                <ul class="list-unstyled">
+                                                    <li>• Audit internal</li>
+                                                    <li>• Evaluasi kinerja</li>
+                                                    <li>• Investigasi khusus</li>
+                                                    <li>• Pemantauan tindak lanjut</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h6 class="fw-bold text-success">
+                                                    <i class="fas fa-handshake me-2"></i>Layanan Konsultasi
+                                                </h6>
+                                                <ul class="list-unstyled">
+                                                    <li>• Konsultasi tata kelola</li>
+                                                    <li>• Bimbingan teknis</li>
+                                                    <li>• Pelatihan SDM</li>
+                                                    <li>• Asistensi implementasi</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-info">
+                                    <i class="fas fa-star me-2"></i>
+                                    <strong>Informasi:</strong> Seluruh layanan ini gratis dan dapat diakses oleh OPD di lingkungan Pemerintah Papua Tengah.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3 faq-item" data-category="audit">
+                    <div class="card-header">
+                        <button class="btn btn-link w-100 text-start text-decoration-none faq-toggle p-0"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq-3"
+                                aria-expanded="false">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="mb-2">
+                                        <span class="badge bg-success">Audit</span>
+                                    </div>
+                                    <h5 class="mb-0 text-dark">Berapa lama proses audit internal?</h5>
+                                </div>
+                                <div>
+                                    <i class="fas fa-chevron-down text-muted"></i>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    <div id="faq-3" class="collapse">
+                        <div class="card-body">
+                            <div class="faq-content">
+                                <p>Waktu pelaksanaan audit internal bervariasi tergantung pada beberapa faktor:</p>
+                                <div class="row mb-4">
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card bg-light text-center">
+                                            <div class="card-body">
+                                                <i class="fas fa-file-alt text-primary fa-2x mb-2"></i>
+                                                <h6 class="fw-bold">Jenis Audit</h6>
+                                                <p class="small mb-0">Kinerja, keuangan, atau khusus</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card bg-light text-center">
+                                            <div class="card-body">
+                                                <i class="fas fa-expand-arrows-alt text-success fa-2x mb-2"></i>
+                                                <h6 class="fw-bold">Ruang Lingkup</h6>
+                                                <p class="small mb-0">Luas area yang diaudit</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card bg-light text-center">
+                                            <div class="card-body">
+                                                <i class="fas fa-cogs text-warning fa-2x mb-2"></i>
+                                                <h6 class="fw-bold">Kompleksitas</h6>
+                                                <p class="small mb-0">Tingkat kerumitan sistem</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="fw-bold mb-0">Estimasi Waktu Audit</h6>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Jenis Audit</th>
+                                                        <th>Estimasi Waktu</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Audit Rutin</td>
+                                                        <td><span class="badge bg-success">7-14 hari kerja</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Audit Khusus/Investigasi</td>
+                                                        <td><span class="badge bg-warning">30-60 hari kerja</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Audit Kinerja</td>
+                                                        <td><span class="badge bg-info">14-30 hari kerja</span></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3 faq-item" data-category="umum">
+                    <div class="card-header">
+                        <button class="btn btn-link w-100 text-start text-decoration-none faq-toggle p-0"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#faq-4"
+                                aria-expanded="false">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="mb-2">
+                                        <span class="badge bg-secondary">Umum</span>
+                                    </div>
+                                    <h5 class="mb-0 text-dark">Apakah identitas pelapor akan dirahasiakan?</h5>
+                                </div>
+                                <div>
+                                    <i class="fas fa-chevron-down text-muted"></i>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                    <div id="faq-4" class="collapse">
+                        <div class="card-body">
+                            <div class="faq-content">
+                                <div class="alert alert-success">
+                                    <i class="fas fa-shield-alt me-2"></i>
+                                    <strong>Ya, identitas pelapor akan dijamin kerahasiaannya.</strong>
+                                    <p class="mb-0 mt-2">Kami berkomitmen penuh melindungi setiap pelapor yang beritikad baik.</p>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h6 class="fw-bold text-primary">
+                                                    <i class="fas fa-user-shield me-2"></i>Perlindungan yang diberikan
+                                                </h6>
+                                                <ul class="list-unstyled">
+                                                    <li>• Kerahasiaan identitas pelapor</li>
+                                                    <li>• Perlindungan dari intimidasi</li>
+                                                    <li>• Komunikasi aman melalui sistem WBS</li>
+                                                    <li>• Hak untuk melaporkan secara anonim</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h6 class="fw-bold text-success">
+                                                    <i class="fas fa-lock me-2"></i>Sistem WBS (Whistle Blowing System)
+                                                </h6>
+                                                <ul class="list-unstyled">
+                                                    <li>• Enkripsi data untuk keamanan</li>
+                                                    <li>• Nomor tiket unik untuk komunikasi</li>
+                                                    <li>• Tim khusus penanganan pengaduan</li>
+                                                    <li>• Prosedur standar perlindungan</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </div>
+
+        <!-- No Results Message -->
+        <div id="no-results" class="text-center py-5 d-none">
+            <div class="display-1 text-muted mb-3">
+                <i class="fas fa-search"></i>
+            </div>
+            <h4 class="mb-3">Tidak Ada Hasil Ditemukan</h4>
+            <p class="text-muted mb-4">Coba gunakan kata kunci yang berbeda atau pilih kategori lain.</p>
+            <button onclick="clearSearch()" class="btn btn-primary">
+                <i class="fas fa-redo me-2"></i>Reset Pencarian
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow">
+                    <div class="card-body p-5 text-center">
+                        <div class="display-6 text-primary mb-4">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <h3 class="fw-bold mb-3">Pertanyaan Tidak Terjawab?</h3>
+                        <p class="text-muted mb-4">
+                            Jika pertanyaan Anda belum terjawab, jangan ragu untuk menghubungi kami secara langsung.
+                        </p>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-light h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-phone text-primary fa-2x mb-2"></i>
+                                        <h6 class="fw-bold">Telepon</h6>
+                                        <p class="mb-1">(0984) 21234</p>
+                                        <small class="text-muted">Senin-Jumat: 08:00-16:00 WIT</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-light h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-envelope text-primary fa-2x mb-2"></i>
+                                        <h6 class="fw-bold">Email</h6>
+                                        <p class="mb-1">info@inspektorat-papuatengah.go.id</p>
+                                        <small class="text-muted">Respon dalam 24 jam</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-light h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-map-marker-alt text-primary fa-2x mb-2"></i>
+                                        <h6 class="fw-bold">Alamat</h6>
+                                        <p class="mb-1">Jl. Raya Nabire No. 123</p>
+                                        <small class="text-muted">Nabire, Papua Tengah</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <a href="{{ route('public.wbs') }}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Laporkan Masalah
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Contact Section -->
-    <section class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8">
-                <div class="max-w-3xl mx-auto text-center">
-                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-question-circle text-purple-600 text-2xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                        Pertanyaan Tidak Terjawab?
-                    </h3>
-                    <p class="text-gray-600 mb-6">
-                        Jika pertanyaan Anda belum terjawab, jangan ragu untuk menghubungi kami secara langsung.
-                    </p>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="text-center">
-                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-phone text-purple-600"></i>
-                            </div>
-                            <h4 class="font-semibold text-gray-900 mb-1">Telepon</h4>
-                            <p class="text-sm text-gray-600">(0984) 21234</p>
-                        </div>
-                        <div class="text-center">
-                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-envelope text-purple-600"></i>
-                            </div>
-                            <h4 class="font-semibold text-gray-900 mb-1">Email</h4>
-                            <p class="text-sm text-gray-600">info@inspektorat-papuatengah.go.id</p>
-                        </div>
-                        <div class="text-center">
-                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                                <i class="fas fa-map-marker-alt text-purple-600"></i>
-                            </div>
-                            <h4 class="font-semibold text-gray-900 mb-1">Alamat</h4>
-                            <p class="text-sm text-gray-600">Jl. Raya Nabire No. 123</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
+<!-- Back to Top Button -->
+<button id="backToTop" class="btn btn-primary position-fixed bottom-0 end-0 m-3 rounded-circle d-none" style="z-index: 1000;">
+    <i class="fas fa-arrow-up"></i>
+</button>
+@endsection
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchFaq');
+    const searchLoading = document.getElementById('search-loading');
     const categoryButtons = document.querySelectorAll('.category-filter');
     const faqItems = document.querySelectorAll('.faq-item');
     const noResults = document.getElementById('no-results');
+    const backToTop = document.getElementById('backToTop');
 
-    // FAQ Toggle Function
-    window.toggleFaq = function(button) {
-        const faqItem = button.closest('.faq-item');
-        const content = faqItem.querySelector('.faq-content');
-        const icon = button.querySelector('i');
-        
-        // Close all other FAQs first
-        faqItems.forEach(item => {
-            if (item !== faqItem) {
-                const otherContent = item.querySelector('.faq-content');
-                const otherIcon = item.querySelector('.faq-toggle i');
-                if (otherContent && !otherContent.classList.contains('hidden')) {
-                    otherContent.classList.add('hidden');
-                    if (otherIcon) {
-                        otherIcon.style.transform = 'rotate(0deg)';
-                    }
-                }
-            }
-        });
-        
-        // Toggle current FAQ with animation
-        if (content.classList.contains('hidden')) {
-            content.classList.remove('hidden');
-            content.style.opacity = '0';
-            content.style.maxHeight = '0';
-            content.style.overflow = 'hidden';
-            
-            // Force reflow
-            content.offsetHeight;
-            
-            content.style.transition = 'all 0.3s ease';
-            content.style.opacity = '1';
-            content.style.maxHeight = '1000px';
-            
-            if (icon) {
-                icon.style.transform = 'rotate(180deg)';
-            }
-            
-            // Clean up after animation
-            setTimeout(() => {
-                content.style.maxHeight = 'none';
-                content.style.overflow = 'visible';
-            }, 300);
-        } else {
-            content.style.transition = 'all 0.3s ease';
-            content.style.opacity = '0';
-            content.style.maxHeight = '0';
-            content.style.overflow = 'hidden';
-            
-            if (icon) {
-                icon.style.transform = 'rotate(0deg)';
-            }
-            
-            setTimeout(() => {
-                content.classList.add('hidden');
-                content.style.opacity = '';
-                content.style.maxHeight = '';
-                content.style.overflow = '';
-                content.style.transition = '';
-            }, 300);
-        }
-    };
+    let searchTimeout;
 
-    // Category Filter
+    // Search functionality
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        showSearchLoading();
+
+        searchTimeout = setTimeout(() => {
+            filterFAQs();
+            hideSearchLoading();
+            // Fix text color after filtering
+            setTimeout(fixFaqContentColor, 100);
+        }, 300);
+    });
+
+    // Category filter
     categoryButtons.forEach(button => {
         button.addEventListener('click', function() {
             const category = this.dataset.category;
 
             // Update active button
             categoryButtons.forEach(btn => {
-                btn.classList.remove('active', 'bg-purple-600', 'text-white');
-                btn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-primary');
             });
-            
-            this.classList.add('active', 'bg-purple-600', 'text-white');
-            this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
 
-            filterFaqs();
+            this.classList.add('btn-primary');
+            this.classList.remove('btn-outline-primary');
+
+            filterFAQs();
         });
     });
 
-    // Search Function
-    searchInput.addEventListener('input', filterFaqs);
-
-    function filterFaqs() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const activeCategory = document.querySelector('.category-filter.active').dataset.category;
+    // Filter function
+    function filterFAQs() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const activeCategory = document.querySelector('.category-filter.btn-primary').dataset.category;
         let visibleCount = 0;
 
         faqItems.forEach(item => {
-            const question = item.querySelector('h4').textContent.toLowerCase();
-            const answerElement = item.querySelector('.faq-content');
-            const answer = answerElement ? answerElement.textContent.toLowerCase() : '';
+            const question = item.querySelector('h5').textContent.toLowerCase();
+            const answer = item.querySelector('.faq-content').textContent.toLowerCase();
             const category = item.dataset.category;
 
-            const matchesSearch = question.includes(searchTerm) || answer.includes(searchTerm);
+            const matchesSearch = !searchTerm || question.includes(searchTerm) || answer.includes(searchTerm);
             const matchesCategory = !activeCategory || category === activeCategory;
 
             if (matchesSearch && matchesCategory) {
                 item.style.display = 'block';
                 visibleCount++;
+
+                // Highlight search terms
+                if (searchTerm.length > 2) {
+                    highlightSearchTerms(item, searchTerm);
+                } else {
+                    removeHighlights(item);
+                }
             } else {
                 item.style.display = 'none';
             }
         });
 
-        // Show/hide no results message
+        // Show/hide no results
         if (visibleCount === 0) {
-            noResults.classList.remove('hidden');
+            noResults.classList.remove('d-none');
         } else {
-            noResults.classList.add('hidden');
+            noResults.classList.add('d-none');
         }
     }
-});
-</script>
-@endpush
-                    
-                    <div class="accordion" id="featuredFaq">
-                        <div class="accordion-item featured-faq">
-                            <h2 class="accordion-header" id="featured1">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#featuredCollapse1">
-                                    <i class="fas fa-star text-warning me-2"></i>
-                                    <strong>Apa itu Inspektorat Papua Tengah?</strong>
-                                </button>
-                            </h2>
-                            <div id="featuredCollapse1" class="accordion-collapse collapse" data-bs-parent="#featuredFaq">
-                                <div class="accordion-body">
-                                    <p>Inspektorat Papua Tengah adalah lembaga pengawasan internal pemerintah yang bertugas melakukan audit, reviu, evaluasi, pemantauan, dan kegiatan pengawasan lainnya terhadap penyelenggaraan tugas dan fungsi organisasi.</p>
-                                    <p>Inspektorat berperan penting dalam mewujudkan tata kelola pemerintahan yang baik (good governance) melalui:</p>
-                                    <ul>
-                                        <li>Pengawasan internal yang efektif</li>
-                                        <li>Pemberian jaminan kualitas (quality assurance)</li>
-                                        <li>Konsultasi dan pembimbingan</li>
-                                        <li>Pencegahan korupsi, kolusi, dan nepotisme</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Regular FAQ -->
-                <div class="accordion" id="faqAccordion">
-                    <!-- FAQ Item 1 - Umum -->
-                    <div class="accordion-item faq-item" data-category="pengaduan">
-                        <h2 class="accordion-header" id="faq1">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1">
-                                <span class="badge bg-warning me-2">Pengaduan</span>
-                                Bagaimana cara menyampaikan pengaduan?
-                            </button>
-                        </h2>
-                        <div id="faqCollapse1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                <p>Anda dapat menyampaikan pengaduan melalui beberapa cara:</p>
-                                <ol>
-                                    <li><strong>Online melalui WBS (Whistle Blowing System):</strong>
-                                        <ul>
-                                            <li>Kunjungi halaman <a href="{{ route('public.wbs') }}" class="text-primary">WBS</a></li>
-                                            <li>Isi formulir pengaduan dengan lengkap</li>
-                                            <li>Upload bukti pendukung jika ada</li>
-                                            <li>Simpan nomor tiket untuk follow-up</li>
-                                        </ul>
-                                    </li>
-                                    <li><strong>Datang langsung ke kantor:</strong>
-                                        <ul>
-                                            <li>Alamat: Jl. Contoh No. 123, Nabire, Papua Tengah</li>
-                                            <li>Jam kerja: Senin-Jumat, 08:00-16:00 WIT</li>
-                                        </ul>
-                                    </li>
-                                    <li><strong>Melalui telepon/email:</strong>
-                                        <ul>
-                                            <li>Telepon: (021) 123-4567</li>
-                                            <li>Email: pengaduan@inspektorat-papuatengah.go.id</li>
-                                        </ul>
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
+    // Highlight search terms
+    function highlightSearchTerms(item, searchTerm) {
+        const question = item.querySelector('h5');
+        const content = item.querySelector('.faq-content');
 
-                    <!-- FAQ Item 2 - Layanan -->
-                    <div class="accordion-item faq-item" data-category="layanan">
-                        <h2 class="accordion-header" id="faq2">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2">
-                                <span class="badge bg-info me-2">Layanan</span>
-                                Apa saja layanan yang tersedia di Inspektorat?
-                            </button>
-                        </h2>
-                        <div id="faqCollapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                <p>Inspektorat Papua Tengah menyediakan berbagai layanan, antara lain:</p>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h6>Layanan Audit & Pengawasan:</h6>
-                                        <ul>
-                                            <li>Audit internal</li>
-                                            <li>Evaluasi kinerja</li>
-                                            <li>Investigasi khusus</li>
-                                            <li>Pemantauan tindak lanjut</li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h6>Layanan Konsultasi:</h6>
-                                        <ul>
-                                            <li>Konsultasi tata kelola</li>
-                                            <li>Bimbingan teknis</li>
-                                            <li>Pelatihan SDM</li>
-                                            <li>Asistensi implementasi</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <p class="mt-3">Seluruh layanan ini <strong>gratis</strong> dan dapat diakses oleh OPD di lingkungan Pemerintah Papua Tengah.</p>
-                            </div>
-                        </div>
-                    </div>
+        if (question && content) {
+            const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
 
-                    <!-- FAQ Item 3 - Audit -->
-                    <div class="accordion-item faq-item" data-category="audit">
-                        <h2 class="accordion-header" id="faq3">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3">
-                                <span class="badge bg-success me-2">Audit</span>
-                                Berapa lama proses audit internal?
-                            </button>
-                        </h2>
-                        <div id="faqCollapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                <p>Waktu pelaksanaan audit internal bervariasi tergantung pada:</p>
-                                <ul>
-                                    <li><strong>Jenis audit:</strong> Audit kinerja, audit keuangan, atau audit khusus</li>
-                                    <li><strong>Ruang lingkup:</strong> Luas area yang diaudit</li>
-                                    <li><strong>Kompleksitas:</strong> Tingkat kerumitan sistem dan proses</li>
-                                </ul>
-                                
-                                <div class="table-responsive mt-3">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Jenis Audit</th>
-                                                <th>Estimasi Waktu</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Audit Rutin</td>
-                                                <td>7-14 hari kerja</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Audit Khusus/Investigasi</td>
-                                                <td>30-60 hari kerja</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Audit Kinerja</td>
-                                                <td>14-30 hari kerja</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- FAQ Item 4 - Umum -->
-                    <div class="accordion-item faq-item" data-category="umum">
-                        <h2 class="accordion-header" id="faq4">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse4">
-                                <span class="badge bg-primary me-2">Umum</span>
-                                Bagaimana cara mengetahui hasil audit?
-                            </button>
-                        </h2>
-                        <div id="faqCollapse4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                <p>Hasil audit dapat diketahui melalui:</p>
-                                <ol>
-                                    <li><strong>Laporan Resmi:</strong> Dikirim ke pimpinan OPD yang diaudit</li>
-                                    <li><strong>Rapat Exit Meeting:</strong> Presentasi hasil audit kepada auditee</li>
-                                    <li><strong>Portal Website:</strong> Ringkasan hasil audit (jika dipublikasikan)</li>
-                                    <li><strong>Monitoring Tindak Lanjut:</strong> Update status rekomendasi</li>
-                                </ol>
-                                
-                                <div class="alert alert-info mt-3">
-                                    <i class="fas fa-info-circle me-2"></i>
-                                    <strong>Catatan:</strong> Tidak semua hasil audit dipublikasikan. Publikasi tergantung pada jenis audit dan kebijakan organisasi.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- FAQ Item 5 - Pengaduan -->
-                    <div class="accordion-item faq-item" data-category="pengaduan">
-                        <h2 class="accordion-header" id="faq5">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse5">
-                                <span class="badge bg-warning me-2">Pengaduan</span>
-                                Apakah identitas pelapor akan dirahasiakan?
-                            </button>
-                        </h2>
-                        <div id="faqCollapse5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                <p><strong>Ya, identitas pelapor akan dijamin kerahasiaannya.</strong></p>
-                                
-                                <h6>Perlindungan yang diberikan:</h6>
-                                <ul>
-                                    <li>Kerahasiaan identitas pelapor</li>
-                                    <li>Perlindungan dari intimidasi atau pembalasan</li>
-                                    <li>Komunikasi aman melalui sistem WBS</li>
-                                    <li>Hak untuk melaporkan secara anonim</li>
-                                </ul>
-                                
-                                <h6>Sistem WBS (Whistle Blowing System):</h6>
-                                <ul>
-                                    <li>Enkripsi data untuk keamanan informasi</li>
-                                    <li>Nomor tiket unik untuk komunikasi</li>
-                                    <li>Tim khusus penanganan pengaduan</li>
-                                    <li>Prosedur standar perlindungan pelapor</li>
-                                </ul>
-                                
-                                <div class="alert alert-success mt-3">
-                                    <i class="fas fa-shield-alt me-2"></i>
-                                    <strong>Jaminan:</strong> Inspektorat berkomitmen penuh melindungi setiap pelapor yang beritikad baik dalam menyampaikan informasi.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- FAQ Item 6 - Layanan -->
-                    <div class="accordion-item faq-item" data-category="layanan">
-                        <h2 class="accordion-header" id="faq6">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse6">
-                                <span class="badge bg-info me-2">Layanan</span>
-                                Bagaimana cara mengajukan permohonan audit?
-                            </button>
-                        </h2>
-                        <div id="faqCollapse6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body">
-                                <p>Untuk mengajukan permohonan audit, ikuti langkah berikut:</p>
-                                
-                                <h6>1. Persiapan Dokumen:</h6>
-                                <ul>
-                                    <li>Surat permohonan resmi dari pimpinan OPD</li>
-                                    <li>Latar belakang dan tujuan audit</li>
-                                    <li>Ruang lingkup yang diinginkan</li>
-                                    <li>Jadwal yang diusulkan</li>
-                                </ul>
-                                
-                                <h6>2. Proses Pengajuan:</h6>
-                                <ol>
-                                    <li>Kirim surat permohonan ke Inspektorat</li>
-                                    <li>Tim Inspektorat akan melakukan evaluasi</li>
-                                    <li>Konfirmasi penerimaan dan jadwal</li>
-                                    <li>Koordinasi teknis pelaksanaan</li>
-                                </ol>
-                                
-                                <div class="row mt-3">
-                                    <div class="col-md-6">
-                                        <div class="card bg-light">
-                                            <div class="card-body">
-                                                <h6>Kontak Pengajuan:</h6>
-                                                <p class="mb-1"><i class="fas fa-envelope me-2"></i> audit@inspektorat-papuatengah.go.id</p>
-                                                <p class="mb-1"><i class="fas fa-phone me-2"></i> (021) 123-4567</p>
-                                                <p class="mb-0"><i class="fas fa-clock me-2"></i> Senin-Jumat: 08:00-16:00 WIT</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card bg-light">
-                                            <div class="card-body">
-                                                <h6>Estimasi Waktu:</h6>
-                                                <p class="mb-1">Evaluasi permohonan: 3-5 hari kerja</p>
-                                                <p class="mb-1">Persiapan audit: 7-10 hari kerja</p>
-                                                <p class="mb-0">Pelaksanaan: Sesuai ruang lingkup</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- No Results Message -->
-                <div id="noResults" class="text-center py-5" style="display: none;">
-                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
-                    <h5>Tidak ditemukan hasil</h5>
-                    <p class="text-muted">Coba gunakan kata kunci yang berbeda atau pilih kategori lain.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Contact CTA -->
-<section class="py-5 bg-light">
-    <div class="container text-center">
-        <h3 class="mb-3">Tidak Menemukan Jawaban yang Anda Cari?</h3>
-        <p class="lead mb-4">Tim kami siap membantu menjawab pertanyaan Anda</p>
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <a href="{{ route('public.kontak') }}" class="btn btn-primary btn-lg w-100">
-                            <i class="fas fa-phone me-2"></i> Hubungi Kami
-                        </a>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <a href="{{ route('public.wbs') }}" class="btn btn-outline-primary btn-lg w-100">
-                            <i class="fas fa-exclamation-triangle me-2"></i> Laporkan Masalah
-                        </a>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <a href="mailto:info@inspektorat-papuatengah.go.id" class="btn btn-outline-secondary btn-lg w-100">
-                            <i class="fas fa-envelope me-2"></i> Email Kami
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-@endsection
-
-@push('scripts')
-<script>
-// Search functionality
-document.getElementById('searchFaq').addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
-    filterFAQ();
-});
-
-// Category filter
-document.querySelectorAll('input[name="category"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-        filterFAQ();
-    });
-});
-
-function filterFAQ() {
-    const searchTerm = document.getElementById('searchFaq').value.toLowerCase();
-    const selectedCategory = document.querySelector('input[name="category"]:checked').value;
-    
-    const faqItems = document.querySelectorAll('.faq-item');
-    let visibleCount = 0;
-    
-    faqItems.forEach(item => {
-        const category = item.dataset.category;
-        const question = item.querySelector('.accordion-button').textContent.toLowerCase();
-        const answer = item.querySelector('.accordion-body').textContent.toLowerCase();
-        
-        let show = true;
-        
-        // Category filter
-        if (selectedCategory && category !== selectedCategory) {
-            show = false;
-        }
-        
-        // Search filter
-        if (searchTerm && !question.includes(searchTerm) && !answer.includes(searchTerm)) {
-            show = false;
-        }
-        
-        if (show) {
-            item.style.display = 'block';
-            visibleCount++;
-        } else {
-            item.style.display = 'none';
-        }
-    });
-    
-    // Show/hide no results message
-    const noResults = document.getElementById('noResults');
-    if (visibleCount === 0) {
-        noResults.style.display = 'block';
-    } else {
-        noResults.style.display = 'none';
-    }
-}
-
-// Highlight search terms
-function highlightSearchTerms() {
-    const searchTerm = document.getElementById('searchFaq').value.toLowerCase();
-    
-    if (searchTerm.length > 2) {
-        const faqItems = document.querySelectorAll('.faq-item:not([style*="display: none"])');
-        
-        faqItems.forEach(item => {
-            const button = item.querySelector('.accordion-button');
-            const body = item.querySelector('.accordion-body');
-            
             // Remove existing highlights
-            button.innerHTML = button.innerHTML.replace(/<mark[^>]*>([^<]+)<\/mark>/gi, '$1');
-            body.innerHTML = body.innerHTML.replace(/<mark[^>]*>([^<]+)<\/mark>/gi, '$1');
-            
-            // Add new highlights
-            const regex = new RegExp(`(${searchTerm})`, 'gi');
-            button.innerHTML = button.innerHTML.replace(regex, '<mark class="bg-warning">$1</mark>');
-            body.innerHTML = body.innerHTML.replace(regex, '<mark class="bg-warning">$1</mark>');
-        });
+            removeHighlights(item);
+
+            // Add highlights
+            question.innerHTML = question.innerHTML.replace(regex, '<mark class="bg-warning">$1</mark>');
+            content.innerHTML = content.innerHTML.replace(regex, '<mark class="bg-warning">$1</mark>');
+        }
     }
-}
 
-// Debounced highlight function
-let highlightTimeout;
-document.getElementById('searchFaq').addEventListener('input', function() {
-    clearTimeout(highlightTimeout);
-    highlightTimeout = setTimeout(highlightSearchTerms, 500);
-});
+    // Remove highlights
+    function removeHighlights(item) {
+        const question = item.querySelector('h5');
+        const content = item.querySelector('.faq-content');
 
-// Smooth scroll to FAQ item if coming from external link
-window.addEventListener('load', function() {
+        if (question) {
+            question.innerHTML = question.innerHTML.replace(/<mark[^>]*>([^<]+)<\/mark>/gi, '$1');
+        }
+        if (content) {
+            content.innerHTML = content.innerHTML.replace(/<mark[^>]*>([^<]+)<\/mark>/gi, '$1');
+        }
+    }
+
+    // Escape regex special characters
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // Show/hide search loading
+    function showSearchLoading() {
+        searchLoading.classList.remove('d-none');
+    }
+
+    function hideSearchLoading() {
+        searchLoading.classList.add('d-none');
+    }
+
+    // Clear search function
+    window.clearSearch = function() {
+        searchInput.value = '';
+        document.querySelector('.category-filter[data-category=""]').click();
+        filterFAQs();
+    };
+
+    // Back to top functionality
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            backToTop.classList.remove('d-none');
+        } else {
+            backToTop.classList.add('d-none');
+        }
+    });
+
+    backToTop.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Handle URL hash for direct FAQ access
     if (window.location.hash) {
         const target = document.querySelector(window.location.hash);
-        if (target && target.classList.contains('faq-item')) {
+        if (target) {
             setTimeout(() => {
-                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                target.scrollIntoView({ behavior: 'smooth' });
                 // Auto-open the FAQ item
-                const button = target.querySelector('.accordion-button');
-                if (button && button.classList.contains('collapsed')) {
+                const button = target.querySelector('.faq-toggle');
+                if (button) {
                     button.click();
                 }
             }, 500);
         }
     }
+
+    // Fix FAQ content text color after collapse
+    function fixFaqContentColor() {
+        const faqContents = document.querySelectorAll('.faq-content');
+        faqContents.forEach(content => {
+            content.style.setProperty('color', '#212529', 'important');
+            content.style.setProperty('background-color', 'transparent', 'important');
+
+            // Force reflow
+            content.offsetHeight;
+
+            const allElements = content.querySelectorAll('*');
+            allElements.forEach(element => {
+                if (!element.classList.contains('text-primary') &&
+                    !element.classList.contains('text-success') &&
+                    !element.classList.contains('text-warning') &&
+                    !element.classList.contains('text-danger') &&
+                    !element.classList.contains('text-info') &&
+                    !element.classList.contains('text-muted') &&
+                    !element.classList.contains('badge')) {
+                    element.style.setProperty('color', '#212529', 'important');
+                    element.style.setProperty('background-color', 'transparent', 'important');
+
+                    // Remove any white text classes
+                    element.classList.remove('text-white');
+
+                    // Force reflow on element
+                    element.offsetHeight;
+                }
+            });
+        });
+
+        // Additional fix for specific elements that might be problematic
+        const problematicElements = document.querySelectorAll('.faq-content .text-white, .faq-content [style*="color: white"], .faq-content [style*="color: #fff"]');
+        problematicElements.forEach(element => {
+            element.style.setProperty('color', '#212529', 'important');
+            element.classList.remove('text-white');
+        });
+    }
+
+    // Listen for Bootstrap collapse events
+    document.addEventListener('shown.bs.collapse', function(e) {
+        if (e.target.classList.contains('collapse')) {
+            fixFaqContentColor();
+        }
+        // Additional fix for text color on page load
+        setTimeout(fixFaqContentColor, 100);
+
+        // Fix color on window resize
+        window.addEventListener('resize', function() {
+            setTimeout(fixFaqContentColor, 100);
+        });
+    });
+
+    // Listen for Bootstrap collapse hide events
+    document.addEventListener('hidden.bs.collapse', function(e) {
+        if (e.target.classList.contains('collapse')) {
+            fixFaqContentColor();
+        }
+    });
+
+    // Initial color fix - run multiple times to ensure it sticks
+    fixFaqContentColor();
+    setTimeout(fixFaqContentColor, 100);
+    setTimeout(fixFaqContentColor, 500);
+    setTimeout(fixFaqContentColor, 1000);
+
+    // Fix on page fully loaded
+    window.addEventListener('load', function() {
+        setTimeout(fixFaqContentColor, 100);
+        setTimeout(fixFaqContentColor, 500);
+        setTimeout(fixFaqContentColor, 1000);
+    });
+
+    // Additional script to run after DOM is fully loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                fixFaqContentColor();
+                // Force reflow to ensure styles are applied
+                document.body.offsetHeight;
+                fixFaqContentColor();
+            }, 50);
+        });
+    } else {
+        // DOM is already loaded
+        setTimeout(function() {
+            fixFaqContentColor();
+            document.body.offsetHeight;
+            fixFaqContentColor();
+        }, 50);
+    }
+
+    // Run fix continuously for the first few seconds
+    let fixInterval = setInterval(function() {
+        fixFaqContentColor();
+    }, 100);
+
+    // Stop the interval after 5 seconds
+    setTimeout(function() {
+        clearInterval(fixInterval);
+    }, 5000);
+
+    // MutationObserver to watch for DOM changes
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList' || mutation.type === 'attributes') {
+                setTimeout(fixFaqContentColor, 50);
+            }
+        });
+    });
+
+    // Start observing FAQ content areas
+    const faqContents = document.querySelectorAll('.faq-content');
+    faqContents.forEach(content => {
+        observer.observe(content, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['style', 'class']
+        });
+    });
+
+    // Also observe the main FAQ container
+    const faqContainer = document.getElementById('faq-list');
+    if (faqContainer) {
+        observer.observe(faqContainer, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['style', 'class']
+        });
+    }
+
+    // Fix color on page load and after short delay
+    setTimeout(fixFaqContentColor, 100);
+    setTimeout(fixFaqContentColor, 500);
+
+    // Add event listeners for all collapse elements
+    const collapseElements = document.querySelectorAll('.collapse');
+    collapseElements.forEach(element => {
+        element.addEventListener('show.bs.collapse', function() {
+            setTimeout(fixFaqContentColor, 50);
+        });
+
+        element.addEventListener('shown.bs.collapse', function() {
+            setTimeout(fixFaqContentColor, 50);
+            setTimeout(fixFaqContentColor, 200);
+        });
+
+        element.addEventListener('hidden.bs.collapse', function() {
+            setTimeout(fixFaqContentColor, 50);
+        });
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            // Close all open FAQs
+            const openCollapses = document.querySelectorAll('.collapse.show');
+            openCollapses.forEach(collapse => {
+                const bsCollapse = new bootstrap.Collapse(collapse, {
+                    toggle: false
+                });
+                bsCollapse.hide();
+            });
+        }
+    });
 });
 </script>
 @endpush
 
 @push('styles')
 <style>
-.faq-content {
-    transition: all 0.3s ease;
-}
-
-.faq-content.hidden {
-    display: none;
-}
-
-.faq-content .prose {
-    color: #374151 !important;
-}
-
-.faq-content .prose * {
+/* FAQ specific styles */
+.faq-toggle {
     color: inherit !important;
+    text-decoration: none !important;
 }
 
-.faq-content .prose p {
-    margin-bottom: 1rem;
-    line-height: 1.6;
-}
-
-.faq-content .prose ul {
-    list-style-type: disc;
-    margin-left: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.faq-content .prose ol {
-    list-style-type: decimal;
-    margin-left: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.faq-content .prose li {
-    margin-bottom: 0.5rem;
+.faq-toggle:hover {
+    color: inherit !important;
 }
 
 .faq-toggle i {
     transition: transform 0.3s ease;
 }
 
-.hero-section {
-    background: linear-gradient(135deg, #9333ea 0%, #3b82f6 100%);
+.faq-toggle[aria-expanded="true"] i {
+    transform: rotate(180deg);
 }
 
-.btn-group .btn {
-    border-color: #007bff;
-    color: white;
+/* CRITICAL: Force dark text color on FAQ content */
+.faq-content,
+.faq-content *,
+.faq-content p,
+.faq-content div,
+.faq-content span,
+.faq-content li,
+.faq-content ul,
+.faq-content ol,
+.faq-content h1,
+.faq-content h2,
+.faq-content h3,
+.faq-content h4,
+.faq-content h5,
+.faq-content h6,
+.faq-content strong,
+.faq-content em,
+.faq-content b,
+.faq-content i,
+.faq-content small,
+.faq-content td,
+.faq-content th,
+.faq-content tr {
+    color: #212529 !important;
+    background-color: transparent !important;
 }
 
+/* Force dark text on specific FAQ IDs */
+#faq-popular-0 .faq-content,
+#faq-popular-0 .faq-content *,
+#faq-popular-1 .faq-content,
+#faq-popular-1 .faq-content *,
+#faq-popular-2 .faq-content,
+#faq-popular-2 .faq-content *,
+#faq-1 .faq-content,
+#faq-1 .faq-content *,
+#faq-2 .faq-content,
+#faq-2 .faq-content *,
+#faq-3 .faq-content,
+#faq-3 .faq-content *,
+#faq-4 .faq-content,
+#faq-4 .faq-content * {
+    color: #212529 !important;
+    background-color: transparent !important;
+}
+
+/* Force dark text on collapse states */
+.collapse .faq-content,
+.collapse .faq-content *,
+.collapse.show .faq-content,
+.collapse.show .faq-content *,
+.collapse.collapsing .faq-content,
+.collapse.collapsing .faq-content * {
+    color: #212529 !important;
+    background-color: transparent !important;
+}
+
+/* Override any Bootstrap text utilities */
+.faq-content .text-white,
+.faq-content .text-white * {
+    color: #212529 !important;
+}
+
+/* Override any inherited white text */
+body .faq-content,
+body .faq-content * {
+    color: #212529 !important;
+}
+
+/* Most specific selector possible */
+html body .container .faq-content,
+html body .container .faq-content * {
+    color: #212529 !important;
+}
+
+/* FAQ Content - Most specific selectors to override any other CSS */
+.card-body .faq-content {
+    line-height: 1.6 !important;
+    color: #212529 !important;
+    background-color: transparent !important;
+}
+
+.card-body .faq-content,
+.card-body .faq-content *,
+.card-body .faq-content p,
+.card-body .faq-content div,
+.card-body .faq-content span,
+.card-body .faq-content li,
+.card-body .faq-content ul,
+.card-body .faq-content ol,
+.card-body .faq-content h1,
+.card-body .faq-content h2,
+.card-body .faq-content h3,
+.card-body .faq-content h4,
+.card-body .faq-content h5,
+.card-body .faq-content h6,
+.card-body .faq-content strong,
+.card-body .faq-content em,
+.card-body .faq-content b,
+.card-body .faq-content i,
+.card-body .faq-content small,
+.card-body .faq-content td,
+.card-body .faq-content th,
+.card-body .faq-content tr {
+    color: #212529 !important;
+    background-color: transparent !important;
+}
+
+.card-body .faq-content a {
+    color: var(--bs-primary) !important;
+    text-decoration: none;
+}
+
+.card-body .faq-content a:hover {
+    text-decoration: underline;
+    color: var(--bs-primary) !important;
+}
+
+/* Specific color overrides for Bootstrap utilities */
+.card-body .faq-content .text-muted {
+    color: #6c757d !important;
+}
+
+.card-body .faq-content .text-primary {
+    color: var(--bs-primary) !important;
+}
+
+.card-body .faq-content .text-success {
+    color: var(--bs-success) !important;
+}
+
+.card-body .faq-content .text-warning {
+    color: var(--bs-warning) !important;
+}
+
+.card-body .faq-content .text-danger {
+    color: var(--bs-danger) !important;
+}
+
+.card-body .faq-content .text-info {
+    color: var(--bs-info) !important;
+}
+
+/* Collapse specific overrides */
+.collapse .card-body .faq-content,
+.collapse .card-body .faq-content * {
+    color: #212529 !important;
+    background-color: transparent !important;
+}
+
+.collapse.show .card-body .faq-content,
+.collapse.show .card-body .faq-content * {
+    color: #212529 !important;
+    background-color: transparent !important;
+}
+
+.collapse.collapsing .card-body .faq-content,
+.collapse.collapsing .card-body .faq-content * {
+    color: #212529 !important;
+    background-color: transparent !important;
+}
+
+/* Table and Alert specific overrides */
+.card-body .faq-content .table,
+.card-body .faq-content .table * {
+    color: #212529 !important;
+}
+
+.card-body .faq-content .alert,
+.card-body .faq-content .alert * {
+    color: #212529 !important;
+}
+
+.card-body .faq-content .card,
+.card-body .faq-content .card * {
+    color: #212529 !important;
+}
+
+.card-body .faq-content .badge {
+    color: white !important;
+}
+
+/* Override any inherited white text */
+.faq-content {
+    color: #212529 !important;
+}
+
+.faq-content * {
+    color: #212529 !important;
+}
+
+/* Force dark text on any nested elements */
+#faq-1 .faq-content,
+#faq-1 .faq-content *,
+#faq-2 .faq-content,
+#faq-2 .faq-content *,
+#faq-3 .faq-content,
+#faq-3 .faq-content *,
+#faq-4 .faq-content,
+#faq-4 .faq-content *,
+#faq-popular-0 .faq-content,
+#faq-popular-0 .faq-content * {
+    color: #212529 !important;
+    background-color: transparent !important;
+}
+
+/* Additional critical fixes for text color */
+.card-body .faq-content {
+    color: #212529 !important;
+}
+
+.card-body .faq-content * {
+    color: #212529 !important;
+}
+
+.category-filter {
+    transition: all 0.3s ease;
+}
+
+.category-filter:hover {
+    transform: translateY(-2px);
+}
+
+#backToTop {
+    transition: all 0.3s ease;
+}
+
+#backToTop:hover {
+    transform: scale(1.1);
+}
+
+/* Search input animations */
+#searchFaq:focus {
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+/* Card hover effects */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .btn-group {
-        flex-direction: column;
-        width: 100%;
+    .category-filter {
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
     }
-    
-    .btn-group .btn {
-        border-radius: 0.375rem !important;
-        margin-bottom: 5px;
+
+    .display-4 {
+        font-size: 2rem;
     }
 }
 </style>

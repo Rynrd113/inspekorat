@@ -1,0 +1,181 @@
+{
+  "name": "FAQ Inspektorat Papua Tengah",
+  "short_name": "FAQ Inspektorat",
+  "description": "Frequently Asked Questions - Inspektorat Papua Tengah",
+  "start_url": "/faq",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "id",
+  "dir": "ltr",
+  "categories": ["government", "public-service", "faq"],
+  "icons": [
+    {
+      "src": "/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Cari FAQ",
+      "short_name": "Cari",
+      "description": "Cari pertanyaan yang sering diajukan",
+      "url": "/faq?search=true",
+      "icons": [
+        {
+          "src": "/icon-search-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Pengaduan",
+      "short_name": "Pengaduan",
+      "description": "Lihat FAQ tentang pengaduan",
+      "url": "/faq?category=pengaduan",
+      "icons": [
+        {
+          "src": "/icon-complaint-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Layanan",
+      "short_name": "Layanan",
+      "description": "Lihat FAQ tentang layanan",
+      "url": "/faq?category=layanan",
+      "icons": [
+        {
+          "src": "/icon-service-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Audit",
+      "short_name": "Audit",
+      "description": "Lihat FAQ tentang audit",
+      "url": "/faq?category=audit",
+      "icons": [
+        {
+          "src": "/icon-audit-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "web",
+      "url": "https://inspektorat-papuatengah.go.id"
+    }
+  ],
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+inspektorat",
+      "url": "/faq?query=%s"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "/faq",
+      "accept": {
+        "text/plain": [".txt"],
+        "application/pdf": [".pdf"]
+      }
+    }
+  ],
+  "share_target": {
+    "action": "/faq/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "file",
+          "accept": ["image/*", "application/pdf"]
+        }
+      ]
+    }
+  },
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "FAQ Desktop View"
+    },
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "375x667",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "FAQ Mobile View"
+    }
+  ],
+  "capture_links": "existing-client-navigate",
+  "display_override": ["window-controls-overlay", "minimal-ui"],
+  "handle_links": "preferred"
+}
