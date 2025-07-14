@@ -194,35 +194,42 @@
 // Store admin token in localStorage for API calls
 @if(session('admin_token'))
     localStorage.setItem('admin_token', '{{ session('admin_token') }}');
-    console.log('Admin token stored:', '{{ substr(session('admin_token'), 0, 20) }}...');
+    @if(config('app.debug'))
+        console.log('Admin token stored successfully');
+    @endif
 @endif
 
 // Check if token exists on page load
 document.addEventListener('DOMContentLoaded', function() {
     const existingToken = localStorage.getItem('admin_token');
-    console.log('Existing token in localStorage:', existingToken ? 'Found' : 'Not found');
     
     if (!existingToken) {
         // Try to get token from session if not in localStorage
         @if(session('admin_token'))
             localStorage.setItem('admin_token', '{{ session('admin_token') }}');
-            console.log('Token set from session');
+            @if(config('app.debug'))
+                console.log('Token set from session');
+            @endif
         @endif
     }
     
-    // Debug: show current token
-    const currentToken = localStorage.getItem('admin_token');
-    if (currentToken) {
-        console.log('Current admin token available for API calls');
-    } else {
-        console.warn('No admin token found - API calls will fail');
-    }
+    // Only log in debug mode
+    @if(config('app.debug'))
+        const currentToken = localStorage.getItem('admin_token');
+        if (currentToken) {
+            console.log('Admin token loaded successfully');
+        } else {
+            console.warn('No admin token found');
+        }
+    @endif
 });
 
 // Clear admin token on logout
 function clearAdminToken() {
     localStorage.removeItem('admin_token');
-    console.log('Admin token cleared');
+    @if(config('app.debug'))
+        console.log('Admin token cleared');
+    @endif
 }
 </script>
 @endpush

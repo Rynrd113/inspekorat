@@ -1,24 +1,37 @@
 @extends('layouts.admin')
 
-@section('header', 'Manajemen FAQ')
-
-@section('breadcrumb')
-<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
-<li><span class="text-gray-500">FAQ</span></li>
-@endsection
-
 @section('main-content')
-<div class="space-y-6">
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
     <!-- Header -->
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">Manajemen FAQ</h1>
-            <p class="text-gray-600 mt-1">Kelola pertanyaan yang sering diajukan</p>
+    <div class="mb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Manajemen FAQ</h1>
+                <nav class="flex mt-2" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-2 text-sm text-gray-500">
+                        <li>
+                            <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800 transition-colors">
+                                <i class="fas fa-home mr-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-chevron-right mx-2 text-gray-300"></i>
+                            <span class="text-gray-600">FAQ</span>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <x-button 
+                    href="{{ route('admin.faq.create') }}"
+                    variant="primary" 
+                    size="md"
+                >
+                    <i class="fas fa-plus mr-2"></i>Tambah FAQ
+                </x-button>
+            </div>
         </div>
-        <a href="{{ route('admin.faq.create') }}"
-           class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
-            <i class="fas fa-plus mr-2"></i>Tambah FAQ
-        </a>
     </div>
 
     <!-- Stats Cards -->
@@ -97,22 +110,26 @@
     </div>
 
     <!-- Search and Filter -->
-    <div class="bg-white shadow rounded-lg">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <i class="fas fa-question-circle text-gray-400 mr-2"></i>
-                    <h2 class="text-lg font-medium text-gray-900">Daftar FAQ</h2>
-                </div>
-            </div>
-        </div>
-        <div class="px-6 py-4">
-            <!-- Filter Form -->
-            <form method="GET" action="{{ route('admin.faq.index') }}" id="filterForm">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
+        <div class="p-6">
+            <form method="GET" action="{{ route('admin.faq.index') }}" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Search Field -->
                     <div>
-                        <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                        <select name="kategori" id="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onchange="document.getElementById('filterForm').submit()">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pencarian</label>
+                        <x-search-input 
+                            name="search"
+                            placeholder="Cari FAQ..."
+                            value="{{ request('search') }}"
+                            with-icon="true"
+                            size="md"
+                        />
+                    </div>
+
+                    <!-- Filter Fields -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                        <select name="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <option value="">Semua Kategori</option>
                             <option value="umum" {{ request('kategori') == 'umum' ? 'selected' : '' }}>Umum</option>
                             <option value="layanan" {{ request('kategori') == 'layanan' ? 'selected' : '' }}>Layanan</option>
@@ -121,42 +138,40 @@
                             <option value="lainnya" {{ request('kategori') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
                         </select>
                     </div>
+                    
                     <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                        <select name="status" id="status" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onchange="document.getElementById('filterForm').submit()">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <option value="">Semua Status</option>
                             <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Aktif</option>
                             <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Non-aktif</option>
                         </select>
                     </div>
-                    <div>
-                        <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Cari FAQ</label>
-                        <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Cari FAQ..." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div class="flex items-end">
-                        <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
-                            <i class="fas fa-search mr-2"></i>Cari
-                        </button>
-                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <x-button type="submit" variant="primary" size="md">
+                        <i class="fas fa-search mr-2"></i>Cari
+                    </x-button>
+                    
+                    <x-button 
+                        type="button" 
+                        variant="secondary" 
+                        size="md"
+                        onclick="window.location.href='{{ route('admin.faq.index') }}'"
+                    >
+                        <i class="fas fa-undo mr-2"></i>Reset
+                    </x-button>
                 </div>
             </form>
+        </div>
+    </div>
 
-            <!-- Results Info -->
-            @if($faqs->count() > 0)
-            <div class="mb-4 text-sm text-gray-600">
-                Menampilkan {{ $faqs->firstItem() }} - {{ $faqs->lastItem() }} dari {{ $faqs->total() }} FAQ
-                @if(request('search'))
-                    untuk pencarian "{{ request('search') }}"
-                @endif
-                @if(request('kategori'))
-                    kategori "{{ ucfirst(request('kategori')) }}"
-                @endif
-            </div>
-            @endif
-
-            <!-- FAQ Table -->
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
+    <!-- FAQ List -->
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
@@ -273,9 +288,11 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
+
+    <!-- Pagination -->
+    {{-- Add pagination here when connected to real data --}}
 </div>
 
 <!-- Delete Form -->
@@ -292,14 +309,5 @@ function deleteFaq(id) {
         form.submit();
     }
 }
-
-// Auto submit search after typing
-let searchTimeout;
-document.getElementById('search').addEventListener('input', function() {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-        document.getElementById('filterForm').submit();
-    }, 500);
-});
 </script>
 @endsection

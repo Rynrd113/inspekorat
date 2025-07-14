@@ -1,62 +1,98 @@
 @extends('layouts.admin')
 
-@section('header', 'Manajemen User')
-
-@section('breadcrumb')
-<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
-<li><span class="text-gray-500">User</span></li>
-@endsection
-
 @section('main-content')
-<div class="space-y-6">
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
     <!-- Header -->
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">Manajemen User</h1>
-            <p class="text-gray-600 mt-1">Kelola user dan role sistem</p>
+    <div class="mb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Manajemen User</h1>
+                <nav class="flex mt-2" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-2 text-sm text-gray-500">
+                        <li>
+                            <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800 transition-colors">
+                                <i class="fas fa-home mr-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-chevron-right mx-2 text-gray-300"></i>
+                            <span class="text-gray-600">User</span>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <x-button 
+                    href="{{ route('admin.users.create') }}"
+                    variant="primary" 
+                    size="md"
+                >
+                    <i class="fas fa-plus mr-2"></i>Tambah User
+                </x-button>
+            </div>
         </div>
-        <a href="{{ route('admin.users.create') }}"
-           class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
-            <i class="fas fa-plus mr-2"></i>Tambah User
-        </a>
     </div>
 
     <!-- Search and Filter -->
-    <x-card>
-        <form method="GET" class="p-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
-                    <input type="text" name="search" id="search" value="{{ request('search') }}"
-                           placeholder="Nama atau email..."
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                    <select name="role" id="role"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        <option value="">Semua Role</option>
-                        @foreach($roles as $key => $label)
-                            <option value="{{ $key }}" {{ request('role') === $key ? 'selected' : '' }}>{{ $label }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="flex items-end space-x-2">
-                    <button type="submit"
-                            class="px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors">
-                        <i class="fas fa-search mr-2"></i>Cari
-                    </button>
-                    <a href="{{ route('admin.users.index') }}"
-                       class="px-4 py-2 bg-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-400 transition-colors">
-                        Reset
-                    </a>
-                </div>
-            </div>
-        </form>
-    </x-card>
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
+        <div class="p-6">
+            <form method="GET" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Search Field -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pencarian</label>
+                        <x-search-input 
+                            name="search"
+                            placeholder="Nama atau email..."
+                            value="{{ request('search') }}"
+                            with-icon="true"
+                            size="md"
+                        />
+                    </div>
 
-    <!-- Table -->
-    <x-card>
+                    <!-- Filter Fields -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                        <select name="role" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Semua Role</option>
+                            @foreach($roles as $key => $label)
+                                <option value="{{ $key }}" {{ request('role') === $key ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Semua Status</option>
+                            <option value="aktif" {{ request('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                            <option value="nonaktif" {{ request('status') == 'nonaktif' ? 'selected' : '' }}>Non-aktif</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <x-button type="submit" variant="primary" size="md">
+                        <i class="fas fa-search mr-2"></i>Cari
+                    </x-button>
+                    
+                    <x-button 
+                        type="button" 
+                        variant="secondary" 
+                        size="md"
+                        onclick="window.location.href='{{ route('admin.users.index') }}'"
+                    >
+                        <i class="fas fa-undo mr-2"></i>Reset
+                    </x-button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Users List -->
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -145,6 +181,9 @@
             {{ $users->links() }}
         </div>
         @endif
-    </x-card>
+    </div>
+
+    <!-- Pagination -->
+    {{-- Add pagination here when connected to real data --}}
 </div>
 @endsection

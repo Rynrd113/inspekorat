@@ -16,10 +16,13 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Kelola WBS</h3>
             <p class="text-gray-600 text-sm mb-4">Lihat, respons, dan kelola laporan WBS</p>
-            <a href="{{ route('admin.wbs.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+            <x-button 
+                href="{{ route('admin.wbs.index') }}"
+                variant="primary" 
+                size="md"
+            >
                 <i class="fas fa-arrow-right mr-2"></i>Kelola WBS
-            </a>
+            </x-button>
         </div>
     </x-card>
     @endif

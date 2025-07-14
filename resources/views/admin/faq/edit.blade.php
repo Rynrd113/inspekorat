@@ -23,9 +23,9 @@
     </div>
 
     <!-- Form -->
-    <div class="bg-white shadow rounded-lg">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-medium text-gray-900">
+    <div class="bg-white rounded-lg shadow-md border border-gray-200">
+        <div class="p-6 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">
                 <i class="fas fa-edit mr-2 text-blue-600"></i>
                 Form Edit FAQ
             </h2>
@@ -40,34 +40,28 @@
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Pertanyaan -->
                     <div>
-                        <label for="pertanyaan" class="block text-sm font-medium text-gray-700 mb-2">
-                            Pertanyaan <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('pertanyaan') border-red-500 @enderror" 
-                               id="pertanyaan" 
-                               name="pertanyaan" 
-                               value="{{ old('pertanyaan', $faq->pertanyaan) }}" 
-                               required>
-                        @error('pertanyaan')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        <x-input
+                            label="Pertanyaan"
+                            name="pertanyaan"
+                            id="pertanyaan"
+                            type="text"
+                            value="{{ old('pertanyaan', $faq->pertanyaan) }}"
+                            required="true"
+                            :error="$errors->first('pertanyaan')"
+                        />
                     </div>
 
                     <!-- Jawaban -->
                     <div>
-                        <label for="jawaban" class="block text-sm font-medium text-gray-700 mb-2">
-                            Jawaban <span class="text-red-500">*</span>
-                        </label>
-                        <textarea 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('jawaban') border-red-500 @enderror" 
-                            id="jawaban" 
-                            name="jawaban" 
-                            rows="8" 
-                            required>{{ old('jawaban', $faq->jawaban) }}</textarea>
-                        @error('jawaban')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        <x-input
+                            label="Jawaban"
+                            name="jawaban"
+                            id="jawaban"
+                            type="textarea"
+                            rows="8"
+                            required="true"
+                            :error="$errors->first('jawaban')"
+                        >{{ old('jawaban', $faq->jawaban) }}</x-input>
                         <div class="mt-2 text-sm text-gray-500">
                             <i class="fas fa-info-circle mr-1"></i>
                             Anda dapat menggunakan HTML dasar untuk formatting
@@ -76,15 +70,15 @@
 
                     <!-- Tags -->
                     <div>
-                        <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
-                            Tags
-                        </label>
-                        <input type="text" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                               id="tags" 
-                               name="tags" 
-                               value="{{ old('tags', $faq->tags) }}" 
-                               placeholder="Pisahkan dengan koma, contoh: inspektorat, audit, pelayanan">
+                        <x-input
+                            label="Tags"
+                            name="tags"
+                            id="tags"
+                            type="text"
+                            value="{{ old('tags', $faq->tags) }}"
+                            placeholder="Pisahkan dengan koma, contoh: inspektorat, audit, pelayanan"
+                            :error="$errors->first('tags')"
+                        />
                         <div class="mt-2 text-sm text-gray-500">
                             <i class="fas fa-info-circle mr-1"></i>
                             Pisahkan tags dengan koma untuk memudahkan pencarian
@@ -99,7 +93,7 @@
                         <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">
                             Kategori <span class="text-red-500">*</span>
                         </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('kategori') border-red-500 @enderror" 
+                        <select class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors @error('kategori') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror" 
                                 id="kategori" 
                                 name="kategori" 
                                 required>
@@ -120,7 +114,7 @@
                         <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
                             Status
                         </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                        <select class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors" 
                                 id="status" 
                                 name="status">
                             <option value="1" {{ old('status', $faq->status ? '1' : '0') == '1' ? 'selected' : '' }}>Aktif</option>
@@ -130,16 +124,16 @@
 
                     <!-- Urutan -->
                     <div>
-                        <label for="urutan" class="block text-sm font-medium text-gray-700 mb-2">
-                            Urutan Tampil
-                        </label>
-                        <input type="number" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                               id="urutan" 
-                               name="urutan" 
-                               value="{{ old('urutan', $faq->urutan) }}" 
-                               min="1" 
-                               placeholder="1">
+                        <x-input
+                            label="Urutan Tampil"
+                            name="urutan"
+                            id="urutan"
+                            type="number"
+                            value="{{ old('urutan', $faq->urutan) }}"
+                            min="1"
+                            placeholder="1"
+                            :error="$errors->first('urutan')"
+                        />
                         <div class="mt-2 text-sm text-gray-500">
                             <i class="fas fa-info-circle mr-1"></i>
                             Semakin kecil angka, semakin awal tampil
@@ -194,21 +188,18 @@
 
             <!-- Form Actions -->
             <div class="flex items-center justify-between pt-6 border-t border-gray-200 mt-8">
-                <a href="{{ route('admin.faq.index') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-400 transition-colors">
+                <x-button variant="secondary" href="{{ route('admin.faq.index') }}">
                     <i class="fas fa-times mr-2"></i>Batal
-                </a>
+                </x-button>
 
                 <div class="flex items-center space-x-3">
-                    <a href="{{ route('admin.faq.show', $faq->id) }}" 
-                       class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                    <x-button variant="primary" href="{{ route('admin.faq.show', $faq->id) }}">
                         <i class="fas fa-eye mr-2"></i>Preview
-                    </a>
+                    </x-button>
                     
-                    <button type="submit" 
-                            class="inline-flex items-center px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors">
+                    <x-button type="submit" variant="success" size="lg">
                         <i class="fas fa-save mr-2"></i>Simpan Perubahan
-                    </button>
+                    </x-button>
                 </div>
             </div>
         </form>

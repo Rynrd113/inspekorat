@@ -1,74 +1,100 @@
 @extends('layouts.admin')
 
-@section('header', 'Manajemen Galeri')
-
-@section('breadcrumb')
-<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
-<li><span class="text-gray-500">Galeri</span></li>
-@endsection
-
 @section('main-content')
-<div class="space-y-6">
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
     <!-- Header -->
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">Manajemen Galeri</h1>
-            <p class="text-gray-600 mt-1">Kelola galeri foto dan video</p>
+    <div class="mb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Manajemen Galeri</h1>
+                <nav class="flex mt-2" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-2 text-sm text-gray-500">
+                        <li>
+                            <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800 transition-colors">
+                                <i class="fas fa-home mr-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-chevron-right mx-2 text-gray-300"></i>
+                            <span class="text-gray-600">Galeri</span>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <x-button 
+                    href="{{ route('admin.galeri.create') }}"
+                    variant="primary" 
+                    size="md"
+                >
+                    <i class="fas fa-plus mr-2"></i>Tambah Media
+                </x-button>
+            </div>
         </div>
-        <a href="{{ route('admin.galeri.create') }}"
-           class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
-            <i class="fas fa-plus mr-2"></i>Tambah Media
-        </a>
     </div>
 
     <!-- Search and Filter -->
-    <div class="bg-white shadow rounded-lg">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <i class="fas fa-images text-gray-400 mr-2"></i>
-                    <h2 class="text-lg font-medium text-gray-900">Galeri Foto & Video</h2>
-                </div>
-            </div>
-        </div>
-        <div class="px-6 py-4">
-            <!-- Filter dan Search -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div>
-                    <label for="filterTipe" class="block text-sm font-medium text-gray-700 mb-2">Tipe</label>
-                    <select id="filterTipe" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Semua Tipe</option>
-                        <option value="foto">Foto</option>
-                        <option value="video">Video</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="filterKategori" class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                    <select id="filterKategori" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Semua Kategori</option>
-                        <option value="kegiatan">Kegiatan</option>
-                        <option value="acara">Acara</option>
-                        <option value="fasilitas">Fasilitas</option>
-                        <option value="lainnya">Lainnya</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="filterStatus" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                    <select id="filterStatus" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Semua Status</option>
-                        <option value="aktif">Aktif</option>
-                        <option value="nonaktif">Non-aktif</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="searchGaleri" class="block text-sm font-medium text-gray-700 mb-2">Cari Media</label>
-                    <input type="text" id="searchGaleri" placeholder="Cari media..." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-            </div>
-                </div>
-            </div>
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
+        <div class="p-6">
+            <form method="GET" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Search Field -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pencarian</label>
+                        <x-search-input 
+                            name="search"
+                            placeholder="Cari media..."
+                            value="{{ request('search') }}"
+                            with-icon="true"
+                            size="md"
+                        />
+                    </div>
 
-            <!-- Grid View -->
+                    <!-- Filter Fields -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tipe</label>
+                        <select name="tipe" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Semua Tipe</option>
+                            <option value="foto" {{ request('tipe') == 'foto' ? 'selected' : '' }}>Foto</option>
+                            <option value="video" {{ request('tipe') == 'video' ? 'selected' : '' }}>Video</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                        <select name="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Semua Kategori</option>
+                            <option value="kegiatan" {{ request('kategori') == 'kegiatan' ? 'selected' : '' }}>Kegiatan</option>
+                            <option value="acara" {{ request('kategori') == 'acara' ? 'selected' : '' }}>Acara</option>
+                            <option value="fasilitas" {{ request('kategori') == 'fasilitas' ? 'selected' : '' }}>Fasilitas</option>
+                            <option value="lainnya" {{ request('kategori') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <x-button type="submit" variant="primary" size="md">
+                        <i class="fas fa-search mr-2"></i>Cari
+                    </x-button>
+                    
+                    <x-button 
+                        type="button" 
+                        variant="secondary" 
+                        size="md"
+                        onclick="window.location.href='{{ route('admin.galeri.index') }}'"
+                    >
+                        <i class="fas fa-undo mr-2"></i>Reset
+                    </x-button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+        <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 <!-- Sample data - replace with actual data -->
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -163,25 +189,11 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Pagination -->
-            <div class="mt-6 flex items-center justify-center">
-                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                        <span class="sr-only">Previous</span>
-                        <i class="fas fa-chevron-left"></i>
-                    </a>
-                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600">1</a>
-                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">2</a>
-                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">3</a>
-                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                        <span class="sr-only">Next</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                </nav>
-            </div>
         </div>
     </div>
+
+    <!-- Pagination -->
+    {{-- Add pagination here when connected to real data --}}
 </div>
 
 <!-- Media View Modal -->
@@ -281,22 +293,6 @@ function closeDeleteModal() {
     document.getElementById('deleteModal').classList.add('hidden');
 }
 
-// Filter functionality
-document.getElementById('filterTipe').addEventListener('change', function() {
-    console.log('Filter tipe changed:', this.value);
-});
-
-document.getElementById('filterKategori').addEventListener('change', function() {
-    console.log('Filter kategori changed:', this.value);
-});
-
-document.getElementById('filterStatus').addEventListener('change', function() {
-    console.log('Filter status changed:', this.value);
-});
-
-document.getElementById('searchGaleri').addEventListener('input', function() {
-    console.log('Search input:', this.value);
-});
 
 // Close modals when clicking outside
 document.getElementById('mediaModal').addEventListener('click', function(e) {

@@ -1,13 +1,16 @@
 @extends('layouts.admin')
 
-@section('content')
-<x-admin.page-header 
-    title="Edit Pelayanan" 
-    :breadcrumbs="[
-        ['label' => 'Pelayanan', 'url' => route('admin.pelayanan.index')],
-        ['label' => 'Edit']
-    ]"
->
+@section('header', 'Edit Pelayanan')
+
+@section('breadcrumb')
+<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li><a href="{{ route('admin.pelayanan.index') }}" class="text-blue-600 hover:text-blue-800">Pelayanan</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li class="text-gray-600">Edit</li>
+@endsection
+
+@section('main-content')
     <x-admin.form-section 
         title="Form Edit Pelayanan" 
         description="Edit informasi pelayanan yang sudah ada"
@@ -237,7 +240,6 @@
             />
         </form>
     </x-admin.form-section>
-</x-admin.page-header>
 
 <script>
 function addProsedur() {
