@@ -193,13 +193,16 @@
                             <p class="text-sm text-gray-500 mb-2">{{ Str::limit(strip_tags($faq->jawaban), 60) }}</p>
                             
                             <div class="flex flex-wrap gap-2 items-center">
-                                <x-badge variant="@switch($faq->kategori)
-                                    @case('umum') secondary @break
-                                    @case('layanan') primary @break
-                                    @case('pengaduan') warning @break
-                                    @case('audit') success @break
-                                    @default info
-                                @endswitch" size="sm">
+                                @php
+                                    $badgeVariant = match($faq->kategori) {
+                                        'umum' => 'secondary',
+                                        'layanan' => 'primary',
+                                        'pengaduan' => 'warning',
+                                        'audit' => 'success',
+                                        default => 'info'
+                                    };
+                                @endphp
+                                <x-badge variant="{{ $badgeVariant }}" size="sm">
                                     {{ ucfirst($faq->kategori) }}
                                 </x-badge>
                                 
@@ -300,16 +303,16 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <x-badge 
-                                    variant="@switch($faq->kategori)
-                                        @case('umum') secondary @break
-                                        @case('layanan') primary @break
-                                        @case('pengaduan') warning @break
-                                        @case('audit') success @break
-                                        @default info
-                                    @endswitch"
-                                    size="md"
-                                >
+                                @php
+                                    $badgeVariant = match($faq->kategori) {
+                                        'umum' => 'secondary',
+                                        'layanan' => 'primary',
+                                        'pengaduan' => 'warning',
+                                        'audit' => 'success',
+                                        default => 'info'
+                                    };
+                                @endphp
+                                <x-badge variant="{{ $badgeVariant }}" size="md">
                                     {{ ucfirst($faq->kategori) }}
                                 </x-badge>
                             </td>

@@ -309,8 +309,9 @@
                 </table>
             </div>
             
-            <!-- Empty State (shown when no documents match filters) -->
-            @if(false) {{-- This will be replaced with actual empty check --}}
+            <!-- Empty State (when no documents are found) -->
+            {{-- Uncomment this section when implementing real empty state logic
+            @if($documents->isEmpty())
                 <x-empty-state
                     title="Tidak ada dokumen yang sesuai"
                     description="Tidak ditemukan dokumen yang cocok dengan pencarian atau filter yang Anda gunakan."
@@ -321,6 +322,7 @@
                     suggestion="Coba gunakan kata kunci yang berbeda atau reset filter untuk melihat semua dokumen."
                 />
             @endif
+            --}}
         </div>
     </div>
 
