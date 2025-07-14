@@ -1,83 +1,153 @@
 @extends('layouts.admin')
 
+@section('header', 'Manajemen Dokumen')
+
+@section('breadcrumb')
+<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li class="text-gray-600">Dokumen</li>
+@endsection
+
 @section('main-content')
-<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
-    <div class="mb-6">
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">Manajemen Dokumen</h1>
-                <nav class="flex mt-2" aria-label="Breadcrumb">
-                    <ol class="flex items-center space-x-2 text-sm text-gray-500">
-                        <li>
-                            <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800 transition-colors">
-                                <i class="fas fa-home mr-1"></i>Dashboard
-                            </a>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-chevron-right mx-2 text-gray-300"></i>
-                            <span class="text-gray-600">Dokumen</span>
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-            
-            <div class="flex items-center space-x-3">
-                <x-button 
-                    href="{{ route('admin.dokumen.create') }}"
-                    variant="primary" 
-                    size="md"
-                >
-                    <i class="fas fa-plus mr-2"></i>Tambah Dokumen
-                </x-button>
-            </div>
+<div class="space-y-6">
+    <!-- Header Actions -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Daftar Dokumen</h1>
+            <p class="text-gray-600 mt-1">Kelola repository dokumen publik Inspektorat</p>
         </div>
+        <div class="flex items-center space-x-3">
+            <x-button 
+                href="{{ route('admin.dokumen.export') }}"
+                variant="secondary" 
+                size="md"
+            >
+                <i class="fas fa-download mr-2"></i>Export
+            </x-button>
+            <x-button 
+                href="{{ route('admin.dokumen.create') }}"
+                variant="primary" 
+                size="md"
+            >
+                <i class="fas fa-plus mr-2"></i>Tambah Dokumen
+            </x-button>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-file-alt text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="text-2xl font-bold text-gray-900">{{ \App\Models\Dokumen::count() ?? 0 }}</div>
+                    <div class="text-sm text-gray-500">Total Dokumen</div>
+                </div>
+            </div>
+        </x-card>
+        
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="text-2xl font-bold text-gray-900">{{ \App\Models\Dokumen::where('status', 1)->count() ?? 0 }}</div>
+                    <div class="text-sm text-gray-500">Aktif</div>
+                </div>
+            </div>
+        </x-card>
+        
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-folder text-yellow-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="text-2xl font-bold text-gray-900">5</div>
+                    <div class="text-sm text-gray-500">Kategori</div>
+                </div>
+            </div>
+        </x-card>
+        
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-eye text-purple-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="text-2xl font-bold text-gray-900">{{ \App\Models\Dokumen::sum('downloads') ?? 0 }}</div>
+                    <div class="text-sm text-gray-500">Total Download</div>
+                </div>
+            </div>
+        </x-card>
     </div>
 
     <!-- Search and Filter -->
-    <div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
-        <div class="p-6">
-            <form method="GET" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Search Field -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Pencarian</label>
-                        <x-search-input 
-                            name="search"
-                            placeholder="Cari dokumen..."
-                            value="{{ request('search') }}"
-                            with-icon="true"
-                            size="md"
-                        />
-                    </div>
-
-                    <!-- Filter Fields -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                        <select name="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="">Semua Kategori</option>
-                            <option value="peraturan" {{ request('kategori') == 'peraturan' ? 'selected' : '' }}>Peraturan</option>
-                            <option value="panduan" {{ request('kategori') == 'panduan' ? 'selected' : '' }}>Panduan</option>
-                            <option value="laporan" {{ request('kategori') == 'laporan' ? 'selected' : '' }}>Laporan</option>
-                            <option value="formulir" {{ request('kategori') == 'formulir' ? 'selected' : '' }}>Formulir</option>
-                            <option value="lainnya" {{ request('kategori') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                        <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="">Semua Status</option>
-                            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Aktif</option>
-                            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Non-aktif</option>
-                        </select>
-                    </div>
+    <x-card>
+        <x-slot:header>
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-900">
+                    <i class="fas fa-filter mr-2 text-blue-600"></i>Filter & Pencarian
+                </h2>
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm text-gray-500">Menampilkan dokumen aktif</span>
+                </div>
+            </div>
+        </x-slot:header>
+        
+        <form method="GET" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Search Field -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Pencarian</label>
+                    <x-search-input 
+                        name="search"
+                        placeholder="Cari judul, nomor, atau deskripsi dokumen..."
+                        value="{{ request('search') }}"
+                        with-icon="true"
+                        size="md"
+                    />
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="flex flex-wrap items-center gap-3">
+                <!-- Filter Fields -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                    <select name="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                        <option value="">Semua Kategori</option>
+                        <option value="peraturan" {{ request('kategori') == 'peraturan' ? 'selected' : '' }}>📋 Peraturan</option>
+                        <option value="panduan" {{ request('kategori') == 'panduan' ? 'selected' : '' }}>📖 Panduan</option>
+                        <option value="laporan" {{ request('kategori') == 'laporan' ? 'selected' : '' }}>📊 Laporan</option>
+                        <option value="formulir" {{ request('kategori') == 'formulir' ? 'selected' : '' }}>📝 Formulir</option>
+                        <option value="lainnya" {{ request('kategori') == 'lainnya' ? 'selected' : '' }}>📄 Lainnya</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                        <option value="">Semua Status</option>
+                        <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>✅ Aktif</option>
+                        <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>❌ Non-aktif</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-gray-200">
+                <div class="flex items-center gap-3">
                     <x-button type="submit" variant="primary" size="md">
-                        <i class="fas fa-search mr-2"></i>Cari
+                        <i class="fas fa-search mr-2"></i>Cari Dokumen
                     </x-button>
                     
                     <x-button 
@@ -86,15 +156,47 @@
                         size="md"
                         onclick="window.location.href='{{ route('admin.dokumen.index') }}'"
                     >
-                        <i class="fas fa-undo mr-2"></i>Reset
+                        <i class="fas fa-undo mr-2"></i>Reset Filter
                     </x-button>
                 </div>
-            </form>
-        </div>
-    </div>
+                
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-gray-500">Urut:</span>
+                    <select name="sort" class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                        <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Terbaru</option>
+                        <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
+                        <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Nama A-Z</option>
+                        <option value="downloads" {{ request('sort') == 'downloads' ? 'selected' : '' }}>Populer</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </x-card>
 
     <!-- Documents List -->
-    <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+    <x-card>
+        <x-slot:header>
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-900">
+                    <i class="fas fa-file-alt mr-2 text-blue-600"></i>Daftar Dokumen
+                </h2>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-500">Total: 10 dokumen</span>
+                    <div class="flex items-center space-x-2">
+                        <x-button 
+                            href="{{ route('admin.dokumen.bulk-actions') }}"
+                            variant="secondary" 
+                            size="sm"
+                            class="hidden"
+                            id="bulk-actions-btn"
+                        >
+                            <i class="fas fa-tasks mr-1"></i>Aksi Massal
+                        </x-button>
+                    </div>
+                </div>
+            </div>
+        </x-slot:header>
+        
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
@@ -206,6 +308,19 @@
                     </tbody>
                 </table>
             </div>
+            
+            <!-- Empty State (shown when no documents match filters) -->
+            @if(false) {{-- This will be replaced with actual empty check --}}
+                <x-empty-state
+                    title="Tidak ada dokumen yang sesuai"
+                    description="Tidak ditemukan dokumen yang cocok dengan pencarian atau filter yang Anda gunakan."
+                    icon="fas fa-file-alt"
+                    :action="true"
+                    actionText="Tambah Dokumen Baru"
+                    actionUrl="{{ route('admin.dokumen.create') }}"
+                    suggestion="Coba gunakan kata kunci yang berbeda atau reset filter untuk melihat semua dokumen."
+                />
+            @endif
         </div>
     </div>
 

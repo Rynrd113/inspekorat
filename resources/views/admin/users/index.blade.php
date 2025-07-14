@@ -25,6 +25,65 @@
         </x-button>
     </div>
 
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-users text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="text-2xl font-bold text-gray-900">{{ \App\Models\User::count() ?? 0 }}</div>
+                    <div class="text-sm text-gray-500">Total User</div>
+                </div>
+            </div>
+        </x-card>
+        
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user-check text-green-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="text-2xl font-bold text-gray-900">{{ \App\Models\User::whereNotNull('email_verified_at')->count() ?? 0 }}</div>
+                    <div class="text-sm text-gray-500">Terverifikasi</div>
+                </div>
+            </div>
+        </x-card>
+        
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user-shield text-purple-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="text-2xl font-bold text-gray-900">{{ \App\Models\User::whereIn('role', ['admin', 'superadmin'])->count() ?? 0 }}</div>
+                    <div class="text-sm text-gray-500">Admin</div>
+                </div>
+            </div>
+        </x-card>
+        
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <div class="text-2xl font-bold text-gray-900">{{ \App\Models\User::where('created_at', '>=', now()->subDays(7))->count() ?? 0 }}</div>
+                    <div class="text-sm text-gray-500">Baru (7 hari)</div>
+                </div>
+            </div>
+        </x-card>
+    </div>
+
     <!-- Search and Filter -->
     <x-card>
         <x-slot:header>
@@ -32,7 +91,8 @@
                 <i class="fas fa-filter mr-2 text-blue-600"></i>Filter & Pencarian
             </h2>
         </x-slot:header>
-            <form method="GET" class="space-y-4">
+        
+        <form method="GET" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Search Field -->
                     <div>
@@ -68,26 +128,48 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex flex-wrap items-center gap-3">
-                    <x-button type="submit" variant="primary" size="md">
-                        <i class="fas fa-search mr-2"></i>Cari
-                    </x-button>
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-gray-200">
+                    <div class="flex items-center gap-3">
+                        <x-button type="submit" variant="primary" size="md">
+                            <i class="fas fa-search mr-2"></i>Cari User
+                        </x-button>
+                        
+                        <x-button 
+                            type="button" 
+                            variant="secondary" 
+                            size="md"
+                            onclick="window.location.href='{{ route('admin.users.index') }}'"
+                        >
+                            <i class="fas fa-undo mr-2"></i>Reset Filter
+                        </x-button>
+                    </div>
                     
-                    <x-button 
-                        type="button" 
-                        variant="secondary" 
-                        size="md"
-                        onclick="window.location.href='{{ route('admin.users.index') }}'"
-                    >
-                        <i class="fas fa-undo mr-2"></i>Reset
-                    </x-button>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-gray-500">Urut:</span>
+                        <select name="sort" class="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                            <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Terbaru</option>
+                            <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Terlama</option>
+                            <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Nama A-Z</option>
+                            <option value="role" {{ request('sort') == 'role' ? 'selected' : '' }}>Role</option>
+                        </select>
+                    </div>
                 </div>
             </form>
-        </div>
-    </div>
+    </x-card>
 
     <!-- Users List -->
-    <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+    <x-card>
+        <x-slot:header>
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-900">
+                    <i class="fas fa-users mr-2 text-blue-600"></i>Daftar User
+                </h2>
+                <div class="text-sm text-gray-500">
+                    Total: {{ $users->total() ?? 0 }} user
+                </div>
+            </div>
+        </x-slot:header>
+        
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -162,8 +244,29 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="px-6 py-4 text-center text-gray-500">
-                            Tidak ada data user ditemukan.
+                        <td colspan="4" class="px-6 py-4">
+                            @if(request('search') || request('role') || request('status'))
+                                <x-empty-state
+                                    title="Tidak ada user yang sesuai filter"
+                                    description="Tidak ditemukan user yang cocok dengan pencarian atau filter yang Anda gunakan."
+                                    icon="fas fa-search"
+                                    :action="true"
+                                    actionText="Reset Filter"
+                                    actionUrl="{{ route('admin.users.index') }}"
+                                    actionVariant="secondary"
+                                    suggestion="Coba gunakan kata kunci yang berbeda atau ubah filter pencarian."
+                                />
+                            @else
+                                <x-empty-state
+                                    title="Belum ada user terdaftar"
+                                    description="Mulai dengan menambahkan user pertama untuk mengelola sistem."
+                                    icon="fas fa-users"
+                                    :action="true"
+                                    actionText="Tambah User"
+                                    actionUrl="{{ route('admin.users.create') }}"
+                                    suggestion="User pertama sebaiknya memiliki role admin untuk mengelola sistem."
+                                />
+                            @endif
                         </td>
                     </tr>
                     @endforelse
@@ -176,7 +279,7 @@
             {{ $users->links() }}
         </div>
         @endif
-    </div>
+    </x-card>
 
     <!-- Pagination -->
     {{-- Add pagination here when connected to real data --}}
