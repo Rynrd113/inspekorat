@@ -1,3 +1,12 @@
+@props([
+    'size' => 'md',
+    'placeholder' => 'Cari...',
+    'withIcon' => false,
+    'icon' => 'fas fa-search',
+    'clearButton' => false,
+    'containerClass' => ''
+])
+
 @php
 $baseClasses = 'w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors duration-200';
 

@@ -1,3 +1,9 @@
+@props([
+    'variant' => 'primary',
+    'size' => 'md',
+    'icon' => null
+])
+
 @php
 $variants = [
     'primary' => 'bg-blue-100 text-blue-800',
