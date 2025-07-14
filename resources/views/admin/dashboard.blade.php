@@ -35,10 +35,14 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Portal Papua Tengah</h3>
             <p class="text-gray-600 text-sm mb-4">Kelola konten berita dan informasi portal</p>
-            <a href="{{ route('admin.portal-papua-tengah.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 transition-colors">
+            <x-button 
+                href="{{ route('admin.portal-papua-tengah.index') }}"
+                variant="primary" 
+                size="md"
+                class="bg-purple-600 hover:bg-purple-700"
+            >
                 <i class="fas fa-arrow-right mr-2"></i>Kelola Portal Papua Tengah
-            </a>
+            </x-button>
         </div>
     </x-card>
     @endif
@@ -51,10 +55,14 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Portal OPD</h3>
             <p class="text-gray-600 text-sm mb-4">Kelola informasi dan profil OPD</p>
-            <a href="{{ route('admin.portal-opd.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-md hover:bg-emerald-700 transition-colors">
+            <x-button 
+                href="{{ route('admin.portal-opd.index') }}"
+                variant="primary" 
+                size="md"
+                class="bg-emerald-600 hover:bg-emerald-700"
+            >
                 <i class="fas fa-arrow-right mr-2"></i>Kelola Portal OPD
-            </a>
+            </x-button>
         </div>
     </x-card>
     @endif
@@ -67,10 +75,14 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">FAQ</h3>
             <p class="text-gray-600 text-sm mb-4">Kelola pertanyaan yang sering diajukan</p>
-            <a href="{{ route('admin.faq.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-md hover:bg-teal-700 transition-colors">
+            <x-button 
+                href="{{ route('admin.faq.index') }}"
+                variant="primary" 
+                size="md"
+                class="bg-teal-600 hover:bg-teal-700"
+            >
                 <i class="fas fa-arrow-right mr-2"></i>Kelola FAQ
-            </a>
+            </x-button>
         </div>
     </x-card>
     @endif
@@ -83,10 +95,14 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Pelayanan</h3>
             <p class="text-gray-600 text-sm mb-4">Kelola layanan publik dan prosedur</p>
-            <a href="{{ route('admin.pelayanan.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-md hover:bg-cyan-700 transition-colors">
+            <x-button 
+                href="{{ route('admin.pelayanan.index') }}"
+                variant="primary" 
+                size="md"
+                class="bg-cyan-600 hover:bg-cyan-700"
+            >
                 <i class="fas fa-arrow-right mr-2"></i>Kelola Pelayanan
-            </a>
+            </x-button>
         </div>
     </x-card>
     @endif
@@ -99,10 +115,14 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Dokumen</h3>
             <p class="text-gray-600 text-sm mb-4">Kelola repository dokumen publik</p>
-            <a href="{{ route('admin.dokumen.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-amber-600 text-white text-sm font-medium rounded-md hover:bg-amber-700 transition-colors">
+            <x-button 
+                href="{{ route('admin.dokumen.index') }}"
+                variant="primary" 
+                size="md"
+                class="bg-amber-600 hover:bg-amber-700"
+            >
                 <i class="fas fa-arrow-right mr-2"></i>Kelola Dokumen
-            </a>
+            </x-button>
         </div>
     </x-card>
     @endif
@@ -115,10 +135,14 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Galeri</h3>
             <p class="text-gray-600 text-sm mb-4">Kelola galeri foto dan video</p>
-            <a href="{{ route('admin.galeri.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-md hover:bg-pink-700 transition-colors">
+            <x-button 
+                href="{{ route('admin.galeri.index') }}"
+                variant="primary" 
+                size="md"
+                class="bg-pink-600 hover:bg-pink-700"
+            >
                 <i class="fas fa-arrow-right mr-2"></i>Kelola Galeri
-            </a>
+            </x-button>
         </div>
     </x-card>
     @endif
@@ -131,10 +155,14 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Persetujuan</h3>
             <p class="text-gray-600 text-sm mb-4">Kelola persetujuan konten</p>
-            <a href="{{ route('admin.approvals.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-md hover:bg-orange-700 transition-colors">
+            <x-button 
+                href="{{ route('admin.approvals.index') }}"
+                variant="primary" 
+                size="md"
+                class="bg-orange-600 hover:bg-orange-700"
+            >
                 <i class="fas fa-arrow-right mr-2"></i>Kelola Persetujuan
-            </a>
+            </x-button>
         </div>
     </x-card>
     @endif
@@ -147,10 +175,14 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Manajemen User</h3>
             <p class="text-gray-600 text-sm mb-4">Kelola pengguna dan hak akses sistem</p>
-            <a href="{{ route('admin.users.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors">
+            <x-button 
+                href="{{ route('admin.users.index') }}"
+                variant="primary" 
+                size="md"
+                class="bg-indigo-600 hover:bg-indigo-700"
+            >
                 <i class="fas fa-arrow-right mr-2"></i>Kelola User
-            </a>
+            </x-button>
         </div>
     </x-card>
     @endif
@@ -163,10 +195,14 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Konfigurasi</h3>
             <p class="text-gray-600 text-sm mb-4">Kelola pengaturan sistem</p>
-            <a href="{{ route('admin.configurations.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-slate-600 text-white text-sm font-medium rounded-md hover:bg-slate-700 transition-colors">
+            <x-button 
+                href="{{ route('admin.configurations.index') }}"
+                variant="primary" 
+                size="md"
+                class="bg-slate-600 hover:bg-slate-700"
+            >
                 <i class="fas fa-arrow-right mr-2"></i>Kelola Konfigurasi
-            </a>
+            </x-button>
         </div>
     </x-card>
     @endif
@@ -179,10 +215,14 @@
             </div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Audit Log</h3>
             <p class="text-gray-600 text-sm mb-4">Lihat log aktivitas sistem</p>
-            <a href="{{ route('admin.audit-logs.index') }}" 
-               class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors">
+            <x-button 
+                href="{{ route('admin.audit-logs.index') }}"
+                variant="primary" 
+                size="md"
+                class="bg-gray-600 hover:bg-gray-700"
+            >
                 <i class="fas fa-arrow-right mr-2"></i>Lihat Log
-            </a>
+            </x-button>
         </div>
     </x-card>
     @endif
