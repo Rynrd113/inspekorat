@@ -21,44 +21,140 @@
         </a>
     </div>
 
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-question-circle text-blue-600"></i>
+                        </div>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Total FAQ</dt>
+                            <dd class="text-lg font-medium text-gray-900">{{ $faqs->total() ?? 0 }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-check-circle text-green-600"></i>
+                        </div>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Aktif</dt>
+                            <dd class="text-lg font-medium text-gray-900">{{ $faqs->where('status', true)->count() ?? 0 }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-star text-yellow-600"></i>
+                        </div>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Featured</dt>
+                            <dd class="text-lg font-medium text-gray-900">{{ $faqs->where('is_featured', true)->count() ?? 0 }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="p-5">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-eye text-purple-600"></i>
+                        </div>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dl>
+                            <dt class="text-sm font-medium text-gray-500 truncate">Total Views</dt>
+                            <dd class="text-lg font-medium text-gray-900">{{ $faqs->sum('view_count') ?? 0 }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Search and Filter -->
     <div class="bg-white shadow rounded-lg">
         <div class="px-6 py-4 border-b border-gray-200">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     <i class="fas fa-question-circle text-gray-400 mr-2"></i>
-                    <h2 class="text-lg font-medium text-gray-900">Frequently Asked Questions</h2>
+                    <h2 class="text-lg font-medium text-gray-900">Daftar FAQ</h2>
                 </div>
             </div>
         </div>
         <div class="px-6 py-4">
-            <!-- Filter dan Search -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div>
-                    <label for="filterKategori" class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                    <select id="filterKategori" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Semua Kategori</option>
-                        <option value="umum">Umum</option>
-                        <option value="layanan">Layanan</option>
-                        <option value="pengaduan">Pengaduan</option>
-                        <option value="audit">Audit</option>
-                        <option value="lainnya">Lainnya</option>
-                    </select>
+            <!-- Filter Form -->
+            <form method="GET" action="{{ route('admin.faq.index') }}" id="filterForm">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div>
+                        <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                        <select name="kategori" id="kategori" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onchange="document.getElementById('filterForm').submit()">
+                            <option value="">Semua Kategori</option>
+                            <option value="umum" {{ request('kategori') == 'umum' ? 'selected' : '' }}>Umum</option>
+                            <option value="layanan" {{ request('kategori') == 'layanan' ? 'selected' : '' }}>Layanan</option>
+                            <option value="pengaduan" {{ request('kategori') == 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
+                            <option value="audit" {{ request('kategori') == 'audit' ? 'selected' : '' }}>Audit</option>
+                            <option value="lainnya" {{ request('kategori') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select name="status" id="status" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" onchange="document.getElementById('filterForm').submit()">
+                            <option value="">Semua Status</option>
+                            <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>Aktif</option>
+                            <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>Non-aktif</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Cari FAQ</label>
+                        <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Cari FAQ..." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-search mr-2"></i>Cari
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <label for="filterStatus" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                    <select id="filterStatus" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Semua Status</option>
-                        <option value="aktif">Aktif</option>
-                        <option value="nonaktif">Non-aktif</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="searchFaq" class="block text-sm font-medium text-gray-700 mb-2">Cari FAQ</label>
-                    <input type="text" id="searchFaq" placeholder="Cari FAQ..." class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-            </div>
+            </form>
 
+            <!-- Results Info -->
+            @if($faqs->count() > 0)
+            <div class="mb-4 text-sm text-gray-600">
+                Menampilkan {{ $faqs->firstItem() }} - {{ $faqs->lastItem() }} dari {{ $faqs->total() }} FAQ
+                @if(request('search'))
+                    untuk pencarian "{{ request('search') }}"
+                @endif
+                @if(request('kategori'))
+                    kategori "{{ ucfirst(request('kategori')) }}"
+                @endif
+            </div>
+            @endif
+
+            <!-- FAQ Table -->
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
@@ -68,206 +164,148 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Urutan</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Update</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Views</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Update</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <!-- Sample data - replace with actual data -->
+                        @forelse($faqs as $index => $faq)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">1</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $faqs->firstItem() + $index }}
+                            </td>
                             <td class="px-6 py-4">
-                                <div class="text-sm font-medium text-gray-900">Apa itu Inspektorat Papua Tengah?</div>
-                                <div class="text-sm text-gray-500">Pertanyaan tentang profil dan tugas Inspektorat...</div>
+                                <div class="text-sm font-medium text-gray-900">{{ Str::limit($faq->pertanyaan, 60) }}</div>
+                                <div class="text-sm text-gray-500">{{ Str::limit(strip_tags($faq->jawaban), 80) }}</div>
+                                @if($faq->is_featured)
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800 mt-1">
+                                    <i class="fas fa-star mr-1"></i>Featured
+                                </span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Umum</span>
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                                    @switch($faq->kategori)
+                                        @case('umum') bg-gray-100 text-gray-800 @break
+                                        @case('layanan') bg-blue-100 text-blue-800 @break
+                                        @case('pengaduan') bg-yellow-100 text-yellow-800 @break
+                                        @case('audit') bg-green-100 text-green-800 @break
+                                        @default bg-purple-100 text-purple-800
+                                    @endswitch
+                                ">
+                                    {{ ucfirst($faq->kategori) }}
+                                </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
+                                <form method="POST" action="{{ route('admin.faq.toggle-status', $faq->id) }}" class="inline">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="inline-flex px-2 py-1 text-xs font-semibold rounded-full transition-colors
+                                        {{ $faq->status ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-red-100 text-red-800 hover:bg-red-200' }}">
+                                        <i class="fas {{ $faq->status ? 'fa-check-circle' : 'fa-times-circle' }} mr-1"></i>
+                                        {{ $faq->status ? 'Aktif' : 'Non-aktif' }}
+                                    </button>
+                                </form>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center space-x-2">
-                                    <span class="text-sm text-gray-900">1</span>
+                                    <span class="text-sm text-gray-900">{{ $faq->urutan ?? '-' }}</span>
                                     <div class="flex space-x-1">
-                                        <button type="button" onclick="moveUp(1)" class="p-1 text-gray-400 hover:text-gray-600" title="Naik">
-                                            <i class="fas fa-arrow-up text-xs"></i>
-                                        </button>
-                                        <button type="button" onclick="moveDown(1)" class="p-1 text-gray-400 hover:text-gray-600" title="Turun">
-                                            <i class="fas fa-arrow-down text-xs"></i>
-                                        </button>
+                                        <form method="POST" action="{{ route('admin.faq.move-up', $faq->id) }}" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="p-1 text-gray-400 hover:text-gray-600" title="Naik">
+                                                <i class="fas fa-arrow-up text-xs"></i>
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{{ route('admin.faq.move-down', $faq->id) }}" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="p-1 text-gray-400 hover:text-gray-600" title="Turun">
+                                                <i class="fas fa-arrow-down text-xs"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">15 Jan 2024</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $faq->view_count ?? 0 }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $faq->updated_at->format('d/m/Y H:i') }}
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('admin.faq.show', 1) }}" class="text-blue-600 hover:text-blue-900" title="Lihat">
+                                <div class="flex items-center space-x-2">
+                                    <a href="{{ route('admin.faq.show', $faq->id) }}" 
+                                       class="text-blue-600 hover:text-blue-900" title="Lihat">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('admin.faq.edit', 1) }}" class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                    <a href="{{ route('admin.faq.edit', $faq->id) }}" 
+                                       class="text-indigo-600 hover:text-indigo-900" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button type="button" onclick="confirmDelete(1)" class="text-red-600 hover:text-red-900" title="Hapus">
+                                    <button type="button" onclick="deleteFaq({{ $faq->id }})" 
+                                            class="text-red-600 hover:text-red-900" title="Hapus">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
                             </td>
                         </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2</td>
-                            <td class="px-6 py-4">
-                                <div class="text-sm font-medium text-gray-900">Bagaimana cara menyampaikan pengaduan?</div>
-                                <div class="text-sm text-gray-500">Prosedur pengaduan melalui sistem WBS...</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pengaduan</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-sm text-gray-900">2</span>
-                                    <div class="flex space-x-1">
-                                        <button type="button" onclick="moveUp(2)" class="p-1 text-gray-400 hover:text-gray-600" title="Naik">
-                                            <i class="fas fa-arrow-up text-xs"></i>
-                                        </button>
-                                        <button type="button" onclick="moveDown(2)" class="p-1 text-gray-400 hover:text-gray-600" title="Turun">
-                                            <i class="fas fa-arrow-down text-xs"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">12 Jan 2024</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('admin.faq.show', 2) }}" class="text-blue-600 hover:text-blue-900" title="Lihat">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('admin.faq.edit', 2) }}" class="text-indigo-600 hover:text-indigo-900" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button type="button" onclick="confirmDelete(2)" class="text-red-600 hover:text-red-900" title="Hapus">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                        @empty
+                        <tr>
+                            <td colspan="8" class="px-6 py-12 text-center">
+                                <div class="text-gray-500">
+                                    <i class="fas fa-question-circle text-4xl mb-4"></i>
+                                    <p class="text-lg font-medium">Tidak ada FAQ ditemukan</p>
+                                    <p class="text-sm">
+                                        @if(request('search') || request('kategori') || request('status'))
+                                            Coba ubah filter pencarian atau 
+                                            <a href="{{ route('admin.faq.index') }}" class="text-blue-600 hover:text-blue-800">reset filter</a>
+                                        @else
+                                            <a href="{{ route('admin.faq.create') }}" class="text-blue-600 hover:text-blue-800">Tambah FAQ pertama</a>
+                                        @endif
+                                    </p>
                                 </div>
                             </td>
                         </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">3</td>
-                            <td class="px-6 py-4">
-                                <div class="text-sm font-medium text-gray-900">Apa saja layanan yang tersedia di Inspektorat?</div>
-                                <div class="text-sm text-gray-500">Daftar layanan audit dan konsultasi...</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-cyan-100 text-cyan-800">Layanan</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-sm text-gray-900">3</span>
-                                    <div class="flex space-x-1">
-                                        <button type="button" onclick="moveUp(3)" class="p-1 text-gray-400 hover:text-gray-600" title="Naik">
-                                            <i class="fas fa-arrow-up text-xs"></i>
-                                        </button>
-                                        <button type="button" onclick="moveDown(3)" class="p-1 text-gray-400 hover:text-gray-600" title="Turun">
-                                            <i class="fas fa-arrow-down text-xs"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">10 Jan 2024</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('admin.faq.show', 3) }}" class="text-blue-600 hover:text-blue-900" title="Lihat">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('admin.faq.edit', 3) }}" class="text-indigo-600 hover:text-indigo-900" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button type="button" onclick="confirmDelete(3)" class="text-red-600 hover:text-red-900" title="Hapus">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">4</td>
-                            <td class="px-6 py-4">
-                                <div class="text-sm font-medium text-gray-900">Berapa lama proses audit internal?</div>
-                                <div class="text-sm text-gray-500">Informasi tentang waktu proses audit...</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">Audit</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">Non-aktif</span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-sm text-gray-900">4</span>
-                                    <div class="flex space-x-1">
-                                        <button type="button" onclick="moveUp(4)" class="p-1 text-gray-400 hover:text-gray-600" title="Naik">
-                                            <i class="fas fa-arrow-up text-xs"></i>
-                                        </button>
-                                        <button type="button" onclick="moveDown(4)" class="p-1 text-gray-400 hover:text-gray-600" title="Turun">
-                                            <i class="fas fa-arrow-down text-xs"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">08 Jan 2024</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('admin.faq.show', 4) }}" class="text-blue-600 hover:text-blue-900" title="Lihat">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('admin.faq.edit', 4) }}" class="text-indigo-600 hover:text-indigo-900" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button type="button" onclick="confirmDelete(4)" class="text-red-600 hover:text-red-900" title="Hapus">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
 
             <!-- Pagination -->
-            <div class="mt-6 flex items-center justify-center">
-                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                        <span class="sr-only">Previous</span>
-                        <i class="fas fa-chevron-left"></i>
-                    </a>
-                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-600">1</a>
-                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">2</a>
-                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">3</a>
-                    <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                        <span class="sr-only">Next</span>
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                </nav>
+            @if($faqs->hasPages())
+            <div class="px-6 py-4 border-t border-gray-200">
+                {{ $faqs->appends(request()->query())->links() }}
             </div>
+            @endif
         </div>
     </div>
 </div>
 
-<form id="deleteForm" action="" method="POST" style="display: none;">
+<!-- Delete Form -->
+<form id="delete-form" method="POST" style="display: none;">
     @csrf
     @method('DELETE')
 </form>
+
 <script>
-    function confirmDelete(id) {
-        if (confirm('Apakah Anda yakin ingin menghapus FAQ ini?')) {
-            document.getElementById('deleteForm').action = `/admin/faq/${id}`;
-            document.getElementById('deleteForm').submit();
-        }
+function deleteFaq(id) {
+    if (confirm('Apakah Anda yakin ingin menghapus FAQ ini?')) {
+        const form = document.getElementById('delete-form');
+        form.action = `/admin/faq/${id}`;
+        form.submit();
     }
+}
+
+// Auto submit search after typing
+let searchTimeout;
+document.getElementById('search').addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        document.getElementById('filterForm').submit();
+    }, 500);
+});
 </script>
 @endsection

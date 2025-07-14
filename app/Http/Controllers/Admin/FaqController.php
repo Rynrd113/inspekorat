@@ -55,14 +55,14 @@ class FaqController extends Controller
             'jawaban' => 'required|string',
             'kategori' => 'required|string|in:' . implode(',', $categories),
             'urutan' => 'nullable|integer|min:1',
-            'status' => 'required|string|in:aktif,nonaktif',
+            'status' => 'required|string|in:0,1',
             'is_featured' => 'nullable|string|in:0,1',
             'tags' => 'nullable|string',
         ]);
 
         // Convert string values to appropriate types
         $validated['created_by'] = auth()->id();
-        $validated['status'] = $request->status === 'aktif';
+        $validated['status'] = $request->status === '1';
         $validated['is_featured'] = $request->is_featured === '1';
 
         \App\Models\Faq::create($validated);
@@ -99,14 +99,14 @@ class FaqController extends Controller
             'jawaban' => 'required|string',
             'kategori' => 'required|string|in:' . implode(',', $categories),
             'urutan' => 'nullable|integer|min:1',
-            'status' => 'required|string|in:aktif,nonaktif',
+            'status' => 'required|string|in:0,1',
             'is_featured' => 'nullable|string|in:0,1',
             'tags' => 'nullable|string',
         ]);
 
         // Convert string values to appropriate types
         $validated['updated_by'] = auth()->id();
-        $validated['status'] = $request->status === 'aktif';
+        $validated['status'] = $request->status === '1';
         $validated['is_featured'] = $request->is_featured === '1';
 
         $faq->update($validated);
@@ -144,5 +144,54 @@ class FaqController extends Controller
         }
 
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * Toggle FAQ status
+     */
+    public function toggleStatus(\App\Models\Faq $faq)
+    {
+        $faq->update(['status' => !$faq->status]);
+        
+        return redirect()->route('admin.faq.index')
+            ->with('success', 'Status FAQ berhasil diubah');
+    }
+
+    /**
+     * Move FAQ up in order
+     */
+    public function moveUp(\App\Models\Faq $faq)
+    {
+        $upperFaq = \App\Models\Faq::where('urutan', '<', $faq->urutan)
+            ->orderBy('urutan', 'desc')
+            ->first();
+
+        if ($upperFaq) {
+            $tempUrutan = $faq->urutan;
+            $faq->update(['urutan' => $upperFaq->urutan]);
+            $upperFaq->update(['urutan' => $tempUrutan]);
+        }
+
+        return redirect()->route('admin.faq.index')
+            ->with('success', 'Urutan FAQ berhasil diubah');
+    }
+
+    /**
+     * Move FAQ down in order
+     */
+    public function moveDown(\App\Models\Faq $faq)
+    {
+        $lowerFaq = \App\Models\Faq::where('urutan', '>', $faq->urutan)
+            ->orderBy('urutan', 'asc')
+            ->first();
+
+        if ($lowerFaq) {
+            $tempUrutan = $faq->urutan;
+            $faq->update(['urutan' => $lowerFaq->urutan]);
+            $lowerFaq->update(['urutan' => $tempUrutan]);
+        }
+
+        return redirect()->route('admin.faq.index')
+            ->with('success', 'Urutan FAQ berhasil diubah');
     }
 }

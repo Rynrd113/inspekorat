@@ -148,6 +148,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('faq/{faq}/edit', [AdminFaqController::class, 'edit'])->name('faq.edit');
             Route::put('faq/{faq}', [AdminFaqController::class, 'update'])->name('faq.update');
             Route::delete('faq/{faq}', [AdminFaqController::class, 'destroy'])->name('faq.destroy');
+            Route::patch('faq/{faq}/toggle-status', [AdminFaqController::class, 'toggleStatus'])->name('faq.toggle-status');
+            Route::patch('faq/{faq}/move-up', [AdminFaqController::class, 'moveUp'])->name('faq.move-up');
+            Route::patch('faq/{faq}/move-down', [AdminFaqController::class, 'moveDown'])->name('faq.move-down');
             Route::post('faq/reorder', [AdminFaqController::class, 'reorder'])->name('faq.reorder');
         });
         

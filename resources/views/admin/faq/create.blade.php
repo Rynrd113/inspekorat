@@ -103,8 +103,8 @@
                                 id="status" 
                                 name="status" 
                                 required>
-                            <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                            <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>Non-aktif</option>
+                            <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Aktif</option>
+                            <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Non-aktif</option>
                         </select>
                         @error('status')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>

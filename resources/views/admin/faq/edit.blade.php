@@ -1,36 +1,45 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit FAQ')
+@section('header', 'Edit FAQ')
 
-@section('content')
-<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Edit FAQ</h1>
-        <nav class="flex mt-2" aria-label="Breadcrumb">
-            <ol class="flex items-center space-x-2 text-sm text-gray-500">
-                <li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
-                <li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
-                <li><a href="{{ route('admin.faq.index') }}" class="text-blue-600 hover:text-blue-800">FAQ</a></li>
-                <li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
-                <li class="text-gray-600">Edit</li>
-            </ol>
-        </nav>
+@section('breadcrumb')
+<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><a href="{{ route('admin.faq.index') }}" class="text-blue-600 hover:text-blue-800">FAQ</a></li>
+<li><span class="text-gray-500">Edit</span></li>
+@endsection
+
+@section('main-content')
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Edit FAQ</h1>
+            <p class="text-gray-600 mt-1">Ubah informasi FAQ yang sudah ada</p>
+        </div>
+        <a href="{{ route('admin.faq.index') }}"
+           class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>Kembali
+        </a>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
-        <div class="p-6 border-b border-gray-200">
-            <h2 class="text-xl font-semibold text-gray-900">
+    <!-- Form -->
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-medium text-gray-900">
                 <i class="fas fa-edit mr-2 text-blue-600"></i>
                 Form Edit FAQ
             </h2>
         </div>
-        <div class="p-6">
-            <form action="{{ route('admin.faq.update', $faq->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="md:col-span-3">
+        
+        <form action="{{ route('admin.faq.update', $faq->id) }}" method="POST" class="p-6">
+            @csrf
+            @method('PUT')
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Main Content -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Pertanyaan -->
+                    <div>
                         <label for="pertanyaan" class="block text-sm font-medium text-gray-700 mb-2">
                             Pertanyaan <span class="text-red-500">*</span>
                         </label>
@@ -38,14 +47,55 @@
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('pertanyaan') border-red-500 @enderror" 
                                id="pertanyaan" 
                                name="pertanyaan" 
-                               value="{{ old('pertanyaan', $faq->pertanyaan ?? 'Apa itu Inspektorat Papua Tengah?') }}" 
+                               value="{{ old('pertanyaan', $faq->pertanyaan) }}" 
                                required>
                         @error('pertanyaan')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                    
-                    <div class="md:col-span-1">
+
+                    <!-- Jawaban -->
+                    <div>
+                        <label for="jawaban" class="block text-sm font-medium text-gray-700 mb-2">
+                            Jawaban <span class="text-red-500">*</span>
+                        </label>
+                        <textarea 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('jawaban') border-red-500 @enderror" 
+                            id="jawaban" 
+                            name="jawaban" 
+                            rows="8" 
+                            required>{{ old('jawaban', $faq->jawaban) }}</textarea>
+                        @error('jawaban')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                        <div class="mt-2 text-sm text-gray-500">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Anda dapat menggunakan HTML dasar untuk formatting
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div>
+                        <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
+                            Tags
+                        </label>
+                        <input type="text" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                               id="tags" 
+                               name="tags" 
+                               value="{{ old('tags', $faq->tags) }}" 
+                               placeholder="Pisahkan dengan koma, contoh: inspektorat, audit, pelayanan">
+                        <div class="mt-2 text-sm text-gray-500">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Pisahkan tags dengan koma untuk memudahkan pencarian
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                    <!-- Kategori -->
+                    <div>
                         <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">
                             Kategori <span class="text-red-500">*</span>
                         </label>
@@ -54,173 +104,154 @@
                                 name="kategori" 
                                 required>
                             <option value="">Pilih Kategori</option>
-                            @foreach(\App\Models\Faq::getKategoriOptions() as $value => $label)
-                                <option value="{{ $value }}" {{ old('kategori', $faq->kategori) == $value ? 'selected' : '' }}>{{ $label }}</option>
-                            @endforeach
+                            <option value="umum" {{ old('kategori', $faq->kategori) == 'umum' ? 'selected' : '' }}>Umum</option>
+                            <option value="layanan" {{ old('kategori', $faq->kategori) == 'layanan' ? 'selected' : '' }}>Layanan</option>
+                            <option value="pengaduan" {{ old('kategori', $faq->kategori) == 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
+                            <option value="audit" {{ old('kategori', $faq->kategori) == 'audit' ? 'selected' : '' }}>Audit</option>
+                            <option value="lainnya" {{ old('kategori', $faq->kategori) == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
                         </select>
                         @error('kategori')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                </div>
 
-                <div class="mt-6">
-                    <label for="jawaban" class="block text-sm font-medium text-gray-700 mb-2">
-                        Jawaban <span class="text-red-500">*</span>
-                    </label>
-                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('jawaban') border-red-500 @enderror" 
-                              id="jawaban" 
-                              name="jawaban" 
-                              rows="6" 
-                              required>{{ old('jawaban', $faq->jawaban ?? 'Inspektorat Papua Tengah adalah lembaga pengawasan internal pemerintah yang bertugas melakukan audit, reviu, evaluasi, pemantauan, dan kegiatan pengawasan lainnya terhadap penyelenggaraan tugas dan fungsi organisasi.') }}</textarea>
-                    @error('jawaban')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                    <p class="mt-1 text-sm text-gray-500">Gunakan formatting HTML sederhana jika diperlukan (contoh: &lt;b&gt;, &lt;i&gt;, &lt;br&gt;, &lt;ul&gt;, &lt;li&gt;).</p>
-                </div>
+                    <!-- Status -->
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                            Status
+                        </label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                id="status" 
+                                name="status">
+                            <option value="1" {{ old('status', $faq->status ? '1' : '0') == '1' ? 'selected' : '' }}>Aktif</option>
+                            <option value="0" {{ old('status', $faq->status ? '1' : '0') == '0' ? 'selected' : '' }}>Non-aktif</option>
+                        </select>
+                    </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                    <!-- Urutan -->
                     <div>
                         <label for="urutan" class="block text-sm font-medium text-gray-700 mb-2">
                             Urutan Tampil
                         </label>
                         <input type="number" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('urutan') border-red-500 @enderror" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                                id="urutan" 
                                name="urutan" 
-                               value="{{ old('urutan', $faq->urutan ?? 1) }}" 
-                               min="1">
-                        @error('urutan')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                        <p class="mt-1 text-sm text-gray-500">Semakin kecil angka, semakin di atas posisinya.</p>
+                               value="{{ old('urutan', $faq->urutan) }}" 
+                               min="1" 
+                               placeholder="1">
+                        <div class="mt-2 text-sm text-gray-500">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Semakin kecil angka, semakin awal tampil
+                        </div>
                     </div>
-                    
-                    <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status <span class="text-red-500">*</span>
-                        </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('status') border-red-500 @enderror" 
-                                id="status" 
-                                name="status" 
-                                required>
-                            <option value="aktif" {{ old('status', $faq->status ? 'aktif' : 'nonaktif') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                            <option value="nonaktif" {{ old('status', $faq->status ? 'aktif' : 'nonaktif') == 'nonaktif' ? 'selected' : '' }}>Non-aktif</option>
-                        </select>
-                        @error('status')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    
-                    <div>
-                        <label for="is_featured" class="block text-sm font-medium text-gray-700 mb-2">
-                            FAQ Unggulan
-                        </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('is_featured') border-red-500 @enderror" 
-                                id="is_featured" 
-                                name="is_featured">
-                            <option value="0" {{ old('is_featured', $faq->is_featured ? '1' : '0') == '0' ? 'selected' : '' }}>Tidak</option>
-                            <option value="1" {{ old('is_featured', $faq->is_featured ? '1' : '0') == '1' ? 'selected' : '' }}>Ya</option>
-                        </select>
-                        @error('is_featured')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                        <p class="mt-1 text-sm text-gray-500">FAQ unggulan akan ditampilkan lebih menonjol.</p>
-                    </div>
-                </div>
 
-                <div class="mt-6">
-                    <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
-                        Tags
-                    </label>
-                    <input type="text" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tags') border-red-500 @enderror" 
-                           id="tags" 
-                           name="tags" 
-                           value="{{ old('tags', $faq->tags ?? 'inspektorat, profil, tugas') }}" 
-                           placeholder="Pisahkan dengan koma">
-                    @error('tags')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                    <p class="mt-1 text-sm text-gray-500">Contoh: pengaduan, prosedur, audit</p>
-                </div>
+                    <!-- Is Featured -->
+                    <div>
+                        <div class="flex items-center">
+                            <input type="checkbox" 
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" 
+                                   id="is_featured" 
+                                   name="is_featured" 
+                                   value="1"
+                                   {{ old('is_featured', $faq->is_featured) ? 'checked' : '' }}>
+                            <label for="is_featured" class="ml-2 block text-sm text-gray-900">
+                                FAQ Unggulan
+                            </label>
+                        </div>
+                        <div class="mt-2 text-sm text-gray-500">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            FAQ unggulan akan ditampilkan di bagian atas
+                        </div>
+                    </div>
 
-                <!-- Statistics and Preview Section -->
-                @if(isset($faq->created_at))
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h4 class="text-lg font-medium text-gray-900 mb-3">Statistik FAQ</h4>
+                    <!-- View Count (Read Only) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Jumlah Views
+                        </label>
+                        <div class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-600">
+                            {{ $faq->view_count ?? 0 }} views
+                        </div>
+                    </div>
+
+                    <!-- Timestamps -->
+                    <div class="bg-gray-50 p-4 rounded-md">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">Informasi</h4>
                         <div class="space-y-2 text-sm text-gray-600">
-                            <div><strong>Dibuat:</strong> {{ $faq->created_at->format('d F Y H:i') }}</div>
-                            <div><strong>Diperbarui:</strong> {{ $faq->updated_at->format('d F Y H:i') }}</div>
-                            <div><strong>Views:</strong> {{ $faq->views ?? 0 }} kali dilihat</div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h4 class="text-lg font-medium text-gray-900 mb-3">Preview FAQ</h4>
-                        <div class="bg-white rounded-lg border border-gray-200">
-                            <div class="border-b border-gray-200">
-                                <div class="px-4 py-3">
-                                    <div id="previewPertanyaan" class="font-medium text-gray-900">{{ $faq->pertanyaan ?? 'Apa itu Inspektorat Papua Tengah?' }}</div>
-                                </div>
+                            <div>
+                                <strong>Dibuat:</strong><br>
+                                {{ $faq->created_at->format('d/m/Y H:i') }}
                             </div>
-                            <div class="px-4 py-3">
-                                <div id="previewJawaban" class="text-gray-700">{!! $faq->jawaban ?? 'Inspektorat Papua Tengah adalah lembaga pengawasan internal pemerintah...' !!}</div>
+                            <div>
+                                <strong>Terakhir diubah:</strong><br>
+                                {{ $faq->updated_at->format('d/m/Y H:i') }}
                             </div>
                         </div>
                     </div>
                 </div>
-                @endif
+            </div>
 
-                <div class="flex justify-between items-center mt-6 pt-6 border-t border-gray-200">
-                    <a href="{{ route('admin.faq.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <i class="fas fa-arrow-left mr-2"></i> Kembali
+            <!-- Form Actions -->
+            <div class="flex items-center justify-between pt-6 border-t border-gray-200 mt-8">
+                <a href="{{ route('admin.faq.index') }}" 
+                   class="inline-flex items-center px-4 py-2 bg-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-400 transition-colors">
+                    <i class="fas fa-times mr-2"></i>Batal
+                </a>
+
+                <div class="flex items-center space-x-3">
+                    <a href="{{ route('admin.faq.show', $faq->id) }}" 
+                       class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-eye mr-2"></i>Preview
                     </a>
-                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        <i class="fas fa-save mr-2"></i> Update
+                    
+                    <button type="submit" 
+                            class="inline-flex items-center px-6 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors">
+                        <i class="fas fa-save mr-2"></i>Simpan Perubahan
                     </button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 
-@push('scripts')
 <script>
-// Live preview functionality
-document.getElementById('pertanyaan').addEventListener('input', function() {
-    const pertanyaan = this.value || 'Pertanyaan akan muncul di sini...';
-    document.getElementById('previewPertanyaan').textContent = pertanyaan;
-});
-
+// Character counter for textarea
 document.getElementById('jawaban').addEventListener('input', function() {
-    const jawaban = this.value || 'Jawaban akan muncul di sini...';
-    document.getElementById('previewJawaban').innerHTML = jawaban;
-});
-
-// Character counter for jawaban
-document.getElementById('jawaban').addEventListener('input', function() {
-    const current = this.value.length;
-    const max = 1000; // Adjust as needed
+    const maxLength = 2000;
+    const currentLength = this.value.length;
+    const remaining = maxLength - currentLength;
     
-    // Remove existing counter
-    const existingCounter = this.parentNode.querySelector('.char-counter');
-    if (existingCounter) {
-        existingCounter.remove();
+    // Create or update character counter
+    let counter = document.getElementById('char-counter');
+    if (!counter) {
+        counter = document.createElement('div');
+        counter.id = 'char-counter';
+        counter.className = 'mt-1 text-sm text-gray-500';
+        this.parentNode.appendChild(counter);
     }
     
-    // Add new counter
-    const counter = document.createElement('div');
-    counter.className = 'char-counter form-text text-end';
-    counter.textContent = `${current} karakter`;
-    
-    if (current > max) {
-        counter.className += ' text-danger';
+    counter.textContent = `${currentLength} karakter`;
+    if (remaining < 100) {
+        counter.className = 'mt-1 text-sm text-red-500';
+    } else {
+        counter.className = 'mt-1 text-sm text-gray-500';
     }
-    
-    this.parentNode.appendChild(counter);
 });
+
+// Auto-save draft functionality
+let saveTimeout;
+function autoSave() {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => {
+        const formData = new FormData(document.querySelector('form'));
+        console.log('Auto-saving draft...');
+        // Here you could implement auto-save functionality
+    }, 2000);
+}
+
+// Add auto-save listeners
+document.getElementById('pertanyaan').addEventListener('input', autoSave);
+document.getElementById('jawaban').addEventListener('input', autoSave);
 </script>
-@endpush
 @endsection
