@@ -2,21 +2,32 @@
 
 @section('title', 'Kelola Web Portal')
 
+@section('header', 'Kelola Web Portal')
+
+@section('breadcrumb')
+<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li class="text-gray-600">Web Portal</li>
+@endsection
+
 @section('main-content')
 <div class="space-y-6">
     <!-- Header -->
-    <div class="flex justify-between items-center">
+    <div class="flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold text-gray-900">Kelola Web Portal</h1>
-            <p class="text-gray-600">Kelola konten dan informasi web portal</p>
+            <p class="text-gray-600 mt-1">Kelola konten dan informasi web portal</p>
         </div>
-        <x-button type="button" variant="primary" onclick="showCreateModal()">
-            <i class="fas fa-plus mr-2"></i>Tambah Konten
-        </x-button>
+        <div class="flex items-center space-x-3">
+            <button type="button" onclick="showCreateModal()" 
+                    class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                <i class="fas fa-plus mr-2"></i>Tambah Konten
+            </button>
+        </div>
     </div>
 
     <!-- Filter dan Search -->
-    <x-card>
+    <div class="bg-white rounded-lg shadow-sm p-6">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Pencarian</label>

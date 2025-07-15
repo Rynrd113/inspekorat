@@ -1,53 +1,329 @@
 /**
  * Admin Panel JavaScript
- * Handles all admin-specific functionality
+ * Provides consistent interaction patterns for admin interface
  */
 
 // Admin namespace
-window.Admin = {
-    // Initialize admin functionality
-    init: function() {
-        this.setupCSRFToken();
-        this.setupModals();
-        this.setupTooltips();
-        this.setupFilters();
-        this.setupFormValidation();
-        this.setupTableSorting();
-        this.loadAdminToken();
-    },
+window.Admin = window.Admin || {};
 
-    // Setup CSRF token for AJAX requests
-    setupCSRFToken: function() {
-        const token = document.querySelector('meta[name="csrf-token"]');
-        if (token) {
-            window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+/**
+ * Modal Management
+ */
+Admin.Modal = {
+    // Open modal
+    open: function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('overflow-hidden');
+            
+            // Focus first focusable element
+            const focusable = modal.querySelector('button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            if (focusable) {
+                focusable.focus();
+            }
         }
     },
-
-    // Setup modal functionality
-    setupModals: function() {
-        // Close modals when clicking outside
+    
+    // Close modal
+    close: function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('overflow-hidden');
+        }
+    },
+    
+    // Initialize modal event listeners
+    init: function() {
+        // Close modal when clicking backdrop
         document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('modal-overlay')) {
-                Admin.closeAllModals();
+            if (e.target.classList.contains('modal-backdrop')) {
+                const modal = e.target.closest('[role="dialog"]');
+                if (modal) {
+                    Admin.Modal.close(modal.id);
+                }
             }
         });
-
-        // Close modals with Escape key
+        
+        // Close modal on escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                Admin.closeAllModals();
+                const openModal = document.querySelector('[role="dialog"]:not(.hidden)');
+                if (openModal) {
+                    Admin.Modal.close(openModal.id);
+                }
+            }
+        });
+    }
+};
+
+/**
+ * Form Handling
+ */
+Admin.Form = {
+    // Show loading state on form submission
+    showLoading: function(form) {
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Loading...';
+        }
+    },
+    
+    // Hide loading state
+    hideLoading: function(form) {
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            // Restore original text (should be stored in data attribute)
+            const originalText = submitBtn.getAttribute('data-original-text');
+            if (originalText) {
+                submitBtn.innerHTML = originalText;
+            }
+        }
+    },
+    
+    // Validate form before submission
+    validate: function(form) {
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.classList.add('border-red-500');
+                isValid = false;
+            } else {
+                field.classList.remove('border-red-500');
+            }
+        });
+        
+        return isValid;
+    },
+    
+    // Initialize form event listeners
+    init: function() {
+        // Handle form submissions
+        document.addEventListener('submit', function(e) {
+            const form = e.target;
+            if (form.tagName === 'FORM') {
+                // Store original button text
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn && !submitBtn.getAttribute('data-original-text')) {
+                    submitBtn.setAttribute('data-original-text', submitBtn.innerHTML);
+                }
+                
+                // Validate form
+                if (!Admin.Form.validate(form)) {
+                    e.preventDefault();
+                    return false;
+                }
+                
+                // Show loading state
+                Admin.Form.showLoading(form);
+            }
+        });
+        
+        // Clear validation errors on input
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('border-red-500')) {
+                e.target.classList.remove('border-red-500');
+            }
+        });
+    }
+};
+
+/**
+ * Table Management
+ */
+Admin.Table = {
+    // Sort table
+    sort: function(table, column, direction) {
+        const rows = Array.from(table.querySelectorAll('tbody tr'));
+        const sortedRows = rows.sort((a, b) => {
+            const aVal = a.children[column].textContent.trim();
+            const bVal = b.children[column].textContent.trim();
+            
+            if (direction === 'asc') {
+                return aVal.localeCompare(bVal);
+            } else {
+                return bVal.localeCompare(aVal);
+            }
+        });
+        
+        const tbody = table.querySelector('tbody');
+        sortedRows.forEach(row => tbody.appendChild(row));
+    },
+    
+    // Filter table rows
+    filter: function(table, searchTerm) {
+        const rows = table.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            if (text.includes(searchTerm.toLowerCase())) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
             }
         });
     },
+    
+    // Initialize table functionality
+    init: function() {
+        // Handle search inputs
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('table-search')) {
+                const table = document.querySelector(e.target.getAttribute('data-table'));
+                if (table) {
+                    Admin.Table.filter(table, e.target.value);
+                }
+            }
+        });
+    }
+};
 
-    // Setup tooltips
-    setupTooltips: function() {
-        const tooltipElements = document.querySelectorAll('[title]');
-        tooltipElements.forEach(element => {
-            element.addEventListener('mouseenter', function() {
-                Admin.showTooltip(this);
-            });
+/**
+ * Notification System
+ */
+Admin.Notification = {
+    // Show notification
+    show: function(message, type = 'info', duration = 5000) {
+        const notification = document.createElement('div');
+        notification.className = `admin-notification admin-notification-${type} fixed top-4 right-4 z-50 bg-white border rounded-lg shadow-lg p-4 max-w-sm`;
+        notification.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas fa-${this.getIcon(type)} mr-2 text-${type === 'success' ? 'green' : type === 'error' ? 'red' : type === 'warning' ? 'yellow' : 'blue'}-600"></i>
+                <span class="text-sm text-gray-900">${message}</span>
+                <button class="ml-auto text-gray-400 hover:text-gray-600" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto remove
+        if (duration > 0) {
+            setTimeout(() => {
+                notification.remove();
+            }, duration);
+        }
+    },
+    
+    // Get icon for notification type
+    getIcon: function(type) {
+        const icons = {
+            'success': 'check-circle',
+            'error': 'exclamation-triangle',
+            'warning': 'exclamation-triangle',
+            'info': 'info-circle'
+        };
+        return icons[type] || 'info-circle';
+    }
+};
+
+/**
+ * Sidebar Management
+ */
+Admin.Sidebar = {
+    // Toggle sidebar
+    toggle: function() {
+        const sidebar = document.querySelector('.admin-sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        
+        if (sidebar) {
+            sidebar.classList.toggle('open');
+            
+            if (overlay) {
+                overlay.classList.toggle('hidden');
+            }
+        }
+    },
+    
+    // Initialize sidebar
+    init: function() {
+        // Handle mobile menu toggle
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.sidebar-toggle')) {
+                Admin.Sidebar.toggle();
+            }
+            
+            // Close on overlay click
+            if (e.target.classList.contains('sidebar-overlay')) {
+                Admin.Sidebar.toggle();
+            }
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768) {
+                const sidebar = document.querySelector('.admin-sidebar');
+                const overlay = document.querySelector('.sidebar-overlay');
+                
+                if (sidebar) {
+                    sidebar.classList.remove('open');
+                }
+                if (overlay) {
+                    overlay.classList.add('hidden');
+                }
+            }
+        });
+    }
+};
+
+/**
+ * Initialize all admin functionality
+ */
+Admin.init = function() {
+    // Setup CSRF token
+    const token = document.querySelector('meta[name="csrf-token"]');
+    if (token && window.axios) {
+        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+    }
+    
+    // Initialize all modules
+    Admin.Modal.init();
+    Admin.Form.init();
+    Admin.Table.init();
+    Admin.Sidebar.init();
+    
+    // Add global keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl/Cmd + / for search
+        if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+            e.preventDefault();
+            const searchInput = document.querySelector('.admin-search-input');
+            if (searchInput) {
+                searchInput.focus();
+            }
+        }
+        
+        // Escape to close modals
+        if (e.key === 'Escape') {
+            const openModal = document.querySelector('[role="dialog"]:not(.hidden)');
+            if (openModal) {
+                Admin.Modal.close(openModal.id);
+            }
+        }
+    });
+    
+    console.log('Admin panel initialized successfully');
+};
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', Admin.init);
+} else {
+    Admin.init();
+}
+
+// Global functions for backward compatibility
+window.openModal = Admin.Modal.open;
+window.closeModal = Admin.Modal.close;
+window.showNotification = Admin.Notification.show;
             element.addEventListener('mouseleave', function() {
                 Admin.hideTooltip();
             });

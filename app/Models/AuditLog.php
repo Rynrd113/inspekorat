@@ -9,6 +9,8 @@ class AuditLog extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'user_id',
         'action',
@@ -23,7 +25,8 @@ class AuditLog extends Model
 
     protected $casts = [
         'old_values' => 'json',
-        'new_values' => 'json'
+        'new_values' => 'json',
+        'created_at' => 'datetime'
     ];
 
     /**

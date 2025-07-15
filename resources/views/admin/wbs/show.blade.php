@@ -1,28 +1,36 @@
 @extends('layouts.admin')
 
-@section('title', 'Detail WBS - Admin Dashboard')
+@section('title', 'Detail Laporan WBS')
+
+@section('header', 'Detail Laporan WBS')
+
+@section('breadcrumb')
+<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li><a href="{{ route('admin.wbs.index') }}" class="text-blue-600 hover:text-blue-800">WBS</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li class="text-gray-600">Detail</li>
+@endsection
 
 @section('main-content')
-
-<!-- Header -->
-<div class="mb-8">
+<div class="space-y-6">
+    <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Detail Laporan WBS</h1>
-            <p class="mt-2 text-gray-600">Detail lengkap laporan whistleblower</p>
+            <h1 class="text-2xl font-bold text-gray-900">Detail Laporan WBS</h1>
+            <p class="text-gray-600 mt-1">Detail lengkap laporan whistleblower</p>
         </div>
-        <div class="flex space-x-3">
-            <x-button href="{{ route('admin.wbs.index') }}" variant="secondary">
-                <i class="fas fa-arrow-left mr-2"></i>
-                Kembali ke Daftar
-            </x-button>
-            <x-button href="{{ route('admin.wbs.edit', $wbs) }}">
-                <i class="fas fa-edit mr-2"></i>
-                Edit Status
-            </x-button>
+        <div class="flex items-center space-x-3">
+            <a href="{{ route('admin.wbs.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar
+            </a>
+            <a href="{{ route('admin.wbs.edit', $wbs) }}" 
+               class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                <i class="fas fa-edit mr-2"></i>Edit Status
+            </a>
         </div>
     </div>
-</div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Main Content -->

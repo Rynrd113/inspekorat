@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Models\AuditLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +43,9 @@ class AuthController extends Controller
             // Generate API token for admin panel usage
             $token = $user->createToken('admin-panel')->plainTextToken;
             
+            // Log login action
+            AuditLog::log('login', $user);
+            
             // Store token in session for JavaScript access
             session([
                 'admin_token' => $token,
@@ -67,9 +71,16 @@ class AuthController extends Controller
      */
     public function logout(Request $request): RedirectResponse
     {
+        $user = Auth::user();
+        
+        // Log logout action
+        if ($user) {
+            AuditLog::log('logout', $user);
+        }
+        
         // Revoke all tokens for the user
-        if (Auth::user()) {
-            Auth::user()->tokens()->delete();
+        if ($user) {
+            $user->tokens()->delete();
         }
         
         Auth::logout();

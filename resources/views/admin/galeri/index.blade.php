@@ -1,36 +1,28 @@
 @extends('layouts.admin')
 
+@section('title', 'Manajemen Galeri')
+
+@section('header', 'Manajemen Galeri')
+
+@section('breadcrumb')
+<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><i class="fas fa-chevron-right mx-2 text-gray-300"></i></li>
+<li class="text-gray-600">Galeri</li>
+@endsection
+
 @section('main-content')
-<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+<div class="space-y-6">
     <!-- Header -->
-    <div class="mb-6">
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900">Manajemen Galeri</h1>
-                <nav class="flex mt-2" aria-label="Breadcrumb">
-                    <ol class="flex items-center space-x-2 text-sm text-gray-500">
-                        <li>
-                            <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800 transition-colors">
-                                <i class="fas fa-home mr-1"></i>Dashboard
-                            </a>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fas fa-chevron-right mx-2 text-gray-300"></i>
-                            <span class="text-gray-600">Galeri</span>
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-            
-            <div class="flex items-center space-x-3">
-                <x-button 
-                    href="{{ route('admin.galeri.create') }}"
-                    variant="primary" 
-                    size="md"
-                >
-                    <i class="fas fa-plus mr-2"></i>Tambah Media
-                </x-button>
-            </div>
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Manajemen Galeri</h1>
+            <p class="text-gray-600 mt-1">Kelola foto dan video galeri</p>
+        </div>
+        <div class="flex items-center space-x-3">
+            <a href="{{ route('admin.galeri.create') }}" 
+               class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                <i class="fas fa-plus mr-2"></i>Tambah Media
+            </a>
         </div>
     </div>
 
