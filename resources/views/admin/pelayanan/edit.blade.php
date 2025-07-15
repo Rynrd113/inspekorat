@@ -70,7 +70,7 @@
                                 $persyaratanData = old('persyaratan', 
                                     is_array($pelayanan->persyaratan ?? null) 
                                         ? $pelayanan->persyaratan 
-                                        : json_decode($pelayanan->persyaratan ?? '[]', true) ?: []
+                                        : (json_decode($pelayanan->persyaratan ?? '[]', true) ?: [])
                                 );
                             @endphp
                             @if($persyaratanData)

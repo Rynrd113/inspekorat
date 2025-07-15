@@ -25,11 +25,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     
     // Admin CRUD routes
     Route::apiResource('wbs', WbsController::class)->names([
-        'index' => 'admin.wbs.index',
-        'store' => 'admin.wbs.store',
-        'show' => 'admin.wbs.show',
-        'update' => 'admin.wbs.update',
-        'destroy' => 'admin.wbs.destroy'
+        'index' => 'api.admin.wbs.index',
+        'store' => 'api.admin.wbs.store',
+        'show' => 'api.admin.wbs.show',
+        'update' => 'api.admin.wbs.update',
+        'destroy' => 'api.admin.wbs.destroy'
     ]);
     Route::apiResource('info-kantor', InfoKantorController::class);
     Route::apiResource('portal-papua-tengah', PortalPapuaTengahController::class);

@@ -116,8 +116,14 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex space-x-2">
                                 <button type="button" 
-                                        class="text-blue-600 hover:text-blue-900 transition-colors"
-                                        onclick="editConfig({{ $config->id }}, '{{ $config->key }}', {{ json_encode($config->value) }}, '{{ $config->type }}', '{{ $config->group }}', '{{ addslashes($config->description) }}', {{ $config->is_public ? 'true' : 'false' }})"
+                                        class="text-blue-600 hover:text-blue-900 transition-colors edit-config-btn"
+                                        data-id="{{ $config->id }}"
+                                        data-key="{{ $config->key }}"
+                                        data-value="{{ $config->value }}"
+                                        data-type="{{ $config->type }}"
+                                        data-group="{{ $config->group }}"
+                                        data-description="{{ $config->description }}"
+                                        data-public="{{ $config->is_public ? 'true' : 'false' }}"
                                         title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </button>
@@ -177,7 +183,7 @@
         </div>
     </div>
 </div>
-<<!-- Add Configuration Modal -->
+<!-- Add Configuration Modal -->
 <div id="addConfigModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
     <div class="flex items-center justify-center min-h-screen p-4">
         <div class="bg-white rounded-lg shadow-xl max-w-lg w-full">
@@ -449,18 +455,22 @@ function handleEditTypeChange(type) {
     }
 }
 
-// Edit configuration function
+// Edit configuration function - updated to use data attributes
 function editConfig(id, key, value, type, group, description, isPublic) {
     document.getElementById('edit_config_id').value = id;
     document.getElementById('edit_key').value = key;
     document.getElementById('edit_type').value = type;
     document.getElementById('edit_group').value = group;
     document.getElementById('edit_description').value = description;
-    document.getElementById('edit_is_public').checked = isPublic;
+    document.getElementById('edit_is_public').checked = isPublic === 'true' || isPublic === true;
     
     // Handle different value types
     if (type === 'json' || type === 'array') {
-        document.getElementById('edit_value').value = JSON.stringify(value, null, 2);
+        try {
+            document.getElementById('edit_value').value = typeof value === 'string' ? value : JSON.stringify(value, null, 2);
+        } catch (e) {
+            document.getElementById('edit_value').value = value || '';
+        }
     } else if (type === 'boolean') {
         document.getElementById('edit_value').value = value ? 'true' : 'false';
     } else if (type === 'file' || type === 'image') {
@@ -472,6 +482,23 @@ function editConfig(id, key, value, type, group, description, isPublic) {
     handleEditTypeChange(type);
     document.getElementById('editConfigModal').classList.remove('hidden');
 }
+
+// Add event listener for edit buttons using data attributes
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.edit-config-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const key = this.dataset.key;
+            const value = this.dataset.value;
+            const type = this.dataset.type;
+            const group = this.dataset.group;
+            const description = this.dataset.description;
+            const isPublic = this.dataset.public;
+            
+            editConfig(id, key, value, type, group, description, isPublic);
+        });
+    });
+});
 
 // Initialize defaults
 function initializeDefaults() {
