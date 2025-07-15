@@ -319,6 +319,9 @@ body {
         box-shadow: none;
     }
 }
+
+/* Body styling */
+body {
     background-color: #f8fafc;
     min-height: 100vh;
 }

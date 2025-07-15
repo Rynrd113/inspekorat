@@ -19,20 +19,6 @@ Admin.debounce = function(func, wait) {
     };
 };
 
-// Throttle utility for scroll events
-Admin.throttle = function(func, limit) {
-    let inThrottle;
-    return function() {
-        const args = arguments;
-        const context = this;
-        if (!inThrottle) {
-            func.apply(context, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
-        }
-    };
-};
-
 /**
  * Modal Management with improved accessibility
  */
@@ -43,330 +29,83 @@ Admin.Modal = {
     open: function(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
-            // Store currently focused element
-            this.previousFocus = document.activeElement;
-            
             modal.classList.remove('hidden');
             modal.setAttribute('aria-hidden', 'false');
-            document.body.classList.add('overflow-hidden');
-            
-            // Set active modal
-            this.activeModal = modal;
-            
-            // Focus management with delay for animation
-            setTimeout(() => {
-                const focusable = modal.querySelector(
-                    'button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
-                );
-                if (focusable) {
-                    focusable.focus();
-                }
-            }, 100);
+            this.activeModal = modalId;
+            document.body.style.overflow = 'hidden';
         }
     },
     
-    // Close modal with focus restoration
+    // Close modal and restore focus
     close: function(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
             modal.classList.add('hidden');
             modal.setAttribute('aria-hidden', 'true');
-            document.body.classList.remove('overflow-hidden');
-            
             this.activeModal = null;
-            
-            // Restore focus
-            if (this.previousFocus) {
-                this.previousFocus.focus();
-                this.previousFocus = null;
-            }
+            document.body.style.overflow = '';
         }
-    },
-    
-    // Initialize modal event listeners with delegation
-    init: function() {
-        const self = this;
-        
-        // Use event delegation for better performance
-        document.addEventListener('click', function(e) {
-            // Close modal when clicking backdrop
-            if (e.target.classList.contains('modal-backdrop')) {
-                const modal = e.target.closest('[role="dialog"]');
-                if (modal) {
-                    self.close(modal.id);
-                }
-            }
-            
-            // Handle modal trigger buttons
-            if (e.target.matches('[data-modal-target]')) {
-                e.preventDefault();
-                const targetId = e.target.getAttribute('data-modal-target');
-                self.open(targetId);
-            }
-            
-            // Handle modal close buttons
-            if (e.target.matches('[data-modal-close]')) {
-                e.preventDefault();
-                const modal = e.target.closest('[role="dialog"]');
-                if (modal) {
-                    self.close(modal.id);
-                }
-            }
-        });
-        
-        // Close modal on escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && self.activeModal) {
-                self.close(self.activeModal.id);
-            }
-        });
     }
 };
 
 /**
- * Enhanced Form Handling with validation
- */
-Admin.Form = {
-    // Show loading state on form submission
-    showLoading: function(form) {
-        const submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) {
-            // Store original content
-            submitBtn.dataset.originalContent = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
-        }
-    },
-    
-    // Hide loading state
-    hideLoading: function(form) {
-        const submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) {
-            submitBtn.disabled = false;
-            // Restore original text (should be stored in data attribute)
-            const originalText = submitBtn.getAttribute('data-original-text');
-            if (originalText) {
-                submitBtn.innerHTML = originalText;
-            }
-        }
-    },
-    
-    // Validate form before submission
-    validate: function(form) {
-        const requiredFields = form.querySelectorAll('[required]');
-        let isValid = true;
-        
-        requiredFields.forEach(field => {
-            if (!field.value.trim()) {
-                field.classList.add('border-red-500');
-                isValid = false;
-            } else {
-                field.classList.remove('border-red-500');
-            }
-        });
-        
-        return isValid;
-    },
-    
-    // Initialize form event listeners
-    init: function() {
-        // Handle form submissions
-        document.addEventListener('submit', function(e) {
-            const form = e.target;
-            if (form.tagName === 'FORM') {
-                // Store original button text
-                const submitBtn = form.querySelector('button[type="submit"]');
-                if (submitBtn && !submitBtn.getAttribute('data-original-text')) {
-                    submitBtn.setAttribute('data-original-text', submitBtn.innerHTML);
-                }
-                
-                // Validate form
-                if (!Admin.Form.validate(form)) {
-                    e.preventDefault();
-                    return false;
-                }
-                
-                // Show loading state
-                Admin.Form.showLoading(form);
-            }
-        });
-        
-        // Clear validation errors on input
-        document.addEventListener('input', function(e) {
-            if (e.target.classList.contains('border-red-500')) {
-                e.target.classList.remove('border-red-500');
-            }
-        });
-    }
-};
-
-/**
- * Table Management
- */
-Admin.Table = {
-    // Sort table
-    sort: function(table, column, direction) {
-        const rows = Array.from(table.querySelectorAll('tbody tr'));
-        const sortedRows = rows.sort((a, b) => {
-            const aVal = a.children[column].textContent.trim();
-            const bVal = b.children[column].textContent.trim();
-            
-            if (direction === 'asc') {
-                return aVal.localeCompare(bVal);
-            } else {
-                return bVal.localeCompare(aVal);
-            }
-        });
-        
-        const tbody = table.querySelector('tbody');
-        sortedRows.forEach(row => tbody.appendChild(row));
-    },
-    
-    // Filter table rows
-    filter: function(table, searchTerm) {
-        const rows = table.querySelectorAll('tbody tr');
-        
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            if (text.includes(searchTerm.toLowerCase())) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    },
-    
-    // Initialize table functionality
-    init: function() {
-        // Handle search inputs
-        document.addEventListener('input', function(e) {
-            if (e.target.classList.contains('table-search')) {
-                const table = document.querySelector(e.target.getAttribute('data-table'));
-                if (table) {
-                    Admin.Table.filter(table, e.target.value);
-                }
-            }
-        });
-    }
-};
-
-/**
- * Notification System
+ * Notification System with auto-dismiss
  */
 Admin.Notification = {
-    // Show notification
     show: function(message, type = 'info', duration = 5000) {
         const notification = document.createElement('div');
-        notification.className = `admin-notification admin-notification-${type} fixed top-4 right-4 z-50 bg-white border rounded-lg shadow-lg p-4 max-w-sm`;
+        notification.className = `notification notification-${type}`;
         notification.innerHTML = `
-            <div class="flex items-center">
-                <i class="fas fa-${this.getIcon(type)} mr-2 text-${type === 'success' ? 'green' : type === 'error' ? 'red' : type === 'warning' ? 'yellow' : 'blue'}-600"></i>
-                <span class="text-sm text-gray-900">${message}</span>
-                <button class="ml-auto text-gray-400 hover:text-gray-600" onclick="this.parentElement.parentElement.remove()">
-                    <i class="fas fa-times"></i>
-                </button>
+            <div class="notification-content">
+                <span class="notification-message">${message}</span>
+                <button class="notification-close" aria-label="Close">×</button>
             </div>
         `;
         
         document.body.appendChild(notification);
         
-        // Auto remove
-        if (duration > 0) {
-            setTimeout(() => {
-                notification.remove();
-            }, duration);
-        }
+        setTimeout(() => {
+            this.hide(notification);
+        }, duration);
+        
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+            this.hide(notification);
+        });
     },
     
-    // Get icon for notification type
-    getIcon: function(type) {
-        const icons = {
-            'success': 'check-circle',
-            'error': 'exclamation-triangle',
-            'warning': 'exclamation-triangle',
-            'info': 'info-circle'
-        };
-        return icons[type] || 'info-circle';
+    hide: function(notification) {
+        notification.classList.add('notification-fade-out');
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
     }
 };
 
 /**
- * Sidebar Management
- */
-Admin.Sidebar = {
-    // Toggle sidebar
-    toggle: function() {
-        const sidebar = document.querySelector('.admin-sidebar');
-        const overlay = document.querySelector('.sidebar-overlay');
-        
-        if (sidebar) {
-            sidebar.classList.toggle('open');
-            
-            if (overlay) {
-                overlay.classList.toggle('hidden');
-            }
-        }
-    },
-    
-    // Initialize sidebar
-    init: function() {
-        // Handle mobile menu toggle
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.sidebar-toggle')) {
-                Admin.Sidebar.toggle();
-            }
-            
-            // Close on overlay click
-            if (e.target.classList.contains('sidebar-overlay')) {
-                Admin.Sidebar.toggle();
-            }
-        });
-        
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                const sidebar = document.querySelector('.admin-sidebar');
-                const overlay = document.querySelector('.sidebar-overlay');
-                
-                if (sidebar) {
-                    sidebar.classList.remove('open');
-                }
-                if (overlay) {
-                    overlay.classList.add('hidden');
-                }
-            }
-        });
-    }
-};
-
-/**
- * Initialize all admin functionality
+ * Main Admin initialization
  */
 Admin.init = function() {
-    // Setup CSRF token
-    const token = document.querySelector('meta[name="csrf-token"]');
-    if (token && window.axios) {
-        window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-    }
-    
-    // Initialize all modules
-    Admin.Modal.init();
-    Admin.Form.init();
-    Admin.Table.init();
-    Admin.Sidebar.init();
-    
-    // Add global keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-        // Ctrl/Cmd + / for search
-        if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+    // Setup modal triggers
+    document.addEventListener('click', function(e) {
+        const trigger = e.target.closest('[data-modal-open]');
+        if (trigger) {
             e.preventDefault();
-            const searchInput = document.querySelector('.admin-search-input');
-            if (searchInput) {
-                searchInput.focus();
-            }
+            const modalId = trigger.dataset.modalOpen;
+            Admin.Modal.open(modalId);
         }
         
-        // Escape to close modals
+        const close = e.target.closest('[data-modal-close]');
+        if (close) {
+            e.preventDefault();
+            const modalId = close.dataset.modalClose || close.closest('[role="dialog"]').id;
+            Admin.Modal.close(modalId);
+        }
+    });
+    
+    // Setup keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             const openModal = document.querySelector('[role="dialog"]:not(.hidden)');
             if (openModal) {
@@ -389,389 +128,3 @@ if (document.readyState === 'loading') {
 window.openModal = Admin.Modal.open;
 window.closeModal = Admin.Modal.close;
 window.showNotification = Admin.Notification.show;
-            element.addEventListener('mouseleave', function() {
-                Admin.hideTooltip();
-            });
-        });
-    },
-
-    // Setup filters
-    setupFilters: function() {
-        const filterElements = document.querySelectorAll('[id^="filter"], [id^="search"]');
-        filterElements.forEach(element => {
-            element.addEventListener('change', function() {
-                Admin.applyFilters();
-            });
-            element.addEventListener('input', function() {
-                Admin.debounce(Admin.applyFilters, 300)();
-            });
-        });
-    },
-
-    // Setup form validation
-    setupFormValidation: function() {
-        const forms = document.querySelectorAll('form');
-        forms.forEach(form => {
-            form.addEventListener('submit', function(e) {
-                if (!Admin.validateForm(this)) {
-                    e.preventDefault();
-                }
-            });
-        });
-    },
-
-    // Setup table sorting
-    setupTableSorting: function() {
-        const sortableHeaders = document.querySelectorAll('th[data-sort]');
-        sortableHeaders.forEach(header => {
-            header.style.cursor = 'pointer';
-            header.addEventListener('click', function() {
-                Admin.sortTable(this);
-            });
-        });
-    },
-
-    // Load admin token
-    loadAdminToken: function() {
-        const existingToken = localStorage.getItem('admin_token');
-        if (existingToken) {
-            console.log('Admin token loaded successfully');
-        }
-    },
-
-    // Modal functions
-    showModal: function(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.remove('hidden');
-            modal.classList.add('fade-in');
-            document.body.style.overflow = 'hidden';
-        }
-    },
-
-    hideModal: function(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.add('hidden');
-            modal.classList.remove('fade-in');
-            document.body.style.overflow = '';
-        }
-    },
-
-    closeAllModals: function() {
-        const modals = document.querySelectorAll('.modal, [id$="Modal"]');
-        modals.forEach(modal => {
-            if (!modal.classList.contains('hidden')) {
-                modal.classList.add('hidden');
-                modal.classList.remove('fade-in');
-            }
-        });
-        document.body.style.overflow = '';
-    },
-
-    // Tooltip functions
-    showTooltip: function(element) {
-        const tooltip = document.createElement('div');
-        tooltip.className = 'absolute z-50 px-2 py-1 text-sm bg-gray-900 text-white rounded shadow-lg';
-        tooltip.textContent = element.getAttribute('title');
-        tooltip.id = 'admin-tooltip';
-        
-        const rect = element.getBoundingClientRect();
-        tooltip.style.left = rect.left + 'px';
-        tooltip.style.top = (rect.top - 35) + 'px';
-        
-        document.body.appendChild(tooltip);
-        element.removeAttribute('title');
-        element.setAttribute('data-original-title', tooltip.textContent);
-    },
-
-    hideTooltip: function() {
-        const tooltip = document.getElementById('admin-tooltip');
-        if (tooltip) {
-            const element = document.querySelector('[data-original-title]');
-            if (element) {
-                element.setAttribute('title', element.getAttribute('data-original-title'));
-                element.removeAttribute('data-original-title');
-            }
-            tooltip.remove();
-        }
-    },
-
-    // Filter functions
-    applyFilters: function() {
-        const filters = {};
-        const filterElements = document.querySelectorAll('[id^="filter"]');
-        const searchElements = document.querySelectorAll('[id^="search"]');
-        
-        filterElements.forEach(element => {
-            if (element.value) {
-                filters[element.id] = element.value;
-            }
-        });
-        
-        searchElements.forEach(element => {
-            if (element.value) {
-                filters[element.id] = element.value;
-            }
-        });
-        
-        Admin.filterTable(filters);
-    },
-
-    filterTable: function(filters) {
-        const table = document.querySelector('table tbody');
-        if (!table) return;
-        
-        const rows = table.querySelectorAll('tr');
-        rows.forEach(row => {
-            let showRow = true;
-            
-            Object.keys(filters).forEach(filterId => {
-                const filterValue = filters[filterId].toLowerCase();
-                const rowText = row.textContent.toLowerCase();
-                
-                if (filterId.startsWith('search')) {
-                    if (!rowText.includes(filterValue)) {
-                        showRow = false;
-                    }
-                } else if (filterId.startsWith('filter')) {
-                    const cellIndex = Admin.getFilterColumnIndex(filterId);
-                    if (cellIndex >= 0) {
-                        const cellText = row.cells[cellIndex].textContent.toLowerCase();
-                        if (!cellText.includes(filterValue)) {
-                            showRow = false;
-                        }
-                    }
-                }
-            });
-            
-            row.style.display = showRow ? '' : 'none';
-        });
-    },
-
-    getFilterColumnIndex: function(filterId) {
-        const filterMapping = {
-            'filterKategori': 2,
-            'filterStatus': 3,
-            'filterTipe': 1
-        };
-        return filterMapping[filterId] || -1;
-    },
-
-    // Form validation
-    validateForm: function(form) {
-        const requiredFields = form.querySelectorAll('[required]');
-        let isValid = true;
-        
-        requiredFields.forEach(field => {
-            if (!field.value.trim()) {
-                Admin.showFieldError(field, 'Field ini wajib diisi');
-                isValid = false;
-            } else {
-                Admin.clearFieldError(field);
-            }
-        });
-        
-        return isValid;
-    },
-
-    showFieldError: function(field, message) {
-        const existingError = field.parentNode.querySelector('.field-error');
-        if (existingError) {
-            existingError.remove();
-        }
-        
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'field-error text-red-500 text-sm mt-1';
-        errorDiv.textContent = message;
-        field.parentNode.appendChild(errorDiv);
-        field.classList.add('border-red-500');
-    },
-
-    clearFieldError: function(field) {
-        const existingError = field.parentNode.querySelector('.field-error');
-        if (existingError) {
-            existingError.remove();
-        }
-        field.classList.remove('border-red-500');
-    },
-
-    // Table sorting
-    sortTable: function(header) {
-        const table = header.closest('table');
-        const tbody = table.querySelector('tbody');
-        const rows = Array.from(tbody.querySelectorAll('tr'));
-        const columnIndex = Array.from(header.parentNode.children).indexOf(header);
-        const sortDirection = header.dataset.sortDirection === 'asc' ? 'desc' : 'asc';
-        
-        rows.sort((a, b) => {
-            const aText = a.cells[columnIndex].textContent.trim();
-            const bText = b.cells[columnIndex].textContent.trim();
-            
-            if (sortDirection === 'asc') {
-                return aText.localeCompare(bText);
-            } else {
-                return bText.localeCompare(aText);
-            }
-        });
-        
-        rows.forEach(row => tbody.appendChild(row));
-        
-        // Update header indicators
-        table.querySelectorAll('th').forEach(th => {
-            th.classList.remove('sort-asc', 'sort-desc');
-            delete th.dataset.sortDirection;
-        });
-        
-        header.classList.add(sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
-        header.dataset.sortDirection = sortDirection;
-    },
-
-    // Utility functions
-    debounce: function(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    },
-
-    // API helper functions
-    makeRequest: function(url, options = {}) {
-        const token = localStorage.getItem('admin_token');
-        
-        const defaultOptions = {
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Authorization': token ? `Bearer ${token}` : ''
-            }
-        };
-        
-        return fetch(url, { ...defaultOptions, ...options })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .catch(error => {
-                console.error('API request failed:', error);
-                Admin.showNotification('Terjadi kesalahan saat mengirim permintaan', 'error');
-                throw error;
-            });
-    },
-
-    // Notification system
-    showNotification: function(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg ${Admin.getNotificationClasses(type)}`;
-        notification.textContent = message;
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.remove();
-        }, 5000);
-    },
-
-    getNotificationClasses: function(type) {
-        const classes = {
-            'success': 'bg-green-100 text-green-800 border border-green-200',
-            'error': 'bg-red-100 text-red-800 border border-red-200',
-            'warning': 'bg-yellow-100 text-yellow-800 border border-yellow-200',
-            'info': 'bg-blue-100 text-blue-800 border border-blue-200'
-        };
-        return classes[type] || classes.info;
-    },
-
-    // Clear admin token on logout
-    clearAdminToken: function() {
-        localStorage.removeItem('admin_token');
-        console.log('Admin token cleared');
-    }
-};
-
-// Global functions for backward compatibility
-function confirmDelete(id) {
-    document.getElementById('deleteForm').action = document.getElementById('deleteForm').action.replace(/\/\d+$/, `/${id}`);
-    Admin.showModal('deleteModal');
-}
-
-function closeDeleteModal() {
-    Admin.hideModal('deleteModal');
-}
-
-function viewMedia(type, src) {
-    const mediaContent = document.getElementById('mediaContent');
-    const modal = document.getElementById('mediaModal');
-    
-    if (type === 'foto') {
-        mediaContent.innerHTML = `<img src="${src}" class="max-w-full max-h-96 object-contain" alt="Media">`;
-    } else if (type === 'video') {
-        mediaContent.innerHTML = `<video controls class="max-w-full max-h-96"><source src="${src}" type="video/mp4">Your browser does not support the video tag.</video>`;
-    }
-    
-    Admin.showModal('mediaModal');
-}
-
-function closeMediaModal() {
-    Admin.hideModal('mediaModal');
-}
-
-function moveUp(id) {
-    const currentPath = window.location.pathname;
-    const basePath = currentPath.substring(0, currentPath.lastIndexOf('/'));
-    
-    Admin.makeRequest(`${basePath}/${id}/move-up`, {
-        method: 'POST'
-    })
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            Admin.showNotification('Gagal memindahkan item', 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error moving item up:', error);
-    });
-}
-
-function moveDown(id) {
-    const currentPath = window.location.pathname;
-    const basePath = currentPath.substring(0, currentPath.lastIndexOf('/'));
-    
-    Admin.makeRequest(`${basePath}/${id}/move-down`, {
-        method: 'POST'
-    })
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            Admin.showNotification('Gagal memindahkan item', 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error moving item down:', error);
-    });
-}
-
-function clearAdminToken() {
-    Admin.clearAdminToken();
-}
-
-// Initialize admin functionality when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    Admin.init();
-});
-
-// Store admin token when provided
-if (typeof adminToken !== 'undefined') {
-    localStorage.setItem('admin_token', adminToken);
-    console.log('Admin token stored from server');
-}

@@ -21,14 +21,10 @@ export default defineConfig({
                 manualChunks: {
                     // Vendor libraries chunk
                     vendor: ['lodash', 'axios'],
-                    // UI frameworks chunk
-                    ui: ['@headlessui/react', '@heroicons/react'],
                     // Admin-specific code chunk
-                    admin: ['resources/js/admin.js', 'resources/css/admin.css'],
+                    admin: ['resources/js/admin.js'],
                     // Public-specific code chunk
-                    public: ['resources/js/app.js', 'resources/css/app.css'],
-                    // Utilities chunk
-                    utils: ['resources/js/utils.js']
+                    public: ['resources/js/app.js']
                 },
                 // Optimize asset file names dengan hash untuk cache busting
                 entryFileNames: (chunkInfo) => {
@@ -105,9 +101,7 @@ export default defineConfig({
         // Include dependencies yang harus di-pre-bundle
         include: [
             'lodash',
-            'axios',
-            'alpinejs',
-            'chart.js'
+            'axios'
         ],
         // Exclude dependencies yang tidak perlu pre-bundle
         exclude: [
