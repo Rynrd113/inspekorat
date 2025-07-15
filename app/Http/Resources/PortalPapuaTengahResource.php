@@ -22,12 +22,12 @@ class PortalPapuaTengahResource extends JsonResource
             'thumbnail' => $this->thumbnail ? asset('storage/' . $this->thumbnail) : null,
             'is_featured' => $this->is_featured,
             'is_published' => $this->is_published,
-            'published_at' => $this->published_at?->format('Y-m-d H:i:s'),
+            'published_at' => $this->published_at ? $this->published_at->format('Y-m-d H:i:s') : null,
             'tags' => $this->tags,
             'meta_description' => $this->meta_description,
             'views' => $this->views,
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null,
+            'updated_at' => $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null,
         ];
     }
 }

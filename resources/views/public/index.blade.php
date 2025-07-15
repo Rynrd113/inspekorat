@@ -3,6 +3,72 @@
 @section('title', 'Portal Informasi Pemerintahan - Inspektorat Papua Tengah')
 @section('description', 'Portal resmi Inspektorat Provinsi Papua Tengah - Akses layanan publik, informasi pemerintahan, dan laporan WBS.')
 
+@push('styles')
+<style>
+    /* Back to top button */
+    .back-to-top {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 50;
+        display: none;
+        padding: 0.75rem;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 3rem;
+        height: 3rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
+    }
+    
+    .back-to-top:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.4);
+    }
+    
+    /* Slider styles */
+    .slide {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+    
+    .slide.active {
+        opacity: 1;
+    }
+    
+    .slider-dot.active {
+        background-color: rgba(255, 255, 255, 1);
+    }
+    
+    /* Animation styles */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-out;
+    }
+    
+    /* Line clamp utility */
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="min-h-screen bg-white">
     <!-- Header -->
@@ -811,4 +877,307 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Load berita terbaru by default
+    loadBerita('terbaru');
+    
+    // Hero slider functionality
+    initHeroSlider();
+    
+    // Back to top button
+    initBackToTop();
+    
+    // Stats counter animation
+    animateStats();
+});
+
+// Global variables
+let currentBeritaData = [];
+let currentFilter = 'terbaru';
+
+// Load berita data
+async function loadBerita(filter = 'terbaru') {
+    try {
+        const response = await fetch(`/api/berita?filter=${filter}&limit=5`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        currentBeritaData = data.data || [];
+        renderBeritaList(currentBeritaData);
+        updateFilterButtons(filter);
+        currentFilter = filter;
+    } catch (error) {
+        console.error('Error loading berita:', error);
+        // Fallback to static data
+        const fallbackData = getFallbackBerita(filter);
+        currentBeritaData = fallbackData;
+        renderBeritaList(currentBeritaData);
+        updateFilterButtons(filter);
+        currentFilter = filter;
+    }
+}
+
+// Fallback berita data
+function getFallbackBerita(filter) {
+    const fallbackBerita = [
+        {
+            id: 1,
+            judul: 'Pelaksanaan Pengawasan Internal di Lingkungan Pemerintah Provinsi Papua Tengah',
+            konten: 'Inspektorat Provinsi Papua Tengah melaksanakan pengawasan internal secara berkala untuk memastikan tata kelola pemerintahan yang baik dan akuntabel.',
+            kategori: 'pengawasan',
+            penulis: 'Tim Inspektorat',
+            published_at: new Date().toISOString(),
+            views: 1250
+        },
+        {
+            id: 2,
+            judul: 'Sosialisasi Implementasi Sistem Pengendalian Intern Pemerintah (SPIP)',
+            konten: 'Kegiatan sosialisasi SPIP dilaksanakan untuk meningkatkan pemahaman aparatur pemerintah tentang sistem pengendalian intern yang efektif.',
+            kategori: 'kegiatan',
+            penulis: 'Bagian SPIP',
+            published_at: new Date(Date.now() - 86400000).toISOString(),
+            views: 890
+        },
+        {
+            id: 3,
+            judul: 'Audit Kinerja Organisasi Perangkat Daerah Tahun 2025',
+            konten: 'Pelaksanaan audit kinerja terhadap OPD di lingkungan Pemerintah Provinsi Papua Tengah untuk menilai efektivitas dan efisiensi program kerja.',
+            kategori: 'audit',
+            penulis: 'Auditor Inspektorat',
+            published_at: new Date(Date.now() - 172800000).toISOString(),
+            views: 1340
+        },
+        {
+            id: 4,
+            judul: 'Pelatihan Audit Internal bagi Aparatur Inspektorat',
+            konten: 'Program pelatihan berkelanjutan untuk meningkatkan kapasitas auditor internal dalam melaksanakan tugas pengawasan.',
+            kategori: 'pelatihan',
+            penulis: 'Sekretariat Inspektorat',
+            published_at: new Date(Date.now() - 259200000).toISOString(),
+            views: 750
+        },
+        {
+            id: 5,
+            judul: 'Laporan Hasil Pengawasan Triwulan IV 2024',
+            konten: 'Publikasi laporan hasil pengawasan yang dilaksanakan Inspektorat Provinsi Papua Tengah pada triwulan keempat tahun 2024.',
+            kategori: 'laporan',
+            penulis: 'Inspektorat Papua Tengah',
+            published_at: new Date(Date.now() - 345600000).toISOString(),
+            views: 2100
+        }
+    ];
+    
+    // Sort berdasarkan filter
+    if (filter === 'terpopuler') {
+        return fallbackBerita.sort((a, b) => b.views - a.views);
+    }
+    
+    return fallbackBerita.sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
+}
+
+// Filter berita function
+function filterBerita(filter) {
+    loadBerita(filter);
+}
+
+// Render berita list
+function renderBeritaList(beritaData) {
+    const container = document.getElementById('berita-list');
+    
+    if (!beritaData || beritaData.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-16">
+                <div class="max-w-md mx-auto">
+                    <i class="fas fa-newspaper text-gray-300 text-6xl mb-4"></i>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Belum ada berita tersedia</h3>
+                    <p class="text-gray-500 mb-6">Berita akan segera dipublikasikan.</p>
+                </div>
+            </div>
+        `;
+        return;
+    }
+    
+    const beritaHtml = beritaData.map(berita => `
+        <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
+            <div class="md:flex">
+                <!-- Image -->
+                <div class="md:w-1/3">
+                    <div class="h-48 md:h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-colors">
+                        <i class="fas fa-image text-blue-400 text-3xl"></i>
+                    </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="md:w-2/3 p-8">
+                    <!-- Category -->
+                    <div class="mb-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                            ${berita.kategori ? berita.kategori.toUpperCase() : 'BERITA'}
+                        </span>
+                    </div>
+                    
+                    <!-- Title -->
+                    <h3 class="text-xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors leading-tight">
+                        <a href="/berita/${berita.id}">${berita.judul || 'Judul Berita'}</a>
+                    </h3>
+                    
+                    <!-- Excerpt -->
+                    <p class="text-gray-600 mb-6 line-clamp-3 leading-relaxed">
+                        ${berita.konten ? berita.konten.replace(/<[^>]*>?/gm, '').substring(0, 150) + '...' : 'Ringkasan berita tidak tersedia...'}
+                    </p>
+                    
+                    <!-- Meta & CTA -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-6 text-sm text-gray-500">
+                            <div class="flex items-center">
+                                <i class="fas fa-user mr-2"></i>
+                                <span>${berita.penulis || 'Admin'}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-calendar mr-2"></i>
+                                <span>${berita.published_at ? new Date(berita.published_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Hari ini'}</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-eye mr-2"></i>
+                                <span>${berita.views ? berita.views.toLocaleString() : '0'} views</span>
+                            </div>
+                        </div>
+                        
+                        <a href="/berita/${berita.id}" class="inline-flex items-center px-6 py-3 text-blue-600 hover:text-white border-2 border-blue-600 hover:bg-blue-600 rounded-xl transition-all duration-300 font-semibold group">
+                            <span>Baca Selengkapnya</span>
+                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </article>
+    `).join('');
+    
+    container.innerHTML = beritaHtml;
+}
+
+// Update filter buttons
+function updateFilterButtons(activeFilter) {
+    const btnTerbaru = document.getElementById('btn-terbaru');
+    const btnTerpopuler = document.getElementById('btn-terpopuler');
+    
+    // Reset all buttons
+    btnTerbaru.className = 'px-8 py-3 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200';
+    btnTerpopuler.className = 'px-8 py-3 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200';
+    
+    // Set active button
+    if (activeFilter === 'terbaru') {
+        btnTerbaru.className = 'px-8 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl transition-all duration-200 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg';
+    } else if (activeFilter === 'terpopuler') {
+        btnTerpopuler.className = 'px-8 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl transition-all duration-200 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg';
+    }
+}
+
+// Hero slider functionality
+function initHeroSlider() {
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.slider-dot');
+    const prevBtn = document.getElementById('prevSlide');
+    const nextBtn = document.getElementById('nextSlide');
+    
+    let currentSlide = 0;
+    
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
+    }
+    
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+    
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+    
+    // Event listeners
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentSlide = index;
+            showSlide(currentSlide);
+        });
+    });
+    
+    // Auto-play slider
+    setInterval(nextSlide, 5000);
+}
+
+// Back to top functionality
+function initBackToTop() {
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    if (backToTopBtn) {
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 100) {
+                backToTopBtn.style.display = 'block';
+            } else {
+                backToTopBtn.style.display = 'none';
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+}
+
+// Animate stats counter
+function animateStats() {
+    const stats = document.querySelectorAll('#stat-opd, #stat-berita, #stat-wbs, #stat-views');
+    
+    stats.forEach(stat => {
+        const target = parseInt(stat.textContent.replace(/,/g, ''));
+        let current = 0;
+        const increment = target / 100;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            stat.textContent = Math.floor(current).toLocaleString();
+        }, 20);
+    });
+}
+
+// Mobile menu toggle
+function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenu) {
+        mobileMenu.classList.toggle('hidden');
+    }
+}
+
+// Add mobile menu event listener
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.querySelector('[onclick="toggleMobileMenu()"]');
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    }
+});
+</script>
+@endpush
+
 @endsection

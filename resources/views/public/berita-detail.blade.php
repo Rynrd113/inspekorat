@@ -197,5 +197,3 @@
     @endif
 </div>
 @endsection
-
-@endpush

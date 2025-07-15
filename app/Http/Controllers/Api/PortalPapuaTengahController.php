@@ -138,4 +138,30 @@ class PortalPapuaTengahController extends Controller
             'message' => 'Berita berhasil dihapus'
         ]);
     }
+
+    /**
+     * Get public berita for homepage with filter
+     */
+    public function publicBerita(Request $request): JsonResponse
+    {
+        $filter = $request->get('filter', 'terbaru');
+        $limit = $request->get('limit', 5);
+        
+        $query = PortalPapuaTengah::published();
+        
+        if ($filter === 'terpopuler') {
+            $query->orderBy('views', 'desc');
+        } else {
+            $query->orderBy('published_at', 'desc');
+        }
+        
+        $berita = $query->take($limit)->get();
+        
+        return response()->json([
+            'success' => true,
+            'data' => PortalPapuaTengahResource::collection($berita),
+            'filter' => $filter,
+            'total' => $berita->count()
+        ]);
+    }
 }

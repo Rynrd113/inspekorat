@@ -40,6 +40,9 @@ Route::get('portal-papua-tengah/public', [PortalPapuaTengahController::class, 'p
 Route::get('info-kantor/public', [InfoKantorController::class, 'publicIndex']);
 Route::post('wbs/public', [WbsController::class, 'publicStore']);
 
+// Public berita endpoint for homepage
+Route::get('berita', [PortalPapuaTengahController::class, 'publicBerita']);
+
 // Auth routes
 Route::post('auth/login', [AuthController::class, 'login']);
 
