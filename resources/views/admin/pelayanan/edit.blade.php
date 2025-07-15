@@ -66,8 +66,15 @@
                             Syarat & Ketentuan
                         </label>
                         <div id="persyaratan-container">
-                            @if(old('persyaratan', $pelayanan->persyaratan ?? []))
-                                @foreach(old('persyaratan', $pelayanan->persyaratan ?? []) as $index => $persyaratan)
+                            @php
+                                $persyaratanData = old('persyaratan', 
+                                    is_array($pelayanan->persyaratan ?? null) 
+                                        ? $pelayanan->persyaratan 
+                                        : json_decode($pelayanan->persyaratan ?? '[]', true) ?: []
+                                );
+                            @endphp
+                            @if($persyaratanData)
+                                @foreach($persyaratanData as $index => $persyaratan)
                                 <div class="flex items-center mb-2 persyaratan-item">
                                     <input type="text" 
                                            class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('persyaratan.*') border-red-500 @enderror" 

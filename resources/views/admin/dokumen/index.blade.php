@@ -18,7 +18,8 @@
         </div>
         <div class="flex items-center space-x-3">
             <x-button 
-                href="{{ route('admin.dokumen.export') }}"
+                href="#"
+                onclick="alert('Fitur export belum tersedia')"
                 variant="secondary" 
                 size="md"
             >
@@ -184,7 +185,8 @@
                     <span class="text-sm text-gray-500">Total: 10 dokumen</span>
                     <div class="flex items-center space-x-2">
                         <x-button 
-                            href="{{ route('admin.dokumen.bulk-actions') }}"
+                            href="#"
+                            onclick="alert('Fitur aksi massal belum tersedia')"
                             variant="secondary" 
                             size="sm"
                             class="hidden"
@@ -310,8 +312,10 @@
             </div>
             
             <!-- Empty State (when no documents are found) -->
-            {{-- Uncomment this section when implementing real empty state logic
-            @if($documents->isEmpty())
+            {{-- 
+            TODO: Uncomment this section when implementing real empty state logic
+            
+            &#64;if($documents->isEmpty())
                 <x-empty-state
                     title="Tidak ada dokumen yang sesuai"
                     description="Tidak ditemukan dokumen yang cocok dengan pencarian atau filter yang Anda gunakan."
@@ -321,7 +325,7 @@
                     actionUrl="{{ route('admin.dokumen.create') }}"
                     suggestion="Coba gunakan kata kunci yang berbeda atau reset filter untuk melihat semua dokumen."
                 />
-            @endif
+            &#64;endif
             --}}
         </div>
     </div>

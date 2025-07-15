@@ -19,10 +19,10 @@
             <p class="text-gray-600 mt-1">Kelola laporan Whistleblower System dan tindak lanjut</p>
         </div>
         <div class="flex items-center space-x-3">
-            <x-button href="{{ route('admin.wbs.export') }}" variant="secondary" size="md">
+            <x-button href="#" onclick="alert('Fitur export belum tersedia')" variant="secondary" size="md">
                 <i class="fas fa-download mr-2"></i>Export Data
             </x-button>
-            <x-button href="{{ route('admin.wbs.statistics') }}" variant="info" size="md">
+            <x-button href="#" onclick="alert('Fitur statistik belum tersedia')" variant="info" size="md">
                 <i class="fas fa-chart-bar mr-2"></i>Statistik
             </x-button>
         </div>
@@ -166,132 +166,121 @@
             </div>
         </form>
     </x-card>
-                                <div class="flex items-end">
-                                    <x-button type="submit" class="w-full">
-                                        <i class="fas fa-search mr-2"></i>
-                                        Filter
-                                    </x-button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </x-card>
 
     <!-- WBS Reports Table -->
-            <x-card>
-                <x-slot:header>
-                    <h3 class="text-lg font-semibold text-gray-900">Daftar Laporan WBS</h3>
-                </x-slot:header>
+    <x-card>
+        <x-slot:header>
+            <h3 class="text-lg font-semibold text-gray-900">Daftar Laporan WBS</h3>
+        </x-slot:header>
 
-                @if($wbsReports->count() > 0)
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Pelapor
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Subjek
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Tanggal
-                                    </th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($wbsReports as $wbs)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                                                    <i class="fas fa-user text-blue-600"></i>
-                                                </div>
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    {{ $wbs->nama_pelapor ?: 'Anonymous' }}
-                                                </div>
-                                                <div class="text-sm text-gray-500">
-                                                    {{ $wbs->email ?: 'Tidak ada email' }}
-                                                </div>
-                                            </div>
+        @if($wbsReports->count() > 0)
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Pelapor
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Subjek
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Tanggal
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Aksi
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach($wbsReports as $wbs)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10">
+                                        <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                            <i class="fas fa-user text-blue-600"></i>
                                         </div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ Str::limit($wbs->subjek, 50) }}</div>
-                                        <div class="text-sm text-gray-500">{{ Str::limit($wbs->deskripsi, 80) }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        @php
-                                            $statusClasses = [
-                                                'pending' => 'bg-yellow-100 text-yellow-800',
-                                                'in_progress' => 'bg-blue-100 text-blue-800',
-                                                'resolved' => 'bg-green-100 text-green-800',
-                                                'rejected' => 'bg-red-100 text-red-800',
-                                            ];
-                                            $statusLabels = [
-                                                'pending' => 'Pending',
-                                                'in_progress' => 'In Progress',
-                                                'resolved' => 'Resolved',
-                                                'rejected' => 'Rejected',
-                                            ];
-                                        @endphp
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $statusClasses[$wbs->status] ?? 'bg-gray-100 text-gray-800' }}">
-                                            {{ $statusLabels[$wbs->status] ?? ucfirst($wbs->status) }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $wbs->created_at->translatedFormat('d M Y H:i') }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div class="flex space-x-2">
-                                            <a href="{{ route('admin.wbs.show', $wbs) }}" 
-                                               class="text-blue-600 hover:text-blue-900">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('admin.wbs.edit', $wbs) }}" 
-                                               class="text-indigo-600 hover:text-indigo-900">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form action="{{ route('admin.wbs.destroy', $wbs) }}" 
-                                                  method="POST" 
-                                                  class="inline"
-                                                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus laporan ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-900">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">
+                                            {{ $wbs->nama_pelapor ?: 'Anonymous' }}
                                         </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                        <div class="text-sm text-gray-500">
+                                            {{ $wbs->email ?: 'Tidak ada email' }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm text-gray-900">{{ Str::limit($wbs->subjek, 50) }}</div>
+                                <div class="text-sm text-gray-500">{{ Str::limit($wbs->deskripsi, 80) }}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @php
+                                    $statusClasses = [
+                                        'pending' => 'bg-yellow-100 text-yellow-800',
+                                        'in_progress' => 'bg-blue-100 text-blue-800',
+                                        'resolved' => 'bg-green-100 text-green-800',
+                                        'rejected' => 'bg-red-100 text-red-800',
+                                    ];
+                                    $statusLabels = [
+                                        'pending' => 'Pending',
+                                        'in_progress' => 'In Progress',
+                                        'resolved' => 'Resolved',
+                                        'rejected' => 'Rejected',
+                                    ];
+                                @endphp
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $statusClasses[$wbs->status] ?? 'bg-gray-100 text-gray-800' }}">
+                                    {{ $statusLabels[$wbs->status] ?? ucfirst($wbs->status) }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $wbs->created_at->translatedFormat('d M Y H:i') }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('admin.wbs.show', $wbs) }}" 
+                                       class="text-blue-600 hover:text-blue-900">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('admin.wbs.edit', $wbs) }}" 
+                                       class="text-indigo-600 hover:text-indigo-900">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('admin.wbs.destroy', $wbs) }}" 
+                                          method="POST" 
+                                          class="inline"
+                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus laporan ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
-                    <!-- Pagination -->
-                    <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-                        {{ $wbsReports->appends(request()->query())->links() }}
-                    </div>
-                @else
-                    <x-empty-state
-                        title="Belum ada laporan WBS"
-                        description="Laporan WBS akan muncul di sini setelah ada yang mengirim laporan melalui form WBS."
-                        icon="fas fa-shield-alt"
-                        suggestion="Pastikan form WBS sudah tersedia untuk masyarakat di website publik."
-                    />
-                @endif
-            </x-card>
-        </div>
-    </div>
+            <!-- Pagination -->
+            <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+                {{ $wbsReports->appends(request()->query())->links() }}
+            </div>
+        @else
+            <x-empty-state
+                title="Belum ada laporan WBS"
+                description="Laporan WBS akan muncul di sini setelah ada yang mengirim laporan melalui form WBS."
+                icon="fas fa-shield-alt"
+                suggestion="Pastikan form WBS sudah tersedia untuk masyarakat di website publik."
+            />
+        @endif
+    </x-card>
+</div>
 @endsection
