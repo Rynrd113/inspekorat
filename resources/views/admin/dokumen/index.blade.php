@@ -377,6 +377,7 @@
         </div>
     </div>
 </div>
+@endsection
 
 @push('scripts')
 <script>
@@ -397,4 +398,3 @@ document.getElementById('deleteModal').addEventListener('click', function(e) {
 });
 </script>
 @endpush
-@endsection
