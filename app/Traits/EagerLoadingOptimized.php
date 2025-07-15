@@ -8,18 +8,21 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 trait EagerLoadingOptimized
 {
     /**
-     * Default relationships yang akan di-load secara eager
+     * Default relationships yang akan di-load secara eager (fallback)
      */
-    protected $defaultEagerLoad = [];
+    private $traitDefaultEagerLoad = [];
 
     /**
-     * Conditional eager loading berdasarkan context
+     * Get contextual eager loading relationships based on context
      */
-    protected $contextualEagerLoad = [
-        'api' => [],
-        'web' => [],
-        'admin' => []
-    ];
+    protected function getContextualEagerLoad(): array
+    {
+        return property_exists($this, 'contextualEagerLoad') ? $this->contextualEagerLoad : [
+            'api' => [],
+            'web' => [],
+            'admin' => []
+        ];
+    }
 
     /**
      * Boot the trait
@@ -34,7 +37,11 @@ trait EagerLoadingOptimized
      */
     public function setDefaultEagerLoad(array $relationships): self
     {
-        $this->defaultEagerLoad = $relationships;
+        if (property_exists($this, 'defaultEagerLoad')) {
+            $this->defaultEagerLoad = $relationships;
+        } else {
+            $this->traitDefaultEagerLoad = $relationships;
+        }
         return $this;
     }
 
@@ -43,7 +50,7 @@ trait EagerLoadingOptimized
      */
     public function getDefaultEagerLoad(): array
     {
-        return $this->defaultEagerLoad;
+        return property_exists($this, 'defaultEagerLoad') ? $this->defaultEagerLoad : $this->traitDefaultEagerLoad;
     }
 
     /**
@@ -51,7 +58,8 @@ trait EagerLoadingOptimized
      */
     public function scopeWithContext($query, string $context = 'web')
     {
-        $relationships = $this->contextualEagerLoad[$context] ?? [];
+        $contextualEagerLoad = $this->getContextualEagerLoad();
+        $relationships = $contextualEagerLoad[$context] ?? [];
         
         if (!empty($relationships)) {
             return $query->with($relationships);
@@ -144,7 +152,8 @@ trait EagerLoadingOptimized
      */
     public function getApiRelations(): array
     {
-        return $this->contextualEagerLoad['api'] ?? [];
+        $contextualEagerLoad = $this->getContextualEagerLoad();
+        return $contextualEagerLoad['api'] ?? [];
     }
 
     /**
@@ -152,7 +161,8 @@ trait EagerLoadingOptimized
      */
     public function getAdminRelations(): array
     {
-        return $this->contextualEagerLoad['admin'] ?? [];
+        $contextualEagerLoad = $this->getContextualEagerLoad();
+        return $contextualEagerLoad['admin'] ?? [];
     }
 
     /**
@@ -160,6 +170,7 @@ trait EagerLoadingOptimized
      */
     public function getWebRelations(): array
     {
-        return $this->contextualEagerLoad['web'] ?? [];
+        $contextualEagerLoad = $this->getContextualEagerLoad();
+        return $contextualEagerLoad['web'] ?? [];
     }
 }

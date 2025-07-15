@@ -382,43 +382,6 @@
 
 @endsection
 
-@push('styles')
-<style>
-.doc-icon {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-}
-
-.doc-preview {
-    min-height: 150px;
-}
-
-.doc-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.doc-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
-}
-
-.featured-doc {
-    transition: transform 0.3s ease;
-}
-
-.featured-doc:hover {
-    transform: translateY(-3px);
-}
-
-.hero-section {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-}
-</style>
 @endpush
 
 @push('scripts')

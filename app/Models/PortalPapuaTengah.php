@@ -19,47 +19,42 @@ class PortalPapuaTengah extends Model
         'slug',
         'konten',
         'kategori',
-        'gambar',
+        'thumbnail',
         'is_published',
         'published_at',
         'penulis',
         'tags',
-        'ringkasan',
-        'views'
-    ];
-
-    /**
-     * Default eager loading relationships
-     */
-    protected $defaultEagerLoad = [
-        'creator:id,name,email',
-        'updater:id,name,email'
-    ];
-
-    /**
-     * Contextual eager loading untuk berbagai use case
-     */
-    protected $contextualEagerLoad = [
-        'api' => [
-            'creator:id,name,email',
-        ],
-        'web' => [
-            'creator:id,name,email',
-            'updater:id,name,email'
-        ],
-        'admin' => [
-            'creator:id,name,email,role',
-            'updater:id,name,email,role',
-            'files'
-        ]
+        'views',
+        'is_featured',
+        'meta_description'
     ];
 
     protected $casts = [
         'is_published' => 'boolean',
         'is_featured' => 'boolean',
-        'published_at' => 'datetime',
-        'tags' => 'array'
+        'published_at' => 'datetime'
     ];
+
+    /**
+     * Constructor to set up contextual eager loading
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        
+        // Set up contextual eager loading
+        $this->contextualEagerLoad = [
+            'api' => [
+                // No creator/updater relationships since they don't exist
+            ],
+            'web' => [
+                // No creator/updater relationships since they don't exist
+            ],
+            'admin' => [
+                // No creator/updater relationships since they don't exist
+            ]
+        ];
+    }
 
     protected static function boot()
     {
@@ -76,6 +71,16 @@ class PortalPapuaTengah extends Model
                 $model->slug = Str::slug($model->judul);
             }
         });
+    }
+
+    /**
+     * Get default eager loading relationships
+     */
+    public function getDefaultEagerLoad(): array
+    {
+        return [
+            // No creator/updater relationships since they don't exist
+        ];
     }
 
     public function scopePublished($query)

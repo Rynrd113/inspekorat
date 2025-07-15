@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('wbs', function (Blueprint $table) {
-            $table->json('bukti_files')->nullable()->after('bukti_file');
-        });
+        // Check if the wbs table exists before trying to modify it
+        if (Schema::hasTable('wbs')) {
+            Schema::table('wbs', function (Blueprint $table) {
+                if (!Schema::hasColumn('wbs', 'bukti_files')) {
+                    $table->json('bukti_files')->nullable()->after('bukti_file');
+                }
+            });
+        }
     }
 
     /**
@@ -21,8 +26,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('wbs', function (Blueprint $table) {
-            $table->dropColumn('bukti_files');
-        });
+        if (Schema::hasTable('wbs') && Schema::hasColumn('wbs', 'bukti_files')) {
+            Schema::table('wbs', function (Blueprint $table) {
+                $table->dropColumn('bukti_files');
+            });
+        }
     }
 };

@@ -198,48 +198,4 @@
 </div>
 @endsection
 
-@push('styles')
-<style>
-.prose {
-    max-width: none;
-}
-
-.prose p {
-    margin-bottom: 1.25em;
-    line-height: 1.7;
-}
-
-.prose h2 {
-    font-size: 1.5em;
-    font-weight: 600;
-    margin-top: 2em;
-    margin-bottom: 1em;
-    color: #1f2937;
-}
-
-.prose h3 {
-    font-size: 1.25em;
-    font-weight: 600;
-    margin-top: 1.6em;
-    margin-bottom: 0.6em;
-    color: #374151;
-}
-
-.prose ul, .prose ol {
-    margin: 1.25em 0;
-    padding-left: 1.625em;
-}
-
-.prose li {
-    margin: 0.5em 0;
-}
-
-.prose blockquote {
-    border-left: 4px solid #e5e7eb;
-    padding-left: 1em;
-    margin: 1.6em 0;
-    font-style: italic;
-    color: #6b7280;
-}
-</style>
 @endpush

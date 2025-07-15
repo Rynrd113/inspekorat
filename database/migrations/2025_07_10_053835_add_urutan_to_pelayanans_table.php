@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('pelayanans', function (Blueprint $table) {
-            $table->integer('urutan')->default(0)->after('status');
-        });
+        // Check if the pelayanans table exists before trying to modify it
+        if (Schema::hasTable('pelayanans')) {
+            Schema::table('pelayanans', function (Blueprint $table) {
+                if (!Schema::hasColumn('pelayanans', 'urutan')) {
+                    $table->integer('urutan')->default(0)->after('status');
+                }
+            });
+        }
     }
 
     /**
@@ -21,8 +26,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('pelayanans', function (Blueprint $table) {
-            $table->dropColumn('urutan');
-        });
+        if (Schema::hasTable('pelayanans') && Schema::hasColumn('pelayanans', 'urutan')) {
+            Schema::table('pelayanans', function (Blueprint $table) {
+                $table->dropColumn('urutan');
+            });
+        }
     }
 };

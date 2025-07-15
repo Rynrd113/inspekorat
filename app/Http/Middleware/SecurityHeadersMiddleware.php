@@ -23,16 +23,56 @@ class SecurityHeadersMiddleware
         $response->headers->set('Permissions-Policy', 'geolocation=(), camera=(), microphone=()');
         
         // Content Security Policy
-        $csp = "default-src 'self'; " .
-               "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " .
-               "style-src 'self' 'unsafe-inline'; " .
-               "img-src 'self' data: https:; " .
-               "font-src 'self'; " .
-               "connect-src 'self'; " .
-               "frame-ancestors 'none';";
+        $isDevelopment = config('app.env') === 'local';
+        
+        if ($isDevelopment) {
+            // Get potential Vite dev server ports
+            $vitePorts = $this->getViteDevServerPorts();
+            
+            // Development CSP - more permissive for Vite
+            $csp = "default-src 'self'; " .
+                   "script-src 'self' 'unsafe-inline' 'unsafe-eval' " . $vitePorts['script'] . "; " .
+                   "style-src 'self' 'unsafe-inline' " . $vitePorts['style'] . " https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
+                   "img-src 'self' data: https:; " .
+                   "font-src 'self' https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
+                   "connect-src 'self' " . $vitePorts['connect'] . "; " .
+                   "frame-ancestors 'none';";
+        } else {
+            // Production CSP - more restrictive
+            $csp = "default-src 'self'; " .
+                   "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " .
+                   "style-src 'self' 'unsafe-inline' https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
+                   "img-src 'self' data: https:; " .
+                   "font-src 'self' https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
+                   "connect-src 'self'; " .
+                   "frame-ancestors 'none';";
+        }
         
         $response->headers->set('Content-Security-Policy', $csp);
 
         return $response;
+    }
+    
+    /**
+     * Get Vite dev server ports for CSP
+     */
+    private function getViteDevServerPorts(): array
+    {
+        // Common Vite ports - 5173 is default, but it can use 5174, 5175, etc.
+        $ports = [5173, 5174, 5175, 5176, 5177];
+        
+        $httpPorts = [];
+        $wsPorts = [];
+        
+        foreach ($ports as $port) {
+            $httpPorts[] = "http://localhost:$port";
+            $wsPorts[] = "ws://localhost:$port";
+        }
+        
+        return [
+            'script' => implode(' ', array_merge($httpPorts, $wsPorts)),
+            'style' => implode(' ', $httpPorts),
+            'connect' => implode(' ', array_merge($httpPorts, $wsPorts))
+        ];
     }
 }

@@ -8,8 +8,10 @@ export default defineConfig({
             input: [
                 'resources/css/app.css', 
                 'resources/css/admin.css', 
+                'resources/css/public.css',
                 'resources/js/app.js', 
-                'resources/js/admin.js'
+                'resources/js/admin.js',
+                'resources/js/public.js'
             ],
             refresh: true,
         }),
@@ -114,9 +116,11 @@ export default defineConfig({
     },
     // Server configuration untuk development
     server: {
+        host: 'localhost',
+        port: 5173,
         hmr: {
             host: 'localhost',
-            port: 3000,
+            port: 5173,
         },
         watch: {
             usePolling: true,

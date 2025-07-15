@@ -26,7 +26,7 @@ class PelayananObserver
         $this->clearCache($pelayanan);
     }
 
-    private function logActivity(Pelayanan $pelayanan, string $action, array $oldValues = null)
+    private function logActivity(Pelayanan $pelayanan, string $action, ?array $oldValues = null)
     {
         AuditLog::create([
             'user_id' => auth()->id(),
