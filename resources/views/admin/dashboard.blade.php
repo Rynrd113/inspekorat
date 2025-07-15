@@ -53,7 +53,7 @@
                     <p class="text-sm font-medium text-gray-600">Berita</p>
                     <p class="text-2xl font-bold text-gray-900">{{ \App\Models\PortalPapuaTengah::count() }}</p>
                     <p class="text-xs text-gray-500">
-                        <span class="text-green-600">{{ \App\Models\PortalPapuaTengah::where('status', 'published')->count() }} published</span>
+                        <span class="text-green-600">{{ \App\Models\PortalPapuaTengah::where('is_published', true)->count() }} published</span>
                     </p>
                 </div>
             </div>
@@ -315,8 +315,8 @@
                                 </div>
                             </div>
                             <div class="flex-shrink-0">
-                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $news->status == 'published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                    {{ ucfirst($news->status) }}
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $news->is_published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                    {{ $news->is_published ? 'Published' : 'Draft' }}
                                 </span>
                             </div>
                         </div>
