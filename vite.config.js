@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -14,7 +13,6 @@ export default defineConfig({
             ],
             refresh: true,
         }),
-        tailwindcss(),
     ],
     build: {
         // Optimization untuk production
@@ -146,22 +144,6 @@ export default defineConfig({
             scss: {
                 additionalData: `@import "resources/css/variables.scss";`,
             },
-        },
-        // PostCSS plugins
-        postcss: {
-            plugins: [
-                require('tailwindcss'),
-                require('autoprefixer'),
-                ...(process.env.NODE_ENV === 'production' ? [
-                    require('cssnano')({
-                        preset: ['default', {
-                            discardComments: {
-                                removeAll: true,
-                            },
-                        }],
-                    }),
-                ] : []),
-            ],
         },
     },
     // Resolve aliases untuk path yang lebih bersih

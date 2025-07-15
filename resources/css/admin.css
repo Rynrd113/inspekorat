@@ -1,5 +1,7 @@
 /* Admin Panel Styles */
-@import 'tailwindcss';
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 /* Variables for consistent theming */
 :root {

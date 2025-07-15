@@ -143,11 +143,6 @@ Admin.Form = {
         const submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = submitBtn.dataset.originalContent || 'Submit';
-        }
-    },
-        if (submitBtn) {
-            submitBtn.disabled = false;
             // Restore original text (should be stored in data attribute)
             const originalText = submitBtn.getAttribute('data-original-text');
             if (originalText) {
