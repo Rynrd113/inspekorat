@@ -14,6 +14,20 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'rate.limit' => \App\Http\Middleware\RateLimitMiddleware::class,
+            'activity.log' => \App\Http\Middleware\ActivityLogMiddleware::class,
+            'api.format' => \App\Http\Middleware\FormatApiResponse::class,
+            'api.errors' => \App\Http\Middleware\HandleApiErrors::class,
+        ]);
+        
+        $middleware->append([
+            \App\Http\Middleware\SecurityHeadersMiddleware::class,
+        ]);
+
+        // API middleware group
+        $middleware->group('api', [
+            \App\Http\Middleware\HandleApiErrors::class,
+            \App\Http\Middleware\FormatApiResponse::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
