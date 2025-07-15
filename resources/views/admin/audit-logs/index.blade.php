@@ -11,33 +11,107 @@
 @endsection
 
 @section('main-content')
+<!-- Success/Error Notifications -->
+@if(session('success'))
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ session('error') }}
+    </div>
+@endif
+
 <div class="space-y-6">
-    <!-- Header -->
+    <!-- Header Actions -->
     <div class="flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold text-gray-900">Audit Logs</h1>
             <p class="text-gray-600 mt-1">Monitor aktivitas sistem - Total: {{ $auditLogs->total() }} logs</p>
         </div>
+        <div class="flex items-center space-x-3">
+            <a href="{{ route('admin.audit-logs.export', request()->query()) }}" 
+               class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors">
+                <i class="fas fa-download mr-2"></i>Export CSV
+            </a>
+        </div>
     </div>
 
-    <!-- Filter Form -->
-    <div class="bg-white rounded-lg shadow-sm p-6">
-        <form method="GET" action="{{ route('admin.audit-logs.index') }}">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-history text-2xl text-blue-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Total Logs</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $auditLogs->total() }}</p>
+                </div>
+            </div>
+        </x-card>
+        
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-calendar-day text-2xl text-green-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Hari Ini</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $auditLogs->where('created_at', '>=', today())->count() }}</p>
+                </div>
+            </div>
+        </x-card>
+        
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-users text-2xl text-purple-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Active Users</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $auditLogs->pluck('user_id')->unique()->count() }}</p>
+                </div>
+            </div>
+        </x-card>
+        
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-bolt text-2xl text-yellow-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Total Actions</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $actions->count() }}</p>
+                </div>
+            </div>
+        </x-card>
+    </div>
+
+    <!-- Search and Filter -->
+    <x-card>
+        <x-slot:header>
+            <h3 class="text-lg font-medium text-gray-900">Filter & Pencarian</h3>
+        </x-slot:header>
+        
+        <form method="GET" action="{{ route('admin.audit-logs.index') }}" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Pencarian</label>
                     <input type="text" 
                            name="search" 
                            id="search"
                            value="{{ request('search') }}"
-                           placeholder="Search by action, model, or user..."
+                           placeholder="Cari berdasarkan action, model, atau user..."
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
                 <div>
                     <label for="user_id" class="block text-sm font-medium text-gray-700 mb-1">User</label>
                     <select name="user_id" id="user_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">All Users</option>
+                        <option value="">Semua User</option>
                         @foreach($users as $user)
                             <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>
                                 {{ $user->name }}
@@ -49,7 +123,7 @@
                 <div>
                     <label for="action" class="block text-sm font-medium text-gray-700 mb-1">Action</label>
                     <select name="action" id="action" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">All Actions</option>
+                        <option value="">Semua Action</option>
                         @foreach($actions as $action)
                             <option value="{{ $action }}" {{ request('action') == $action ? 'selected' : '' }}>
                                 {{ ucfirst($action) }}
@@ -61,7 +135,7 @@
                 <div>
                     <label for="model_type" class="block text-sm font-medium text-gray-700 mb-1">Model Type</label>
                     <select name="model_type" id="model_type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">All Models</option>
+                        <option value="">Semua Model</option>
                         @foreach($modelTypes as $modelType)
                             <option value="{{ $modelType }}" {{ request('model_type') == $modelType ? 'selected' : '' }}>
                                 {{ class_basename($modelType) }}
@@ -69,24 +143,12 @@
                         @endforeach
                     </select>
                 </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">&nbsp;</label>
-                    <div class="flex gap-2">
-                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <i class="fas fa-search mr-2"></i>Filter
-                        </button>
-                        <a href="{{ route('admin.audit-logs.index') }}" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
-                            <i class="fas fa-times mr-2"></i>Clear
-                        </a>
-                    </div>
-                </div>
             </div>
 
             <!-- Date Range -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <label for="date_from" class="block text-sm font-medium text-gray-700 mb-1">Date From</label>
+                    <label for="date_from" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
                     <input type="date" 
                            name="date_from" 
                            id="date_from"
@@ -94,18 +156,35 @@
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label for="date_to" class="block text-sm font-medium text-gray-700 mb-1">Date To</label>
+                    <label for="date_to" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
                     <input type="date" 
                            name="date_to" 
                            id="date_to"
                            value="{{ request('date_to') }}"
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">&nbsp;</label>
+                    <div class="flex gap-2">
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-search mr-2"></i>Filter
+                        </button>
+                        <a href="{{ route('admin.audit-logs.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-times mr-2"></i>Clear
+                        </a>
+                    </div>
+                </div>
             </div>
         </form>
+    </x-card>
 
-        @if($auditLogs->count() > 0)
-            <!-- Audit Logs Table -->
+    <!-- Audit Logs Table -->
+    @if($auditLogs->count() > 0)
+        <x-card>
+            <x-slot:header>
+                <h3 class="text-lg font-medium text-gray-900">Daftar Audit Logs</h3>
+            </x-slot:header>
+
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
@@ -126,10 +205,10 @@
                                 IP Address
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Date
+                                Tanggal
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Actions
+                                Aksi
                             </th>
                         </tr>
                     </thead>
@@ -218,7 +297,8 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <a href="{{ route('admin.audit-logs.show', $log) }}" 
-                                       class="text-blue-600 hover:text-blue-900">
+                                       class="text-blue-600 hover:text-blue-900" 
+                                       title="Lihat Detail">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 </td>
@@ -229,34 +309,38 @@
             </div>
 
             <!-- Pagination -->
-            <div class="mt-4">
-                {{ $auditLogs->links() }}
-            </div>
-        @else
-            <!-- Empty State -->
+            @if($auditLogs->hasPages())
+                <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+                    {{ $auditLogs->links() }}
+                </div>
+            @endif
+        </x-card>
+    @else
+        <!-- Empty State -->
+        <x-card>
             <div class="text-center py-12">
                 <div class="mx-auto h-24 w-24 text-gray-400">
                     <i class="fas fa-history text-6xl"></i>
                 </div>
-                <h3 class="mt-4 text-lg font-medium text-gray-900">No audit logs found</h3>
+                <h3 class="mt-4 text-lg font-medium text-gray-900">Tidak ada audit log ditemukan</h3>
                 <p class="mt-2 text-sm text-gray-500">
                     @if(request()->hasAny(['search', 'user_id', 'action', 'model_type', 'date_from', 'date_to']))
-                        No logs match your current filters. Try adjusting your search criteria.
+                        Tidak ada log yang sesuai dengan filter yang dipilih. Coba sesuaikan kriteria pencarian Anda.
                     @else
-                        No audit logs have been recorded yet. Actions performed by users will appear here.
+                        Belum ada audit log yang tercatat. Aktivitas yang dilakukan user akan muncul di sini.
                     @endif
                 </p>
                 @if(request()->hasAny(['search', 'user_id', 'action', 'model_type', 'date_from', 'date_to']))
                     <div class="mt-4">
                         <a href="{{ route('admin.audit-logs.index') }}" 
                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-blue-100 hover:bg-blue-200">
-                            <i class="fas fa-times mr-2"></i>Clear filters
+                            <i class="fas fa-times mr-2"></i>Hapus filter
                         </a>
                     </div>
                 @endif
             </div>
-        @endif
-    </div>
+        </x-card>
+    @endif
 </div>
 
 <script>

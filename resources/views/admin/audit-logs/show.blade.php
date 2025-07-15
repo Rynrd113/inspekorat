@@ -1,8 +1,9 @@
 @extends('layouts.admin')
 
-@section('title', 'Audit Log Details')
+@section('title', 'Detail Audit Log')
 
-@section('header', 'Audit Log Details')
+@section('header', 'Detail Audit Log')
+
 @section('breadcrumb')
 <li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
 <li><a href="{{ route('admin.audit-logs.index') }}" class="text-blue-600 hover:text-blue-800">Audit Logs</a></li>
@@ -10,9 +11,26 @@
 @endsection
 
 @section('main-content')
-<x-card>
-    <div class="mb-6">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Log Information</h2>
+<div class="space-y-6">
+    <!-- Header Actions -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Detail Audit Log #{{ $auditLog->id }}</h1>
+            <p class="text-gray-600 mt-1">Informasi detail tentang aktivitas sistem</p>
+        </div>
+        <div class="flex items-center space-x-3">
+            <a href="{{ route('admin.audit-logs.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>Kembali
+            </a>
+        </div>
+    </div>
+
+    <!-- Log Information -->
+    <x-card>
+        <x-slot:header>
+            <h3 class="text-lg font-medium text-gray-900">Informasi Log</h3>
+        </x-slot:header>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -62,12 +80,12 @@
                 <p class="font-medium">{{ $auditLog->ip_address }}</p>
             </div>
             <div>
-                <p class="text-sm text-gray-600">Date</p>
+                <p class="text-sm text-gray-600">Tanggal</p>
                 <p class="font-medium">{{ $auditLog->created_at->format('d M Y, H:i:s') }}</p>
             </div>
             <div>
                 <p class="text-sm text-gray-600">User Agent</p>
-                <p class="font-medium text-xs">{{ Str::limit($auditLog->user_agent, 60) }}</p>
+                <p class="font-medium text-xs">{{ \Illuminate\Support\Str::limit($auditLog->user_agent, 60) }}</p>
             </div>
         </div>
         
@@ -77,30 +95,33 @@
             <p class="font-medium">{{ $auditLog->description }}</p>
         </div>
         @endif
-    </div>
+    </x-card>
 
     @if($auditLog->old_values || $auditLog->new_values)
-    <div class="border-t pt-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Data Changes</h3>
+    <!-- Data Changes -->
+    <x-card>
+        <x-slot:header>
+            <h3 class="text-lg font-medium text-gray-900">Perubahan Data</h3>
+        </x-slot:header>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             @if($auditLog->old_values)
             <div>
-                <h4 class="text-sm font-medium text-red-600 mb-2">Old Values</h4>
+                <h4 class="text-sm font-medium text-red-600 mb-2">Nilai Lama</h4>
                 <pre class="bg-red-50 p-3 rounded-md text-sm overflow-x-auto">{{ json_encode($auditLog->old_values, JSON_PRETTY_PRINT) }}</pre>
             </div>
             @endif
             
             @if($auditLog->new_values)
             <div>
-                <h4 class="text-sm font-medium text-green-600 mb-2">New Values</h4>
+                <h4 class="text-sm font-medium text-green-600 mb-2">Nilai Baru</h4>
                 <pre class="bg-green-50 p-3 rounded-md text-sm overflow-x-auto">{{ json_encode($auditLog->new_values, JSON_PRETTY_PRINT) }}</pre>
             </div>
             @endif
         </div>
-    </div>
+    </x-card>
     @endif
-</x-card>
+</div>
 @endsection
 <div class="container-fluid px-4">
     <h1 class="mt-4">Audit Log Details</h1>
