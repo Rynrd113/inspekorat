@@ -315,7 +315,7 @@
             {{-- 
             TODO: Uncomment this section when implementing real empty state logic
             
-            &#64;if($documents->isEmpty())
+            @if($documents->isEmpty())
                 <x-empty-state
                     title="Tidak ada dokumen yang sesuai"
                     description="Tidak ditemukan dokumen yang cocok dengan pencarian atau filter yang Anda gunakan."
@@ -325,7 +325,7 @@
                     actionUrl="{{ route('admin.dokumen.create') }}"
                     suggestion="Coba gunakan kata kunci yang berbeda atau reset filter untuk melihat semua dokumen."
                 />
-            &#64;endif
+            @endif
             --}}
         </div>
     </div>
