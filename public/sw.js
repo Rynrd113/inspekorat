@@ -1,46 +1,91 @@
 /**
- * Service Worker for FAQ Page
- * Provides offline support and caching for better performance
+ * Service Worker for Portal Inspektorat Papua Tengah
+ * Provides offline support, asset caching, and performance optimization
  */
 
-const CACHE_NAME = 'inspektorat-faq-v2.0';
-const urlsToCache = [
+const CACHE_NAME = 'inspektorat-v3.0';
+const CACHE_STATIC_NAME = 'inspektorat-static-v3.0';
+const CACHE_DYNAMIC_NAME = 'inspektorat-dynamic-v3.0';
+
+// Static assets yang akan di-cache
+const STATIC_ASSETS = [
     '/',
-    '/faq',
-    '/css/faq.css',
-    '/js/faq.js',
     '/css/app.css',
     '/js/app.js',
+    '/css/admin.css',
+    '/js/admin.js',
+    '/favicon.ico',
+    '/logo.svg',
+    '/manifest.json',
+    '/offline.html',
+    // External CDN assets
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
 
-// Install event - cache resources
+// Dynamic assets patterns
+const DYNAMIC_CACHE_PATTERNS = [
+    /\/api\//,
+    /\/storage\//,
+    /\.(?:png|jpg|jpeg|svg|gif|webp|avif)$/,
+    /\.(?:js|css)$/,
+    /\.(?:woff|woff2|eot|ttf|otf)$/
+];
+
+// Assets yang tidak boleh di-cache
+const CACHE_BLACKLIST = [
+    /\/admin\/login/,
+    /\/admin\/logout/,
+    /\/api\/auth/,
+    /\/api\/csrf/,
+    /\/sanctum\//,
+    /\/broadcasting\//
+];
+
+// Install event - cache static assets
 self.addEventListener('install', function(event) {
+    console.log('Service Worker: Installing...');
+    
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(function(cache) {
-                console.log('Service Worker: Caching files');
-                return cache.addAll(urlsToCache);
-            })
-            .catch(function(error) {
-                console.error('Service Worker: Failed to cache files', error);
-            })
+        Promise.all([
+            // Cache static assets
+            caches.open(CACHE_STATIC_NAME).then(function(cache) {
+                console.log('Service Worker: Caching static assets');
+                return cache.addAll(STATIC_ASSETS);
+            }),
+            // Initialize dynamic cache
+            caches.open(CACHE_DYNAMIC_NAME)
+        ])
+        .then(function() {
+            console.log('Service Worker: Installation complete');
+            return self.skipWaiting();
+        })
+        .catch(function(error) {
+            console.error('Service Worker: Installation failed', error);
+        })
     );
 });
 
-// Activate event - clean up old caches
+// Activate event - cleanup old caches
 self.addEventListener('activate', function(event) {
+    console.log('Service Worker: Activating...');
+    
     event.waitUntil(
         caches.keys().then(function(cacheNames) {
             return Promise.all(
                 cacheNames.map(function(cacheName) {
-                    if (cacheName !== CACHE_NAME) {
+                    if (cacheName !== CACHE_STATIC_NAME && 
+                        cacheName !== CACHE_DYNAMIC_NAME &&
+                        cacheName !== CACHE_NAME) {
                         console.log('Service Worker: Deleting old cache', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
             );
+        })
+        .then(function() {
+            console.log('Service Worker: Activation complete');
+            return self.clients.claim();
         })
     );
 });

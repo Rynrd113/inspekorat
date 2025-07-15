@@ -32,7 +32,10 @@ class InfoKantorController extends Controller
                 $query->active();
             }
 
-            return $query->ordered()->get();
+            return $query->with(['creator:id,name,email', 'updater:id,name,email'])
+                ->select(['id', 'judul', 'konten', 'kategori', 'is_active', 'icon', 'urutan', 'created_by', 'updated_by', 'created_at', 'updated_at'])
+                ->ordered()
+                ->get();
         });
 
         return response()->json([

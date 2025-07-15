@@ -1,0 +1,372 @@
+// Asset Optimization Utilities
+// SCSS version compatible with Tailwind CSS
+
+/* ==========================================================================
+   Critical Performance Utilities
+   ========================================================================== */
+
+.performance-optimized {
+  contain: layout style paint;
+  will-change: auto;
+  
+  &.loading {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  &.loaded {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   Lazy Loading Utilities
+   ========================================================================== */
+
+.lazy-image {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  will-change: opacity;
+  
+  &.loading {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  
+  &.loaded {
+    opacity: 1;
+    background: none;
+    animation: none;
+  }
+  
+  &.error {
+    opacity: 0.5;
+    background: #f8f9fa;
+    border: 1px dashed #dee2e6;
+    
+    &::before {
+      content: '📷';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      opacity: 0.5;
+    }
+  }
+}
+
+.lazy-container {
+  position: relative;
+  overflow: hidden;
+  background: #f8f9fa;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmer 1.5s infinite;
+    z-index: 1;
+  }
+  
+  &.loaded::before {
+    display: none;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ==========================================================================
+   Font Optimization Utilities
+   ========================================================================== */
+
+.font-optimized {
+  font-display: swap;
+  font-synthesis: none;
+  font-variant-ligatures: common-ligatures;
+  font-feature-settings: "kern" 1, "liga" 1, "clig" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-fallback {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  .fonts-loaded & {
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* ==========================================================================
+   Layout Optimization Utilities
+   ========================================================================== */
+
+.layout-optimized {
+  contain: layout;
+  
+  &.strict {
+    contain: strict;
+  }
+  
+  &.content {
+    contain: content;
+  }
+}
+
+.transform-optimized {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.scroll-optimized {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+}
+
+/* ==========================================================================
+   Animation Optimization Utilities
+   ========================================================================== */
+
+.animation-optimized {
+  will-change: transform, opacity;
+  
+  &.paused {
+    animation-play-state: paused;
+  }
+  
+  &.reduced-motion {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animation-optimized {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   Critical Resource Hints
+   ========================================================================== */
+
+.critical-resource {
+  &.loading {
+    visibility: hidden;
+  }
+  
+  &.loaded {
+    visibility: visible;
+  }
+}
+
+/* ==========================================================================
+   Responsive Image Utilities
+   ========================================================================== */
+
+.responsive-image {
+  max-width: 100%;
+  height: auto;
+  
+  &.aspect-16-9 {
+    aspect-ratio: 16/9;
+    object-fit: cover;
+  }
+  
+  &.aspect-4-3 {
+    aspect-ratio: 4/3;
+    object-fit: cover;
+  }
+  
+  &.aspect-square {
+    aspect-ratio: 1/1;
+    object-fit: cover;
+  }
+  
+  &.object-contain {
+    object-fit: contain;
+  }
+  
+  &.object-cover {
+    object-fit: cover;
+  }
+  
+  &.object-fill {
+    object-fit: fill;
+  }
+}
+
+/* ==========================================================================
+   Performance Monitoring Utilities
+   ========================================================================== */
+
+.performance-marker {
+  &::before {
+    content: attr(data-performance-id);
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 10px;
+    color: #666;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2px 4px;
+    border-radius: 2px;
+    z-index: 9999;
+    display: none;
+  }
+  
+  &.debug-performance::before {
+    display: block;
+  }
+}
+
+/* ==========================================================================
+   Critical CSS Utilities
+   ========================================================================== */
+
+.critical-content {
+  position: relative;
+  
+  &.above-fold {
+    min-height: 100vh;
+  }
+  
+  &.below-fold {
+    min-height: 50vh;
+  }
+}
+
+.non-critical {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   Browser Support Utilities
+   ========================================================================== */
+
+.webp-support {
+  .webp-image {
+    background-image: url('image.webp');
+  }
+}
+
+.no-webp-support {
+  .webp-image {
+    background-image: url('image.jpg');
+  }
+}
+
+/* ==========================================================================
+   Utilities for Third-party Integration
+   ========================================================================== */
+
+.third-party-optimized {
+  contain: layout style;
+  
+  &.loading {
+    min-height: 100px;
+    background: #f8f9fa;
+    
+    &::before {
+      content: 'Loading...';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #666;
+      font-size: 14px;
+    }
+  }
+}
+
+/* ==========================================================================
+   Debug Utilities
+   ========================================================================== */
+
+.debug-performance {
+  &::after {
+    content: 'LCP: ' attr(data-lcp) ' | FID: ' attr(data-fid) ' | CLS: ' attr(data-cls);
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 9999;
+    font-family: monospace;
+  }
+}
+
+/* ==========================================================================
+   Responsive Utilities
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .mobile-optimized {
+    .lazy-image {
+      background-size: 100% 100%;
+    }
+    
+    .animation-optimized {
+      animation-duration: 0.2s !important;
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .desktop-optimized {
+    .lazy-image {
+      background-size: 200% 100%;
+    }
+  }
+}
+
+/* ==========================================================================
+   Print Optimization
+   ========================================================================== */
+
+@media print {
+  .performance-optimized,
+  .lazy-image,
+  .animation-optimized {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .lazy-container::before {
+    display: none !important;
+  }
+}

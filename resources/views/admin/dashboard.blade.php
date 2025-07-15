@@ -266,7 +266,11 @@
         <div class="space-y-4">
             @if(auth()->user()->hasAnyRole(['admin_wbs', 'wbs_manager', 'admin', 'superadmin']))
             @php
-                $recentWbs = \App\Models\Wbs::latest()->limit(3)->get();
+                $recentWbs = \App\Models\Wbs::with(['creator:id,name,email', 'updater:id,name,email'])
+                    ->select(['id', 'nama_pelapor', 'subjek', 'status', 'created_at', 'created_by', 'updated_by'])
+                    ->latest()
+                    ->limit(3)
+                    ->get();
             @endphp
             @if($recentWbs->count() > 0)
                 <div>

@@ -62,7 +62,9 @@ class PortalPapuaTengahRepository implements PortalPapuaTengahRepositoryInterfac
             $query->where('is_featured', $filters['is_featured']);
         }
 
-        return $query->orderBy('published_at', 'desc')->paginate($perPage);
+        return $query->withContext($filters['context'] ?? 'web')
+                    ->orderBy('published_at', 'desc')
+                    ->paginate($perPage);
     }
 
     public function create(array $data): PortalPapuaTengah

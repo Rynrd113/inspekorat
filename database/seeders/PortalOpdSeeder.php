@@ -13,7 +13,9 @@ class PortalOpdSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::where('role', 'superadmin')->first();
+        $admin = User::select(['id', 'name', 'email', 'role'])
+            ->where('role', 'superadmin')
+            ->first();
         
         $opds = [
             [

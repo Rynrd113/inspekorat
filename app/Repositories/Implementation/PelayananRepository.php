@@ -24,8 +24,15 @@ class PelayananRepository implements PelayananRepositoryInterface
 
     public function getAll(): Collection
     {
-        return Cache::remember('pelayanans.all', 600, function () {
-            return $this->model->with(['creator:id,name', 'updater:id,name'])->get();
+        return Cache::remember('pelayanans.all', 3600, function () {
+            return $this->model->with(['creator:id,name', 'updater:id,name'])
+                              ->select([
+                                  'id', 'nama_layanan', 'deskripsi', 'kategori', 
+                                  'status', 'waktu_penyelesaian', 'biaya', 'urutan',
+                                  'created_at', 'updated_at', 'created_by', 'updated_by'
+                              ])
+                              ->orderBy('urutan')
+                              ->get();
         });
     }
 
@@ -35,8 +42,11 @@ class PelayananRepository implements PelayananRepositoryInterface
 
         // Apply filters
         if (!empty($filters['search'])) {
-            $query->where('nama_layanan', 'like', '%' . $filters['search'] . '%')
-                  ->orWhere('deskripsi', 'like', '%' . $filters['search'] . '%');
+            $query->where(function ($q) use ($filters) {
+                $q->where('nama_layanan', 'like', '%' . $filters['search'] . '%')
+                  ->orWhere('deskripsi', 'like', '%' . $filters['search'] . '%')
+                  ->orWhere('persyaratan', 'like', '%' . $filters['search'] . '%');
+            });
         }
 
         if (!empty($filters['kategori'])) {
@@ -47,7 +57,16 @@ class PelayananRepository implements PelayananRepositoryInterface
             $query->where('status', $filters['status']);
         }
 
-        return $query->with(['creator:id,name', 'updater:id,name'])
+        // Critical: Always eager load relationships to prevent N+1 queries
+        return $query->with([
+                         'creator:id,name,email',
+                         'updater:id,name,email'
+                     ])
+                     ->select([
+                         'id', 'nama_layanan', 'deskripsi', 'kategori', 'status', 
+                         'waktu_penyelesaian', 'biaya', 'urutan', 'created_at', 
+                         'updated_at', 'created_by', 'updated_by'
+                     ])
                      ->latest()
                      ->paginate($perPage);
     }

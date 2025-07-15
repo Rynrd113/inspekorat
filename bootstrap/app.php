@@ -18,16 +18,28 @@ return Application::configure(basePath: dirname(__DIR__))
             'activity.log' => \App\Http\Middleware\ActivityLogMiddleware::class,
             'api.format' => \App\Http\Middleware\FormatApiResponse::class,
             'api.errors' => \App\Http\Middleware\HandleApiErrors::class,
+            'api.rate.limit' => \App\Http\Middleware\ApiRateLimitMiddleware::class,
+            'db.optimize' => \App\Http\Middleware\DatabaseQueryOptimizationMiddleware::class,
+            'asset.optimize' => \App\Http\Middleware\AssetOptimizationMiddleware::class,
         ]);
         
         $middleware->append([
             \App\Http\Middleware\SecurityHeadersMiddleware::class,
+            \App\Http\Middleware\AssetOptimizationMiddleware::class,
         ]);
 
-        // API middleware group
+        // API middleware group with rate limiting and performance monitoring
         $middleware->group('api', [
             \App\Http\Middleware\HandleApiErrors::class,
             \App\Http\Middleware\FormatApiResponse::class,
+            \App\Http\Middleware\ApiRateLimitMiddleware::class . ':120,1', // 120 requests per minute
+            \App\Http\Middleware\DatabaseQueryOptimizationMiddleware::class,
+        ]);
+        
+        // Web middleware group with database optimization and asset optimization
+        $middleware->group('web', [
+            \App\Http\Middleware\DatabaseQueryOptimizationMiddleware::class,
+            \App\Http\Middleware\AssetOptimizationMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

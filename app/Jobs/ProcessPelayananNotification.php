@@ -87,6 +87,8 @@ class ProcessPelayananNotification implements ShouldQueue
     private function sendNotificationToAdmins(): void
     {
         $admins = \App\Models\User::whereIn('role', ['admin', 'superadmin', 'service_manager'])
+                                  ->where('email_verified_at', '!=', null)
+                                  ->select(['id', 'name', 'email', 'role'])
                                   ->get();
 
         foreach ($admins as $admin) {

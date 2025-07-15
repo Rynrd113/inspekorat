@@ -32,7 +32,10 @@ class WebPortalController extends Controller
                 $query->active();
             }
 
-            return $query->ordered()->get();
+            return $query->with(['creator:id,name,email', 'updater:id,name,email'])
+                ->select(['id', 'nama_portal', 'deskripsi', 'url_portal', 'kategori', 'icon', 'is_active', 'urutan', 'created_by', 'updated_by', 'created_at', 'updated_at'])
+                ->ordered()
+                ->get();
         });
 
         return response()->json([

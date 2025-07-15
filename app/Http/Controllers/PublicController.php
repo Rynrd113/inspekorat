@@ -24,9 +24,14 @@ class PublicController extends Controller
      */
     public function index(): View
     {
-        // Cache data public untuk performa - ambil hanya 5 berita terbaru
+        // Cache data public untuk performa - ambil hanya 5 berita terbaru dengan eager loading
         $portalPapuaTengah = Cache::remember('public_portal_papua_tengah', 600, function () {
-            return PortalPapuaTengah::published()->ordered()->take(5)->get();
+            return PortalPapuaTengah::with(['creator:id,name,email', 'updater:id,name,email'])
+                ->published()
+                ->ordered()
+                ->select(['id', 'judul', 'slug', 'konten', 'kategori', 'gambar', 'published_at', 'views', 'created_by', 'updated_by'])
+                ->take(5)
+                ->get();
         });
 
         // Cache statistik public untuk performa

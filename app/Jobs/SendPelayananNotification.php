@@ -27,9 +27,10 @@ class SendPelayananNotification implements ShouldQueue
 
     public function handle()
     {
-        // Get admins who should be notified
+        // Get admins who should be notified with optimized query
         $admins = User::whereIn('role', ['admin', 'superadmin'])
                      ->where('email_verified_at', '!=', null)
+                     ->select(['id', 'name', 'email', 'role'])
                      ->get();
 
         foreach ($admins as $admin) {

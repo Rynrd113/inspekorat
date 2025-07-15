@@ -3,79 +3,149 @@
  * Provides consistent interaction patterns for admin interface
  */
 
-// Admin namespace
+// Admin namespace with performance optimizations
 window.Admin = window.Admin || {};
 
+// Debounce utility for performance
+Admin.debounce = function(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+};
+
+// Throttle utility for scroll events
+Admin.throttle = function(func, limit) {
+    let inThrottle;
+    return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+            func.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+};
+
 /**
- * Modal Management
+ * Modal Management with improved accessibility
  */
 Admin.Modal = {
-    // Open modal
+    activeModal: null,
+    
+    // Open modal with focus management
     open: function(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
+            // Store currently focused element
+            this.previousFocus = document.activeElement;
+            
             modal.classList.remove('hidden');
             modal.setAttribute('aria-hidden', 'false');
             document.body.classList.add('overflow-hidden');
             
-            // Focus first focusable element
-            const focusable = modal.querySelector('button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
-            if (focusable) {
-                focusable.focus();
-            }
+            // Set active modal
+            this.activeModal = modal;
+            
+            // Focus management with delay for animation
+            setTimeout(() => {
+                const focusable = modal.querySelector(
+                    'button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                if (focusable) {
+                    focusable.focus();
+                }
+            }, 100);
         }
     },
     
-    // Close modal
+    // Close modal with focus restoration
     close: function(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
             modal.classList.add('hidden');
             modal.setAttribute('aria-hidden', 'true');
             document.body.classList.remove('overflow-hidden');
+            
+            this.activeModal = null;
+            
+            // Restore focus
+            if (this.previousFocus) {
+                this.previousFocus.focus();
+                this.previousFocus = null;
+            }
         }
     },
     
-    // Initialize modal event listeners
+    // Initialize modal event listeners with delegation
     init: function() {
-        // Close modal when clicking backdrop
+        const self = this;
+        
+        // Use event delegation for better performance
         document.addEventListener('click', function(e) {
+            // Close modal when clicking backdrop
             if (e.target.classList.contains('modal-backdrop')) {
                 const modal = e.target.closest('[role="dialog"]');
                 if (modal) {
-                    Admin.Modal.close(modal.id);
+                    self.close(modal.id);
+                }
+            }
+            
+            // Handle modal trigger buttons
+            if (e.target.matches('[data-modal-target]')) {
+                e.preventDefault();
+                const targetId = e.target.getAttribute('data-modal-target');
+                self.open(targetId);
+            }
+            
+            // Handle modal close buttons
+            if (e.target.matches('[data-modal-close]')) {
+                e.preventDefault();
+                const modal = e.target.closest('[role="dialog"]');
+                if (modal) {
+                    self.close(modal.id);
                 }
             }
         });
         
         // Close modal on escape key
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const openModal = document.querySelector('[role="dialog"]:not(.hidden)');
-                if (openModal) {
-                    Admin.Modal.close(openModal.id);
-                }
+            if (e.key === 'Escape' && self.activeModal) {
+                self.close(self.activeModal.id);
             }
         });
     }
 };
 
 /**
- * Form Handling
+ * Enhanced Form Handling with validation
  */
 Admin.Form = {
     // Show loading state on form submission
     showLoading: function(form) {
         const submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) {
+            // Store original content
+            submitBtn.dataset.originalContent = submitBtn.innerHTML;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Loading...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
         }
     },
     
     // Hide loading state
     hideLoading: function(form) {
         const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = submitBtn.dataset.originalContent || 'Submit';
+        }
+    },
         if (submitBtn) {
             submitBtn.disabled = false;
             // Restore original text (should be stored in data attribute)

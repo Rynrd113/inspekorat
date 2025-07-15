@@ -8,11 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Traits\HasAuditLog;
+use App\Traits\EagerLoadingOptimized;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens, HasAuditLog;
+    use HasFactory, Notifiable, HasApiTokens, HasAuditLog, EagerLoadingOptimized;
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +25,24 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+    ];
+
+    /**
+     * Contextual eager loading untuk berbagai use case
+     */
+    protected $contextualEagerLoad = [
+        'api' => [
+            // Minimal data untuk API
+        ],
+        'web' => [
+            'createdContent:id,judul,created_at,created_by',
+        ],
+        'admin' => [
+            'createdContent:id,judul,created_at,created_by',
+            'updatedContent:id,judul,updated_at,updated_by',
+            'wbsReports:id,subjek,status,created_at,assigned_to',
+            'auditLogs:id,action,model_type,created_at,user_id'
+        ]
     ];
 
     /**
