@@ -28,6 +28,11 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\AssetOptimizationMiddleware::class,
         ]);
 
+        // Configure authentication redirects
+        $middleware->redirectGuestsTo(function () {
+            return route('admin.login');
+        });
+        
         // API middleware group with rate limiting and performance monitoring
         $middleware->group('api', [
             \App\Http\Middleware\HandleApiErrors::class,
@@ -38,6 +43,12 @@ return Application::configure(basePath: dirname(__DIR__))
         
         // Web middleware group with database optimization and asset optimization
         $middleware->group('web', [
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\DatabaseQueryOptimizationMiddleware::class,
             \App\Http\Middleware\AssetOptimizationMiddleware::class,
         ]);

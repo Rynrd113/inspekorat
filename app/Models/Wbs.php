@@ -29,7 +29,9 @@ class Wbs extends Model
         'responded_at',
         'admin_note',
         'attachment',
-        'is_anonymous'
+        'is_anonymous',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
@@ -40,6 +42,27 @@ class Wbs extends Model
         'tanggal_kejadian' => 'date',
         'bukti_files' => 'array',
     ];
+
+    /**
+     * Boot the model and set up event listeners.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (auth()->check()) {
+                $model->created_by = auth()->id();
+                $model->updated_by = auth()->id();
+            }
+        });
+
+        static::updating(function ($model) {
+            if (auth()->check()) {
+                $model->updated_by = auth()->id();
+            }
+        });
+    }
 
     /**
      * Scope untuk filter berdasarkan status
@@ -80,6 +103,22 @@ class Wbs extends Model
             'selesai' => 'bg-green-100 text-green-800',
             default => 'bg-gray-100 text-gray-800'
         };
+    }
+
+    /**
+     * Get the user who created this WBS report
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Get the user who last updated this WBS report
+     */
+    public function updater()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
     /**
