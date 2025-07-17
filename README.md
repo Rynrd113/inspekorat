@@ -19,9 +19,9 @@ Portal informasi dan layanan publik resmi Inspektorat Provinsi Papua Tengah deng
 - **Galeri**: Koleksi foto dan video kegiatan dengan viewer modal interaktif
 - **FAQ**: Sistem tanya jawab dengan search dan kategorisasi
 - **Whistleblower System (WBS)**: Sistem pelaporan yang aman dan terstruktur
-- **Kontak**: Informasi kontak lengkap dengan peta lokasi
+- **Kontak**: Informasi kontak lengkap dengan peta lokasi dan form kontak
 - **Statistik Real-time**: Dashboard data terkini OPD, berita, dan laporan WBS
-- **Responsive Design**: Optimized untuk desktop, tablet, dan mobile
+- **Responsive Design**: Optimized untuk desktop, tablet, dan mobile dengan Bootstrap 5
 
 ### 🔐 **Admin Panel dengan Role-Based Access Control**
 - **Dashboard Dinamis**: Tampilan berdasarkan role dan hak akses user
@@ -34,10 +34,12 @@ Portal informasi dan layanan publik resmi Inspektorat Provinsi Papua Tengah deng
 - **Portal OPD Management**: CRUD lengkap untuk data OPD
 - **Portal Papua Tengah**: Manajemen berita dan konten
 - **WBS Management**: Kelola laporan whistleblower dengan tracking status
-- **Multi-Role Support**: 10+ level role dengan hak akses berbeda
+- **Multi-Role Support**: 11 level role dengan hak akses berbeda
+- **Performance Monitoring**: Real-time tracking dan optimization
+- **Security Features**: RBAC, CSRF protection, input validation
 
 ### 👥 **Sistem Role & Permissions**
-- **SuperAdmin**: Akses penuh termasuk user management
+- **SuperAdmin**: Akses penuh termasuk user management dan system settings
 - **Admin**: Akses ke semua modul kecuali user management  
 - **Admin Profil**: Khusus mengelola profil organisasi
 - **Admin Pelayanan**: Khusus mengelola layanan publik
@@ -47,16 +49,19 @@ Portal informasi dan layanan publik resmi Inspektorat Provinsi Papua Tengah deng
 - **Admin Portal OPD**: Khusus mengelola data OPD
 - **Admin Berita**: Khusus mengelola berita/konten
 - **Admin WBS**: Khusus mengelola laporan WBS
-- **User**: Akses terbatas/view only
+- **User**: Akses terbatas/view only dengan dashboard khusus
 
 ## 💻 Teknologi & Arsitektur
 
 - **Backend**: Laravel 12.x dengan PHP 8.2+
-- **Frontend**: Tailwind CSS 3.x dengan Vite
+- **Frontend**: Bootstrap 5.3 dengan Vite untuk build modern
 - **Database**: MySQL dengan optimasi Query Builder dan Eloquent ORM
 - **Authentication**: Laravel Sanctum dengan custom role middleware
-- **Caching**: Laravel Cache untuk optimasi performa
+- **Caching**: Redis/File Cache untuk optimasi performa
 - **File Storage**: Laravel Storage dengan validasi keamanan
+- **Architecture**: Repository Pattern, Service Layer, Action Classes
+- **Security**: RBAC, CSRF, XSS protection, input validation
+- **Testing**: PHPUnit untuk unit dan feature testing
 
 ## Instalasi
 
@@ -104,9 +109,9 @@ Portal informasi dan layanan publik resmi Inspektorat Provinsi Papua Tengah deng
    ```
 
    Ini akan membuat tabel dan data sample termasuk:
-   - **SuperAdmin**: `superadmin@papuatengah.go.id` / `password`
-   - **Admin Modul**: Admin untuk setiap modul dengan password `password`
-   - **Sample Data**: 10 OPD, berita, dan data WBS sample
+   - **SuperAdmin**: `superadmin@inspektorat.id` / `superadmin123`
+   - **Admin untuk semua modul**: Setiap admin memiliki akses sesuai rolenya
+   - **Sample Data**: 10 OPD, berita, dokumen, galeri, FAQ, pelayanan, dan data WBS sample
 
 6. **Build assets**
    ```bash
@@ -126,6 +131,11 @@ Aplikasi akan berjalan di `http://localhost:8000`
 |------|-------|----------|--------|
 | **Super Admin** | `superadmin@inspektorat.id` | `superadmin123` | Semua fitur + User Management |
 | **Admin** | `admin@inspektorat.id` | `admin123` | Semua modul admin |
+| **Admin Profil** | `admin.profil@inspektorat.id` | `adminprofil123` | Hanya Profil |
+| **Admin Pelayanan** | `admin.pelayanan@inspektorat.id` | `adminpelayanan123` | Hanya Pelayanan |
+| **Admin Dokumen** | `admin.dokumen@inspektorat.id` | `admindokumen123` | Hanya Dokumen |
+| **Admin Galeri** | `admin.galeri@inspektorat.id` | `admingaleri123` | Hanya Galeri |
+| **Admin FAQ** | `admin.faq@inspektorat.id` | `adminfaq123` | Hanya FAQ |
 | **Admin WBS** | `admin.wbs@inspektorat.id` | `adminwbs123` | Hanya WBS |
 | **Admin Berita** | `admin.berita@inspektorat.id` | `adminberita123` | Hanya Berita |
 | **Admin Portal OPD** | `admin.opd@inspektorat.id` | `adminopd123` | Hanya Portal OPD |
@@ -178,7 +188,21 @@ php artisan migrate:fresh --seed
 php artisan db:seed --class=SuperAdminSeeder
 php artisan db:seed --class=PortalOpdSeeder
 php artisan db:seed --class=PortalPapuaTengahSeeder
+php artisan db:seed --class=PelayananSeeder
+php artisan db:seed --class=DokumenSeeder
+php artisan db:seed --class=GaleriSeeder
+php artisan db:seed --class=FaqSeeder
 php artisan db:seed --class=WbsSeeder
+
+# Jalankan testing
+php artisan test
+
+# Testing dengan coverage
+php artisan test --coverage
+
+# Testing spesifik
+php artisan test --testsuite=Feature
+php artisan test --testsuite=Unit
 
 # Optimize untuk development
 php artisan optimize:clear
@@ -199,38 +223,54 @@ php artisan storage:link
 php artisan route:list
 ```
 
-## 🗄️ Struktur Database
+### 🗄️ Struktur Database
 
 ### Tabel Utama
 - `users`: Data pengguna dengan sistem role
-- `portal_opds`: Data OPD Papua Tengah (baru)
+- `portal_opds`: Data OPD Papua Tengah
 - `portal_papua_tengahs`: Konten berita dan artikel
+- `profils`: Data profil organisasi (baru)
+- `pelayanans`: Data layanan publik (baru)
+- `dokumens`: Repository dokumen (baru)
+- `galeris`: Galeri foto dan video (baru)
+- `faqs`: Sistem tanya jawab (baru)
 - `wbs`: Data laporan Whistleblower
 - `info_kantors`: Informasi kantor dan kontak
-- `web_portals`: Data portal web
 
 ### Relasi Database
-- **Users ↔ Portal OPDs**: Relasi creator/updater
-- **Users ↔ Portal Papua Tengah**: Relasi penulis/editor
-- **Users ↔ WBS**: Relasi processor/handler
+- **Users ↔ All Modules**: Relasi creator/updater untuk audit trail
+- **Category System**: Kategorisasi untuk dokumen, FAQ, dan galeri
+- **File Management**: Integrasi dengan Laravel Storage
 - **Soft Deletes**: Implementasi pada semua model utama
+- **Performance**: Indexing dan caching untuk query optimization
 
 ## 🛣️ Route Structure
 
 ### Public Routes
 ```
 / - Beranda dengan statistik dan showcase
+/profil - Profil organisasi lengkap
 /berita - Daftar berita
 /berita/{id} - Detail berita
-/portal-opd - Daftar OPD (baru)
-/portal-opd/{opd} - Detail OPD (baru)
+/pelayanan - Katalog layanan publik
+/dokumen - Repository dokumen
+/galeri - Galeri foto dan video
+/faq - Sistem tanya jawab
+/portal-opd - Daftar OPD
+/portal-opd/{opd} - Detail OPD
 /wbs - Form WBS
+/kontak - Informasi kontak dan form
 ```
 
 ### Admin Routes (Protected by Auth + Role)
 ```
 /admin/dashboard - Dashboard role-based
 /admin/users/* - User management (SuperAdmin only)
+/admin/profil/* - Profil management
+/admin/pelayanan/* - Pelayanan management
+/admin/dokumen/* - Dokumen management
+/admin/galeri/* - Galeri management
+/admin/faq/* - FAQ management
 /admin/portal-opd/* - OPD management
 /admin/portal-papua-tengah/* - Berita management
 /admin/wbs/* - WBS management
@@ -289,6 +329,31 @@ php artisan route:list
 - **Role-Based Access Control**: Middleware protection pada setiap route
 - **Cache Security**: Sensitive data tidak di-cache
 - **Password Hashing**: Laravel default bcrypt hashing
+- **Session Security**: Secure session management
+- **API Security**: Sanctum authentication untuk API endpoints
+
+## 🏗️ Architecture & Design Patterns
+
+### Clean Architecture Implementation
+- **Repository Pattern**: Abstraksi data access layer
+- **Service Layer**: Business logic separation
+- **Action Classes**: Single responsibility operations
+- **Dependency Injection**: IoC container untuk loose coupling
+- **Interface Segregation**: Contracts untuk better testability
+
+### Performance Optimization
+- **Database Indexing**: Optimized query performance
+- **Redis Caching**: Multi-layer caching strategy
+- **Eager Loading**: N+1 query problem prevention
+- **Asset Optimization**: Vite build optimization
+- **Image Processing**: Thumbnail generation dan compression
+
+### Testing Strategy
+- **Unit Testing**: Model dan service testing
+- **Feature Testing**: Controller dan integration testing
+- **Database Testing**: Seeding dan migration testing
+- **Performance Testing**: Load dan stress testing
+- **Security Testing**: Vulnerability dan penetration testing
 
 ## 📱 Browser & Device Support
 
@@ -310,9 +375,19 @@ php artisan route:list
 
 ## 🆕 Update Log
 
+### v3.0.0 - July 2025 (Latest)
+- ✅ **Complete System Implementation**: Semua 11 modul lengkap
+- ✅ **Enhanced Architecture**: Repository Pattern, Service Layer, Action Classes
+- ✅ **New Modules**: Profil, Pelayanan, Dokumen, Galeri, FAQ
+- ✅ **Bootstrap 5 Migration**: UI/UX modern dan responsive
+- ✅ **Performance Optimization**: Redis caching, query optimization
+- ✅ **Enhanced Security**: Advanced RBAC, input validation, CSRF protection
+- ✅ **Testing Framework**: PHPUnit dengan comprehensive test coverage
+- ✅ **Documentation**: Complete developer dan user documentation
+
 ### v2.0.0 - July 2025
 - ✅ **Portal OPD**: Sistem manajemen OPD lengkap
-- ✅ **Role-Based Access Control**: 6 level role dengan middleware protection
+- ✅ **Role-Based Access Control**: 11 level role dengan middleware protection
 - ✅ **User Management**: CRUD user dengan assignment role (SuperAdmin)
 - ✅ **Enhanced Dashboard**: Dashboard dinamis berdasarkan role
 - ✅ **Public Homepage**: Statistik real-time dan showcase Portal OPD
@@ -337,7 +412,55 @@ Proyek ini dikembangkan untuk kepentingan publik Provinsi Papua Tengah. Untuk ko
 
 ## 🎯 Panduan Penggunaan
 
-### Portal OPD (Fitur Baru)
+### Sistem Admin Terbaru
+**Dashboard Role-Based:**
+- Setiap admin memiliki dashboard khusus sesuai role
+- Quick actions untuk fungsi yang sering digunakan
+- Statistics real-time untuk modul yang dikelola
+- Notifications untuk updates dan alerts
+
+**User Management (Super Admin):**
+1. Login sebagai Super Admin
+2. Akses "Manajemen User" di dashboard
+3. Kelola user dengan berbagai role:
+   - Tambah user baru dengan role spesifik
+   - Edit role dan status user existing
+   - Monitor aktivitas user per modul
+   - Reset password dan manage permissions
+
+### Modul Baru yang Tersedia
+
+**Profil Management:**
+- Kelola visi, misi, dan sejarah organisasi
+- Upload struktur organisasi
+- Manage contact information
+- Update logo dan branding
+
+**Pelayanan Publik:**
+- CRUD layanan dengan kategorisasi
+- Upload dokumen persyaratan
+- Manage prosedur dan SOP
+- Tracking status layanan
+
+**Dokumen Repository:**
+- Upload dan kategorisasi dokumen
+- Kontrol akses public/private
+- Download tracking dan analytics
+- Bulk upload functionality
+
+**Galeri Management:**
+- Upload foto dan video
+- Album management
+- Thumbnail generation
+- Metadata editing
+
+**FAQ System:**
+- Manage pertanyaan dan jawaban
+- Kategorisasi FAQ
+- Order management
+- Public/private toggle
+
+### Portal OPD (Enhanced)
 **Admin:**
 1. Login sebagai Admin Portal OPD atau Super Admin
 2. Akses menu "Portal OPD" di sidebar
@@ -353,20 +476,7 @@ Proyek ini dikembangkan untuk kepentingan publik Provinsi Papua Tengah. Untuk ko
 - Akses `/portal-opd` untuk melihat daftar OPD
 - Klik OPD untuk detail lengkap dengan informasi kontak
 - Gunakan pencarian untuk menemukan OPD tertentu
-
-### User Management (Super Admin)
-1. Login sebagai Super Admin
-2. Akses "Manajemen User" di dashboard
-3. Kelola user dengan role-based access:
-   - Tambah user baru dengan role tertentu
-   - Edit role dan status user existing
-   - Monitor aktivitas user per modul
-
-### Role-Based Dashboard
-Dashboard admin menampilkan menu berdasarkan role:
-- **Super Admin**: Semua modul + User Management
-- **Admin**: Semua modul operasional
-- **Admin Modul**: Hanya modul sesuai spesialisasi
+- Filter berdasarkan kategori dan status
 
 ## 📞 Support & Kontak
 
@@ -414,7 +524,7 @@ php artisan storage:link
 ## ❓ FAQ
 
 **Q: Bagaimana cara menambah role baru?**
-A: Edit `User` model, tambahkan role di method `getRoles()`, dan update middleware `RoleMiddleware`. Kemudian update routes di `web.php` dengan middleware role baru.
+A: Edit `User` model, tambahkan role di method `getRoles()`, update middleware `RoleMiddleware`, dan sesuaikan routes di `web.php` dengan middleware role baru.
 
 **Q: Bagaimana cara reset password admin?**
 A: Gunakan tinker: 
@@ -423,40 +533,31 @@ php artisan tinker
 User::where('email', 'admin@inspektorat.id')->first()->update(['password' => bcrypt('newpassword')]);
 ```
 
-**Q: Bagaimana cara backup database?**
+**Q: Bagaimana cara menjalankan testing?**
 A: 
 ```bash
-# MySQL backup
-mysqldump -u username -p database_name > backup.sql
+# Jalankan semua tests
+php artisan test
 
-# Restore backup
-mysql -u username -p database_name < backup.sql
+# Jalankan specific test
+php artisan test --testsuite=Feature
+
+# Jalankan dengan coverage
+php artisan test --coverage
 ```
 
-**Q: Portal OPD tidak muncul di public?**
+**Q: Modul baru tidak muncul?**
 A: Pastikan:
-- Status OPD = active (status = 1)
-- Data seeder ter-load: `php artisan db:seed --class=PortalOpdSeeder`
-- Cache di-clear: `php artisan cache:clear`
+- Migration telah dijalankan: `php artisan migrate`
+- Seeder telah dijalankan: `php artisan db:seed`
+- Cache di-clear: `php artisan optimize:clear`
+- Role user sesuai dengan akses modul
 
-**Q: Akun admin tidak bisa login?**
-A: Periksa:
-- Email dan password sesuai tabel akun testing
-- Jalankan seeder: `php artisan db:seed --class=SuperAdminSeeder`
-- Clear cache: `php artisan optimize:clear`
-
-**Q: Error "Route not defined"?**
-A: Jalankan:
-```bash
-php artisan route:clear
-php artisan config:clear
-php artisan optimize:clear
-```
-
-**Q: Upload file tidak berfungsi?**
+**Q: Error saat upload file?**
 A: Pastikan:
 - Storage link: `php artisan storage:link`
 - Permissions: `chmod -R 775 storage/app/public`
+- File size limit sesuai dengan php.ini
 - Folder storage/app/public ada dan writable
 
 ## �📄 License
