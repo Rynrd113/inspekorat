@@ -14,106 +14,103 @@ return new class extends Migration
     {
         // Add critical indexes for pelayanans table
         Schema::table('pelayanans', function (Blueprint $table) {
-            // Check and add indexes only if they don't exist
-            $existingIndexes = DB::select("SHOW INDEX FROM pelayanans");
-            $indexNames = collect($existingIndexes)->pluck('Key_name')->toArray();
+            $indexes = [
+                'status',
+                'kategori',
+                ['status', 'kategori'],
+                ['status', 'urutan'],
+                'created_at',
+                'updated_at',
+                'deleted_at'
+            ];
             
-            if (!in_array('pelayanans_status_index', $indexNames)) {
-                $table->index('status');
-            }
-            if (!in_array('pelayanans_kategori_index', $indexNames)) {
-                $table->index('kategori');
-            }
-            if (!in_array('pelayanans_status_kategori_index', $indexNames)) {
-                $table->index(['status', 'kategori']);
-            }
-            if (!in_array('pelayanans_status_urutan_index', $indexNames)) {
-                $table->index(['status', 'urutan']);
-            }
-            if (!in_array('pelayanans_created_at_index', $indexNames)) {
-                $table->index('created_at');
-            }
-            if (!in_array('pelayanans_updated_at_index', $indexNames)) {
-                $table->index('updated_at');
-            }
-            if (!in_array('pelayanans_deleted_at_index', $indexNames)) {
-                $table->index('deleted_at');
+            foreach ($indexes as $index) {
+                try {
+                    $table->index($index);
+                } catch (\Exception $e) {
+                    // Index already exists, ignore
+                }
             }
             
-            // Full-text search for better performance
-            if (!in_array('pelayanans_nama_deskripsi_fulltext', $indexNames)) {
-                $table->fullText(['nama', 'deskripsi']);
+            // Full-text search for better performance (only for MySQL)
+            if (DB::connection()->getDriverName() === 'mysql') {
+                try {
+                    $table->fullText(['nama', 'deskripsi']);
+                } catch (\Exception $e) {
+                    // Index already exists, ignore
+                }
             }
         });
 
-        // Add missing indexes for users table
+        // Add missing indexes for users table (skip role index as it's already added)
         Schema::table('users', function (Blueprint $table) {
-            // Only add indexes if they don't already exist
-            $existingIndexes = DB::select("SHOW INDEX FROM users");
-            $indexNames = collect($existingIndexes)->pluck('Key_name')->toArray();
+            $indexes = [
+                'email_verified_at',
+                ['role', 'email_verified_at'],
+                'created_at'
+            ];
             
-            if (!in_array('users_role_index', $indexNames)) {
-                $table->index('role');
-            }
-            if (!in_array('users_email_verified_at_index', $indexNames)) {
-                $table->index('email_verified_at');
-            }
-            if (!in_array('users_role_email_verified_at_index', $indexNames)) {
-                $table->index(['role', 'email_verified_at']);
-            }
-            if (!in_array('users_created_at_index', $indexNames)) {
-                $table->index('created_at');
+            foreach ($indexes as $index) {
+                try {
+                    $table->index($index);
+                } catch (\Exception $e) {
+                    // Index already exists, ignore
+                }
             }
         });
 
         // Add missing indexes for wbs table
         Schema::table('wbs', function (Blueprint $table) {
-            $existingIndexes = DB::select("SHOW INDEX FROM wbs");
-            $indexNames = collect($existingIndexes)->pluck('Key_name')->toArray();
+            $indexes = [
+                ['status', 'created_at'],
+                ['status', 'responded_at'],
+                'tanggal_kejadian',
+                'is_anonymous'
+            ];
             
-            if (!in_array('wbs_status_created_at_index', $indexNames)) {
-                $table->index(['status', 'created_at']);
-            }
-            if (!in_array('wbs_status_responded_at_index', $indexNames)) {
-                $table->index(['status', 'responded_at']);
-            }
-            if (!in_array('wbs_tanggal_kejadian_index', $indexNames)) {
-                $table->index('tanggal_kejadian');
-            }
-            if (!in_array('wbs_is_anonymous_index', $indexNames)) {
-                $table->index('is_anonymous');
+            foreach ($indexes as $index) {
+                try {
+                    $table->index($index);
+                } catch (\Exception $e) {
+                    // Index already exists, ignore
+                }
             }
             
-            // Full-text search for reports
-            if (!in_array('wbs_subjek_deskripsi_kronologi_fulltext', $indexNames)) {
-                $table->fullText(['subjek', 'deskripsi', 'kronologi']);
+            // Full-text search for reports (only for MySQL)
+            if (DB::connection()->getDriverName() === 'mysql') {
+                try {
+                    $table->fullText(['subjek', 'deskripsi', 'kronologi']);
+                } catch (\Exception $e) {
+                    // Index already exists, ignore
+                }
             }
         });
 
         // Add missing indexes for portal_papua_tengahs table
         Schema::table('portal_papua_tengahs', function (Blueprint $table) {
-            $existingIndexes = DB::select("SHOW INDEX FROM portal_papua_tengahs");
-            $indexNames = collect($existingIndexes)->pluck('Key_name')->toArray();
+            $indexes = [
+                ['is_published', 'published_at'],
+                ['kategori', 'is_published', 'published_at'],
+                ['is_featured', 'is_published', 'published_at'],
+                'views',
+                'penulis'
+            ];
             
-            if (!in_array('portal_papua_tengahs_is_published_published_at_index', $indexNames)) {
-                $table->index(['is_published', 'published_at']);
-            }
-            if (!in_array('portal_papua_tengahs_kategori_is_published_published_at_index', $indexNames)) {
-                $table->index(['kategori', 'is_published', 'published_at']);
-            }
-            if (!in_array('portal_papua_tengahs_is_featured_is_published_published_at_index', $indexNames)) {
-                $table->index(['is_featured', 'is_published', 'published_at']);
-            }
-            if (!in_array('portal_papua_tengahs_views_index', $indexNames)) {
-                $table->index('views');
-            }
-            if (!in_array('portal_papua_tengahs_penulis_index', $indexNames)) {
-                $table->index('penulis');
+            foreach ($indexes as $index) {
+                try {
+                    $table->index($index);
+                } catch (\Exception $e) {
+                    // Index already exists, ignore
+                }
             }
             
-            // Full-text search for content
-            if (!in_array('portal_papua_tengahs_judul_konten_tags_fulltext', $indexNames)) {
-                $table->fullText(['judul', 'konten', 'tags']);
+            // Full-text search for content (only for MySQL)
+            if (DB::connection()->getDriverName() === 'mysql') {
+                try {
+                    $table->fullText(['judul', 'konten', 'tags']);
+                } catch (\Exception $e) {
+                    // Index already exists, ignore
+                }
             }
         });
 

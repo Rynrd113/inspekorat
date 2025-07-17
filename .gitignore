@@ -24,9 +24,27 @@ Homestead.yaml
 Thumbs.db
 
 # Cache files for faster installation
-composer.lock
-package-lock.json
 .npm/
 bootstrap/cache/config.php
+
+# Temporary files
+cookies.txt
+getMessage
+email
+role
+admin
+*.tmp
+*.temp
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
 bootstrap/cache/routes-*.php
 bootstrap/cache/events.php
