@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSearch;
+use App\Traits\HasPagination;
 
 class Faq extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSearch, HasPagination;
 
     protected $table = 'faqs';
 
@@ -152,5 +154,39 @@ class Faq extends Model
                   ->orWhere('tags', 'like', "%{$query}%");
             })
             ->ordered();
+    }
+
+    /**
+     * Get searchable fields for FAQ
+     */
+    protected function getSearchableFields(): array
+    {
+        return [
+            'pertanyaan', 'jawaban', 'tags'
+        ];
+    }
+
+    /**
+     * Get filterable fields for FAQ
+     */
+    protected function getFilterableFields(): array
+    {
+        return [
+            'kategori' => 'exact',
+            'status' => 'boolean',
+            'is_featured' => 'boolean',
+            'created_at' => 'date_range',
+            'updated_at' => 'date_range',
+        ];
+    }
+
+    /**
+     * Get sortable fields for FAQ
+     */
+    protected function getSortableFields(): array
+    {
+        return [
+            'id', 'pertanyaan', 'kategori', 'status', 'is_featured', 'urutan', 'view_count', 'created_at', 'updated_at'
+        ];
     }
 }

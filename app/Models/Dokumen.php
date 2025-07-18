@@ -15,6 +15,13 @@ class Dokumen extends Model
         'judul',
         'deskripsi',
         'kategori',
+        // Original migration fields
+        'file_path',
+        'file_name',
+        'file_size',
+        'file_type',
+        'tanggal_publikasi',
+        // New migration fields
         'tahun',
         'nomor_dokumen',
         'tanggal_terbit',

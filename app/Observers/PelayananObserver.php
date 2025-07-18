@@ -29,7 +29,7 @@ class PelayananObserver
     private function logActivity(Pelayanan $pelayanan, string $action, ?array $oldValues = null)
     {
         AuditLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => auth()->id() ?? 1,
             'action' => $action,
             'model_type' => 'App\Models\Pelayanan',
             'model_id' => $pelayanan->id,

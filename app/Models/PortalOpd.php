@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\HasSearch;
+use App\Traits\HasPagination;
 
 class PortalOpd extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasSearch, HasPagination;
 
     protected $table = 'portal_opds';
 
@@ -91,5 +93,37 @@ class PortalOpd extends Model
             return asset('storage/' . $this->banner);
         }
         return asset('images/default-opd-banner.jpg');
+    }
+
+    /**
+     * Get searchable fields for PortalOpd
+     */
+    protected function getSearchableFields(): array
+    {
+        return [
+            'nama_opd', 'singkatan', 'alamat', 'email', 'kepala_opd', 'deskripsi', 'visi'
+        ];
+    }
+
+    /**
+     * Get filterable fields for PortalOpd
+     */
+    protected function getFilterableFields(): array
+    {
+        return [
+            'status' => 'boolean',
+            'created_at' => 'date_range',
+            'updated_at' => 'date_range',
+        ];
+    }
+
+    /**
+     * Get sortable fields for PortalOpd
+     */
+    protected function getSortableFields(): array
+    {
+        return [
+            'id', 'nama_opd', 'singkatan', 'kepala_opd', 'email', 'status', 'created_at', 'updated_at'
+        ];
     }
 }

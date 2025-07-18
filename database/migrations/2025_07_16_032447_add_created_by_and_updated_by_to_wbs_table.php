@@ -23,8 +23,18 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('wbs', function (Blueprint $table) {
-            $table->dropForeign(['created_by']);
-            $table->dropForeign(['updated_by']);
+            try {
+                $table->dropForeign(['created_by']);
+            } catch (Exception $e) {
+                // Foreign key might not exist
+            }
+            
+            try {
+                $table->dropForeign(['updated_by']);
+            } catch (Exception $e) {
+                // Foreign key might not exist
+            }
+            
             $table->dropColumn(['created_by', 'updated_by']);
         });
     }

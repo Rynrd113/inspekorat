@@ -17,24 +17,12 @@ class PortalOpdController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = PortalOpd::with(['creator', 'updater']);
+        $query = PortalOpd::with(['creator', 'updater'])
+                           ->search($request)
+                           ->filter($request)
+                           ->sorted($request);
 
-        // Search functionality
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('nama_opd', 'like', "%{$search}%")
-                  ->orWhere('singkatan', 'like', "%{$search}%")
-                  ->orWhere('kepala_opd', 'like', "%{$search}%");
-            });
-        }
-
-        // Status filter
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        $portalOpds = $query->latest()->paginate(10);
+        $portalOpds = $query->paginated($request);
 
         return view('admin.portal-opd.index', compact('portalOpds'));
     }

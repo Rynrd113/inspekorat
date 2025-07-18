@@ -18,15 +18,20 @@ class PortalPapuaTengah extends Model
         'judul',
         'slug',
         'konten',
+        'isi',
         'kategori',
         'thumbnail',
+        'gambar',
         'is_published',
         'published_at',
         'penulis',
         'tags',
         'views',
         'is_featured',
-        'meta_description'
+        'meta_description',
+        'status',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [

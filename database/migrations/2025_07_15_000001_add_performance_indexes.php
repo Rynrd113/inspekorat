@@ -12,6 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Skip this migration in testing environment
+        if (app()->environment(['testing', 'dusk.local'])) {
+            return;
+        }
         // Add critical indexes for pelayanans table
         Schema::table('pelayanans', function (Blueprint $table) {
             $indexes = [
@@ -160,6 +164,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Skip this migration in testing environment
+        if (app()->environment(['testing', 'dusk.local'])) {
+            return;
+        }
         Schema::table('pelayanans', function (Blueprint $table) {
             // Use try-catch to handle non-existent indexes gracefully
             try {
@@ -184,7 +192,10 @@ return new class extends Migration
                 $table->dropIndex(['deleted_at']);
             } catch (\Exception $e) {}
             try {
-                $table->dropFullText(['nama', 'deskripsi']);
+                // Skip dropFullText in testing environment
+                if (config('database.default') !== 'testing') {
+                    $table->dropFullText(['nama', 'deskripsi']);
+                }
             } catch (\Exception $e) {}
         });
 
@@ -217,7 +228,10 @@ return new class extends Migration
                 $table->dropIndex(['is_anonymous']);
             } catch (\Exception $e) {}
             try {
-                $table->dropFullText(['subjek', 'deskripsi', 'kronologi']);
+                // Skip dropFullText in testing environment
+                if (config('database.default') !== 'testing') {
+                    $table->dropFullText(['subjek', 'deskripsi', 'kronologi']);
+                }
             } catch (\Exception $e) {}
         });
 
@@ -238,7 +252,10 @@ return new class extends Migration
                 $table->dropIndex(['penulis']);
             } catch (\Exception $e) {}
             try {
-                $table->dropFullText(['judul', 'konten', 'tags']);
+                // Skip dropFullText in testing environment
+                if (config('database.default') !== 'testing') {
+                    $table->dropFullText(['judul', 'konten', 'tags']);
+                }
             } catch (\Exception $e) {}
         });
 

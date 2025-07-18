@@ -4,25 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasSearch;
+use App\Traits\HasPagination;
 
 class Pelayanan extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSearch, HasPagination;
 
     protected $table = 'pelayanans';
 
     protected $fillable = [
-        'nama_layanan',
+        'nama',
         'deskripsi',
         'prosedur',
         'persyaratan',
-        'waktu_pelayanan',
+        'waktu_penyelesaian',
         'biaya',
-        'dasar_hukum',
         'kategori',
         'status',
-        'kontak_penanggung_jawab',
-        'file_formulir',
+        'urutan',
+        'kontak_pic',
+        'email_pic',
+        'telepon_pic',
         'created_by',
         'updated_by',
     ];
@@ -87,5 +90,38 @@ class Pelayanan extends Model
     {
         $options = self::getKategoriOptions();
         return $options[$this->kategori] ?? $this->kategori;
+    }
+
+    /**
+     * Get searchable fields for Pelayanan
+     */
+    protected function getSearchableFields(): array
+    {
+        return [
+            'nama', 'deskripsi', 'kontak_pic', 'email_pic'
+        ];
+    }
+
+    /**
+     * Get filterable fields for Pelayanan
+     */
+    protected function getFilterableFields(): array
+    {
+        return [
+            'kategori' => 'exact',
+            'status' => 'boolean',
+            'created_at' => 'date_range',
+            'updated_at' => 'date_range',
+        ];
+    }
+
+    /**
+     * Get sortable fields for Pelayanan
+     */
+    protected function getSortableFields(): array
+    {
+        return [
+            'id', 'nama', 'kategori', 'status', 'urutan', 'biaya', 'created_at', 'updated_at'
+        ];
     }
 }

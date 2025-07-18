@@ -5,10 +5,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\HasAuditLog;
+use App\Traits\HasSearch;
+use App\Traits\HasPagination;
 
 class Wbs extends Model
 {
-    use HasFactory, HasAuditLog;
+    use HasFactory, HasAuditLog, HasSearch, HasPagination;
 
     protected $table = 'wbs';
 
@@ -127,5 +129,39 @@ class Wbs extends Model
     public function getRouteKeyName()
     {
         return 'id';
+    }
+
+    /**
+     * Get searchable fields for WBS
+     */
+    protected function getSearchableFields(): array
+    {
+        return [
+            'nama_pelapor', 'email', 'subjek', 'deskripsi', 'lokasi_kejadian'
+        ];
+    }
+
+    /**
+     * Get filterable fields for WBS
+     */
+    protected function getFilterableFields(): array
+    {
+        return [
+            'status' => 'exact',
+            'is_anonymous' => 'boolean',
+            'tanggal_kejadian' => 'date_range',
+            'created_at' => 'date_range',
+            'updated_at' => 'date_range',
+        ];
+    }
+
+    /**
+     * Get sortable fields for WBS
+     */
+    protected function getSortableFields(): array
+    {
+        return [
+            'id', 'nama_pelapor', 'subjek', 'status', 'is_anonymous', 'tanggal_kejadian', 'created_at', 'updated_at'
+        ];
     }
 }

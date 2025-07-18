@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Traits\HasFileUpload;
+use App\Rules\FileUploadValidation;
 
 class DokumenController extends Controller
 {
+    use HasFileUpload;
     /**
      * Display a listing of documents
      */
@@ -55,22 +58,26 @@ class DokumenController extends Controller
             'tahun' => 'required|integer|min:2020|max:' . (date('Y') + 1),
             'nomor_dokumen' => 'nullable|string|max:100',
             'tanggal_terbit' => 'required|date',
-            'file_dokumen' => 'required|file|mimes:pdf,doc,docx,xls,xlsx|max:10240',
-            'file_cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'file_dokumen' => ['required', new FileUploadValidation(10240, ['pdf', 'doc', 'docx', 'xls', 'xlsx'])],
+            'file_cover' => ['nullable', new FileUploadValidation(2048, ['jpeg', 'png', 'jpg', 'gif'])],
             'status' => 'boolean',
             'is_public' => 'boolean',
             'tags' => 'nullable|string',
         ]);
 
-        // Handle file uploads
+        // Handle file uploads using the trait
         if ($request->hasFile('file_dokumen')) {
-            $validated['file_dokumen'] = $request->file('file_dokumen')
-                ->store('dokumen/files', 'public');
+            $validated['file_dokumen'] = $this->uploadFile(
+                $request->file('file_dokumen'), 
+                'dokumen/files'
+            );
         }
 
         if ($request->hasFile('file_cover')) {
-            $validated['file_cover'] = $request->file('file_cover')
-                ->store('dokumen/covers', 'public');
+            $validated['file_cover'] = $this->uploadImage(
+                $request->file('file_cover'), 
+                'dokumen/covers'
+            );
         }
 
         // Store document
