@@ -121,6 +121,7 @@ class PortalOpdSeeder extends Seeder
         ];
 
         foreach ($opds as $opd) {
+            // No need to convert misi to JSON since the model has cast
             PortalOpd::updateOrCreate(
                 ['nama_opd' => $opd['nama_opd']], 
                 $opd

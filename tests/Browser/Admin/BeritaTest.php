@@ -5,6 +5,7 @@ namespace Tests\Browser\Admin;
 use App\Models\User;
 use App\Models\PortalPapuaTengah;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\DB;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -33,10 +34,11 @@ class BeritaTest extends DuskTestCase
 
     private function createTestBeritaData()
     {
-        $categories = ['Berita', 'Pengumuman', 'Kegiatan', 'Audit', 'Sosialisasi'];
+        $categories = ['berita', 'pengumuman', 'kegiatan', 'regulasi', 'layanan'];
         
+        $testData = [];
         for ($i = 1; $i <= 15; $i++) {
-            PortalPapuaTengah::create([
+            $testData[] = [
                 'judul' => 'Berita Test ' . $i,
                 'slug' => 'berita-test-' . $i,
                 'konten' => 'Ini adalah konten berita test ' . $i . '. Konten ini berisi informasi penting mengenai kegiatan inspektorat Papua Tengah.',
@@ -46,11 +48,17 @@ class BeritaTest extends DuskTestCase
                 'thumbnail' => 'berita/thumbnails/berita-' . $i . '.jpg',
                 'gambar' => 'berita/berita-' . $i . '.jpg',
                 'status' => 'published',
-                'is_featured' => $i <= 5,
+                'is_featured' => ($i <= 5),
+                'is_published' => true,
                 'views' => rand(50, 500),
                 'published_at' => now()->subDays($i),
-            ]);
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
         }
+        
+        // Use DB::table()->insert() to bypass model events
+        DB::table('portal_papua_tengahs')->insert($testData);
     }
 
     /**

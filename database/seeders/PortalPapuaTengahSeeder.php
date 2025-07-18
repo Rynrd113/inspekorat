@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\PortalPapuaTengah;
 
 class PortalPapuaTengahSeeder extends Seeder
 {
@@ -134,7 +135,7 @@ class PortalPapuaTengahSeeder extends Seeder
             ],
         ];
 
-        // Insert data using batch insert for better performance
+        // Use DB::table()->insert() to bypass model events that may cause issues
         DB::table('portal_papua_tengahs')->insert($portalData);
     }
 }
