@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            SuperAdminSeeder::class, // Seeder utama untuk semua user testing
+            UserSeeder::class, // Seeder utama untuk semua user
             PortalPapuaTengahSeeder::class,
             InfoKantorSeeder::class,
             WbsSeeder::class,
