@@ -41,15 +41,14 @@ class BeritaTest extends DuskTestCase
                 'slug' => 'berita-test-' . $i,
                 'konten' => 'Ini adalah konten berita test ' . $i . '. Konten ini berisi informasi penting mengenai kegiatan inspektorat Papua Tengah.',
                 'isi' => 'Isi berita test ' . $i . ' yang lebih lengkap dan detail mengenai kegiatan inspektorat Papua Tengah. Berita ini membahas tentang pelaksanaan audit internal di berbagai OPD.',
+                'penulis' => $this->admin->name,
                 'kategori' => $categories[($i - 1) % 5],
                 'thumbnail' => 'berita/thumbnails/berita-' . $i . '.jpg',
                 'gambar' => 'berita/berita-' . $i . '.jpg',
                 'status' => 'published',
                 'is_featured' => $i <= 5,
-                'view_count' => rand(50, 500),
+                'views' => rand(50, 500),
                 'published_at' => now()->subDays($i),
-                'created_by' => $this->admin->id,
-                'updated_by' => $this->admin->id,
             ]);
         }
     }
