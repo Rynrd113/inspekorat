@@ -98,6 +98,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'destroy'])->name('portal-opd.destroy');
         });
         
+        // Info Kantor routes - protected by role middleware (missing routes)
+        Route::middleware('role:admin_info_kantor,admin,super_admin')->group(function () {
+            Route::get('info-kantor', [\App\Http\Controllers\Admin\InfoKantorController::class, 'index'])->name('info-kantor.index');
+            Route::get('info-kantor/create', [\App\Http\Controllers\Admin\InfoKantorController::class, 'create'])->name('info-kantor.create');
+            Route::post('info-kantor', [\App\Http\Controllers\Admin\InfoKantorController::class, 'store'])->name('info-kantor.store');
+            Route::get('info-kantor/{infoKantor}', [\App\Http\Controllers\Admin\InfoKantorController::class, 'show'])->name('info-kantor.show');
+            Route::get('info-kantor/{infoKantor}/edit', [\App\Http\Controllers\Admin\InfoKantorController::class, 'edit'])->name('info-kantor.edit');
+            Route::put('info-kantor/{infoKantor}', [\App\Http\Controllers\Admin\InfoKantorController::class, 'update'])->name('info-kantor.update');
+            Route::delete('info-kantor/{infoKantor}', [\App\Http\Controllers\Admin\InfoKantorController::class, 'destroy'])->name('info-kantor.destroy');
+        });
+        
         // Profil routes - protected by role middleware
         Route::middleware('role:admin_profil,admin,super_admin')->group(function () {
             Route::get('profil', [AdminProfilController::class, 'index'])->name('profil.index');
