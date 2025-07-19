@@ -16,14 +16,21 @@ class Pengaduan extends Model
         'telepon',
         'subjek',
         'isi_pengaduan',
+        'kategori',
         'status',
         'tanggapan',
-        'attachment'
+        'attachment',
+        'tanggal_pengaduan',
+        'is_anonymous',
+        'bukti_files'
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'tanggal_pengaduan' => 'datetime',
+        'is_anonymous' => 'boolean',
+        'bukti_files' => 'array',
     ];
 
     /**

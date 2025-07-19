@@ -14,14 +14,18 @@ class WebPortal extends Model
         'nama_portal',
         'deskripsi',
         'url_portal',
+        'url',
         'kategori',
         'icon',
         'is_active',
-        'urutan'
+        'status',
+        'urutan',
+        'created_by'
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'status' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

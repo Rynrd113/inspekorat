@@ -42,13 +42,14 @@ class WbsTest extends DuskTestCase
                 'deskripsi' => 'Deskripsi lengkap laporan WBS test ' . $i . '. Ini adalah laporan mengenai dugaan penyimpangan yang terjadi di lingkungan pemerintahan.',
                 'tanggal_kejadian' => now()->subDays(rand(1, 30)),
                 'lokasi_kejadian' => 'Lokasi Kejadian Test ' . $i . ', Papua Tengah',
-                'kategori' => ['Korupsi', 'Suap', 'Nepotisme', 'Penyalahgunaan Wewenang', 'Lainnya'][($i - 1) % 5],
-                'status' => ['pending', 'investigating', 'completed', 'closed'][($i - 1) % 4],
+                'pihak_terlibat' => 'Pihak terlibat untuk laporan ' . $i,
+                'kronologi' => 'Kronologi lengkap kejadian untuk laporan ' . $i . '. Kejadian dimulai pada...',
+                'bukti_files' => $i % 2 === 0 ? ['evidence/evidence-' . $i . '.pdf', 'evidence/evidence-' . $i . '.jpg'] : null,
+                'status' => ['pending', 'proses', 'selesai'][($i - 1) % 3],
                 'is_anonymous' => $i % 3 === 0,
-                'evidence_files' => $i % 2 === 0 ? ['evidence/evidence-' . $i . '.pdf', 'evidence/evidence-' . $i . '.jpg'] : null,
-                'priority' => ['low', 'medium', 'high', 'urgent'][($i - 1) % 4],
-                'assigned_to' => $this->admin->id,
-                'follow_up_notes' => 'Catatan tindak lanjut untuk laporan ' . $i,
+                'response' => $i > 10 ? 'Response untuk laporan ' . $i : null,
+                'responded_at' => $i > 10 ? now()->subDays(rand(1, 5)) : null,
+                'admin_note' => 'Catatan admin untuk laporan ' . $i,
                 'created_by' => $this->admin->id,
                 'updated_by' => $this->admin->id,
             ]);
@@ -68,8 +69,9 @@ class WbsTest extends DuskTestCase
                 ->assertSee('Laporan WBS Test 2')
                 ->assertSee('Laporan WBS Test 3')
                 ->assertSee('Status')
-                ->assertSee('Priority')
-                ->assertSee('Kategori');
+                ->assertSee('pending')
+                ->assertSee('proses')
+                ->assertSee('selesai');
         });
     }
 

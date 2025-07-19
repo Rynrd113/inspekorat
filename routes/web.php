@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\AuditLogController as AdminAuditLogController;
 use App\Http\Controllers\Admin\SystemConfigurationController as AdminSystemConfigurationController;
 use App\Http\Controllers\Admin\ContentApprovalController as AdminContentApprovalController;
+use App\Http\Controllers\Admin\PengaduanController as AdminPengaduanController;
+use App\Http\Controllers\Admin\WebPortalController as AdminWebPortalController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\PortalOpdController;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +44,9 @@ Route::get('/faq', [PublicController::class, 'faq'])->name('public.faq');
 Route::get('/kontak', [PublicController::class, 'kontak'])->name('public.kontak');
 Route::post('/kontak', [PublicController::class, 'kontakKirim'])->name('kontak.kirim');
 Route::get('/pengaduan', [PublicController::class, 'pengaduan'])->name('public.pengaduan');
+
+// Web Portal Public Routes
+Route::get('/web-portal', [PublicController::class, 'webPortal'])->name('public.web-portal.index');
 
 // Portal OPD Public Routes
 Route::get('/portal-opd', [PortalOpdController::class, 'index'])->name('public.portal-opd.index');
@@ -191,6 +196,28 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('audit-logs/{auditLog}', [AdminAuditLogController::class, 'show'])->name('audit-logs.show');
             Route::get('audit-logs/stats', [AdminAuditLogController::class, 'stats'])->name('audit-logs.stats');
             Route::get('audit-logs/export', [AdminAuditLogController::class, 'export'])->name('audit-logs.export');
+        });
+
+        // Pengaduan routes - accessible by admin, super_admin
+        Route::middleware('role:admin,super_admin')->group(function () {
+            Route::get('pengaduan', [AdminPengaduanController::class, 'index'])->name('pengaduan.index');
+            Route::get('pengaduan/create', [AdminPengaduanController::class, 'create'])->name('pengaduan.create');
+            Route::post('pengaduan', [AdminPengaduanController::class, 'store'])->name('pengaduan.store');
+            Route::get('pengaduan/{pengaduan}', [AdminPengaduanController::class, 'show'])->name('pengaduan.show');
+            Route::get('pengaduan/{pengaduan}/edit', [AdminPengaduanController::class, 'edit'])->name('pengaduan.edit');
+            Route::put('pengaduan/{pengaduan}', [AdminPengaduanController::class, 'update'])->name('pengaduan.update');
+            Route::delete('pengaduan/{pengaduan}', [AdminPengaduanController::class, 'destroy'])->name('pengaduan.destroy');
+        });
+
+        // Web Portal routes - accessible by admin, super_admin
+        Route::middleware('role:admin,super_admin')->group(function () {
+            Route::get('web-portal', [AdminWebPortalController::class, 'index'])->name('web-portal.index');
+            Route::get('web-portal/create', [AdminWebPortalController::class, 'create'])->name('web-portal.create');
+            Route::post('web-portal', [AdminWebPortalController::class, 'store'])->name('web-portal.store');
+            Route::get('web-portal/{webPortal}', [AdminWebPortalController::class, 'show'])->name('web-portal.show');
+            Route::get('web-portal/{webPortal}/edit', [AdminWebPortalController::class, 'edit'])->name('web-portal.edit');
+            Route::put('web-portal/{webPortal}', [AdminWebPortalController::class, 'update'])->name('web-portal.update');
+            Route::delete('web-portal/{webPortal}', [AdminWebPortalController::class, 'destroy'])->name('web-portal.destroy');
         });
     });
 });

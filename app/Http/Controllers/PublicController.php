@@ -11,6 +11,7 @@ use App\Models\Pelayanan;
 use App\Models\Dokumen;
 use App\Models\Galeri;
 use App\Models\Faq;
+use App\Models\WebPortal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -541,5 +542,19 @@ startxref
     public function pengaduan(): View
     {
         return view('public.pengaduan');
+    }
+
+    /**
+     * Show web portal page
+     */
+    public function webPortal(): View
+    {
+        $webPortals = Cache::remember('public_web_portals', 600, function () {
+            return \App\Models\WebPortal::where('status', true)
+                ->orderBy('urutan')
+                ->get();
+        });
+
+        return view('public.web-portal', compact('webPortals'));
     }
 }

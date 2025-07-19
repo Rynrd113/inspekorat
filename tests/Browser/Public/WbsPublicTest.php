@@ -30,9 +30,10 @@ class WbsPublicTest extends DuskTestCase
             $browser->visit('/wbs')
                 ->waitForText('Whistleblowing System')
                 ->assertPresent('form')
-                ->assertPresent('input[name="judul"]')
-                ->assertPresent('textarea[name="isi"]')
-                ->assertPresent('select[name="kategori"]')
+                ->assertPresent('input[name="subjek"]')
+                ->assertPresent('textarea[name="deskripsi"]')
+                ->assertPresent('input[name="nama_pelapor"]')
+                ->assertPresent('input[name="email"]')
                 ->assertPresent('input[name="is_anonymous"]')
                 ->assertPresent('button[type="submit"]')
                 ->screenshot('wbs_page_form');
@@ -47,13 +48,12 @@ class WbsPublicTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/wbs')
                 ->waitForText('Whistleblowing System')
-                ->type('judul', 'Test Laporan WBS')
-                ->type('isi', 'Ini adalah laporan test untuk sistem WBS.')
-                ->select('kategori', 'korupsi')
+                ->type('subjek', 'Test Laporan WBS')
+                ->type('deskripsi', 'Ini adalah laporan test untuk sistem WBS.')
                 ->type('nama_pelapor', 'John Doe')
                 ->type('email', 'john@example.com')
-                ->type('telepon', '081234567890')
-                ->press('Kirim Laporan')
+                ->type('no_telepon', '081234567890')
+                ->press('Kirim Laporan WBS')
                 ->waitForText('berhasil')
                 ->assertSee('berhasil')
                 ->screenshot('wbs_form_submission_valid_non_anonymous');
@@ -68,11 +68,10 @@ class WbsPublicTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/wbs')
                 ->waitForText('Whistleblowing System')
-                ->type('judul', 'Test Laporan WBS Anonim')
-                ->type('isi', 'Ini adalah laporan test anonim untuk sistem WBS.')
-                ->select('kategori', 'penyalahgunaan')
+                ->type('subjek', 'Test Laporan WBS Anonim')
+                ->type('deskripsi', 'Ini adalah laporan test anonim untuk sistem WBS.')
                 ->check('is_anonymous')
-                ->press('Kirim Laporan')
+                ->press('Kirim Laporan WBS')
                 ->waitForText('berhasil')
                 ->assertSee('berhasil')
                 ->screenshot('wbs_form_submission_valid_anonymous');
@@ -87,8 +86,8 @@ class WbsPublicTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/wbs')
                 ->waitForText('Whistleblowing System')
-                ->press('Kirim Laporan')
-                ->waitFor('.error, .invalid-feedback', 3)
+                ->press('Kirim Laporan WBS')
+                ->waitFor('.text-red-600', 5)
                 ->screenshot('wbs_form_validation_empty');
         });
     }
@@ -101,13 +100,12 @@ class WbsPublicTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/wbs')
                 ->waitForText('Whistleblowing System')
-                ->type('judul', 'Test Laporan')
-                ->type('isi', 'Test laporan')
-                ->select('kategori', 'korupsi')
+                ->type('subjek', 'Test Laporan')
+                ->type('deskripsi', 'Test laporan')
                 ->type('nama_pelapor', 'John Doe')
                 ->type('email', 'invalid-email')
-                ->press('Kirim Laporan')
-                ->waitFor('.error, .invalid-feedback', 3)
+                ->press('Kirim Laporan WBS')
+                ->waitFor('.text-red-600', 5)
                 ->screenshot('wbs_form_validation_invalid_email');
         });
     }
@@ -144,18 +142,18 @@ class WbsPublicTest extends DuskTestCase
     }
 
     /**
-     * Test WBS page category selection
+     * Test WBS page optional fields
      */
     public function test_wbs_page_category_selection()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/wbs')
                 ->waitForText('Whistleblowing System')
-                ->assertPresent('select[name="kategori"]')
-                ->select('kategori', 'korupsi')
-                ->select('kategori', 'penyalahgunaan')
-                ->select('kategori', 'pelanggaran')
-                ->screenshot('wbs_category_selection');
+                ->assertPresent('input[name="tanggal_kejadian"]')
+                ->assertPresent('input[name="lokasi_kejadian"]')
+                ->assertPresent('textarea[name="pihak_terlibat"]')
+                ->assertPresent('textarea[name="kronologi"]')
+                ->screenshot('wbs_optional_fields');
         });
     }
 
@@ -241,15 +239,14 @@ class WbsPublicTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/wbs')
                 ->waitForText('Whistleblowing System')
-                ->type('judul', 'Test Laporan')
-                ->type('isi', 'Test isi laporan')
-                ->select('kategori', 'korupsi')
+                ->type('subjek', 'Test Laporan')
+                ->type('deskripsi', 'Test isi laporan')
                 ->type('nama_pelapor', 'John Doe')
                 ->whenAvailable('button[type="reset"]', function ($reset) {
                     $reset->click();
                 })
-                ->assertInputValue('judul', '')
-                ->assertInputValue('isi', '')
+                ->assertInputValue('subjek', '')
+                ->assertInputValue('deskripsi', '')
                 ->assertInputValue('nama_pelapor', '')
                 ->screenshot('wbs_form_reset');
         });
@@ -361,9 +358,9 @@ class WbsPublicTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/wbs')
                 ->waitForText('Whistleblowing System')
-                ->type('judul', str_repeat('a', 300)) // Test title length
-                ->type('isi', str_repeat('b', 3000)) // Test content length
-                ->press('Kirim Laporan')
+                ->type('subjek', str_repeat('a', 300)) // Test title length
+                ->type('deskripsi', str_repeat('b', 3000)) // Test content length
+                ->press('Kirim Laporan WBS')
                 ->waitFor('body', 3)
                 ->screenshot('wbs_form_character_limits');
         });
