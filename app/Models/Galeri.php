@@ -33,6 +33,7 @@ class Galeri extends Model
         'status' => 'boolean',
         'is_featured' => 'boolean',
         'view_count' => 'integer',
+        'tags' => 'json',
     ];
 
     /**

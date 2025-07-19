@@ -53,21 +53,31 @@ class WorkflowAndCommunicationTest extends DuskTestCase
 
         // Create test data
         PortalOpd::create([
-            'nama' => 'Test OPD',
+            'nama_opd' => 'Test OPD',
+            'singkatan' => 'TEST-OPD',
             'alamat' => 'Jl. Test No. 123',
             'telepon' => '081234567890',
             'email' => 'test@opd.id',
             'website' => 'https://test.opd.id',
-            'kepala' => 'Kepala Test',
-            'status' => 'active'
+            'kepala_opd' => 'Kepala Test',
+            'deskripsi' => 'Test OPD untuk workflow testing',
+            'status' => true,
+            'created_by' => $this->admin->id ?? null
         ]);
 
         Pelayanan::create([
-            'nama_layanan' => 'Test Service',
+            'nama' => 'Test Service',
             'deskripsi' => 'Test service description',
+            'prosedur' => 'Test procedure',
             'persyaratan' => 'Test requirements',
+            'waktu_penyelesaian' => '3 hari kerja',
             'biaya' => 'Gratis',
-            'waktu_proses' => '3 hari kerja',
+            'kategori' => 'Pelayanan Test',
+            'status' => true,
+            'created_by' => $this->admin->id ?? null
+        ]);
+
+        Wbs::create([
             'kategori' => 'pelayanan',
             'status' => 'active'
         ]);

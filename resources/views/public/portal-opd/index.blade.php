@@ -38,9 +38,14 @@
     <!-- OPD Grid -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         @if($portalOpds->count() > 0)
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Count Display -->
+        <div class="mb-6 text-center">
+            <p class="text-gray-600">{{ $portalOpds->total() }} OPD terdaftar</p>
+        </div>
+        
+        <div class="opd-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($portalOpds as $opd)
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <div class="opd-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <!-- Banner -->
                 <div class="h-48 bg-gradient-to-r from-blue-500 to-indigo-600 relative">
                     <img src="{{ $opd->banner_url }}" alt="{{ $opd->nama_opd }}" 
