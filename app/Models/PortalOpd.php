@@ -66,6 +66,18 @@ class PortalOpd extends Model
     }
 
     /**
+     * Debug method to check data consistency
+     */
+    public static function debugData()
+    {
+        \Log::info('Portal OPD Debug', [
+            'total_count' => self::count(),
+            'active_count' => self::active()->count(),
+            'first_10' => self::take(10)->get(['id', 'nama_opd', 'status'])->toArray()
+        ]);
+    }
+
+    /**
      * Get formatted address
      */
     public function getFormattedAlamatAttribute()

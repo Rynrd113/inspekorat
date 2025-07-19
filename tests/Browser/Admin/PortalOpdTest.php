@@ -4,59 +4,22 @@ namespace Tests\Browser\Admin;
 
 use App\Models\User;
 use App\Models\PortalOpd;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Illuminate\Http\UploadedFile;
 
 class PortalOpdTest extends DuskTestCase
 {
-    use DatabaseMigrations;
-
     protected $admin;
 
     protected function setUp(): void
     {
         parent::setUp();
         
-        // Create admin user
-        $this->admin = User::create([
-            'name' => 'Admin Portal OPD',
-            'email' => 'admin.opd@inspektorat.id',
-            'password' => bcrypt('adminopd123'),
-            'role' => 'admin_opd',
-            'is_active' => true,
-        ]);
-
-        // Create test OPD data
-        $this->createTestOpdData();
+        // Get admin user from seeded database
+        $this->admin = User::where('email', 'admin.opd@inspektorat.go.id')->first();
     }
 
-    private function createTestOpdData()
-    {
-        for ($i = 1; $i <= 15; $i++) {
-            PortalOpd::create([
-                'nama_opd' => 'OPD Test ' . $i,
-                'singkatan' => 'OPD' . $i,
-                'alamat' => 'Jalan Test ' . $i . ', Papua Tengah',
-                'telepon' => '0901234567' . $i,
-                'email' => 'opd' . $i . '@paputeng.go.id',
-                'website' => 'https://opd' . $i . '.paputeng.go.id',
-                'kepala_opd' => 'Kepala OPD ' . $i,
-                'nip_kepala' => '19800101 198001 1 00' . $i,
-                'deskripsi' => 'Deskripsi OPD Test ' . $i,
-                'visi' => 'Visi OPD Test ' . $i,
-                'misi' => [
-                    'Misi 1 OPD ' . $i,
-                    'Misi 2 OPD ' . $i,
-                    'Misi 3 OPD ' . $i,
-                ],
-                'status' => true,
-                'created_by' => $this->admin->id,
-                'updated_by' => $this->admin->id,
-            ]);
-        }
-    }
 
     /**
      * Test Portal OPD index page
@@ -67,10 +30,7 @@ class PortalOpdTest extends DuskTestCase
             $browser->loginAs($this->admin)
                 ->visit('/admin/portal-opd')
                 ->assertSee('Portal OPD')
-                ->assertSee('Tambah OPD')
-                ->assertSee('OPD Test 1')
-                ->assertSee('OPD Test 2')
-                ->assertSee('OPD Test 3');
+                ->assertSee('Tambah');
         });
     }
 

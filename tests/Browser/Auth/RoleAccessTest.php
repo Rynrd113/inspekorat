@@ -3,104 +3,11 @@
 namespace Tests\Browser\Auth;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
 class RoleAccessTest extends DuskTestCase
 {
-    use DatabaseMigrations;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        
-        // Create test users for different roles
-        $this->createTestUsers();
-    }
-
-    private function createTestUsers()
-    {
-        User::create([
-            'name' => 'Super Admin',
-            'email' => 'superadmin@inspektorat.id',
-            'password' => bcrypt('superadmin123'),
-            'role' => 'superadmin',
-            'is_active' => true,
-        ]);
-
-        User::create([
-            'name' => 'Admin Profil',
-            'email' => 'admin.profil@inspektorat.id',
-            'password' => bcrypt('adminprofil123'),
-            'role' => 'admin_profil',
-            'is_active' => true,
-        ]);
-
-        User::create([
-            'name' => 'Admin Pelayanan',
-            'email' => 'admin.pelayanan@inspektorat.id',
-            'password' => bcrypt('adminpelayanan123'),
-            'role' => 'admin_pelayanan',
-            'is_active' => true,
-        ]);
-
-        User::create([
-            'name' => 'Admin Dokumen',
-            'email' => 'admin.dokumen@inspektorat.id',
-            'password' => bcrypt('admindokumen123'),
-            'role' => 'admin_dokumen',
-            'is_active' => true,
-        ]);
-
-        User::create([
-            'name' => 'Admin Galeri',
-            'email' => 'admin.galeri@inspektorat.id',
-            'password' => bcrypt('admingaleri123'),
-            'role' => 'admin_galeri',
-            'is_active' => true,
-        ]);
-
-        User::create([
-            'name' => 'Admin FAQ',
-            'email' => 'admin.faq@inspektorat.id',
-            'password' => bcrypt('adminfaq123'),
-            'role' => 'admin_faq',
-            'is_active' => true,
-        ]);
-
-        User::create([
-            'name' => 'Admin Berita',
-            'email' => 'admin.berita@inspektorat.id',
-            'password' => bcrypt('adminberita123'),
-            'role' => 'admin_berita',
-            'is_active' => true,
-        ]);
-
-        User::create([
-            'name' => 'Admin WBS',
-            'email' => 'admin.wbs@inspektorat.id',
-            'password' => bcrypt('adminwbs123'),
-            'role' => 'admin_wbs',
-            'is_active' => true,
-        ]);
-
-        User::create([
-            'name' => 'Admin Portal OPD',
-            'email' => 'admin.opd@inspektorat.id',
-            'password' => bcrypt('adminopd123'),
-            'role' => 'admin_opd',
-            'is_active' => true,
-        ]);
-
-        User::create([
-            'name' => 'User Public',
-            'email' => 'user.public@inspektorat.id',
-            'password' => bcrypt('userpublic123'),
-            'role' => 'user',
-            'is_active' => true,
-        ]);
-    }
 
     /**
      * Test SuperAdmin can access all modules
@@ -109,7 +16,7 @@ class RoleAccessTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->type('email', 'superadmin@inspektorat.id')
+                ->type('email', 'superadmin@inspektorat.go.id')
                 ->type('password', 'superadmin123')
                 ->press('Login')
                 ->pause(1000)
@@ -145,7 +52,7 @@ class RoleAccessTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->type('email', 'admin.profil@inspektorat.id')
+                ->type('email', 'admin.profil@inspektorat.go.id')
                 ->type('password', 'adminprofil123')
                 ->press('Login')
                 ->pause(1000)
@@ -182,7 +89,7 @@ class RoleAccessTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->type('email', 'admin.pelayanan@inspektorat.id')
+                ->type('email', 'admin.pelayanan@inspektorat.go.id')
                 ->type('password', 'adminpelayanan123')
                 ->press('Login')
                 ->pause(1000)
@@ -219,7 +126,7 @@ class RoleAccessTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->type('email', 'admin.dokumen@inspektorat.id')
+                ->type('email', 'admin.dokumen@inspektorat.go.id')
                 ->type('password', 'admindokumen123')
                 ->press('Login')
                 ->pause(1000)
@@ -256,7 +163,7 @@ class RoleAccessTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->type('email', 'admin.galeri@inspektorat.id')
+                ->type('email', 'admin.galeri@inspektorat.go.id')
                 ->type('password', 'admingaleri123')
                 ->press('Login')
                 ->pause(1000)
@@ -293,7 +200,7 @@ class RoleAccessTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->type('email', 'admin.faq@inspektorat.id')
+                ->type('email', 'admin.faq@inspektorat.go.id')
                 ->type('password', 'adminfaq123')
                 ->press('Login')
                 ->pause(1000)
@@ -330,7 +237,7 @@ class RoleAccessTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->type('email', 'admin.berita@inspektorat.id')
+                ->type('email', 'admin.berita@inspektorat.go.id')
                 ->type('password', 'adminberita123')
                 ->press('Login')
                 ->pause(1000)
@@ -367,7 +274,7 @@ class RoleAccessTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->type('email', 'admin.wbs@inspektorat.id')
+                ->type('email', 'admin.wbs@inspektorat.go.id')
                 ->type('password', 'adminwbs123')
                 ->press('Login')
                 ->pause(1000)
@@ -404,7 +311,7 @@ class RoleAccessTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->type('email', 'admin.opd@inspektorat.id')
+                ->type('email', 'admin.opd@inspektorat.go.id')
                 ->type('password', 'adminopd123')
                 ->press('Login')
                 ->pause(1000)
@@ -441,7 +348,7 @@ class RoleAccessTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->type('email', 'user.public@inspektorat.id')
+                ->type('email', 'user.public@inspektorat.go.id')
                 ->type('password', 'userpublic123')
                 ->press('Login')
                 ->pause(1000)
@@ -455,15 +362,15 @@ class RoleAccessTest extends DuskTestCase
     public function testDashboardAccessBasedOnRole()
     {
         $roles = [
-            'superadmin@inspektorat.id' => 'superadmin123',
-            'admin.profil@inspektorat.id' => 'adminprofil123',
-            'admin.pelayanan@inspektorat.id' => 'adminpelayanan123',
-            'admin.dokumen@inspektorat.id' => 'admindokumen123',
-            'admin.galeri@inspektorat.id' => 'admingaleri123',
-            'admin.faq@inspektorat.id' => 'adminfaq123',
-            'admin.berita@inspektorat.id' => 'adminberita123',
-            'admin.wbs@inspektorat.id' => 'adminwbs123',
-            'admin.opd@inspektorat.id' => 'adminopd123',
+            'superadmin@inspektorat.go.id' => 'superadmin123',
+            'admin.profil@inspektorat.go.id' => 'adminprofil123',
+            'admin.pelayanan@inspektorat.go.id' => 'adminpelayanan123',
+            'admin.dokumen@inspektorat.go.id' => 'admindokumen123',
+            'admin.galeri@inspektorat.go.id' => 'admingaleri123',
+            'admin.faq@inspektorat.go.id' => 'adminfaq123',
+            'admin.berita@inspektorat.go.id' => 'adminberita123',
+            'admin.wbs@inspektorat.go.id' => 'adminwbs123',
+            'admin.opd@inspektorat.go.id' => 'adminopd123',
         ];
 
         foreach ($roles as $email => $password) {
@@ -489,7 +396,7 @@ class RoleAccessTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             // Test SuperAdmin - should see all menu items
             $browser->visit('/admin/login')
-                ->type('email', 'superadmin@inspektorat.id')
+                ->type('email', 'superadmin@inspektorat.go.id')
                 ->type('password', 'superadmin123')
                 ->press('Login')
                 ->pause(1000)
@@ -508,7 +415,7 @@ class RoleAccessTest extends DuskTestCase
 
             // Test Admin Profil - should only see profile menu
             $browser->visit('/admin/login')
-                ->type('email', 'admin.profil@inspektorat.id')
+                ->type('email', 'admin.profil@inspektorat.go.id')
                 ->type('password', 'adminprofil123')
                 ->press('Login')
                 ->pause(1000)

@@ -90,6 +90,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Portal OPD routes - protected by role middleware
         Route::middleware('role:admin_portal_opd,opd_manager,admin,super_admin')->group(function () {
             Route::get('portal-opd', [AdminPortalOpdController::class, 'index'])->name('portal-opd.index');
+            Route::post('portal-opd/sync', [AdminPortalOpdController::class, 'sync'])->name('portal-opd.sync');
             Route::get('portal-opd/create', [AdminPortalOpdController::class, 'create'])->name('portal-opd.create');
             Route::post('portal-opd', [AdminPortalOpdController::class, 'store'])->name('portal-opd.store');
             Route::get('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'show'])->name('portal-opd.show');

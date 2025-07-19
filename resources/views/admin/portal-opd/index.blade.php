@@ -16,10 +16,16 @@
             <p class="text-gray-600 mt-1">Kelola data Organisasi Perangkat Daerah</p>
         </div>
         @if(auth()->user()->hasAnyRole(['admin_portal_opd', 'admin', 'super_admin']))
-        <a href="{{ route('admin.portal-opd.create') }}"
-           class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
-            <i class="fas fa-plus mr-2"></i>Tambah OPD
-        </a>
+        <div class="flex items-center space-x-3">
+            <button class="sync-data-btn inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors"
+                    onclick="syncPortalOpdData()">
+                <i class="fas fa-sync mr-2"></i>Sync Data
+            </button>
+            <a href="{{ route('admin.portal-opd.create') }}"
+               class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                <i class="fas fa-plus mr-2"></i>Tambah OPD
+            </a>
+        </div>
         @endif
     </div>
 
@@ -58,7 +64,7 @@
 
     <!-- Table -->
     <x-card>
-        <div class="overflow-x-auto">
+        <div class="data-table overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -152,5 +158,79 @@
         </div>
         @endif
     </x-card>
+    
+    <!-- Sync Progress Indicator -->
+    <div class="sync-progress hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
+                    <i class="fas fa-sync fa-spin text-blue-600 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mt-2">Syncing Data</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500">
+                        Please wait while we synchronize Portal OPD data...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+function syncPortalOpdData() {
+    const syncBtn = document.querySelector('.sync-data-btn');
+    const syncProgress = document.querySelector('.sync-progress');
+    
+    // Show progress
+    syncProgress.classList.remove('hidden');
+    syncBtn.disabled = true;
+    syncBtn.innerHTML = '<i class="fas fa-spin fa-spinner mr-2"></i>Syncing...';
+    
+    // Make AJAX call to sync endpoint
+    fetch('/admin/portal-opd/sync', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        syncProgress.classList.add('hidden');
+        syncBtn.disabled = false;
+        syncBtn.innerHTML = '<i class="fas fa-sync mr-2"></i>Sync Data';
+        
+        // Show success message
+        const successMsg = document.createElement('div');
+        successMsg.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg z-50';
+        successMsg.textContent = data.message || 'Data synchronization completed';
+        document.body.appendChild(successMsg);
+        
+        setTimeout(() => {
+            successMsg.remove();
+        }, 3000);
+        
+        // Reload page to show updated data
+        window.location.reload();
+    })
+    .catch(error => {
+        syncProgress.classList.add('hidden');
+        syncBtn.disabled = false;
+        syncBtn.innerHTML = '<i class="fas fa-sync mr-2"></i>Sync Data';
+        
+        console.error('Sync error:', error);
+        
+        // Show error message
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-md shadow-lg z-50';
+        errorMsg.textContent = 'Failed to synchronize data';
+        document.body.appendChild(errorMsg);
+        
+        setTimeout(() => {
+            errorMsg.remove();
+        }, 3000);
+    });
+}
+</script>
 @endsection

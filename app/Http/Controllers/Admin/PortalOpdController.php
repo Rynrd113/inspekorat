@@ -160,4 +160,39 @@ class PortalOpdController extends Controller
         return redirect()->route('admin.portal-opd.index')
             ->with('success', 'Portal OPD berhasil dihapus.');
     }
+
+    /**
+     * Sync Portal OPD data
+     */
+    public function sync(): \Illuminate\Http\JsonResponse
+    {
+        try {
+            // Clear cache
+            \Cache::forget('portal_opds.all');
+            \Cache::forget('portal_opds.active');
+            
+            // Clear individual cache entries
+            $opds = PortalOpd::all();
+            foreach ($opds as $opd) {
+                \Cache::forget("portal_opds.{$opd->id}");
+            }
+            
+            $totalCount = PortalOpd::count();
+            $activeCount = PortalOpd::active()->count();
+            
+            return response()->json([
+                'success' => true,
+                'message' => "Data synchronized successfully! Total: {$totalCount}, Active: {$activeCount}",
+                'data' => [
+                    'total' => $totalCount,
+                    'active' => $activeCount
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to synchronize data: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

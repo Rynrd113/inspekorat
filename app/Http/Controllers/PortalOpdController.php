@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PortalOpd;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Cache;
 
 class PortalOpdController extends Controller
 {
@@ -13,6 +14,12 @@ class PortalOpdController extends Controller
      */
     public function index(Request $request): View
     {
+        // Clear cache if needed for debugging
+        if ($request->has('clear_cache')) {
+            Cache::forget('portal_opds.active');
+            Cache::forget('portal_opds.all');
+        }
+
         $query = PortalOpd::active();
 
         // Search functionality

@@ -16,6 +16,9 @@ return new class extends Migration
         if (app()->environment(['testing', 'dusk.local', 'local'])) {
             $platform = config('database.default');
             if ($platform === 'mysql') {
+                // First, update any invalid roles to valid ones
+                DB::table('users')->whereNotIn('role', ['super_admin', 'admin'])->update(['role' => 'admin']);
+                
                 // Change role column to VARCHAR to support all roles
                 DB::statement("ALTER TABLE users MODIFY COLUMN role VARCHAR(50) DEFAULT 'admin'");
             } else {
@@ -31,15 +34,19 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert back if needed
-        if (app()->environment(['testing', 'dusk.local', 'local'])) {
-            $platform = config('database.default');
-            if ($platform === 'mysql') {
-                DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'admin') DEFAULT 'admin'");
-            } else {
-                Schema::table('users', function (Blueprint $table) {
-                    $table->enum('role', ['super_admin', 'admin'])->default('admin')->change();
-                });
+        // Don't revert in testing - keep VARCHAR to avoid truncation errors
+        if (!app()->environment(['testing', 'dusk.local'])) {
+            if (app()->environment(['local'])) {
+                $platform = config('database.default');
+                if ($platform === 'mysql') {
+                    // First, update any invalid roles to valid ones
+                    DB::table('users')->whereNotIn('role', ['super_admin', 'admin'])->update(['role' => 'admin']);
+                    DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('super_admin', 'admin') DEFAULT 'admin'");
+                } else {
+                    Schema::table('users', function (Blueprint $table) {
+                        $table->enum('role', ['super_admin', 'admin'])->default('admin')->change();
+                    });
+                }
             }
         }
     }

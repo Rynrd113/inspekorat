@@ -37,7 +37,7 @@
                     
                     <!-- OPD Info -->
                     <div class="text-white">
-                        <h1 class="text-3xl md:text-4xl font-bold mb-2">{{ $portalOpd->nama_opd }}</h1>
+                        <h1 class="text-3xl md:text-4xl font-bold mb-2">{{ $portalOpd->nama_opd ?? 'Nama OPD Tidak Tersedia' }}</h1>
                         @if($portalOpd->singkatan)
                         <p class="text-lg text-blue-200 font-medium">{{ $portalOpd->singkatan }}</p>
                         @endif

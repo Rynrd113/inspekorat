@@ -38,9 +38,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Skip this migration in testing environment for regular tests
-        // But allow it for dusk.local tests which need the full schema
-        if (app()->environment(['testing', 'local'])) {
+        // Skip this migration in testing environment to avoid ENUM truncation issues
+        if (app()->environment(['testing', 'dusk.local'])) {
             return;
         }
         
@@ -54,7 +53,12 @@ return new class extends Migration
                 }
             }
             
-            $table->enum('role', ['admin', 'super_admin'])->default('admin')->change();
+            // Only revert in production/staging environments
+            if (app()->environment(['production', 'staging'])) {
+                // First, clean up any roles that don't fit the enum
+                DB::table('users')->whereNotIn('role', ['admin', 'super_admin'])->update(['role' => 'admin']);
+                $table->enum('role', ['admin', 'super_admin'])->default('admin')->change();
+            }
             $table->index('role');
         });
     }
