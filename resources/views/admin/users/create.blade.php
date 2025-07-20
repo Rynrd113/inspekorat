@@ -36,7 +36,7 @@
                     </label>
                     <input type="text" name="name" id="name" required
                            value="{{ old('name') }}"
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 ease-in-out bg-white"
                            placeholder="Nama lengkap user">
                     @error('name')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -49,7 +49,7 @@
                     </label>
                     <input type="email" name="email" id="email" required
                            value="{{ old('email') }}"
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 ease-in-out bg-white"
                            placeholder="email@example.com">
                     @error('email')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -63,7 +63,7 @@
                         Password <span class="text-red-500">*</span>
                     </label>
                     <input type="password" name="password" id="password" required
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 ease-in-out bg-white"
                            placeholder="Minimal 8 karakter">
                     <p class="mt-1 text-sm text-gray-500">Minimal 8 karakter.</p>
                     @error('password')
@@ -75,7 +75,7 @@
                         Konfirmasi Password <span class="text-red-500">*</span>
                     </label>
                     <input type="password" name="password_confirmation" id="password_confirmation" required
-                           class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 ease-in-out bg-white"
                            placeholder="Ulangi password">
                 </div>
             </div>
@@ -85,7 +85,7 @@
                     Role <span class="text-red-500">*</span>
                 </label>
                 <select name="role" id="role" required
-                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 ease-in-out bg-white">
                     <option value="">Pilih Role</option>
                     @foreach($roles as $key => $label)
                         <option value="{{ $key }}" {{ old('role') === $key ? 'selected' : '' }}>

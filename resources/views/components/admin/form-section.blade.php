@@ -6,9 +6,9 @@
     'collapsed' => false
 ])
 
-<div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
+<div class="admin-form-section">
     @if($title)
-    <div class="p-6 border-b border-gray-200 bg-gray-50">
+    <div class="admin-form-header">
         <div class="flex items-center justify-between">
             <div class="flex items-center">
                 @if($icon)
@@ -35,7 +35,7 @@
     </div>
     @endif
     
-    <div class="p-6 {{ $collapsible && $collapsed ? 'hidden' : '' }}" data-section-content>
+    <div class="admin-form-body {{ $collapsible && $collapsed ? 'hidden' : '' }}" data-section-content>
         {{ $slot }}
     </div>
 </div>

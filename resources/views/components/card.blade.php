@@ -1,4 +1,4 @@
-<div class="bg-white rounded-lg shadow-md overflow-hidden {{ $attributes->get('class') }}" {{ $attributes->except('class') }}>
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200 ease-in-out {{ $attributes->get('class') }}" {{ $attributes->except('class') }}>
     @isset($header)
         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
             {{ $header }}

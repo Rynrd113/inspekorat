@@ -1,7 +1,8 @@
 @php
-$inputClasses = 'block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors';
+$baseClasses = 'block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 ease-in-out bg-white';
+$inputClasses = $baseClasses;
 if ($error) {
-    $inputClasses .= ' border-red-300 focus:border-red-500 focus:ring-red-500';
+    $inputClasses = $baseClasses . ' border-red-300 focus:border-red-500 focus:ring-red-500';
 }
 @endphp
 
