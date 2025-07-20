@@ -15,47 +15,49 @@
             </div>
             
             <nav class="hidden md:block">
-                <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-4">
                     <a href="{{ route('public.index') }}" 
-                       class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.index') ? 'text-blue-600' : '' }}">
+                       class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium {{ request()->routeIs('public.index') ? 'text-blue-600' : '' }}">
                         Beranda
                     </a>
-                    <a href="{{ route('public.profil') }}" 
-                       class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.profil') ? 'text-blue-600' : '' }}">
-                        Profil
-                    </a>
-                    <a href="{{ route('public.berita.index') }}" 
-                       class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.berita.*') ? 'text-blue-600' : '' }}">
-                        Berita
-                    </a>
-                    @if(Route::has('public.portal-opd.index'))
-                    <a href="{{ route('public.portal-opd.index') }}" 
-                       class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.portal-opd.*') ? 'text-blue-600' : '' }}">
-                        Portal OPD
-                    </a>
-                    @endif
-                    <a href="{{ route('public.pelayanan.index') }}" 
-                       class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.pelayanan.*') ? 'text-blue-600' : '' }}">
-                        Pelayanan
-                    </a>
-                    <a href="{{ route('public.dokumen.index') }}" 
-                       class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.dokumen.*') ? 'text-blue-600' : '' }}">
-                        Dokumen
-                    </a>
-                    <a href="{{ route('public.galeri.index') }}" 
-                       class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.galeri.*') ? 'text-blue-600' : '' }}">
-                        Galeri
-                    </a>
+                    
+                    <!-- Informasi Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium flex items-center">
+                            Informasi
+                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="py-1">
+                                <a href="{{ route('public.profil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
+                                <a href="{{ route('public.berita.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Berita</a>
+                                <a href="{{ route('public.galeri.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Galeri</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Layanan Dropdown -->
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium flex items-center">
+                            Layanan
+                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="py-1">
+                                <a href="{{ route('public.pelayanan.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pelayanan</a>
+                                <a href="{{ route('public.dokumen.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dokumen</a>
+                                <a href="{{ route('public.pengaduan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pengaduan</a>
+                                <a href="{{ route('public.wbs') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">WBS</a>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <a href="{{ route('public.faq') }}" 
-                       class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.faq') ? 'text-blue-600' : '' }}">
+                       class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium {{ request()->routeIs('public.faq') ? 'text-blue-600' : '' }}">
                         FAQ
                     </a>
-                    <a href="{{ route('public.wbs') }}" 
-                       class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.wbs') ? 'text-blue-600' : '' }}">
-                        WBS
-                    </a>
                     <a href="{{ route('public.kontak') }}" 
-                       class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.kontak') ? 'text-blue-600' : '' }}">
+                       class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium {{ request()->routeIs('public.kontak') ? 'text-blue-600' : '' }}">
                         Kontak
                     </a>
                     @if(Route::has('admin.login'))
@@ -86,39 +88,45 @@
                class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.index') ? 'text-blue-600' : '' }}">
                 Beranda
             </a>
+            
+            <!-- Informasi Section -->
+            <div class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Informasi</div>
             <a href="{{ route('public.profil') }}" 
-               class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.profil') ? 'text-blue-600' : '' }}">
+               class="block px-6 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.profil') ? 'text-blue-600' : '' }}">
                 Profil
             </a>
             <a href="{{ route('public.berita.index') }}" 
-               class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.berita.*') ? 'text-blue-600' : '' }}">
+               class="block px-6 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.berita.*') ? 'text-blue-600' : '' }}">
                 Berita
             </a>
-            @if(Route::has('public.portal-opd.index'))
-            <a href="{{ route('public.portal-opd.index') }}" 
-               class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.portal-opd.*') ? 'text-blue-600' : '' }}">
-                Portal OPD
+            <a href="{{ route('public.galeri.index') }}" 
+               class="block px-6 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.galeri.*') ? 'text-blue-600' : '' }}">
+                Galeri
             </a>
-            @endif
+            
+            <!-- Layanan Section -->
+            <div class="px-3 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">Layanan</div>
             <a href="{{ route('public.pelayanan.index') }}" 
-               class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.pelayanan.*') ? 'text-blue-600' : '' }}">
+               class="block px-6 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.pelayanan.*') ? 'text-blue-600' : '' }}">
                 Pelayanan
             </a>
             <a href="{{ route('public.dokumen.index') }}" 
-               class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.dokumen.*') ? 'text-blue-600' : '' }}">
+               class="block px-6 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.dokumen.*') ? 'text-blue-600' : '' }}">
                 Dokumen
             </a>
-            <a href="{{ route('public.galeri.index') }}" 
-               class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.galeri.*') ? 'text-blue-600' : '' }}">
-                Galeri
+            <a href="{{ route('public.pengaduan') }}" 
+               class="block px-6 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.pengaduan') ? 'text-blue-600' : '' }}">
+                Pengaduan
             </a>
+            <a href="{{ route('public.wbs') }}" 
+               class="block px-6 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.wbs') ? 'text-blue-600' : '' }}">
+                WBS
+            </a>
+            
+            <!-- Other -->
             <a href="{{ route('public.faq') }}" 
                class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.faq') ? 'text-blue-600' : '' }}">
                 FAQ
-            </a>
-            <a href="{{ route('public.wbs') }}" 
-               class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.wbs') ? 'text-blue-600' : '' }}">
-                WBS
             </a>
             <a href="{{ route('public.kontak') }}" 
                class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.kontak') ? 'text-blue-600' : '' }}">

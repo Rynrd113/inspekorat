@@ -1,11 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', 'Galeri Kegiatan - Inspektorat Papua Tengah')
 @section('description', 'Dokumentasi foto dan video kegiatan Inspektorat Provinsi Papua Tengah.')
 
 @section('content')
-<!-- Navigation -->
-<x-navigation />
 
 <div class="min-h-screen bg-gray-50">
     <!-- Header Section -->

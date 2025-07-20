@@ -1,11 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', $berita->judul . ' - Portal Inspektorat Papua Tengah')
 @section('description', Str::limit(strip_tags($berita->konten), 160))
 
 @section('content')
-<!-- Navigation -->
-<x-navigation />
 
 <div class="min-h-screen bg-gray-50">
 

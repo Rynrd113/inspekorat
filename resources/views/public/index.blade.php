@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', 'Portal Informasi Pemerintahan - Inspektorat Papua Tengah')
 @section('description', 'Portal resmi Inspektorat Provinsi Papua Tengah - Akses layanan publik, informasi pemerintahan, dan laporan WBS.')
@@ -71,70 +71,6 @@
 
 @section('content')
 <div class="min-h-screen bg-white">
-    <!-- Header -->
-    <header class="bg-white/95 backdrop-blur-sm shadow-lg sticky top-0 z-50 border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="h-12 w-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
-                            <i class="fas fa-shield-alt text-white text-lg"></i>
-                        </div>
-                    </div>
-                    <div class="ml-4">
-                        <h1 class="text-xl font-bold text-gray-900">Inspektorat Provinsi</h1>
-                        <p class="text-sm text-blue-600 font-medium">Papua Tengah</p>
-                    </div>
-                </div>
-                
-                <nav class="hidden lg:block">
-                    <div class="flex items-center space-x-1">
-                        <a href="#beranda" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">Beranda</a>
-                        <a href="{{ route('public.profil') }}" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">Profil</a>
-                        <a href="{{ route('public.berita.index') }}" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">Berita</a>
-                        <a href="{{ route('public.portal-opd.index') }}" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">Portal OPD</a>
-                        <a href="{{ route('public.pelayanan.index') }}" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">Pelayanan</a>
-                        <a href="{{ route('public.dokumen.index') }}" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">Dokumen</a>
-                        <a href="{{ route('public.galeri.index') }}" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">Galeri</a>
-                        <a href="{{ route('public.faq') }}" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">FAQ</a>
-                        <a href="{{ route('public.wbs') }}" class="text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">WBS</a>
-                        <div class="ml-4 pl-4 border-l border-gray-200">
-                            <a href="{{ route('admin.login') }}" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg">
-                                <i class="fas fa-sign-in-alt mr-2"></i>Login Admin
-                            </a>
-                        </div>
-                    </div>
-                </nav>
-                
-                <!-- Mobile menu button -->
-                <div class="lg:hidden">
-                    <button type="button" class="text-gray-500 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-lg focus:outline-none focus:text-gray-600 transition-all duration-200" id="mobile-menu-button">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Mobile menu -->
-        <div class="lg:hidden hidden" id="mobile-menu">
-            <div class="px-4 pt-2 pb-4 space-y-1 bg-white border-t border-gray-100 shadow-lg">
-                <a href="#beranda" class="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">Beranda</a>
-                <a href="{{ route('public.profil') }}" class="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">Profil</a>
-                <a href="{{ route('public.berita.index') }}" class="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">Berita</a>
-                <a href="{{ route('public.portal-opd.index') }}" class="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">Portal OPD</a>
-                <a href="{{ route('public.pelayanan.index') }}" class="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">Pelayanan</a>
-                <a href="{{ route('public.dokumen.index') }}" class="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">Dokumen</a>
-                <a href="{{ route('public.galeri.index') }}" class="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">Galeri</a>
-                <a href="{{ route('public.faq') }}" class="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">FAQ</a>
-                <a href="{{ route('public.wbs') }}" class="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">WBS</a>
-                <div class="border-t border-gray-200 pt-4 mt-4">
-                    <a href="{{ route('admin.login') }}" class="flex items-center px-4 py-3 text-blue-600 font-medium hover:bg-blue-50 rounded-lg transition-all duration-200">
-                        <i class="fas fa-sign-in-alt mr-3"></i>Login Admin
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
 
     <!-- Hero Slider Section -->
     <section id="beranda" class="relative overflow-hidden">
@@ -275,12 +211,6 @@
             </button>
         </div>
         
-        <!-- Wave separator -->
-        <div class="absolute bottom-0 left-0 right-0 z-10">
-            <svg viewBox="0 0 1440 120" class="w-full h-16 text-white">
-                <path fill="currentColor" d="M0,32L48,37.3C96,43,192,53,288,58.7C384,64,480,64,576,58.7C672,53,768,43,864,48C960,53,1056,75,1152,80C1248,85,1344,75,1392,69.3L1440,64L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z"></path>
-            </svg>
-        </div>
     </section>
 
     <!-- Stats Section -->
@@ -561,21 +491,21 @@
                     </div>
                 </div>
 
-                <!-- Portal Papua Tengah Card -->
+                <!-- Pengaduan Card -->
                 <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 group transform hover:-translate-y-2 border border-gray-100">
                     <div class="p-6">
-                        <div class="w-full h-48 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center mb-6">
-                            <i class="fas fa-newspaper text-blue-600 text-4xl"></i>
+                        <div class="w-full h-48 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-comment-alt text-green-600 text-4xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                            Portal Berita
+                        <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-600 transition-colors">
+                            Pengaduan Masyarakat
                         </h3>
                         <p class="text-gray-600 mb-6 leading-relaxed">
-                            Baca berita terkini dan informasi kegiatan dari Inspektorat Papua Tengah.
+                            Sampaikan pengaduan, kritik, dan saran kepada Inspektorat Papua Tengah.
                         </p>
-                        <a href="{{ route('public.berita.index') }}" class="inline-flex items-center justify-center w-full px-6 py-3 text-blue-600 border-2 border-blue-600 rounded-xl hover:bg-blue-50 transition-all duration-300 font-semibold">
-                            <i class="fas fa-newspaper mr-2"></i>
-                            Lihat Berita
+                        <a href="{{ route('public.pengaduan') }}" class="inline-flex items-center justify-center w-full px-6 py-3 text-green-600 border-2 border-green-600 rounded-xl hover:bg-green-50 transition-all duration-300 font-semibold">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Buat Pengaduan
                         </a>
                     </div>
                 </div>

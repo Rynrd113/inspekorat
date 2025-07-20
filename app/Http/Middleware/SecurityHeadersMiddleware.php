@@ -23,27 +23,19 @@ class SecurityHeadersMiddleware
         $response->headers->set('Permissions-Policy', 'geolocation=(), camera=(), microphone=()');
         
         // Content Security Policy
-        $isDevelopment = config('app.env') === 'local';
+        $isDevelopment = in_array(config('app.env'), ['local', 'dusk.local', 'testing']);
         
         if ($isDevelopment) {
-            // Get potential Vite dev server ports
-            $vitePorts = $this->getViteDevServerPorts();
-            
-            // Development CSP - more permissive for Vite
-            $csp = "default-src 'self'; " .
-                   "script-src 'self' 'unsafe-inline' 'unsafe-eval' " . $vitePorts['script'] . "; " .
-                   "style-src 'self' 'unsafe-inline' " . $vitePorts['style'] . " https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
-                   "img-src 'self' data: https:; " .
-                   "font-src 'self' https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
-                   "connect-src 'self' " . $vitePorts['connect'] . "; " .
+            // Development CSP - allow Vite dev server
+            $csp = "default-src 'self' http://localhost:5173; " .
+                   "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:5173; " .
+                   "script-src-elem 'self' 'unsafe-inline' http://localhost:5173; " .
+                   "style-src 'self' 'unsafe-inline' http://localhost:5173 https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
+                   "style-src-elem 'self' 'unsafe-inline' http://localhost:5173 https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
+                   "img-src 'self' data: https: http://localhost:5173; " .
+                   "font-src 'self' https://fonts.bunny.net https://cdnjs.cloudflare.com http://localhost:5173; " .
+                   "connect-src 'self' http://localhost:5173 ws://localhost:5173; " .
                    "frame-ancestors 'none';";
-            
-            // Debug log
-            \Log::info('CSP Development Mode', [
-                'env' => config('app.env'),
-                'csp' => $csp,
-                'vite_ports' => $vitePorts
-            ]);
         } else {
             // Production CSP - more restrictive
             $csp = "default-src 'self'; " .
@@ -53,39 +45,10 @@ class SecurityHeadersMiddleware
                    "font-src 'self' https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
                    "connect-src 'self'; " .
                    "frame-ancestors 'none';";
-            
-            // Debug log
-            \Log::info('CSP Production Mode', [
-                'env' => config('app.env'),
-                'csp' => $csp
-            ]);
         }
         
         $response->headers->set('Content-Security-Policy', $csp);
 
         return $response;
-    }
-    
-    /**
-     * Get Vite dev server ports for CSP
-     */
-    private function getViteDevServerPorts(): array
-    {
-        // Common Vite ports - 5173 is default, but it can use 5174, 5175, etc.
-        $ports = [5173, 5174, 5175, 5176, 5177];
-        
-        $httpPorts = [];
-        $wsPorts = [];
-        
-        foreach ($ports as $port) {
-            $httpPorts[] = "http://localhost:$port";
-            $wsPorts[] = "ws://localhost:$port";
-        }
-        
-        return [
-            'script' => implode(' ', array_merge($httpPorts, $wsPorts)),
-            'style' => implode(' ', $httpPorts),
-            'connect' => implode(' ', array_merge($httpPorts, $wsPorts))
-        ];
     }
 }

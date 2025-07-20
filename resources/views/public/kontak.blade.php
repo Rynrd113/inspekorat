@@ -3,9 +3,6 @@
 @section('title', 'Kontak Kami - Portal Inspektorat Papua Tengah')
 
 @section('content')
-<!-- Navigation -->
-<x-navigation />
-
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -103,52 +100,44 @@
             </div>
         </div>
         
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <h4 class="card-title mb-4">
-                        <i class="fas fa-info-circle text-primary me-2"></i>
+        <div class="space-y-6">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="p-6">
+                    <h4 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                        <i class="fas fa-info-circle text-blue-600 mr-3"></i>
                         Informasi Kontak
                     </h4>
                     
-                    <div class="contact-info">
-                        <div class="mb-3">
-                            <div class="d-flex align-items-start">
-                                <i class="fas fa-map-marker-alt text-primary me-3 mt-1"></i>
-                                <div>
-                                    <h6 class="mb-1">Alamat</h6>
-                                    <p class="text-muted mb-0">{{ $kontak->alamat ?? 'Jl. Raya Nabire No. 123, Nabire, Papua Tengah' }}</p>
-                                </div>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-blue-600 mr-3 mt-1"></i>
+                            <div>
+                                <h6 class="font-medium text-gray-900 mb-1">Alamat</h6>
+                                <p class="text-gray-600">{{ $kontak->alamat ?? 'Jl. Raya Nabire No. 123, Nabire, Papua Tengah' }}</p>
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <div class="d-flex align-items-start">
-                                <i class="fas fa-phone text-primary me-3 mt-1"></i>
-                                <div>
-                                    <h6 class="mb-1">Telepon</h6>
-                                    <p class="text-muted mb-0">{{ $kontak->telepon ?? '(0984) 21234' }}</p>
-                                </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-phone text-blue-600 mr-3 mt-1"></i>
+                            <div>
+                                <h6 class="font-medium text-gray-900 mb-1">Telepon</h6>
+                                <p class="text-gray-600">{{ $kontak->telepon ?? '(0984) 21234' }}</p>
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <div class="d-flex align-items-start">
-                                <i class="fas fa-envelope text-primary me-3 mt-1"></i>
-                                <div>
-                                    <h6 class="mb-1">Email</h6>
-                                    <p class="text-muted mb-0">{{ $kontak->email ?? 'inspektorat@paputengah.go.id' }}</p>
-                                </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-envelope text-blue-600 mr-3 mt-1"></i>
+                            <div>
+                                <h6 class="font-medium text-gray-900 mb-1">Email</h6>
+                                <p class="text-gray-600">{{ $kontak->email ?? 'inspektorat@paputengah.go.id' }}</p>
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <div class="d-flex align-items-start">
-                                <i class="fas fa-clock text-primary me-3 mt-1"></i>
-                                <div>
-                                    <h6 class="mb-1">Jam Operasional</h6>
-                                    <p class="text-muted mb-0">{{ $kontak->jam_operasional ?? 'Senin - Jumat: 08:00 - 16:00 WIT' }}</p>
-                                </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-clock text-blue-600 mr-3 mt-1"></i>
+                            <div>
+                                <h6 class="font-medium text-gray-900 mb-1">Jam Operasional</h6>
+                                <p class="text-gray-600">{{ $kontak->jam_operasional ?? 'Senin - Jumat: 08:00 - 16:00 WIT' }}</p>
                             </div>
                         </div>
                     </div>
@@ -156,15 +145,15 @@
             </div>
             
             <!-- Additional Info Card -->
-            <div class="card border-0 shadow-sm mt-4">
-                <div class="card-body p-4">
-                    <h5 class="card-title mb-3">
-                        <i class="fas fa-question-circle text-primary me-2"></i>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="p-6">
+                    <h5 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                        <i class="fas fa-question-circle text-blue-600 mr-2"></i>
                         Butuh Bantuan Cepat?
                     </h5>
-                    <p class="text-muted mb-3">Lihat halaman FAQ untuk jawaban atas pertanyaan yang sering diajukan.</p>
-                    <a href="{{ route('public.faq') }}" class="btn btn-outline-primary btn-sm">
-                        <i class="fas fa-external-link-alt me-2"></i>
+                    <p class="text-gray-600 mb-4">Lihat halaman FAQ untuk jawaban atas pertanyaan yang sering diajukan.</p>
+                    <a href="{{ route('public.faq') }}" class="inline-flex items-center px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors text-sm font-medium">
+                        <i class="fas fa-external-link-alt mr-2"></i>
                         Lihat FAQ
                     </a>
                 </div>

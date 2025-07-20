@@ -1,10 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', 'Portal OPD - Papua Tengah')
 
 @section('content')
-<!-- Navigation -->
-<x-navigation />
 
 <div class="min-h-screen bg-gray-50">
     <!-- Header -->

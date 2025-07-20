@@ -1,11 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', $pelayanan->nama_layanan . ' - Layanan Publik - Inspektorat Papua Tengah')
 @section('description', $pelayanan->deskripsi)
 
 @section('content')
-<!-- Navigation -->
-<x-navigation />
 
 <div class="min-h-screen bg-gray-50">
     <!-- Header Section -->

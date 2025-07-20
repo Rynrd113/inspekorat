@@ -1,11 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', 'Layanan Publik - Inspektorat Papua Tengah')
 @section('description', 'Akses berbagai layanan publik yang disediakan oleh Inspektorat Provinsi Papua Tengah.')
 
 @section('content')
-<!-- Navigation -->
-<x-navigation />
 
 <div class="min-h-screen bg-gray-50">
     <!-- Header Section -->

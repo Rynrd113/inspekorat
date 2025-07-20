@@ -1,11 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', 'Pengaduan Masyarakat - Portal Inspektorat Papua Tengah')
 @section('description', 'Sampaikan pengaduan, kritik, dan saran kepada Inspektorat Provinsi Papua Tengah secara online.')
 
 @section('content')
-<!-- Navigation -->
-<x-navigation />
 
 <div class="min-h-screen bg-gray-50">
 

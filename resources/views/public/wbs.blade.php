@@ -1,11 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.public')
 
 @section('title', 'Whistleblower System (WBS) - Inspektorat Papua Tengah')
 @section('description', 'Laporkan dugaan pelanggaran atau tindakan yang tidak sesuai melalui sistem Whistleblower Inspektorat Papua Tengah.')
 
 @section('content')
-<!-- Navigation -->
-<x-navigation />
 
 <div class="min-h-screen bg-gray-50">
 

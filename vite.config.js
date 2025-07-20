@@ -7,11 +7,9 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css', 
-                'resources/css/admin.css', 
-                'resources/css/public.css',
+                'resources/css/admin.css',
                 'resources/js/app.js', 
-                'resources/js/admin.js',
-                'resources/js/public.js'
+                'resources/js/admin.js'
             ],
             refresh: true,
         }),
@@ -24,9 +22,7 @@ export default defineConfig({
                     // Vendor libraries chunk
                     vendor: ['lodash', 'axios'],
                     // Admin-specific code chunk
-                    admin: ['resources/js/admin.js'],
-                    // Public-specific code chunk
-                    public: ['resources/js/app.js']
+                    admin: ['resources/js/admin.js']
                 },
                 // Optimize asset file names dengan hash untuk cache busting
                 entryFileNames: (chunkInfo) => {
