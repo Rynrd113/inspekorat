@@ -11,23 +11,17 @@ class WebPortal extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama_portal',
-        'deskripsi',
-        'url_portal',
+        'nama',
         'url',
+        'deskripsi',
         'kategori',
-        'icon',
-        'is_active',
         'status',
-        'urutan',
-        'created_by'
+        'urutan'
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
         'status' => 'boolean',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'urutan' => 'integer'
     ];
 
     /**
@@ -35,7 +29,7 @@ class WebPortal extends Model
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('is_active', true);
+        return $query->where('status', true);
     }
 
     /**
@@ -55,6 +49,6 @@ class WebPortal extends Model
      */
     public function scopeOrdered(Builder $query): Builder
     {
-        return $query->orderBy('urutan', 'asc')->orderBy('nama_portal', 'asc');
+        return $query->orderBy('urutan', 'asc')->orderBy('nama', 'asc');
     }
 }

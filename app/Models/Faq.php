@@ -19,18 +19,13 @@ class Faq extends Model
         'kategori',
         'urutan',
         'status',
-        'is_featured',
-        'tags',
-        'view_count',
         'created_by',
         'updated_by',
     ];
 
     protected $casts = [
         'status' => 'boolean',
-        'is_featured' => 'boolean',
         'urutan' => 'integer',
-        'view_count' => 'integer',
     ];
 
     /**

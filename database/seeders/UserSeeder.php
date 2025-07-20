@@ -56,13 +56,6 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
             ],
             [
-                'name' => 'Admin Profil',
-                'email' => 'admin.profil@inspektorat.go.id',
-                'password' => Hash::make('adminprofil123'),
-                'role' => 'admin_profil',
-                'email_verified_at' => now(),
-            ],
-            [
                 'name' => 'Admin Pelayanan',
                 'email' => 'admin.pelayanan@inspektorat.go.id',
                 'password' => Hash::make('adminpelayanan123'),

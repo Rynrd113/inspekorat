@@ -17,30 +17,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', [
-                'user',
-                'admin_wbs', 
-                'admin_berita', 
-                'admin_portal_opd', 
-                'admin_pelayanan', 
-                'admin_dokumen', 
-                'admin_galeri', 
-                'admin_faq',
-                'content_manager',
-                'service_manager', 
-                'opd_manager',
-                'wbs_manager',
-                'admin',
-                'super_admin'
-            ])->default('user');
-            $table->boolean('status')->default(true);
+            $table->enum('role', ['super_admin', 'admin', 'admin_wbs', 'admin_berita', 'admin_portal_opd'])->default('admin');
             $table->rememberToken();
             $table->timestamps();
             
-            // Indexes for performance
+            // Index untuk optimasi query
             $table->index('role');
-            $table->index('status');
-            $table->index('email');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

@@ -17,28 +17,23 @@ class PortalOpd extends Model
     protected $fillable = [
         'nama_opd',
         'singkatan',
+        'deskripsi',
         'alamat',
         'telepon',
         'email',
         'website',
         'kepala_opd',
-        'nip_kepala',
-        'deskripsi',
+        'logo',
         'visi',
         'misi',
-        'logo',
-        'banner',
+        'tugas_fungsi',
         'status',
-        'created_by',
-        'updated_by'
+        'urutan'
     ];
 
     protected $casts = [
-        'misi' => 'array',
         'status' => 'boolean',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime'
+        'urutan' => 'integer'
     ];
 
     /**

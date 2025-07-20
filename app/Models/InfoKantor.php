@@ -11,18 +11,22 @@ class InfoKantor extends Model
     use HasFactory;
 
     protected $fillable = [
-        'judul',
-        'konten',
-        'kategori',
-        'is_active',
-        'icon',
-        'urutan'
+        'nama',
+        'alamat',
+        'telepon',
+        'email',
+        'website',
+        'deskripsi',
+        'jam_operasional',
+        'latitude',
+        'longitude',
+        'status'
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'status' => 'boolean',
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
     ];
 
     /**
@@ -30,7 +34,7 @@ class InfoKantor extends Model
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('is_active', true);
+        return $query->where('status', true);
     }
 
     /**

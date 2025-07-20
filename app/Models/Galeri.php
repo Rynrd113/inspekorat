@@ -15,25 +15,19 @@ class Galeri extends Model
         'judul',
         'deskripsi',
         'kategori',
-        'album',
-        'tanggal_kegiatan',
-        'lokasi_kegiatan',
-        'file_media',
-        'thumbnail',
+        'file_path',
+        'file_name',
+        'file_type',
+        'file_size',
         'status',
-        'is_featured',
-        'tags',
-        'view_count',
+        'tanggal_publikasi',
         'created_by',
         'updated_by',
     ];
 
     protected $casts = [
-        'tanggal_kegiatan' => 'date',
+        'tanggal_publikasi' => 'date',
         'status' => 'boolean',
-        'is_featured' => 'boolean',
-        'view_count' => 'integer',
-        'tags' => 'json',
     ];
 
     /**

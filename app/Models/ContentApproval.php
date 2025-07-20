@@ -10,24 +10,19 @@ class ContentApproval extends Model
     use HasFactory;
 
     protected $fillable = [
-        'model_type',
-        'model_id',
+        'approvable_type',
+        'approvable_id',
         'submitted_by',
         'approved_by',
-        'rejected_by',
         'status',
-        'submission_notes',
-        'approval_notes',
-        'rejection_notes',
+        'notes',
         'submitted_at',
-        'approved_at',
-        'rejected_at'
+        'reviewed_at'
     ];
 
     protected $casts = [
         'submitted_at' => 'datetime',
-        'approved_at' => 'datetime',
-        'rejected_at' => 'datetime'
+        'reviewed_at' => 'datetime'
     ];
 
     const STATUS_PENDING = 'pending';

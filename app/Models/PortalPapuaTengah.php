@@ -14,28 +14,21 @@ class PortalPapuaTengah extends Model
 
     protected $fillable = [
         'judul',
-        'slug',
         'konten',
-        'isi',
         'kategori',
-        'thumbnail',
+        'author',
+        'tanggal_publikasi',
         'gambar',
-        'is_published',
-        'published_at',
-        'penulis',
-        'tags',
-        'views',
-        'is_featured',
-        'meta_description',
         'status',
+        'views',
         'created_by',
         'updated_by'
     ];
 
     protected $casts = [
-        'is_published' => 'boolean',
-        'is_featured' => 'boolean',
-        'published_at' => 'datetime'
+        'status' => 'boolean',
+        'tanggal_publikasi' => 'date',
+        'views' => 'integer'
     ];
 
     protected static function boot()
