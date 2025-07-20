@@ -17,7 +17,7 @@ class DokumenCrudTest extends DuskTestCase
         
         $this->admin = User::where('email', 'admin.dokumen@inspektorat.go.id')->first();
         if (!$this->admin) {
-            $this->admin = User::where('role', 'superadmin')->first();
+            $this->admin = User::where('role', 'super_admin')->first();
         }
     }
 
@@ -29,18 +29,18 @@ class DokumenCrudTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen')
-                ->assertSee('Dokumen')
+                ->assertSee('Manajemen Dokumen')
                 ->click('a[href*="create"]')
                 ->pause(1000)
                 ->assertPathBeginsWith('/admin/dokumen/create')
-                ->type('judul', 'Peraturan Daerah Nomor 1 Tahun 2025')
+                ->type('nama_dokumen', 'Peraturan Daerah Nomor 1 Tahun 2025')
                 ->type('deskripsi', 'Peraturan daerah tentang tata kelola pemerintahan Papua Tengah')
                 ->select('kategori', 'peraturan')
                 ->screenshot('dokumen-create-form');
                 
             // Only try to upload if the field exists
-            if ($browser->element('input[type="file"]')) {
-                $browser->attach('file_dokumen', __DIR__ . '/../../fixtures/test-document.pdf');
+            if ($browser->element('input[name="file"]')) {
+                $browser->attach('file', __DIR__ . '/../../fixtures/test-document.pdf');
             }
             
             $browser->press('Simpan')
@@ -64,12 +64,12 @@ class DokumenCrudTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($dokumen) {
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen')
-                ->assertSee('Dokumen')
-                ->assertSee($dokumen->judul)
+                ->assertSee('Manajemen Dokumen')
+                ->assertSee($dokumen->nama_dokumen)
                 ->screenshot('dokumen-list-view')
                 ->click('a[href*="/admin/dokumen/' . $dokumen->id . '"]')
                 ->pause(1000)
-                ->assertSee($dokumen->judul)
+                ->assertSee($dokumen->nama_dokumen)
                 ->assertSee($dokumen->deskripsi)
                 ->screenshot('dokumen-detail-view');
         });
@@ -89,8 +89,8 @@ class DokumenCrudTest extends DuskTestCase
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen/' . $dokumen->id . '/edit')
                 ->assertSee('Edit')
-                ->clear('judul')
-                ->type('judul', 'Dokumen Updated Test')
+                ->clear('nama_dokumen')
+                ->type('nama_dokumen', 'Dokumen Updated Test')
                 ->clear('deskripsi')
                 ->type('deskripsi', 'Deskripsi dokumen yang telah diperbarui')
                 ->screenshot('dokumen-edit-form')
@@ -115,7 +115,7 @@ class DokumenCrudTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($dokumen) {
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen')
-                ->assertSee($dokumen->judul)
+                ->assertSee($dokumen->nama_dokumen)
                 ->click('a[href*="download"]')
                 ->pause(2000)
                 ->screenshot('dokumen-download-action');
@@ -131,7 +131,7 @@ class DokumenCrudTest extends DuskTestCase
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen')
                 ->type('search', 'Peraturan')
-                ->press('Search')
+                ->press('Cari')
                 ->pause(1000)
                 ->screenshot('dokumen-search-results');
         });
@@ -149,7 +149,7 @@ class DokumenCrudTest extends DuskTestCase
                 
             if ($browser->element('select[name="kategori"]')) {
                 $browser->select('kategori', 'peraturan')
-                    ->press('Filter')
+                    ->press('Cari')
                     ->pause(1000)
                     ->screenshot('dokumen-filtered-results');
             }
@@ -179,7 +179,7 @@ class DokumenCrudTest extends DuskTestCase
             $browser->resize(375, 667) // iPhone size
                 ->loginAs($this->admin)
                 ->visit('/admin/dokumen')
-                ->assertSee('Dokumen')
+                ->assertSee('Manajemen Dokumen')
                 ->screenshot('dokumen-mobile-view')
                 ->resize(1280, 720); // Reset to desktop
         });

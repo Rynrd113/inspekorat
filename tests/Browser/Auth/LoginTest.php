@@ -16,12 +16,12 @@ class LoginTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->assertSee('Login')
+                ->assertSee('Panel Admin')
                 ->assertPresent('input[name="email"]')
                 ->assertPresent('input[name="password"]')
                 ->type('email', 'admin@inspektorat.go.id')
                 ->type('password', 'admin123')
-                ->press('Login')
+                ->press('Masuk')
                 ->pause(1000)
                 ->assertPathIs('/admin/dashboard')
                 ->assertSee('Dashboard');
@@ -37,7 +37,7 @@ class LoginTest extends DuskTestCase
             $browser->visit('/admin/login')
                 ->type('email', 'superadmin@inspektorat.go.id')
                 ->type('password', 'superadmin123')
-                ->press('Login')
+                ->press('Masuk')
                 ->pause(1000)
                 ->assertPathIs('/admin/dashboard')
                 ->assertSee('Dashboard')
@@ -54,10 +54,10 @@ class LoginTest extends DuskTestCase
             $browser->visit('/admin/login')
                 ->type('email', 'admin@inspektorat.go.id')
                 ->type('password', 'wrongpassword')
-                ->press('Login')
+                ->press('Masuk')
                 ->pause(1000)
                 ->assertPathIs('/admin/login')
-                ->assertSee('These credentials do not match our records');
+                ->assertSee('Email atau kata sandi salah');
         });
     }
 
@@ -70,13 +70,13 @@ class LoginTest extends DuskTestCase
             $browser->visit('/admin/login')
                 ->type('email', 'admin@inspektorat.go.id')
                 ->type('password', 'admin123')
-                ->press('Login')
+                ->press('Masuk')
                 ->pause(1000)
                 ->assertPathIs('/admin/dashboard')
-                ->click('button[onclick="event.preventDefault(); document.getElementById(\'logout-form\').submit();"]')
+                ->element('form[action*="logout"] button[type="submit"]')->click()
                 ->pause(1000)
                 ->assertPathIs('/admin/login')
-                ->assertSee('Login');
+                ->assertSee('Panel Admin');
         });
     }
 
@@ -87,10 +87,10 @@ class LoginTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->press('Login')
+                ->press('Masuk')
                 ->pause(1000)
-                ->assertSee('The email field is required')
-                ->assertSee('The password field is required');
+                ->assertSee('Email wajib diisi')
+                ->assertSee('Kata sandi wajib diisi');
         });
     }
 
@@ -103,7 +103,7 @@ class LoginTest extends DuskTestCase
             $browser->visit('/admin/login')
                 ->type('email', 'wrong@email.com')
                 ->type('password', 'wrongpassword')
-                ->press('Login')
+                ->press('Masuk')
                 ->pause(1000)
                 ->assertPathIs('/admin/login');
         });
@@ -118,8 +118,8 @@ class LoginTest extends DuskTestCase
             $browser->visit('/admin/login')
                 ->type('email', 'admin@inspektorat.go.id')
                 ->type('password', 'admin123')
-                ->check('remember')
-                ->press('Login')
+                ->check('remember-me')
+                ->press('Masuk')
                 ->pause(1000)
                 ->assertPathIs('/admin/dashboard')
                 ->assertSee('Dashboard');
@@ -133,10 +133,9 @@ class LoginTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/login')
-                ->clickLink('Forgot Password?')
+                ->clickLink('Lupa kata sandi?')
                 ->pause(1000)
-                ->assertPathIs('/admin/password/reset')
-                ->assertSee('Reset Password');
+                ->assertSee('Lupa kata sandi?');
         });
     }
 
@@ -148,7 +147,7 @@ class LoginTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->resize(375, 667) // iPhone 6/7/8 size
                 ->visit('/admin/login')
-                ->assertSee('Login')
+                ->assertSee('Panel Admin')
                 ->assertPresent('input[name="email"]')
                 ->assertPresent('input[name="password"]')
                 ->resize(1280, 720); // Reset to desktop size
@@ -165,7 +164,7 @@ class LoginTest extends DuskTestCase
                 ->assertPathIs('/admin/login')
                 ->type('email', 'admin@inspektorat.go.id')
                 ->type('password', 'admin123')
-                ->press('Login')
+                ->press('Masuk')
                 ->pause(1000)
                 ->assertPathIs('/admin/users');
         });

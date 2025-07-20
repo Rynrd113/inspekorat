@@ -19,7 +19,7 @@ class PengaduanTest extends DuskTestCase
         parent::setUp();
         
         $this->admin = User::factory()->create([
-            'role' => 'admin',
+            'role' => 'super_admin',
             'email' => 'admin@inspektorat.id'
         ]);
         

@@ -24,7 +24,7 @@ class ProfilTest extends DuskTestCase
             'name' => 'Super Admin',
             'email' => 'superadmin@inspektorat.id',
             'password' => bcrypt('superadmin123'),
-            'role' => 'superadmin',
+            'role' => 'super_admin',
             'is_active' => true,
         ]);
 
@@ -33,7 +33,7 @@ class ProfilTest extends DuskTestCase
             'name' => 'Admin User',
             'email' => 'admin@inspektorat.id',
             'password' => bcrypt('admin123'),
-            'role' => 'admin',
+            'role' => 'super_admin',
             'is_active' => true,
         ]);
 
@@ -202,8 +202,8 @@ class ProfilTest extends DuskTestCase
             $browser->loginAs($this->superAdmin)
                 ->visit('/admin/profil')
                 ->assertSee('Profil')
-                ->assertSee('Next')
-                ->clickLink('Next')
+                ->assertSee('Selanjutnya')
+                ->clickLink('Selanjutnya')
                 ->pause(1000)
                 ->assertSee('Komitmen Layanan');
         });
@@ -218,7 +218,7 @@ class ProfilTest extends DuskTestCase
             $browser->loginAs($this->superAdmin)
                 ->visit('/admin/profil')
                 ->type('search', 'Visi dan Misi')
-                ->press('Search')
+                ->press('Cari')
                 ->pause(1000)
                 ->assertSee('Visi dan Misi')
                 ->assertDontSee('Profil Inspektorat Papua Tengah');
@@ -282,10 +282,10 @@ class ProfilTest extends DuskTestCase
                 ->visit('/admin/profil/create')
                 ->press('Simpan')
                 ->pause(1000)
-                ->assertSee('The title field is required')
-                ->assertSee('The content field is required')
-                ->assertSee('The slug field is required')
-                ->assertSee('The sort order field is required');
+                ->assertSee('Judul harus diisi')
+                ->assertSee('Konten harus diisi')
+                ->assertSee('Slug harus diisi')
+                ->assertSee('Urutan harus diisi');
         });
     }
 
@@ -303,7 +303,7 @@ class ProfilTest extends DuskTestCase
                 ->type('sort_order', '12')
                 ->press('Simpan')
                 ->pause(1000)
-                ->assertSee('The slug has already been taken');
+                ->assertSee('Slug sudah digunakan');
         });
     }
 
@@ -463,9 +463,9 @@ class ProfilTest extends DuskTestCase
                 ->visit('/admin/profil')
                 ->check('select-all')
                 ->select('bulk-action', 'activate')
-                ->press('Apply')
+                ->press('Terapkan')
                 ->pause(1000)
-                ->assertSee('Bulk action berhasil dijalankan');
+                ->assertSee('Aksi massal berhasil diterapkan');
         });
     }
 
@@ -591,7 +591,7 @@ class ProfilTest extends DuskTestCase
                 ->visit('/admin/profil')
                 ->click('a[href="/admin/profil/export"]')
                 ->pause(2000)
-                ->assertSee('Export berhasil');
+                ->assertSee('Ekspor berhasil');
         });
     }
 
@@ -608,7 +608,7 @@ class ProfilTest extends DuskTestCase
                 ->attach('file', __DIR__ . '/../../fixtures/profiles-import.xlsx')
                 ->press('Import')
                 ->pause(2000)
-                ->assertSee('Import berhasil');
+                ->assertSee('Impor berhasil');
         });
     }
 
@@ -620,14 +620,14 @@ class ProfilTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->superAdmin)
                 ->visit('/admin/profil')
-                ->clickLink('Advanced Search')
+                ->clickLink('Pencarian Lanjutan')
                 ->pause(1000)
                 ->type('title', 'Profil')
                 ->type('content', 'Inspektorat')
                 ->select('status', 'active')
                 ->type('sort_order_min', '1')
                 ->type('sort_order_max', '5')
-                ->press('Search')
+                ->press('Cari')
                 ->pause(1000)
                 ->assertSee('Profil Inspektorat Papua Tengah');
         });

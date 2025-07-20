@@ -17,7 +17,7 @@ class BeritaCrudTest extends DuskTestCase
         
         $this->admin = User::where('email', 'admin.berita@inspektorat.go.id')->first();
         if (!$this->admin) {
-            $this->admin = User::where('role', 'superadmin')->first();
+            $this->admin = User::where('role', 'super_admin')->first();
         }
     }
 
@@ -29,19 +29,19 @@ class BeritaCrudTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->admin)
                 ->visit('/admin/portal-papua-tengah')
-                ->assertSee('Berita')
+                ->assertSee('Portal Berita Papua Tengah')
                 ->click('a[href*="create"]')
                 ->pause(1000)
                 ->assertPathBeginsWith('/admin/portal-papua-tengah/create')
                 ->type('judul', 'Inspektorat Papua Tengah Luncurkan Program Inovasi Pelayanan Publik')
-                ->type('isi', 'Papua Tengah - Inspektorat Daerah Papua Tengah meluncurkan program inovasi pelayanan publik yang bertujuan meningkatkan kualitas layanan kepada masyarakat. Program ini mencakup digitalisasi proses administrasi dan peningkatan transparansi.')
+                ->type('konten', 'Papua Tengah - Inspektorat Daerah Papua Tengah meluncurkan program inovasi pelayanan publik yang bertujuan meningkatkan kualitas layanan kepada masyarakat. Program ini mencakup digitalisasi proses administrasi dan peningkatan transparansi.')
                 ->select('kategori', 'berita')
                 ->select('status', 'published')
                 ->screenshot('berita-create-form');
                 
             // Only try to upload if the field exists
-            if ($browser->element('input[type="file"]')) {
-                $browser->attach('gambar', __DIR__ . '/../../fixtures/test-image.png');
+            if ($browser->element('input[name="thumbnail"]')) {
+                $browser->attach('thumbnail', __DIR__ . '/../../fixtures/test-image.png');
             }
             
             $browser->press('Simpan')
@@ -65,13 +65,13 @@ class BeritaCrudTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($berita) {
             $browser->loginAs($this->admin)
                 ->visit('/admin/portal-papua-tengah')
-                ->assertSee('Berita')
+                ->assertSee('Portal Berita Papua Tengah')
                 ->assertSee($berita->judul)
                 ->screenshot('berita-list-view')
                 ->click('a[href*="/admin/portal-papua-tengah/' . $berita->id . '"]')
                 ->pause(1000)
                 ->assertSee($berita->judul)
-                ->assertSee($berita->isi)
+                ->assertSee($berita->konten)
                 ->screenshot('berita-detail-view');
         });
     }
@@ -92,8 +92,8 @@ class BeritaCrudTest extends DuskTestCase
                 ->assertSee('Edit')
                 ->clear('judul')
                 ->type('judul', 'Berita Updated Test')
-                ->clear('isi')
-                ->type('isi', 'Isi berita yang telah diperbarui untuk testing')
+                ->clear('konten')
+                ->type('konten', 'Konten berita yang telah diperbarui untuk testing')
                 ->screenshot('berita-edit-form')
                 ->press('Update')
                 ->pause(2000)
@@ -112,7 +112,7 @@ class BeritaCrudTest extends DuskTestCase
             $browser->loginAs($this->admin)
                 ->visit('/admin/portal-papua-tengah')
                 ->type('search', 'Inspektorat')
-                ->press('Search')
+                ->click('button[onclick="filterData()"]')
                 ->pause(1000)
                 ->screenshot('berita-search-results');
         });
@@ -154,7 +154,7 @@ class BeritaCrudTest extends DuskTestCase
                 
             if ($browser->element('select[name="kategori"]')) {
                 $browser->select('kategori', 'berita')
-                    ->press('Filter')
+                    ->click('button[onclick="filterData()"]')
                     ->pause(1000)
                     ->screenshot('berita-filtered-results');
             }
@@ -199,13 +199,13 @@ class BeritaCrudTest extends DuskTestCase
             $browser->loginAs($this->admin)
                 ->visit('/admin/portal-papua-tengah/create')
                 ->type('judul', 'Berita dengan Gambar')
-                ->type('isi', 'Berita yang dilengkapi dengan gambar untuk testing upload')
+                ->type('konten', 'Berita yang dilengkapi dengan gambar untuk testing upload')
                 ->select('kategori', 'berita')
                 ->select('status', 'published');
                 
             // Only try to upload if the field exists
-            if ($browser->element('input[type="file"]')) {
-                $browser->attach('gambar', __DIR__ . '/../../fixtures/test-image.png');
+            if ($browser->element('input[name="thumbnail"]')) {
+                $browser->attach('thumbnail', __DIR__ . '/../../fixtures/test-image.png');
             }
             
             $browser->screenshot('berita-with-image-upload')

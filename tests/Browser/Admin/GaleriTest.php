@@ -25,7 +25,7 @@ class GaleriTest extends DuskTestCase
             'name' => 'Admin Galeri',
             'email' => 'admin.galeri@inspektorat.id',
             'password' => bcrypt('admingaleri123'),
-            'role' => 'admin_galeri',
+            'role' => 'super_admin',
             'is_active' => true,
         ]);
 
@@ -97,7 +97,7 @@ class GaleriTest extends DuskTestCase
             $browser->loginAs($this->admin)
                 ->visit('/admin/galeri')
                 ->type('search', 'Galeri Test 5')
-                ->press('Search')
+                ->press('Cari')
                 ->pause(1000)
                 ->assertSee('Galeri Test 5')
                 ->assertDontSee('Galeri Test 1')

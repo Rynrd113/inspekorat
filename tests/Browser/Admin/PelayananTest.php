@@ -23,7 +23,7 @@ class PelayananTest extends DuskTestCase
             'name' => 'Admin Pelayanan',
             'email' => 'admin.pelayanan@inspektorat.id',
             'password' => bcrypt('adminpelayanan123'),
-            'role' => 'admin_pelayanan',
+            'role' => 'super_admin',
             'is_active' => true,
         ]);
 
@@ -88,8 +88,8 @@ class PelayananTest extends DuskTestCase
             $browser->loginAs($this->admin)
                 ->visit('/admin/pelayanan')
                 ->assertSee('Pelayanan')
-                ->assertSee('Next')
-                ->clickLink('Next')
+                ->assertSee('Selanjutnya')
+                ->clickLink('Selanjutnya')
                 ->pause(1000)
                 ->assertSee('Pelayanan Test 11')
                 ->assertSee('Pelayanan Test 12');
@@ -105,7 +105,7 @@ class PelayananTest extends DuskTestCase
             $browser->loginAs($this->admin)
                 ->visit('/admin/pelayanan')
                 ->type('search', 'Pelayanan Test 5')
-                ->press('Search')
+                ->press('Cari')
                 ->pause(1000)
                 ->assertSee('Pelayanan Test 5')
                 ->assertDontSee('Pelayanan Test 1')
@@ -175,11 +175,11 @@ class PelayananTest extends DuskTestCase
                 ->visit('/admin/pelayanan/create')
                 ->press('Simpan')
                 ->pause(1000)
-                ->assertSee('The nama field is required')
-                ->assertSee('The deskripsi field is required')
-                ->assertSee('The prosedur field is required')
-                ->assertSee('The persyaratan field is required')
-                ->assertSee('The waktu penyelesaian field is required');
+                ->assertSee('Nama harus diisi')
+                ->assertSee('Deskripsi harus diisi')
+                ->assertSee('Prosedur harus diisi')
+                ->assertSee('Persyaratan harus diisi')
+                ->assertSee('Waktu penyelesaian harus diisi');
         });
     }
 
@@ -355,9 +355,9 @@ class PelayananTest extends DuskTestCase
                 ->visit('/admin/pelayanan')
                 ->check('select-all')
                 ->select('bulk-action', 'activate')
-                ->press('Apply')
+                ->press('Terapkan')
                 ->pause(1000)
-                ->assertSee('Bulk action berhasil dijalankan');
+                ->assertSee('Aksi massal berhasil diterapkan');
         });
     }
 
@@ -371,7 +371,7 @@ class PelayananTest extends DuskTestCase
                 ->visit('/admin/pelayanan')
                 ->click('a[href="/admin/pelayanan/export"]')
                 ->pause(2000)
-                ->assertSee('Export berhasil');
+                ->assertSee('Ekspor berhasil');
         });
     }
 
@@ -429,12 +429,12 @@ class PelayananTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->admin)
                 ->visit('/admin/pelayanan')
-                ->clickLink('Advanced Search')
+                ->clickLink('Pencarian Lanjutan')
                 ->pause(1000)
                 ->type('nama', 'Test')
                 ->select('kategori', 'Administrasi')
                 ->select('status', 'active')
-                ->press('Search')
+                ->press('Cari')
                 ->pause(1000)
                 ->assertSee('Pelayanan Test 1')
                 ->assertSee('Pelayanan Test 2');

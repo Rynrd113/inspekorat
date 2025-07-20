@@ -18,7 +18,7 @@ class PortalOpdCrudTest extends DuskTestCase
         
         $this->admin = User::where('email', 'admin.opd@inspektorat.go.id')->first();
         if (!$this->admin) {
-            $this->admin = User::where('role', 'superadmin')->first();
+            $this->admin = User::where('role', 'super_admin')->first();
         }
     }
 

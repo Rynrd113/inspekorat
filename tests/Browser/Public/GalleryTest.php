@@ -207,7 +207,7 @@ class GalleryTest extends DuskTestCase
             $browser->visit('/galeri?kategori=nonexistent')
                 ->waitForText('Galeri')
                 ->whenAvailable('.empty-state, .no-results', function ($empty) {
-                    $empty->assertSee('Tidak ada media');
+                    $empty->assertSee('Tidak ada media yang ditemukan');
                 })
                 ->screenshot('gallery_empty_state');
         });

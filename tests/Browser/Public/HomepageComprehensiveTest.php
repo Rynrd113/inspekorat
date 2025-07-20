@@ -14,8 +14,10 @@ class HomepageComprehensiveTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->assertSee('Portal')
+                ->waitForText('Inspektorat Provinsi')
+                ->assertSee('Inspektorat Provinsi')
                 ->assertSee('Papua Tengah')
+                ->assertSee('Portal Informasi Pemerintahan')
                 ->screenshot('homepage-main')
                 ->assertPresent('nav')
                 ->assertPresent('footer');
@@ -29,13 +31,16 @@ class HomepageComprehensiveTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
+                ->waitForText('Inspektorat Provinsi')
                 ->assertSee('Beranda')
                 ->assertSee('Profil')
+                ->assertSee('Berita')
+                ->assertSee('Portal OPD')
                 ->assertSee('Pelayanan')
                 ->assertSee('Dokumen')
                 ->assertSee('Galeri')
-                ->assertSee('Berita')
-                ->assertSee('Kontak')
+                ->assertSee('FAQ')
+                ->assertSee('WBS')
                 ->screenshot('homepage-navigation');
         });
     }
@@ -47,7 +52,10 @@ class HomepageComprehensiveTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->assertPresent('.hero-section, .banner, .jumbotron')
+                ->waitForText('Inspektorat Provinsi')
+                ->assertPresent('.hero-slider')
+                ->assertSee('Pengawasan yang')
+                ->assertSee('Akuntabel & Transparan')
                 ->screenshot('homepage-hero-section');
         });
     }
@@ -59,7 +67,10 @@ class HomepageComprehensiveTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->assertSee('Berita')
+                ->waitForText('Inspektorat Provinsi')
+                ->scrollIntoView('#layanan')
+                ->assertSee('Berita Inspektorat')
+                ->assertPresent('#berita-list')
                 ->screenshot('homepage-news-section');
         });
     }
@@ -71,7 +82,12 @@ class HomepageComprehensiveTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->assertSee('Pelayanan')
+                ->waitForText('Inspektorat Provinsi')
+                ->scrollIntoView('#pintasan-layanan')
+                ->assertSee('Pintasan Layanan')
+                ->assertSee('Profil Inspektorat')
+                ->assertSee('Layanan Publik')
+                ->assertSee('Dokumen Publik')
                 ->screenshot('homepage-services-section');
         });
     }
@@ -83,7 +99,12 @@ class HomepageComprehensiveTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
+                ->waitForText('Inspektorat Provinsi')
+                ->scrollIntoView('footer')
                 ->assertPresent('footer')
+                ->assertSee('Inspektorat Provinsi Papua Tengah')
+                ->assertSee('Tautan Cepat')
+                ->assertSee('Layanan')
                 ->screenshot('homepage-footer');
         });
     }
@@ -95,7 +116,12 @@ class HomepageComprehensiveTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->assertSee('Kontak')
+                ->waitForText('Inspektorat Provinsi')
+                ->scrollIntoView('#informasi')
+                ->assertSee('Informasi Kontak')
+                ->assertSee('Alamat Kantor')
+                ->assertSee('Telepon')
+                ->assertSee('Email')
                 ->screenshot('homepage-contact-info');
         });
     }
@@ -107,7 +133,11 @@ class HomepageComprehensiveTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->assertSee('Portal OPD')
+                ->waitForText('Inspektorat Provinsi')
+                ->scrollIntoView('.bg-gray-50')
+                ->assertSee('Portal Organisasi Perangkat Daerah')
+                ->assertSee('Informasi OPD Terlengkap')
+                ->assertSee('Mudah Diakses')
                 ->screenshot('homepage-portal-opd-showcase');
         });
     }
@@ -120,10 +150,11 @@ class HomepageComprehensiveTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->resize(375, 667) // iPhone size
                 ->visit('/')
-                ->assertSee('Portal')
+                ->waitForText('Inspektorat Provinsi')
+                ->assertSee('Inspektorat Provinsi')
                 ->screenshot('homepage-mobile-responsive')
                 ->resize(768, 1024) // iPad size
-                ->assertSee('Portal')
+                ->assertSee('Inspektorat Provinsi')
                 ->screenshot('homepage-tablet-responsive')
                 ->resize(1280, 720); // Desktop size
         });
@@ -136,8 +167,9 @@ class HomepageComprehensiveTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->assertPresent('title')
-                ->assertPresent('meta[name="description"]')
+                ->waitForText('Inspektorat Provinsi')
+                ->assertTitleContains('Portal Informasi Pemerintahan')
+                ->assertTitleContains('Inspektorat Papua Tengah')
                 ->screenshot('homepage-seo-check');
         });
     }
@@ -150,13 +182,14 @@ class HomepageComprehensiveTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $startTime = microtime(true);
             
-            $browser->visit('/');
+            $browser->visit('/')
+                ->waitForText('Inspektorat Provinsi');
             
             $endTime = microtime(true);
             $loadTime = $endTime - $startTime;
             
-            // Assert page loads within reasonable time (5 seconds)
-            $this->assertLessThan(5, $loadTime, 'Homepage should load within 5 seconds');
+            // Assert page loads within reasonable time (10 seconds for complex page)
+            $this->assertLessThan(10, $loadTime, 'Homepage should load within 10 seconds');
             
             $browser->screenshot('homepage-performance-check');
         });

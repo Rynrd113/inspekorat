@@ -58,7 +58,7 @@ class DocumentsTest extends DuskTestCase
                 ->waitForText('Dokumen')
                 ->whenAvailable('input[name="search"]', function ($input) {
                     $input->type('peraturan')
-                        ->press('Enter');
+                        ->press('Cari');
                 })
                 ->waitFor('body', 3)
                 ->screenshot('documents_search_functionality');
@@ -90,7 +90,7 @@ class DocumentsTest extends DuskTestCase
             $browser->visit('/dokumen')
                 ->waitForText('Dokumen')
                 ->whenAvailable('a[href*="download"]', function ($link) {
-                    $link->assertSee('Download');
+                    $link->assertSee('Unduh');
                 })
                 ->screenshot('documents_download_links');
         });
@@ -105,7 +105,7 @@ class DocumentsTest extends DuskTestCase
             $browser->visit('/dokumen')
                 ->waitForText('Dokumen')
                 ->whenAvailable('a[href*="preview"]', function ($link) {
-                    $link->assertSee('Preview');
+                    $link->assertSee('Pratinjau');
                 })
                 ->screenshot('documents_preview_links');
         });
@@ -193,7 +193,7 @@ class DocumentsTest extends DuskTestCase
             $browser->visit('/dokumen')
                 ->waitForText('Dokumen')
                 ->whenAvailable('.download-count', function ($count) {
-                    $count->assertSee('Download');
+                    $count->assertSee('Unduhan');
                 })
                 ->screenshot('documents_download_count');
         });
@@ -208,7 +208,7 @@ class DocumentsTest extends DuskTestCase
             $browser->visit('/dokumen?search=nonexistentdocument')
                 ->waitForText('Dokumen')
                 ->whenAvailable('.empty-state, .no-results', function ($empty) {
-                    $empty->assertSee('Tidak ada dokumen');
+                    $empty->assertSee('Tidak ada dokumen yang ditemukan');
                 })
                 ->screenshot('documents_empty_state');
         });

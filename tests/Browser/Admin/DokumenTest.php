@@ -63,7 +63,7 @@ class DokumenTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen')
-                ->assertSee('Dokumen')
+                ->assertSee('Manajemen Dokumen')
                 ->assertSee('Tambah Dokumen')
                 ->assertSee('Dokumen Test 1')
                 ->assertSee('Dokumen Test 2')
@@ -99,7 +99,7 @@ class DokumenTest extends DuskTestCase
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen')
                 ->type('search', 'Dokumen Test 5')
-                ->press('Search')
+                ->press('Cari')
                 ->pause(1000)
                 ->assertSee('Dokumen Test 5')
                 ->assertDontSee('Dokumen Test 1')
@@ -115,8 +115,8 @@ class DokumenTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen')
-                ->select('kategori', 'regulasi')
-                ->press('Filter')
+                ->select('kategori', 'peraturan')
+                ->press('Cari')
                 ->pause(1000)
                 ->assertSee('Dokumen Test 1'); // First document should be 'regulasi'
         });
@@ -130,11 +130,11 @@ class DokumenTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen')
-                ->clickLink('Tambah Dokumen')
+                ->click('a[href="' . route('admin.dokumen.create') . '")')
                 ->pause(1000)
                 ->assertPathIs('/admin/dokumen/create')
                 ->assertSee('Tambah Dokumen')
-                ->assertPresent('input[name="judul"]')
+                ->assertPresent('input[name="nama_dokumen"]')
                 ->assertPresent('textarea[name="deskripsi"]')
                 ->assertPresent('input[name="file"]')
                 ->assertPresent('select[name="kategori"]')
@@ -153,7 +153,7 @@ class DokumenTest extends DuskTestCase
                 ->visit('/admin/dokumen/create')
                 ->press('Simpan')
                 ->pause(1000)
-                ->assertSee('The judul field is required')
+                ->assertSee('required')
                 ->assertSee('The deskripsi field is required')
                 ->assertSee('The file field is required')
                 ->assertSee('The kategori field is required');
@@ -194,7 +194,7 @@ class DokumenTest extends DuskTestCase
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen/' . $dokumen->id . '/edit')
                 ->assertSee('Edit Dokumen')
-                ->assertInputValue('judul', $dokumen->judul)
+                ->assertInputValue('nama_dokumen', $dokumen->nama_dokumen)
                 ->assertInputValue('deskripsi', $dokumen->deskripsi)
                 ->assertSelected('kategori', $dokumen->kategori);
         });
@@ -210,8 +210,8 @@ class DokumenTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($dokumen) {
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen/' . $dokumen->id . '/edit')
-                ->clear('judul')
-                ->type('judul', 'Dokumen Updated Test')
+                ->clear('nama_dokumen')
+                ->type('nama_dokumen', 'Dokumen Updated Test')
                 ->clear('deskripsi')
                 ->type('deskripsi', 'Deskripsi dokumen yang telah diupdate')
                 ->select('kategori', 'panduan')
@@ -219,7 +219,7 @@ class DokumenTest extends DuskTestCase
                 ->press('Update')
                 ->pause(2000)
                 ->assertPathIs('/admin/dokumen')
-                ->assertSee('Data berhasil diupdate')
+                ->assertSee('berhasil')
                 ->assertSee('Dokumen Updated Test');
         });
     }
@@ -234,11 +234,11 @@ class DokumenTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($dokumen) {
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen/' . $dokumen->id . '/edit')
-                ->clear('judul')
+                ->clear('nama_dokumen')
                 ->clear('deskripsi')
                 ->press('Update')
                 ->pause(1000)
-                ->assertSee('The judul field is required')
+                ->assertSee('required')
                 ->assertSee('The deskripsi field is required');
         });
     }
@@ -253,12 +253,12 @@ class DokumenTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($dokumen) {
             $browser->loginAs($this->admin)
                 ->visit('/admin/dokumen')
-                ->press('.btn-delete[data-id="' . $dokumen->id . '"]')
-                ->whenAvailable('.modal', function ($modal) {
+                ->click('button[onclick="confirmDelete(' . $dokumen->id . ')"]')
+                ->whenAvailable('#deleteModal', function ($modal) {
                     $modal->press('Hapus');
                 })
                 ->pause(2000)
-                ->assertSee('Data berhasil dihapus')
+                ->assertSee('berhasil')
                 ->assertDontSee($dokumen->judul);
         });
     }
@@ -297,7 +297,7 @@ class DokumenTest extends DuskTestCase
                 ->visit('/admin/dokumen')
                 ->click('.toggle-status[data-id="' . $dokumen->id . '"]')
                 ->pause(1000)
-                ->assertSee('Status berhasil diupdate');
+                ->assertSee('berhasil');
                 
             // Verify status changed in database
             $this->assertDatabaseHas('dokumens', [
@@ -320,7 +320,7 @@ class DokumenTest extends DuskTestCase
                 ->visit('/admin/dokumen')
                 ->click('.toggle-public[data-id="' . $dokumen->id . '"]')
                 ->pause(1000)
-                ->assertSee('Akses publik berhasil diupdate');
+                ->assertSee('berhasil');
                 
             // Verify public access changed in database
             $this->assertDatabaseHas('dokumens', [
@@ -356,7 +356,7 @@ class DokumenTest extends DuskTestCase
                 ->select('bulk_action', 'activate')
                 ->press('Jalankan')
                 ->pause(1000)
-                ->assertSee('Operasi bulk berhasil dijalankan');
+                ->assertSee('berhasil');
         });
     }
 

@@ -23,7 +23,7 @@ class WebPortalEnhancedTest extends DuskTestCase
             'name' => 'Admin Web Portal',
             'email' => 'admin.webportal@inspektorat.id',
             'password' => bcrypt('adminwebportal123'),
-            'role' => 'admin',
+            'role' => 'super_admin',
             'is_active' => true,
         ]);
 

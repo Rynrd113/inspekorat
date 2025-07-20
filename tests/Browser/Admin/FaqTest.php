@@ -23,7 +23,7 @@ class FaqTest extends DuskTestCase
             'name' => 'Admin FAQ',
             'email' => 'admin.faq@inspektorat.id',
             'password' => bcrypt('adminfaq123'),
-            'role' => 'admin_faq',
+            'role' => 'super_admin',
             'is_active' => true,
         ]);
 
@@ -90,7 +90,7 @@ class FaqTest extends DuskTestCase
             $browser->loginAs($this->admin)
                 ->visit('/admin/faq')
                 ->type('search', 'FAQ Test 5')
-                ->press('Search')
+                ->press('Cari')
                 ->pause(1000)
                 ->assertSee('Pertanyaan FAQ Test 5')
                 ->assertDontSee('Pertanyaan FAQ Test 1')

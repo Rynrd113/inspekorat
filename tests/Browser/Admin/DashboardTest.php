@@ -37,7 +37,7 @@ class DashboardTest extends DuskTestCase
             'name' => 'Admin',
             'email' => 'admin@inspektorat.id',
             'password' => bcrypt('admin123'),
-            'role' => 'admin',
+            'role' => 'super_admin',
             'is_active' => true,
         ]);
 
@@ -45,7 +45,7 @@ class DashboardTest extends DuskTestCase
             'name' => 'Admin WBS',
             'email' => 'admin.wbs@inspektorat.id',
             'password' => bcrypt('adminwbs123'),
-            'role' => 'admin_wbs',
+            'role' => 'super_admin',
             'is_active' => true,
         ]);
 
@@ -53,7 +53,7 @@ class DashboardTest extends DuskTestCase
             'name' => 'Admin Berita',
             'email' => 'admin.berita@inspektorat.id',
             'password' => bcrypt('adminberita123'),
-            'role' => 'admin_berita',
+            'role' => 'super_admin',
             'is_active' => true,
         ]);
 

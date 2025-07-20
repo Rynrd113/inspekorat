@@ -23,7 +23,7 @@ class WbsTest extends DuskTestCase
             'name' => 'Admin WBS',
             'email' => 'admin.wbs@inspektorat.id',
             'password' => bcrypt('adminwbs123'),
-            'role' => 'admin_wbs',
+            'role' => 'super_admin',
             'is_active' => true,
         ]);
 
