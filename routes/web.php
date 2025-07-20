@@ -45,6 +45,11 @@ Route::get('/kontak', [PublicController::class, 'kontak'])->name('public.kontak'
 Route::post('/kontak', [PublicController::class, 'kontakKirim'])->name('kontak.kirim');
 Route::get('/pengaduan', [PublicController::class, 'pengaduan'])->name('public.pengaduan');
 
+// Test route for debugging
+Route::get('/test-admin', function() {
+    return 'TEST ADMIN ROUTE WORKS! <a href="/admin/login">Click here for admin login</a>';
+})->name('test.admin');
+
 // Web Portal Public Routes
 Route::get('/web-portal', [PublicController::class, 'webPortal'])->name('public.web-portal.index');
 
@@ -63,6 +68,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Authenticated admin routes
     Route::middleware('auth')->group(function () {
         Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
+        Route::post('extend-session', [AdminAuthController::class, 'extendSession'])->name('extend-session');
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         
         // WBS routes - protected by role middleware

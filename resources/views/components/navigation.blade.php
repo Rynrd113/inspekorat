@@ -60,12 +60,11 @@
                        class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium {{ request()->routeIs('public.kontak') ? 'text-blue-600' : '' }}">
                         Kontak
                     </a>
-                    @if(Route::has('admin.login'))
-                    <a href="{{ route('admin.login') }}" 
+                    
+                    <a href="/admin/login" 
                        class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
                         Admin
                     </a>
-                    @endif
                 </div>
             </nav>
             
@@ -132,12 +131,11 @@
                class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.kontak') ? 'text-blue-600' : '' }}">
                 Kontak
             </a>
-            @if(Route::has('admin.login'))
-            <a href="{{ route('admin.login') }}" 
-               class="block px-3 py-2 text-blue-600 font-medium">
+            
+            <a href="/admin/login" 
+               class="block px-3 py-2 text-blue-600 font-medium hover:bg-blue-50">
                 Admin
             </a>
-            @endif
         </div>
     </div>
 </header>
@@ -171,4 +169,6 @@ document.addEventListener('click', function(event) {
         icon.classList.add('fa-bars');
     }
 });
+
+// Clean navigation - no complex JavaScript
 </script>

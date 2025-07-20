@@ -94,4 +94,17 @@ class AuthController extends Controller
         return redirect()->route('admin.login')
             ->with('success', 'Anda telah logout.');
     }
+
+    /**
+     * Extend session
+     */
+    public function extendSession(Request $request)
+    {
+        if (Auth::check()) {
+            $request->session()->regenerate();
+            return response()->json(['status' => 'success', 'message' => 'Session extended']);
+        }
+        
+        return response()->json(['status' => 'error', 'message' => 'Not authenticated'], 401);
+    }
 }

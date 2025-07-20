@@ -6,6 +6,93 @@
 // Admin namespace with performance optimizations
 window.Admin = window.Admin || {};
 
+/**
+ * Session Management
+ * Handles session timeout and auto-logout prevention
+ */
+Admin.Session = {
+    // Session timeout in minutes (43200 minutes = 30 days)
+    timeoutMinutes: 43200, 
+    warningMinutes: 30, // Show warning 30 minutes before expiry
+    lastActivity: Date.now(),
+    timeoutTimer: null,
+    warningTimer: null,
+    
+    // Initialize session management
+    init: function() {
+        this.resetTimers();
+        this.bindEvents();
+    },
+    
+    // Reset activity timers
+    resetTimers: function() {
+        clearTimeout(this.timeoutTimer);
+        clearTimeout(this.warningTimer);
+        
+        this.lastActivity = Date.now();
+        
+        // Set warning timer (30 minutes before expiry)
+        this.warningTimer = setTimeout(() => {
+            this.showSessionWarning();
+        }, (this.timeoutMinutes - this.warningMinutes) * 60 * 1000);
+        
+        // Set timeout timer (session expiry)
+        this.timeoutTimer = setTimeout(() => {
+            this.handleSessionExpiry();
+        }, this.timeoutMinutes * 60 * 1000);
+    },
+    
+    // Bind activity events
+    bindEvents: function() {
+        const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+        events.forEach(event => {
+            document.addEventListener(event, () => {
+                this.updateActivity();
+            }, { passive: true });
+        });
+    },
+    
+    // Update last activity time
+    updateActivity: function() {
+        this.lastActivity = Date.now();
+        // Only reset timers if user has been inactive for more than 5 minutes
+        if (Date.now() - this.lastActivity > 5 * 60 * 1000) {
+            this.resetTimers();
+        }
+    },
+    
+    // Show session warning modal
+    showSessionWarning: function() {
+        if (confirm('Sesi Anda akan berakhir dalam 30 menit. Klik OK untuk memperpanjang sesi.')) {
+            this.extendSession();
+        }
+    },
+    
+    // Handle session expiry
+    handleSessionExpiry: function() {
+        alert('Sesi Anda telah berakhir. Anda akan dialihkan ke halaman login.');
+        window.location.href = '/admin/login';
+    },
+    
+    // Extend session via AJAX
+    extendSession: function() {
+        fetch('/admin/extend-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+            }
+        }).then(response => {
+            if (response.ok) {
+                this.resetTimers();
+                console.log('Session extended successfully');
+            }
+        }).catch(error => {
+            console.error('Failed to extend session:', error);
+        });
+    }
+};
+
 // Debounce utility for performance
 Admin.debounce = function(func, wait) {
     let timeout;
@@ -87,6 +174,11 @@ Admin.Notification = {
  * Main Admin initialization
  */
 Admin.init = function() {
+    // Initialize session management
+    if (typeof Admin.Session !== 'undefined') {
+        Admin.Session.init();
+    }
+    
     // Setup modal triggers
     document.addEventListener('click', function(e) {
         const trigger = e.target.closest('[data-modal-open]');

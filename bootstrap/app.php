@@ -30,7 +30,11 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Configure authentication redirects
         $middleware->redirectGuestsTo(function () {
-            return route('admin.login');
+            // Only redirect to admin login if on admin routes
+            if (request()->is('admin*')) {
+                return route('admin.login');
+            }
+            return route('public.index');
         });
         
         // API middleware group with rate limiting and performance monitoring
