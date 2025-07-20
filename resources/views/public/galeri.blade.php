@@ -3,44 +3,48 @@
 @section('title', 'Galeri - Portal Inspektorat Papua Tengah')
 
 @section('content')
+<!-- Navigation -->
+<x-navigation />
+
 <!-- Hero Section -->
-<section class="hero-section bg-primary text-white py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-3">Galeri</h1>
-                <p class="lead">Dokumentasi kegiatan dan aktivitas Inspektorat Papua Tengah dalam bentuk foto dan video.</p>
+<section class="hero-section text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row items-center">
+            <div class="lg:w-2/3 text-center lg:text-left">
+                <h1 class="text-4xl lg:text-5xl font-bold mb-4">Galeri</h1>
+                <p class="text-xl text-blue-100">Dokumentasi kegiatan dan aktivitas Inspektorat Papua Tengah dalam bentuk foto dan video.</p>
             </div>
-            <div class="col-lg-4 text-center">
-                <i class="fas fa-camera fa-5x opacity-75"></i>
+            <div class="lg:w-1/3 text-center mt-8 lg:mt-0">
+                <i class="fas fa-camera text-8xl opacity-75"></i>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Breadcrumb -->
-<nav aria-label="breadcrumb" class="bg-light py-2">
-    <div class="container">
-        <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{{ route('public.index') }}">Beranda</a></li>
-            <li class="breadcrumb-item active">Galeri</li>
+<nav aria-label="breadcrumb" class="bg-gray-100 py-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ol class="flex items-center space-x-2 text-sm">
+            <li><a href="{{ route('public.index') }}" class="text-blue-600 hover:text-blue-800">Beranda</a></li>
+            <li class="text-gray-400">/</li>
+            <li class="text-gray-700">Galeri</li>
         </ol>
     </div>
 </nav>
 
 <!-- Filter Section -->
-<section class="py-4 bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <select class="form-select" id="filterTipe">
+<section class="py-6 bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" id="filterTipe">
                     <option value="">Semua Tipe</option>
                     <option value="foto">Foto</option>
                     <option value="video">Video</option>
                 </select>
             </div>
-            <div class="col-md-3">
-                <select class="form-select" id="filterKategori">
+            <div>
+                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" id="filterKategori">
                     <option value="">Semua Kategori</option>
                     <option value="kegiatan">Kegiatan</option>
                     <option value="acara">Acara</option>
@@ -48,17 +52,17 @@
                     <option value="lainnya">Lainnya</option>
                 </select>
             </div>
-            <div class="col-md-3">
-                <select class="form-select" id="sortBy">
+            <div>
+                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" id="sortBy">
                     <option value="terbaru">Terbaru</option>
                     <option value="terlama">Terlama</option>
                     <option value="popular">Paling Populer</option>
                 </select>
             </div>
-            <div class="col-md-3">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="searchGaleri" placeholder="Cari...">
-                    <button class="btn btn-outline-primary" type="button">
+            <div>
+                <div class="flex">
+                    <input type="text" class="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" id="searchGaleri" placeholder="Cari...">
+                    <button class="px-4 py-2 bg-blue-600 text-white border border-blue-600 rounded-r-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500" type="button">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -68,57 +72,51 @@
 </section>
 
 <!-- Gallery Section -->
-<section class="py-5">
-    <div class="container">
+<section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Gallery Tabs -->
-        <ul class="nav nav-pills justify-content-center mb-4" id="galleryTabs">
-            <li class="nav-item">
-                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#semua" type="button">
-                    <i class="fas fa-th me-2"></i> Semua
+        <div class="flex justify-center mb-8" id="galleryTabs">
+            <div class="inline-flex bg-gray-100 rounded-lg p-1">
+                <button class="px-4 py-2 bg-blue-600 text-white rounded-md transition-colors" data-target="#semua" type="button">
+                    <i class="fas fa-th mr-2"></i> Semua
                 </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#foto" type="button">
-                    <i class="fas fa-image me-2"></i> Foto
+                <button class="px-4 py-2 text-gray-700 hover:text-blue-600 rounded-md transition-colors" data-target="#foto" type="button">
+                    <i class="fas fa-image mr-2"></i> Foto
                 </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#video" type="button">
-                    <i class="fas fa-video me-2"></i> Video
+                <button class="px-4 py-2 text-gray-700 hover:text-blue-600 rounded-md transition-colors" data-target="#video" type="button">
+                    <i class="fas fa-video mr-2"></i> Video
                 </button>
-            </li>
-        </ul>
+            </div>
+        </div>
 
         <!-- Gallery Content -->
-        <div class="tab-content" id="galleryContent">
+        <div id="galleryContent">
             <!-- All Media Tab -->
-            <div class="tab-pane fade show active" id="semua">
-                <div class="row g-3" id="galleryGrid">
+            <div class="block" id="semua">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="galleryGrid">
                     <!-- Photo Item 1 -->
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <div class="gallery-item" data-type="foto" data-category="kegiatan">
-                            <div class="position-relative overflow-hidden rounded">
-                                <img src="https://via.placeholder.com/400x300?text=Kegiatan+Audit" 
-                                     class="img-fluid gallery-image" alt="Kegiatan Audit Internal">
-                                <div class="gallery-overlay">
-                                    <div class="gallery-actions">
-                                        <button class="btn btn-light btn-sm" onclick="viewMedia('foto', 'https://via.placeholder.com/800x600?text=Kegiatan+Audit', 'Kegiatan Audit Internal')">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-light btn-sm" onclick="shareMedia('Kegiatan Audit Internal')">
-                                            <i class="fas fa-share-alt"></i>
-                                        </button>
-                                    </div>
-                                    <div class="gallery-info">
-                                        <span class="badge bg-primary">Foto</span>
-                                        <span class="badge bg-secondary">Kegiatan</span>
-                                    </div>
+                    <div class="gallery-item" data-type="foto" data-category="kegiatan">
+                        <div class="relative overflow-hidden rounded-lg">
+                            <img src="https://via.placeholder.com/400x300?text=Kegiatan+Audit" 
+                                 class="w-full gallery-image" alt="Kegiatan Audit Internal">
+                            <div class="gallery-overlay">
+                                <div class="gallery-actions">
+                                    <button class="px-3 py-2 bg-white text-gray-700 rounded-md text-sm shadow-lg hover:bg-gray-50" onclick="viewMedia('foto', 'https://via.placeholder.com/800x600?text=Kegiatan+Audit', 'Kegiatan Audit Internal')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="px-3 py-2 bg-white text-gray-700 rounded-md text-sm shadow-lg hover:bg-gray-50" onclick="shareMedia('Kegiatan Audit Internal')">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                </div>
+                                <div class="gallery-info">
+                                    <span class="inline-block px-2 py-1 bg-blue-600 text-white text-xs rounded">Foto</span>
+                                    <span class="inline-block px-2 py-1 bg-gray-600 text-white text-xs rounded">Kegiatan</span>
                                 </div>
                             </div>
-                            <div class="mt-2">
-                                <h6 class="mb-1">Kegiatan Audit Internal</h6>
-                                <small class="text-muted">15 Januari 2024</small>
-                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <h6 class="font-semibold text-gray-900 mb-1">Kegiatan Audit Internal</h6>
+                            <small class="text-gray-500">15 Januari 2024</small>
                         </div>
                     </div>
 
@@ -397,80 +395,6 @@
 
 @endsection
 
-@push('styles')
-<style>
-.gallery-item {
-    margin-bottom: 20px;
-}
-
-.gallery-image {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.video-thumbnail {
-    width: 100%;
-    height: 250px;
-    background: linear-gradient(135deg, #333 0%, #666 100%);
-}
-
-.gallery-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.7);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.gallery-item:hover .gallery-overlay {
-    opacity: 1;
-}
-
-.gallery-item:hover .gallery-image {
-    transform: scale(1.05);
-}
-
-.gallery-actions {
-    margin-bottom: 10px;
-}
-
-.gallery-actions .btn {
-    margin: 0 5px;
-}
-
-.gallery-info {
-    text-align: center;
-}
-
-.gallery-info .badge {
-    margin: 0 2px;
-}
-
-.hero-section {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-}
-
-.nav-pills .nav-link {
-    color: #007bff;
-    border: 1px solid #007bff;
-    margin: 0 5px;
-}
-
-.nav-pills .nav-link.active {
-    background-color: #007bff;
-    border-color: #007bff;
-}
-</style>
-@endpush
 
 @push('scripts')
 <script>

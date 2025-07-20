@@ -42,12 +42,10 @@
                        class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.dokumen.*') ? 'text-blue-600' : '' }}">
                         Dokumen
                     </a>
-                    @if(Route::has('public.galeri.index'))
                     <a href="{{ route('public.galeri.index') }}" 
                        class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.galeri.*') ? 'text-blue-600' : '' }}">
                         Galeri
                     </a>
-                    @endif
                     <a href="{{ route('public.faq') }}" 
                        class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.faq') ? 'text-blue-600' : '' }}">
                         FAQ
@@ -55,6 +53,10 @@
                     <a href="{{ route('public.wbs') }}" 
                        class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.wbs') ? 'text-blue-600' : '' }}">
                         WBS
+                    </a>
+                    <a href="{{ route('public.kontak') }}" 
+                       class="text-gray-700 hover:text-blue-600 px-2 py-2 text-sm font-medium {{ request()->routeIs('public.kontak') ? 'text-blue-600' : '' }}">
+                        Kontak
                     </a>
                     @if(Route::has('admin.login'))
                     <a href="{{ route('admin.login') }}" 
@@ -106,12 +108,10 @@
                class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.dokumen.*') ? 'text-blue-600' : '' }}">
                 Dokumen
             </a>
-            @if(Route::has('public.galeri.index'))
             <a href="{{ route('public.galeri.index') }}" 
                class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.galeri.*') ? 'text-blue-600' : '' }}">
                 Galeri
             </a>
-            @endif
             <a href="{{ route('public.faq') }}" 
                class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.faq') ? 'text-blue-600' : '' }}">
                 FAQ
@@ -119,6 +119,10 @@
             <a href="{{ route('public.wbs') }}" 
                class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.wbs') ? 'text-blue-600' : '' }}">
                 WBS
+            </a>
+            <a href="{{ route('public.kontak') }}" 
+               class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.kontak') ? 'text-blue-600' : '' }}">
+                Kontak
             </a>
             @if(Route::has('admin.login'))
             <a href="{{ route('admin.login') }}" 

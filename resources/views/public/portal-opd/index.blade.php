@@ -3,6 +3,9 @@
 @section('title', 'Portal OPD - Papua Tengah')
 
 @section('content')
+<!-- Navigation -->
+<x-navigation />
+
 <div class="min-h-screen bg-gray-50">
     <!-- Header -->
     <div class="bg-blue-600 text-white py-12">

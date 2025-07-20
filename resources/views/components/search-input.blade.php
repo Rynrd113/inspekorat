@@ -8,7 +8,7 @@
 ])
 
 @php
-$baseClasses = 'w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors duration-200';
+$baseClasses = 'w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 bg-white';
 
 $sizes = [
     'sm' => 'px-3 py-2 text-sm',

@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <!-- Vite Assets -->
-    @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js', 'resources/js/admin.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <!-- Smooth Scroll CSS -->
     <style>
@@ -50,6 +50,7 @@
             background: #2563eb;
         }
         
+
         /* Smooth transitions */
         .transition-all {
             transition-property: all;

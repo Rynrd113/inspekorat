@@ -1,35 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Pengaduan Masyarakat - Portal Inspektorat Papua Selatan')
-@section('description', 'Sampaikan pengaduan, kritik, dan saran kepada Inspektorat Provinsi Papua Selatan secara online.')
+@section('title', 'Pengaduan Masyarakat - Portal Inspektorat Papua Tengah')
+@section('description', 'Sampaikan pengaduan, kritik, dan saran kepada Inspektorat Provinsi Papua Tengah secara online.')
 
 @section('content')
+<!-- Navigation -->
+<x-navigation />
+
 <div class="min-h-screen bg-gray-50">
-    <!-- Header -->
-    <header class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center">
-                    <a href="{{ route('public.index') }}" class="flex items-center">
-                        <div class="h-8 w-8 bg-green-600 rounded flex items-center justify-center">
-                            <span class="text-white text-sm font-bold">PS</span>
-                        </div>
-                        <div class="ml-3">
-                            <h1 class="text-lg font-semibold text-gray-900">Portal Inspektorat</h1>
-                            <p class="text-sm text-gray-500">Papua Selatan</p>
-                        </div>
-                    </a>
-                </div>
-                
-                <nav class="hidden md:block">
-                    <div class="flex items-center space-x-8">
-                        <a href="{{ route('public.index') }}" class="text-gray-700 hover:text-green-600 px-3 py-2 text-sm font-medium">Beranda</a>
-                        <a href="{{ route('admin.login') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700">Admin</a>
-                    </div>
-                </nav>
-            </div>
-        </div>
-    </header>
 
     <!-- Breadcrumb -->
     <div class="bg-white border-b">

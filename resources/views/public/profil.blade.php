@@ -3,6 +3,9 @@
 @section('title', 'Profil Inspektorat Papua Tengah')
 
 @section('content')
+<!-- Navigation -->
+<x-navigation />
+
 <!-- Hero Section -->
 <section class="relative bg-gradient-to-r from-blue-800 to-blue-900 py-20">
     <div class="absolute inset-0 bg-black opacity-20"></div>

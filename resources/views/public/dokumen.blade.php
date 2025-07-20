@@ -3,6 +3,9 @@
 @section('title', 'Dokumen - Portal Inspektorat Papua Tengah')
 
 @section('content')
+<!-- Navigation -->
+<x-navigation />
+
 <!-- Hero Section -->
 <section class="hero-section bg-primary text-white py-5">
     <div class="container">

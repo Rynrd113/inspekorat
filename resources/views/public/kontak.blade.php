@@ -3,91 +3,99 @@
 @section('title', 'Kontak Kami - Portal Inspektorat Papua Tengah')
 
 @section('content')
+<!-- Navigation -->
+<x-navigation />
+
 <!-- Hero Section -->
-<section class="hero-section bg-primary text-white py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-3">Kontak Kami</h1>
-                <p class="lead">Hubungi kami untuk informasi lebih lanjut atau sampaikan masukan Anda.</p>
+<section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row items-center">
+            <div class="lg:w-2/3 text-center lg:text-left">
+                <h1 class="text-4xl lg:text-5xl font-bold mb-4">Kontak Kami</h1>
+                <p class="text-xl text-blue-100">Hubungi kami untuk informasi lebih lanjut atau sampaikan masukan Anda.</p>
             </div>
-            <div class="col-lg-4 text-center">
-                <i class="fas fa-envelope fa-5x opacity-75"></i>
+            <div class="lg:w-1/3 text-center mt-8 lg:mt-0">
+                <i class="fas fa-envelope text-8xl opacity-75"></i>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Breadcrumb -->
-<nav aria-label="breadcrumb" class="bg-light py-2">
-    <div class="container">
-        <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{{ route('public.index') }}">Beranda</a></li>
-            <li class="breadcrumb-item active">Kontak</li>
+<nav aria-label="breadcrumb" class="bg-gray-100 py-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ol class="flex items-center space-x-2 text-sm">
+            <li><a href="{{ route('public.index') }}" class="text-blue-600 hover:text-blue-800">Beranda</a></li>
+            <li class="text-gray-400">/</li>
+            <li class="text-gray-700">Kontak</li>
         </ol>
     </div>
 </nav>
 
-<div class="container py-5">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6" role="alert">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>{{ session('success') }}</span>
+                <button type="button" class="ml-auto text-green-700 hover:text-green-900" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
     @endif
 
-    <div class="row">
-        <div class="col-lg-8 mb-5">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <h4 class="card-title mb-4">
-                        <i class="fas fa-paper-plane text-primary me-2"></i>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="p-6">
+                    <h4 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                        <i class="fas fa-paper-plane text-blue-600 mr-3"></i>
                         Kirim Pesan
                     </h4>
                     
                     <form method="POST" action="{{ route('kontak.kirim') }}">
                         @csrf
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="nama" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
                                 <input type="text" 
-                                       class="form-control @error('nama') is-invalid @enderror" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('nama') border-red-500 @enderror" 
                                        id="nama" 
                                        name="nama" 
                                        value="{{ old('nama') }}"
                                        required>
                                 @error('nama')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email <span class="text-red-500">*</span></label>
                                 <input type="email" 
-                                       class="form-control @error('email') is-invalid @enderror" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('email') border-red-500 @enderror" 
                                        id="email" 
                                        name="email" 
                                        value="{{ old('email') }}"
                                        required>
                                 @error('email')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
-                        <div class="mb-4">
-                            <label for="pesan" class="form-label">Pesan <span class="text-danger">*</span></label>
-                            <textarea class="form-control @error('pesan') is-invalid @enderror" 
+                        <div class="mb-6">
+                            <label for="pesan" class="block text-sm font-medium text-gray-700 mb-2">Pesan <span class="text-red-500">*</span></label>
+                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('pesan') border-red-500 @enderror" 
                                       id="pesan" 
                                       name="pesan" 
                                       rows="6" 
                                       placeholder="Tuliskan pesan atau pertanyaan Anda di sini..."
                                       required>{{ old('pesan') }}</textarea>
                             @error('pesan')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-paper-plane me-2"></i>
+                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                            <i class="fas fa-paper-plane mr-2"></i>
                             Kirim Pesan
                         </button>
                     </form>

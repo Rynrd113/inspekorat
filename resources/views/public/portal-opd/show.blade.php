@@ -3,6 +3,9 @@
 @section('title', $portalOpd->nama_opd . ' - Portal OPD Papua Tengah')
 
 @section('content')
+<!-- Navigation -->
+<x-navigation />
+
 <div class="min-h-screen bg-gray-50">
     <!-- Header with Banner -->
     <div class="relative h-64 md:h-80 overflow-hidden">

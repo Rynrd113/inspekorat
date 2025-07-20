@@ -4,49 +4,10 @@
 @section('description', 'Kumpulan berita dan informasi terbaru dari Inspektorat Provinsi Papua Tengah.')
 
 @section('content')
+<!-- Navigation -->
+<x-navigation />
+
 <div class="min-h-screen bg-gray-50">
-    <!-- Header Navigation -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="{{ route('public.index') }}" class="flex items-center">
-                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
-                            <i class="fas fa-shield-alt text-white text-lg"></i>
-                        </div>
-                        <div>
-                            <h1 class="text-lg font-bold text-gray-900">Inspektorat</h1>
-                            <p class="text-sm text-gray-500">Papua Tengah</p>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Navigation -->
-                <nav class="hidden md:flex space-x-8">
-                    <a href="{{ route('public.index') }}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
-                        Beranda
-                    </a>
-                    <a href="{{ route('public.berita.index') }}" class="text-blue-600 font-medium">
-                        Berita
-                    </a>
-                    <a href="{{ route('public.wbs') }}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
-                        WBS
-                    </a>
-                    <a href="{{ route('public.index') }}#info-kantor" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
-                        Info Kantor
-                    </a>
-                </nav>
-
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button type="button" class="text-gray-700 hover:text-blue-600 focus:outline-none">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
 
     <!-- Breadcrumb -->
     <div class="bg-white border-b">

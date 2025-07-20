@@ -37,6 +37,13 @@ class SecurityHeadersMiddleware
                    "font-src 'self' https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
                    "connect-src 'self' " . $vitePorts['connect'] . "; " .
                    "frame-ancestors 'none';";
+            
+            // Debug log
+            \Log::info('CSP Development Mode', [
+                'env' => config('app.env'),
+                'csp' => $csp,
+                'vite_ports' => $vitePorts
+            ]);
         } else {
             // Production CSP - more restrictive
             $csp = "default-src 'self'; " .
@@ -46,6 +53,12 @@ class SecurityHeadersMiddleware
                    "font-src 'self' https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
                    "connect-src 'self'; " .
                    "frame-ancestors 'none';";
+            
+            // Debug log
+            \Log::info('CSP Production Mode', [
+                'env' => config('app.env'),
+                'csp' => $csp
+            ]);
         }
         
         $response->headers->set('Content-Security-Policy', $csp);

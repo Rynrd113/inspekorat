@@ -4,6 +4,9 @@
 @section('description', 'Dokumentasi foto dan video kegiatan Inspektorat Provinsi Papua Tengah.')
 
 @section('content')
+<!-- Navigation -->
+<x-navigation />
+
 <div class="min-h-screen bg-gray-50">
     <!-- Header Section -->
     <section class="bg-gradient-to-r from-pink-600 to-purple-600 text-white py-16">

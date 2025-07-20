@@ -1,5 +1,5 @@
 @php
-$baseClasses = 'block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 ease-in-out bg-white';
+$baseClasses = 'block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 ease-in-out bg-white placeholder-gray-500';
 $inputClasses = $baseClasses;
 if ($error) {
     $inputClasses = $baseClasses . ' border-red-300 focus:border-red-500 focus:ring-red-500';
