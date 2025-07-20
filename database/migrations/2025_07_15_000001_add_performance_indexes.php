@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         // Skip this migration in testing environment
-        if (app()->environment(['testing', 'dusk.local'])) {
+        if (app()->environment(['testing', ])) {
             return;
         }
         // Add critical indexes for pelayanans table
@@ -165,7 +165,7 @@ return new class extends Migration
     public function down(): void
     {
         // Skip this migration in testing environment
-        if (app()->environment(['testing', 'dusk.local'])) {
+        if (app()->environment(['testing', ])) {
             return;
         }
         Schema::table('pelayanans', function (Blueprint $table) {

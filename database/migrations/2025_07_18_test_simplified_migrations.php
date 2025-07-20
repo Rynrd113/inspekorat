@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         // Skip complex migrations in testing environment
-        if (app()->environment(['testing', 'dusk.local'])) {
+        if (app()->environment(['testing', ])) {
             return;
         }
     }
@@ -23,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         // Skip in testing environment
-        if (app()->environment(['testing', 'dusk.local'])) {
+        if (app()->environment(['testing', ])) {
             return;
         }
     }

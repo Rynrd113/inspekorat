@@ -80,4 +80,12 @@ class PortalPapuaTengah extends Model
     {
         return $query->where('is_featured', true);
     }
+
+    /**
+     * Scope a query to order by published date (newest first).
+     */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('published_at', 'desc');
+    }
 }

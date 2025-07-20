@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         // Only run in testing environment
-        if (app()->environment(['testing', 'dusk.local', 'local'])) {
+        if (app()->environment(['testing', , 'local'])) {
             $platform = config('database.default');
             if ($platform === 'mysql') {
                 // First, update any invalid roles to valid ones
@@ -35,7 +35,7 @@ return new class extends Migration
     public function down(): void
     {
         // Don't revert in testing - keep VARCHAR to avoid truncation errors
-        if (!app()->environment(['testing', 'dusk.local'])) {
+        if (!app()->environment(['testing', ])) {
             if (app()->environment(['local'])) {
                 $platform = config('database.default');
                 if ($platform === 'mysql') {

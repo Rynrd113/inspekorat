@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         // Skip this migration in testing environment for regular tests
-        // But allow it for dusk.local tests which need the full schema
+        // But allow it for tests which need the full schema
         if (app()->environment(['testing', 'local'])) {
             return;
         }
@@ -39,7 +39,7 @@ return new class extends Migration
     public function down(): void
     {
         // Skip this migration in testing environment to avoid ENUM truncation issues
-        if (app()->environment(['testing', 'dusk.local'])) {
+        if (app()->environment(['testing', ])) {
             return;
         }
         

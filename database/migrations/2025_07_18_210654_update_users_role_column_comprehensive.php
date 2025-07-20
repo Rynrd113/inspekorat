@@ -29,7 +29,7 @@ return new class extends Migration
     public function down(): void
     {
         // Don't revert to ENUM in testing environment to avoid truncation errors
-        if (!app()->environment(['testing', 'dusk.local'])) {
+        if (!app()->environment(['testing', ])) {
             // Restore to a simple enum only in non-testing environments
             $platform = config('database.default');
             if ($platform === 'mysql') {

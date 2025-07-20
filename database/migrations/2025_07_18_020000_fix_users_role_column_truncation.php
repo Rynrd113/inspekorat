@@ -12,8 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // For dusk testing environment, change role from enum to string to avoid truncation
-        if (app()->environment('dusk.local') || app()->environment('testing')) {
+        // For testing environment, change role from enum to string to avoid truncation
+        if (app()->environment() || app()->environment('testing')) {
             // For MySQL, we need to use raw SQL to modify the enum
             $platform = config('database.default');
             if ($platform === 'mysql') {
@@ -56,7 +56,7 @@ return new class extends Migration
     public function down(): void
     {
         // Don't revert to ENUM in testing environment to avoid truncation errors
-        if (!app()->environment(['testing', 'dusk.local'])) {
+        if (!app()->environment(['testing', ])) {
             // Restore original enum only in non-testing environments
             $platform = config('database.default');
             if ($platform === 'mysql') {
