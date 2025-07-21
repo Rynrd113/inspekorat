@@ -1,0 +1,175 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Facto    /**
+     * Get action label
+     */
+    public function getActionLabelAttribute()
+    {
+        return match($this->event) {
+            'created' => 'Dibuat',
+            'updated' => 'Diperbarui',
+            'deleted' => 'Dihapus',
+            'restored' => 'Dipulihkan',
+            'viewed' => 'Dilihat',
+            'approved' => 'Disetujui',
+            'rejected' => 'Ditolak',
+            'login' => 'Login',
+            'logout' => 'Logout',
+            default => $this->event
+        ];
+    }
+
+    /**
+     * Accessor for backward compatibility
+     */
+    public function getActionAttribute()
+    {
+        return $this->event;
+    }
+
+    /**
+     * Accessor for backward compatibility
+     */
+    public function getModelTypeAttribute()
+    {
+        return $this->auditable_type;
+    }
+
+    /**
+     * Accessor for backward compatibility
+     */
+    public function getModelIdAttribute()
+    {
+        return $this->auditable_id;
+    }se Illuminate\Database\Eloquent\Model;
+
+class AuditLog extends Model
+{
+    use HasFactory;
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'user_id',
+        'event',
+        'auditable_type',
+        'auditable_id',
+        'old_values',
+        'new_values',
+        'ip_address',
+        'user_agent',
+        'created_at'
+    ];
+
+    protected $casts = [
+        'old_values' => 'json',
+        'new_values' => 'json',
+        'created_at' => 'datetime'
+    ];
+
+    /**
+     * Get the user who performed the action
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the model that was changed
+     */
+    public function auditable()
+    {
+        return $this->morphTo();
+    }
+
+    /**
+     * Log an action
+     */
+    public static function log($action, $model, $oldValues = null, $newValues = null)
+    {
+        if (!auth()->check()) {
+            return;
+        }
+
+        return self::create([
+            'user_id' => auth()->id(),
+            'event' => $action,
+            'auditable_type' => get_class($model),
+            'auditable_id' => $model->id ?? null,
+            'old_values' => $oldValues,
+            'new_values' => $newValues,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
+    }
+
+    /**
+     * Get action label
+     */
+    public function getActionLabelAttribute()
+    {
+        return match($this->event) {
+            'created' => 'Dibuat',
+            'updated' => 'Diperbarui',
+            'deleted' => 'Dihapus',
+            'restored' => 'Dipulihkan',
+            'viewed' => 'Dilihat',
+            'approved' => 'Disetujui',
+            'rejected' => 'Ditolak',
+            'login' => 'Login',
+            'logout' => 'Logout',
+            default => $this->event
+        };
+    }
+
+    /**
+     * Get model name
+     */
+    public function getModelNameAttribute()
+    {
+        return match($this->auditable_type) {
+            'App\Models\User' => 'User',
+            'App\Models\PortalOpd' => 'Portal OPD',
+            'App\Models\PortalPapuaTengah' => 'Berita',
+            'App\Models\Wbs' => 'WBS',
+            'App\Models\Faq' => 'FAQ',
+            'App\Models\Dokumen' => 'Dokumen',
+            'App\Models\Galeri' => 'Galeri',
+            'App\Models\Pelayanan' => 'Pelayanan',
+            default => class_basename($this->auditable_type)
+        };
+    }
+
+    /**
+     * Scope for recent activities
+     */
+    public function scopeRecent($query, $days = 30)
+    {
+        return $query->where('created_at', '>=', now()->subDays($days));
+    }
+
+    /**
+     * Scope for specific user
+     */
+    public function scopeByUser($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    /**
+     * Scope for specific model
+     */
+    public function scopeByModel($query, $modelType, $modelId = null)
+    {
+        $query = $query->where('auditable_type', $modelType);
+        
+        if ($modelId) {
+            $query->where('auditable_id', $modelId);
+        }
+        
+        return $query;
+    }
+}

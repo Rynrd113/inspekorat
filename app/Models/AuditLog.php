@@ -4,33 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 
 class AuditLog extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
-
     protected $fillable = [
+        'user_type',
         'user_id',
-        'action',
-        'model_type',
-        'model_id',
+        'event',
+        'auditable_type',
+        'auditable_id',
         'old_values',
         'new_values',
+        'url',
         'ip_address',
         'user_agent',
-        'created_at'
+        'tags',
     ];
 
     protected $casts = [
-        'old_values' => 'json',
-        'new_values' => 'json',
-        'created_at' => 'datetime'
+        'old_values' => 'array',
+        'new_values' => 'array',
     ];
 
     /**
-     * Get the user who performed the action
+     * Get the user that performed the action
      */
     public function user()
     {
@@ -38,9 +39,9 @@ class AuditLog extends Model
     }
 
     /**
-     * Get the model that was changed
+     * Get the auditable model
      */
-    public function model()
+    public function auditable()
     {
         return $this->morphTo();
     }
@@ -48,86 +49,76 @@ class AuditLog extends Model
     /**
      * Log an action
      */
-    public static function log($action, $model, $oldValues = null, $newValues = null)
+    public static function log($action, $model = null, $oldValues = null, $newValues = null)
     {
-        if (!auth()->check()) {
-            return;
-        }
+        try {
+            $user = Auth::user();
+            
+            $data = [
+                'user_type' => $user ? get_class($user) : null,
+                'user_id' => $user ? $user->id : null,
+                'event' => $action, // Menggunakan 'event' sesuai dengan migration
+                'auditable_type' => $model ? get_class($model) : null,
+                'auditable_id' => $model ? $model->id : null,
+                'old_values' => $oldValues ? json_encode($oldValues) : null,
+                'new_values' => $newValues ? json_encode($newValues) : null,
+                'url' => Request::fullUrl(),
+                'ip_address' => Request::ip(),
+                'user_agent' => Request::userAgent(),
+            ];
 
-        return self::create([
-            'user_id' => auth()->id(),
-            'action' => $action,
-            'model_type' => get_class($model),
-            'model_id' => $model->id ?? null,
-            'old_values' => $oldValues,
-            'new_values' => $newValues,
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-        ]);
+            self::create($data);
+        } catch (\Exception $e) {
+            // Log error but don't break the application
+            \Log::error('Failed to create audit log: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Get action label
+     * Get action attribute (alias for event)
+     */
+    public function getActionAttribute()
+    {
+        return $this->event;
+    }
+
+    /**
+     * Set action attribute (alias for event)
+     */
+    public function setActionAttribute($value)
+    {
+        $this->attributes['event'] = $value;
+    }
+
+    /**
+     * Get model type attribute (alias for auditable_type)
+     */
+    public function getModelTypeAttribute()
+    {
+        return $this->auditable_type;
+    }
+
+    /**
+     * Get model id attribute (alias for auditable_id)
+     */
+    public function getModelIdAttribute()
+    {
+        return $this->auditable_id;
+    }
+
+    /**
+     * Get action label for display
      */
     public function getActionLabelAttribute()
     {
-        return match($this->action) {
-            'created' => 'Dibuat',
-            'updated' => 'Diperbarui',
-            'deleted' => 'Dihapus',
-            'restored' => 'Dipulihkan',
-            'viewed' => 'Dilihat',
-            'approved' => 'Disetujui',
-            'rejected' => 'Ditolak',
-            default => $this->action
-        };
+        return ucfirst($this->event);
     }
 
     /**
-     * Get model name
+     * Get model name for display
      */
     public function getModelNameAttribute()
     {
-        return match($this->model_type) {
-            'App\Models\User' => 'User',
-            'App\Models\PortalOpd' => 'Portal OPD',
-            'App\Models\PortalPapuaTengah' => 'Berita',
-            'App\Models\Wbs' => 'WBS',
-            'App\Models\Faq' => 'FAQ',
-            'App\Models\Dokumen' => 'Dokumen',
-            'App\Models\Galeri' => 'Galeri',
-            'App\Models\Pelayanan' => 'Pelayanan',
-            default => class_basename($this->model_type)
-        };
-    }
-
-    /**
-     * Scope for recent activities
-     */
-    public function scopeRecent($query, $days = 30)
-    {
-        return $query->where('created_at', '>=', now()->subDays($days));
-    }
-
-    /**
-     * Scope for specific user
-     */
-    public function scopeByUser($query, $userId)
-    {
-        return $query->where('user_id', $userId);
-    }
-
-    /**
-     * Scope for specific model
-     */
-    public function scopeByModel($query, $modelType, $modelId = null)
-    {
-        $query = $query->where('model_type', $modelType);
-        
-        if ($modelId) {
-            $query->where('model_id', $modelId);
-        }
-        
-        return $query;
+        return $this->auditable_type ? class_basename($this->auditable_type) : 'N/A';
     }
 }

@@ -11,9 +11,9 @@ window.Admin = window.Admin || {};
  * Handles session timeout and auto-logout prevention
  */
 Admin.Session = {
-    // Session timeout in minutes (43200 minutes = 30 days)
-    timeoutMinutes: 43200, 
-    warningMinutes: 30, // Show warning 30 minutes before expiry
+    // Session timeout in minutes (120 minutes = 2 hours)
+    timeoutMinutes: 120, 
+    warningMinutes: 10, // Show warning 10 minutes before expiry
     lastActivity: Date.now(),
     timeoutTimer: null,
     warningTimer: null,
@@ -54,16 +54,18 @@ Admin.Session = {
     
     // Update last activity time
     updateActivity: function() {
-        this.lastActivity = Date.now();
-        // Only reset timers if user has been inactive for more than 5 minutes
-        if (Date.now() - this.lastActivity > 5 * 60 * 1000) {
+        const now = Date.now();
+        
+        // Only reset timers if it's been more than 5 minutes since last reset
+        if (now - this.lastActivity > 5 * 60 * 1000) {
+            this.lastActivity = now;
             this.resetTimers();
         }
     },
     
     // Show session warning modal
     showSessionWarning: function() {
-        if (confirm('Sesi Anda akan berakhir dalam 30 menit. Klik OK untuk memperpanjang sesi.')) {
+        if (confirm('Sesi Anda akan berakhir dalam 10 menit. Klik OK untuk memperpanjang sesi.')) {
             this.extendSession();
         }
     },

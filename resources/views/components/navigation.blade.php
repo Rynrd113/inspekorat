@@ -61,7 +61,7 @@
                         Kontak
                     </a>
                     
-                    <a href="/admin/login" 
+                    <a href="{{ route('admin.login') }}" 
                        class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
                         Admin
                     </a>
@@ -132,7 +132,7 @@
                 Kontak
             </a>
             
-            <a href="/admin/login" 
+            <a href="{{ route('admin.login') }}" 
                class="block px-3 py-2 text-blue-600 font-medium hover:bg-blue-50">
                 Admin
             </a>
@@ -169,6 +169,4 @@ document.addEventListener('click', function(event) {
         icon.classList.add('fa-bars');
     }
 });
-
-// Clean navigation - no complex JavaScript
 </script>

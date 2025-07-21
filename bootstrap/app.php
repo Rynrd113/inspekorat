@@ -37,6 +37,15 @@ return Application::configure(basePath: dirname(__DIR__))
             return route('public.index');
         });
         
+        // Redirect authenticated users - only for admin routes
+        $middleware->redirectUsersTo(function () {
+            // Only redirect to dashboard if user is accessing admin login and is authenticated
+            if (request()->is('admin/login') && auth()->check() && auth()->user()->isAdmin()) {
+                return route('admin.dashboard');
+            }
+            return null; // Don't redirect for other routes
+        });
+        
         // API middleware group with rate limiting and performance monitoring
         $middleware->group('api', [
             \App\Http\Middleware\HandleApiErrors::class,

@@ -24,12 +24,12 @@ class AuditLogController extends Controller
 
         // Filter by action
         if ($request->filled('action')) {
-            $query->where('action', $request->action);
+            $query->where('event', $request->action);
         }
 
         // Filter by model type
         if ($request->filled('model_type')) {
-            $query->where('model_type', $request->model_type);
+            $query->where('auditable_type', $request->model_type);
         }
 
         // Filter by date range
@@ -45,8 +45,8 @@ class AuditLogController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
-                $q->where('action', 'like', "%{$search}%")
-                  ->orWhere('model_type', 'like', "%{$search}%")
+                $q->where('event', 'like', "%{$search}%")
+                  ->orWhere('auditable_type', 'like', "%{$search}%")
                   ->orWhereHas('user', function($userQuery) use ($search) {
                       $userQuery->where('name', 'like', "%{$search}%");
                   });
