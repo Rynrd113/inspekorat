@@ -11,6 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Personal Access Tokens Table (Laravel Sanctum)
+        Schema::create('personal_access_tokens', function (Blueprint $table) {
+            $table->id();
+            $table->morphs('tokenable');
+            $table->string('name');
+            $table->string('token', 64)->unique();
+            $table->text('abilities')->nullable();
+            $table->timestamp('last_used_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamps();
+        });
 
         // Audit Logs Table
         Schema::create('audit_logs', function (Blueprint $table) {
@@ -68,13 +79,19 @@ return new class extends Migration
             $table->string('key')->unique();
             $table->text('value')->nullable();
             $table->string('type')->default('string');
+            $table->string('group')->default('general');
             $table->text('description')->nullable();
             $table->boolean('is_public')->default(false);
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
             
             // Indexes
             $table->index('key');
+            $table->index('group');
             $table->index('is_public');
+            
+            // Foreign key
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
         });
 
     }
@@ -87,5 +104,6 @@ return new class extends Migration
         Schema::dropIfExists('system_configurations');
         Schema::dropIfExists('content_approvals');
         Schema::dropIfExists('audit_logs');
+        Schema::dropIfExists('personal_access_tokens');
     }
 };

@@ -57,8 +57,8 @@ class AuditLogController extends Controller
 
         // Get filter options
         $users = User::select('id', 'name')->orderBy('name')->get();
-        $actions = AuditLog::select('action')->distinct()->orderBy('action')->pluck('action');
-        $modelTypes = AuditLog::select('model_type')->distinct()->orderBy('model_type')->pluck('model_type');
+        $actions = AuditLog::select('event')->distinct()->orderBy('event')->pluck('event');
+        $modelTypes = AuditLog::select('auditable_type')->distinct()->orderBy('auditable_type')->pluck('auditable_type');
 
         return view('admin.audit-logs.index', compact('auditLogs', 'users', 'actions', 'modelTypes'));
     }
@@ -89,12 +89,19 @@ class AuditLogController extends Controller
                 ->orderBy('activity_count', 'desc')
                 ->limit(10)
                 ->get(),
-            'most_common_actions' => AuditLog::select('action')
+            'most_common_actions' => AuditLog::select('event')
                 ->selectRaw('COUNT(*) as action_count')
-                ->groupBy('action')
+                ->groupBy('event')
                 ->orderBy('action_count', 'desc')
                 ->limit(10)
-                ->get(),
+                ->get()
+                ->map(function($item) {
+                    return (object)[
+                        'event' => $item->event,
+                        'action_count' => $item->action_count,
+                        'action_label' => ucfirst($item->event) // Manual accessor since this is stdClass
+                    ];
+                }),
             'recent_activities' => AuditLog::with('user')
                 ->latest()
                 ->limit(10)
@@ -117,11 +124,11 @@ class AuditLogController extends Controller
         }
 
         if ($request->filled('action')) {
-            $query->where('action', $request->action);
+            $query->where('event', $request->action);
         }
 
         if ($request->filled('model_type')) {
-            $query->where('model_type', $request->model_type);
+            $query->where('auditable_type', $request->model_type);
         }
 
         if ($request->filled('date_from')) {

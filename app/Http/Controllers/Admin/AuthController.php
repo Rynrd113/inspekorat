@@ -78,9 +78,14 @@ class AuthController extends Controller
             AuditLog::log('logout', $user);
         }
         
-        // Revoke all tokens for the user
+        // Revoke all tokens for the user (with safety check for SQLite)
         if ($user) {
-            $user->tokens()->delete();
+            try {
+                $user->tokens()->delete();
+            } catch (\Exception $e) {
+                // Log error but don't break logout process
+                \Log::warning('Failed to delete user tokens during logout: ' . $e->getMessage());
+            }
         }
         
         Auth::logout();
