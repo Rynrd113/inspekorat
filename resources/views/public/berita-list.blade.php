@@ -145,11 +145,11 @@
                                 <div class="flex items-center space-x-3">
                                     <span class="flex items-center">
                                         <i class="fas fa-user mr-1"></i>
-                                        {{ $berita->penulis }}
+                                        {{ $berita->author }}
                                     </span>
                                     <span class="flex items-center">
                                         <i class="fas fa-calendar mr-1"></i>
-                                        {{ $berita->published_at->format('d M Y') }}
+                                        {{ $berita->tanggal_publikasi ? \Carbon\Carbon::parse($berita->tanggal_publikasi)->format('d M Y') : 'Tanggal tidak tersedia' }}
                                     </span>
                                 </div>
                                 <span class="flex items-center">

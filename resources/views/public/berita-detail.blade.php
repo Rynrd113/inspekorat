@@ -54,15 +54,15 @@
             <div class="flex flex-wrap items-center text-sm text-gray-500 space-x-6 mb-6">
                 <div class="flex items-center">
                     <i class="fas fa-user mr-2"></i>
-                    <span>{{ $berita->penulis }}</span>
+                    <span>{{ $berita->author }}</span>
                 </div>
                 <div class="flex items-center">
                     <i class="fas fa-calendar mr-2"></i>
-                    <span>{{ $berita->published_at->format('d F Y') }}</span>
+                    <span>{{ $berita->tanggal_publikasi ? \Carbon\Carbon::parse($berita->tanggal_publikasi)->format('d F Y') : 'Tanggal tidak tersedia' }}</span>
                 </div>
                 <div class="flex items-center">
                     <i class="fas fa-clock mr-2"></i>
-                    <span>{{ $berita->published_at->format('H:i') }} WIT</span>
+                    <span>{{ $berita->tanggal_publikasi ? \Carbon\Carbon::parse($berita->tanggal_publikasi)->format('H:i') : '--:--' }} WIT</span>
                 </div>
                 <div class="flex items-center">
                     <i class="fas fa-eye mr-2"></i>
@@ -144,7 +144,7 @@
                         </p>
                         
                         <div class="flex items-center justify-between text-xs text-gray-500">
-                            <span>{{ $related->published_at->format('d M Y') }}</span>
+                            <span>{{ \Carbon\Carbon::parse($related->tanggal_publikasi)->format('d M Y') }}</span>
                             <span>{{ number_format($related->views) }} views</span>
                         </div>
                     </div>
