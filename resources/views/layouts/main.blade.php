@@ -23,7 +23,7 @@
     @if(isset($isAdmin) && $isAdmin)
         @vite(['resources/css/app.css', 'resources/css/admin.css', 'resources/js/app.js', 'resources/js/admin.js'])
     @else
-        @vite(['resources/css/app.css', 'resources/css/public.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
     
     <!-- Global Styles -->
