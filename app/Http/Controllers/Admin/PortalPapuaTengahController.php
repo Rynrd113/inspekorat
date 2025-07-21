@@ -25,7 +25,7 @@ class PortalPapuaTengahController extends Controller
 
         // Filter by status
         if ($request->has('status') && $request->status !== '') {
-            $query->where('is_published', $request->status === 'published');
+            $query->where('status', $request->status === 'published');
         }
 
         // Search
@@ -34,7 +34,7 @@ class PortalPapuaTengahController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('judul', 'like', "%{$search}%")
                   ->orWhere('konten', 'like', "%{$search}%")
-                  ->orWhere('penulis', 'like', "%{$search}%");
+                  ->orWhere('author', 'like', "%{$search}%");
             });
         }
 

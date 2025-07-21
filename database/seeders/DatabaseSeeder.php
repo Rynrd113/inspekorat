@@ -13,15 +13,20 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class, // Seeder utama untuk semua user
-            PortalPapuaTengahSeeder::class,
             InfoKantorSeeder::class,
-            WbsSeeder::class,
+            WebPortalSeeder::class,
+            PortalPapuaTengahSeeder::class,
             PortalOpdSeeder::class,
+            WbsSeeder::class,
             // Seeders untuk modul baru
             PelayananSeeder::class,
             DokumenSeeder::class,
             GaleriSeeder::class,
             FaqSeeder::class,
+            // Seeders untuk sistem
+            SystemConfigurationSeeder::class,
+            AuditLogSeeder::class,
+            PerformanceLogSeeder::class,
         ]);
     }
 }

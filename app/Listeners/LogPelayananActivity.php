@@ -13,9 +13,9 @@ class LogPelayananActivity
         // Log activity
         AuditLog::create([
             'user_id' => auth()->id(),
-            'action' => 'created',
-            'model_type' => 'App\Models\Pelayanan',
-            'model_id' => $event->pelayanan->id,
+            'event' => 'created',
+            'auditable_type' => 'App\Models\Pelayanan',
+            'auditable_id' => $event->pelayanan->id,
             'new_values' => $event->pelayanan->toArray(),
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),

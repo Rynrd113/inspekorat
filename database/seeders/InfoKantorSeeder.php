@@ -12,56 +12,52 @@ class InfoKantorSeeder extends Seeder
      */
     public function run(): void
     {
-        $infoKantor = [
+        // Check if data already exists
+        if (InfoKantor::count() > 0) {
+            return;
+        }
+
+        $infoKantorData = [
             [
-                'judul' => 'Alamat Kantor',
-                'konten' => 'Jl. Trans Papua, Merauke, Papua Selatan 99611',
-                'kategori' => 'alamat',
-                'icon' => 'fas fa-map-marker-alt',
-                'urutan' => 1,
+                'nama' => 'Inspektorat Daerah Provinsi Papua Tengah',
+                'alamat' => 'Jl. Trikora No. 45, Nabire, Papua Tengah 98816',
+                'telepon' => '(0984) 21567',
+                'email' => 'inspektorat@papuatengah.go.id',
+                'website' => 'https://inspektorat.papuatengah.go.id',
+                'deskripsi' => 'Inspektorat Daerah Provinsi Papua Tengah adalah unsur pengawas yang bertugas menyelenggarakan pengawasan internal di lingkungan Pemerintah Provinsi Papua Tengah.',
+                'jam_operasional' => 'Senin - Jumat: 08:00 - 16:00 WIT',
+                'latitude' => -3.3667,
+                'longitude' => 135.4833,
+                'status' => true,
             ],
             [
-                'judul' => 'Telepon',
-                'konten' => '(0971) 321234',
-                'kategori' => 'kontak',
-                'icon' => 'fas fa-phone',
-                'urutan' => 2,
+                'nama' => 'Kantor Cabang Inspektorat - Timika',
+                'alamat' => 'Jl. Yos Sudarso No. 12, Timika, Papua Tengah',
+                'telepon' => '(0901) 321456',
+                'email' => 'cabang.timika@papuatengah.go.id',
+                'website' => null,
+                'deskripsi' => 'Kantor cabang Inspektorat yang melayani wilayah Timika dan sekitarnya.',
+                'jam_operasional' => 'Senin - Jumat: 08:00 - 15:00 WIT',
+                'latitude' => -4.5333,
+                'longitude' => 136.8833,
+                'status' => true,
             ],
             [
-                'judul' => 'Email',
-                'konten' => 'inspektorat@papuaselatan.go.id',
-                'kategori' => 'kontak',
-                'icon' => 'fas fa-envelope',
-                'urutan' => 3,
-            ],
-            [
-                'judul' => 'Jam Operasional',
-                'konten' => 'Senin - Jumat: 08:00 - 16:00 WIT<br>Sabtu - Minggu: Tutup',
-                'kategori' => 'jam_operasional',
-                'icon' => 'fas fa-clock',
-                'urutan' => 4,
-            ],
-            [
-                'judul' => 'Fax',
-                'konten' => '(0971) 321235',
-                'kategori' => 'kontak',
-                'icon' => 'fas fa-fax',
-                'urutan' => 5,
-            ],
-            [
-                'judul' => 'Website Resmi',
-                'konten' => 'https://inspektorat.papuaselatan.go.id',
-                'kategori' => 'kontak',
-                'icon' => 'fas fa-globe',
-                'urutan' => 6,
+                'nama' => 'Kantor Cabang Inspektorat - Paniai',
+                'alamat' => 'Jl. Danau Paniai No. 8, Enarotali, Papua Tengah',
+                'telepon' => '(0968) 41234',
+                'email' => 'cabang.paniai@papuatengah.go.id',
+                'website' => null,
+                'deskripsi' => 'Kantor cabang Inspektorat yang melayani wilayah Paniai dan sekitarnya.',
+                'jam_operasional' => 'Senin - Jumat: 08:00 - 15:00 WIT',
+                'latitude' => -3.8667,
+                'longitude' => 136.35,
+                'status' => true,
             ],
         ];
 
-        foreach ($infoKantor as $info) {
-            InfoKantor::updateOrCreate(
-                ['judul' => $info['judul'], 'kategori' => $info['kategori']], 
-                $info
-            );
+        foreach ($infoKantorData as $data) {
+            InfoKantor::create($data);
         }
     }
 }

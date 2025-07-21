@@ -53,8 +53,7 @@ class PortalPapuaTengah extends Model
      */
     public function scopePublished($query)
     {
-        return $query->where('is_published', true)
-                    ->where('published_at', '<=', now());
+        return $query->where('status', true);
     }
 
     /**
@@ -62,8 +61,7 @@ class PortalPapuaTengah extends Model
      */
     public function scopeActive($query)
     {
-        return $query->where('status', 'published')
-                    ->where('is_published', true);
+        return $query->where('status', true);
     }
 
     /**
@@ -71,7 +69,7 @@ class PortalPapuaTengah extends Model
      */
     public function scopeFeatured($query)
     {
-        return $query->where('is_featured', true);
+        return $query->where('status', true);
     }
 
     /**
@@ -79,6 +77,6 @@ class PortalPapuaTengah extends Model
      */
     public function scopeOrdered($query)
     {
-        return $query->orderBy('published_at', 'desc');
+        return $query->orderBy('tanggal_publikasi', 'desc');
     }
 }

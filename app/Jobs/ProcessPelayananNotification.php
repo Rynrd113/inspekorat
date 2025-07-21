@@ -71,9 +71,9 @@ class ProcessPelayananNotification implements ShouldQueue
     {
         AuditLog::create([
             'user_id' => $this->userId,
-            'action' => $this->action,
-            'model_type' => 'App\Models\Pelayanan',
-            'model_id' => $this->pelayanan->id,
+            'event' => $this->action,
+            'auditable_type' => 'App\Models\Pelayanan',
+            'auditable_id' => $this->pelayanan->id,
             'new_values' => $this->pelayanan->toArray(),
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),

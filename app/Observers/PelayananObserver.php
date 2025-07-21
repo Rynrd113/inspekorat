@@ -30,9 +30,9 @@ class PelayananObserver
     {
         AuditLog::create([
             'user_id' => auth()->id() ?? 1,
-            'action' => $action,
-            'model_type' => 'App\Models\Pelayanan',
-            'model_id' => $pelayanan->id,
+            'event' => $action,
+            'auditable_type' => 'App\Models\Pelayanan',
+            'auditable_id' => $pelayanan->id,
             'old_values' => $oldValues,
             'new_values' => $pelayanan->toArray(),
             'ip_address' => request()->ip(),

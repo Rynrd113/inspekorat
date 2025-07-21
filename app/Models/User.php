@@ -42,7 +42,7 @@ class User extends Authenticatable
             'createdContent:id,judul,created_at,created_by',
             'updatedContent:id,judul,updated_at,updated_by',
             'wbsReports:id,subjek,status,created_at,assigned_to',
-            'auditLogs:id,action,model_type,created_at,user_id'
+            'auditLogs:id,event,auditable_type,created_at,user_id'
         ]
     ];
 

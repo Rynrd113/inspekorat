@@ -29,7 +29,7 @@ class PublicController extends Controller
         $portalPapuaTengah = Cache::remember('public_portal_papua_tengah', 600, function () {
             return PortalPapuaTengah::published()
                 ->ordered()
-                ->select(['id', 'judul', 'slug', 'konten', 'kategori', 'thumbnail', 'published_at', 'views', 'penulis'])
+                ->select(['id', 'judul', 'konten', 'kategori', 'gambar', 'tanggal_publikasi', 'views', 'author'])
                 ->take(5)
                 ->get();
         });
@@ -107,7 +107,7 @@ class PublicController extends Controller
         $relatedBerita = PortalPapuaTengah::published()
             ->where('kategori', $berita->kategori)
             ->where('id', '!=', $berita->id)
-            ->orderBy('published_at', 'desc')
+            ->orderBy('tanggal_publikasi', 'desc')
             ->take(3)
             ->get();
 
@@ -127,7 +127,7 @@ class PublicController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('judul', 'like', "%{$search}%")
                   ->orWhere('konten', 'like', "%{$search}%")
-                  ->orWhere('penulis', 'like', "%{$search}%");
+                  ->orWhere('author', 'like', "%{$search}%");
             });
         }
         
@@ -141,7 +141,7 @@ class PublicController extends Controller
         if ($sort === 'terpopuler') {
             $query->orderBy('views', 'desc');
         } else {
-            $query->orderBy('published_at', 'desc');
+            $query->orderBy('tanggal_publikasi', 'desc');
         }
         
         // Pagination
@@ -408,9 +408,9 @@ startxref
     {
         $query = Galeri::where('status', true);
 
-        // Filter by type if specified
+        // Filter by file type if specified
         if ($request->filled('type')) {
-            $query->where('type', $request->type);
+            $query->where('file_type', $request->type);
         }
 
         // Filter by category if specified
@@ -422,8 +422,8 @@ startxref
             'public_galeri_' . md5($request->fullUrl()), 
             600, 
             function () use ($query) {
-                return $query->orderBy('urutan', 'asc')
-                           ->orderBy('tanggal_event', 'desc')
+                return $query->orderBy('tanggal_publikasi', 'desc')
+                           ->orderBy('created_at', 'desc')
                            ->get();
             }
         );
@@ -442,7 +442,7 @@ startxref
         $related = Galeri::where('status', true)
             ->where('kategori', $galeri->kategori)
             ->where('id', '!=', $galeri->id)
-            ->orderBy('urutan', 'asc')
+            ->orderBy('tanggal_publikasi', 'desc')
             ->take(6)
             ->get();
 

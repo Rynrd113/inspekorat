@@ -26,36 +26,33 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// Public Routes
-Route::get('/', [PublicController::class, 'index'])->name('public.index');
-Route::get('/berita', [PublicController::class, 'berita'])->name('public.berita.index');
-Route::get('/berita/{id}', [PublicController::class, 'show'])->name('public.berita.show');
-Route::get('/wbs', [PublicController::class, 'wbs'])->name('public.wbs');
-Route::post('/wbs', [PublicController::class, 'storeWbs'])->name('public.wbs.store');
-Route::get('/profil', [PublicController::class, 'profil'])->name('public.profil');
-Route::get('/pelayanan', [PublicController::class, 'pelayanan'])->name('public.pelayanan.index');
-Route::get('/pelayanan/{id}', [PublicController::class, 'pelayananShow'])->name('public.pelayanan.show');
-Route::get('/dokumen', [PublicController::class, 'dokumen'])->name('public.dokumen.index');
-Route::get('/dokumen/{id}/download', [PublicController::class, 'dokumenDownload'])->name('public.dokumen.download');
-Route::get('/dokumen/{id}/preview', [PublicController::class, 'dokumenPreview'])->name('public.dokumen.preview');
-Route::get('/galeri', [PublicController::class, 'galeri'])->name('public.galeri.index');
-Route::get('/galeri/{id}', [PublicController::class, 'galeriShow'])->name('public.galeri.show');
-Route::get('/faq', [PublicController::class, 'faq'])->name('public.faq');
-Route::get('/kontak', [PublicController::class, 'kontak'])->name('public.kontak');
-Route::post('/kontak', [PublicController::class, 'kontakKirim'])->name('kontak.kirim');
-Route::get('/pengaduan', [PublicController::class, 'pengaduan'])->name('public.pengaduan');
-
-// Test route for debugging
-Route::get('/test-admin', function() {
-    return 'TEST ADMIN ROUTE WORKS! <a href="/admin/login">Click here for admin login</a>';
-})->name('test.admin');
-
-// Web Portal Public Routes
-Route::get('/web-portal', [PublicController::class, 'webPortal'])->name('public.web-portal.index');
-
-// Portal OPD Public Routes
-Route::get('/portal-opd', [PortalOpdController::class, 'index'])->name('public.portal-opd.index');
-Route::get('/portal-opd/{portalOpd}', [PortalOpdController::class, 'show'])->name('public.portal-opd.show');
+// Public Routes with admin logout middleware
+Route::middleware('admin.logout.public')->group(function () {
+    Route::get('/', [PublicController::class, 'index'])->name('public.index');
+    Route::get('/berita', [PublicController::class, 'berita'])->name('public.berita.index');
+    Route::get('/berita/{id}', [PublicController::class, 'show'])->name('public.berita.show');
+    Route::get('/wbs', [PublicController::class, 'wbs'])->name('public.wbs');
+    Route::post('/wbs', [PublicController::class, 'storeWbs'])->name('public.wbs.store');
+    Route::get('/profil', [PublicController::class, 'profil'])->name('public.profil');
+    Route::get('/pelayanan', [PublicController::class, 'pelayanan'])->name('public.pelayanan.index');
+    Route::get('/pelayanan/{id}', [PublicController::class, 'pelayananShow'])->name('public.pelayanan.show');
+    Route::get('/dokumen', [PublicController::class, 'dokumen'])->name('public.dokumen.index');
+    Route::get('/dokumen/{id}/download', [PublicController::class, 'dokumenDownload'])->name('public.dokumen.download');
+    Route::get('/dokumen/{id}/preview', [PublicController::class, 'dokumenPreview'])->name('public.dokumen.preview');
+    Route::get('/galeri', [PublicController::class, 'galeri'])->name('public.galeri.index');
+    Route::get('/galeri/{id}', [PublicController::class, 'galeriShow'])->name('public.galeri.show');
+    Route::get('/faq', [PublicController::class, 'faq'])->name('public.faq');
+    Route::get('/kontak', [PublicController::class, 'kontak'])->name('public.kontak');
+    Route::post('/kontak', [PublicController::class, 'kontakKirim'])->name('kontak.kirim');
+    Route::get('/pengaduan', [PublicController::class, 'pengaduan'])->name('public.pengaduan');
+    
+    // Web Portal Public Routes
+    Route::get('/web-portal', [PublicController::class, 'webPortal'])->name('public.web-portal.index');
+    
+    // Portal OPD Public Routes
+    Route::get('/portal-opd', [PortalOpdController::class, 'index'])->name('public.portal-opd.index');
+    Route::get('/portal-opd/{portalOpd}', [PortalOpdController::class, 'show'])->name('public.portal-opd.show');
+});
 
 // Admin Authentication Routes
 Route::prefix('admin')->name('admin.')->group(function () {

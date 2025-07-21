@@ -21,6 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'api.rate.limit' => \App\Http\Middleware\ApiRateLimitMiddleware::class,
             'db.optimize' => \App\Http\Middleware\DatabaseQueryOptimizationMiddleware::class,
             'asset.optimize' => \App\Http\Middleware\AssetOptimizationMiddleware::class,
+            'admin.logout.public' => \App\Http\Middleware\AdminLogoutOnPublic::class,
+            'admin.redirect' => \App\Http\Middleware\AdminRedirectMiddleware::class,
         ]);
         
         $middleware->append([

@@ -1,6 +1,11 @@
 @extends('layouts.public')
 
-@section('title', 'Galeri Kegiatan - Inspektorat Papua Tengah')
+@section('title', 'Galeri Ke                <div class="gallery-item group cursor-pointer" 
+                     data-                    <div class="text-3xl font-bold text-blue-600 mb-2" id="total-photos">
+                        {{ isset($galeris) ? $galeris->whereIn('file_type', ['jpg', 'jpeg', 'png', 'gif'])->count() : 0 }}
+                    </div>e="{{ $galeri->file_type ?? 'jpg' }}" 
+                     data-category="{{ strtolower($galeri->kategori ?? 'umum') }}"
+                     onclick="openLightbox({{ $galeri->id ?? 0 }})">an - Inspektorat Papua Tengah')
 @section('description', 'Dokumentasi foto dan video kegiatan Inspektorat Provinsi Papua Tengah.')
 
 @section('content')
@@ -55,32 +60,28 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="gallery-grid">
                 @forelse($galeris ?? [] as $galeri)
                 <div class="gallery-item group cursor-pointer" 
-                     data-type="{{ $galeri->type ?? 'foto' }}" 
+                     data-type="{{ $galeri->file_type ?? 'foto' }}" 
                      data-category="{{ strtolower($galeri->kategori ?? 'umum') }}"
                      onclick="openLightbox({{ $galeri->id ?? 0 }})">
                     
                     <div class="relative overflow-hidden rounded-xl bg-white shadow-lg hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
                         <!-- Image/Video Thumbnail -->
-                        <div class="aspect-w-16 aspect-h-12 bg-gradient-to-br from-pink-100 to-purple-100">
-                            @if(($galeri->type ?? 'foto') === 'video')
-                                <div class="w-full h-48 bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center relative">
-                                    <i class="fas fa-play-circle text-white text-4xl"></i>
-                                    <div class="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-medium">
-                                        VIDEO
-                                    </div>
+                                                <div class="aspect-w-16 aspect-h-12 bg-gradient-to-br from-pink-100 to-purple-100">
+                            @if(in_array(strtolower($galeri->file_type ?? 'jpg'), ['mp4', 'avi', 'mov', 'wmv']))
+                                <div class="w-full h-full bg-gray-900 flex items-center justify-center">
+                                    <i class="fas fa-play-circle text-white text-5xl opacity-80"></i>
                                 </div>
                             @else
-                                <div class="w-full h-48 bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center">
-                                    <i class="fas fa-image text-white text-3xl"></i>
+                                <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                                    <i class="fas fa-image text-gray-500 text-4xl opacity-60"></i>
                                 </div>
                             @endif
-                        </div>
 
                         <!-- Overlay -->
                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
                             <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 <div class="bg-white rounded-full p-3">
-                                    @if(($galeri->type ?? 'foto') === 'video')
+                                    @if(in_array(strtolower($galeri->file_type ?? 'jpg'), ['mp4', 'avi', 'mov', 'wmv']))
                                         <i class="fas fa-play text-pink-600 text-xl"></i>
                                     @else
                                         <i class="fas fa-search-plus text-pink-600 text-xl"></i>
@@ -95,17 +96,17 @@
                                 {{ $galeri->judul ?? 'Galeri Item' }}
                             </h3>
                             
-                            @if(isset($galeri->tanggal_event))
+                            @if($galeri->tanggal_publikasi)
                             <div class="flex items-center text-xs text-gray-500 mb-2">
                                 <i class="fas fa-calendar w-3 mr-2"></i>
-                                <span>{{ \Carbon\Carbon::parse($galeri->tanggal_event)->format('d M Y') }}</span>
+                                <span>{{ \Carbon\Carbon::parse($galeri->tanggal_publikasi)->format('d M Y') }}</span>
                             </div>
                             @endif
 
-                            @if(isset($galeri->lokasi_event))
+                            @if($galeri->deskripsi)
                             <div class="flex items-center text-xs text-gray-500 mb-2">
-                                <i class="fas fa-map-marker-alt w-3 mr-2"></i>
-                                <span class="line-clamp-1">{{ $galeri->lokasi_event }}</span>
+                                <i class="fas fa-info-circle w-3 mr-2"></i>
+                                <span class="line-clamp-1">{{ Str::limit($galeri->deskripsi, 50) }}</span>
                             </div>
                             @endif
 
@@ -145,20 +146,20 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
                 <div class="text-center">
-                    <div class="text-3xl font-bold text-pink-600 mb-2" id="total-photos">
-                        {{ isset($galeris) ? $galeris->where('type', 'foto')->count() : 0 }}
+                                        <div class="text-3xl font-bold text-green-600 mb-2" id="total-docs">
+                        {{ isset($galeris) ? $galeris->whereIn('file_type', ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'])->count() : 0 }}
                     </div>
                     <div class="text-gray-600">Foto</div>
                 </div>
                 <div class="text-center">
                     <div class="text-3xl font-bold text-purple-600 mb-2" id="total-videos">
-                        {{ isset($galeris) ? $galeris->where('type', 'video')->count() : 0 }}
+                        {{ isset($galeris) ? $galeris->whereIn('file_type', ['mp4', 'avi', 'mov', 'wmv'])->count() : 0 }}
                     </div>
                     <div class="text-gray-600">Video</div>
                 </div>
                 <div class="text-center">
                     <div class="text-3xl font-bold text-indigo-600 mb-2" id="total-events">
-                        {{ isset($galeris) ? $galeris->unique('tanggal_event')->count() : 0 }}
+                        {{ isset($galeris) ? $galeris->unique('tanggal_publikasi')->count() : 0 }}
                     </div>
                     <div class="text-gray-600">Kegiatan</div>
                 </div>
@@ -228,8 +229,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 const itemType = item.dataset.type;
                 const itemCategory = item.dataset.category;
                 
+                // Map file extensions to filter types
+                let itemFilterType = itemType;
+                if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(itemType)) {
+                    itemFilterType = 'foto';
+                } else if (['mp4', 'avi', 'mov', 'wmv'].includes(itemType)) {
+                    itemFilterType = 'video';
+                } else if (['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(itemType)) {
+                    itemFilterType = 'dokumen';
+                }
+                
                 if (filter === 'all' || 
-                    filter === itemType || 
+                    filter === itemFilterType || 
                     filter === itemCategory) {
                     item.style.display = 'block';
                 } else {
@@ -255,8 +266,8 @@ function openLightbox(itemId) {
     currentGalleryIndex = galleryData.findIndex(g => g.id === itemId);
     
     if (item) {
-        // Display content based on type
-        if (item.type === 'video') {
+        // Display content based on file type
+        if (['mp4', 'avi', 'mov', 'wmv'].includes(item.file_type)) {
             content.innerHTML = `
                 <div class="bg-gray-900 rounded-lg p-8 flex items-center justify-center" style="min-height: 400px;">
                     <div class="text-center">
@@ -279,8 +290,8 @@ function openLightbox(itemId) {
         // Update info
         title.textContent = item.judul || 'Galeri Item';
         meta.innerHTML = `
-            ${item.tanggal_event ? `<span class="mr-4"><i class="fas fa-calendar mr-1"></i> ${new Date(item.tanggal_event).toLocaleDateString('id-ID')}</span>` : ''}
-            ${item.lokasi_event ? `<span class="mr-4"><i class="fas fa-map-marker-alt mr-1"></i> ${item.lokasi_event}</span>` : ''}
+            ${item.tanggal_publikasi ? `<span class="mr-4"><i class="fas fa-calendar mr-1"></i> ${new Date(item.tanggal_publikasi).toLocaleDateString('id-ID')}</span>` : ''}
+            ${item.deskripsi ? `<span class="mr-4"><i class="fas fa-map-marker-alt mr-1"></i> ${item.deskripsi}</span>` : ''}
             <span><i class="fas fa-tag mr-1"></i> ${item.kategori || 'Umum'}</span>
         `;
     }

@@ -43,7 +43,7 @@ class Galeri extends Model
      */
     public function scopeFeatured($query)
     {
-        return $query->where('is_featured', true);
+        return $query->where('status', true);
     }
 
     /**
@@ -59,7 +59,7 @@ class Galeri extends Model
      */
     public function scopeByAlbum($query, $album)
     {
-        return $query->where('album', $album);
+        return $query->where('kategori', $album);
     }
 
     /**
@@ -67,7 +67,7 @@ class Galeri extends Model
      */
     public function scopeFoto($query)
     {
-        return $query->where('kategori', 'foto');
+        return $query->whereIn('file_type', ['jpg', 'jpeg', 'png', 'gif', 'webp']);
     }
 
     /**
@@ -75,7 +75,7 @@ class Galeri extends Model
      */
     public function scopeVideo($query)
     {
-        return $query->where('kategori', 'video');
+        return $query->whereIn('file_type', ['mp4', 'avi', 'mov', 'wmv', 'flv']);
     }
 
     /**
@@ -127,7 +127,7 @@ class Galeri extends Model
      */
     public function getFileExtensionAttribute()
     {
-        return pathinfo($this->file_media, PATHINFO_EXTENSION);
+        return pathinfo($this->file_path, PATHINFO_EXTENSION);
     }
 
     /**
@@ -136,7 +136,7 @@ class Galeri extends Model
     public function getIsImageAttribute()
     {
         $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        return in_array(strtolower($this->file_extension), $imageExtensions);
+        return in_array(strtolower($this->file_type), $imageExtensions);
     }
 
     /**
@@ -145,6 +145,14 @@ class Galeri extends Model
     public function getIsVideoAttribute()
     {
         $videoExtensions = ['mp4', 'avi', 'mov', 'wmv', 'flv'];
-        return in_array(strtolower($this->file_extension), $videoExtensions);
+        return in_array(strtolower($this->file_type), $videoExtensions);
+    }
+
+    /**
+     * Get tipe attribute (alias for file_type compatibility)
+     */
+    public function getTipeAttribute()
+    {
+        return $this->file_type;
     }
 }
