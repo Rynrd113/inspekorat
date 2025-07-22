@@ -80,7 +80,7 @@
 
     <!-- Documents Table -->
     <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
-        @if(isset($dokumen) && $dokumen->count() > 0)
+        @if(isset($dokumens) && $dokumens->count() > 0)
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -103,7 +103,7 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach($dokumen as $doc)
+                    @foreach($dokumens as $doc)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
@@ -111,7 +111,7 @@
                                     <i class="fas fa-file-alt text-blue-500 text-lg"></i>
                                 </div>
                                 <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900">{{ $doc->nama_dokumen }}</div>
+                                    <div class="text-sm font-medium text-gray-900">{{ $doc->judul }}</div>
                                     <div class="text-sm text-gray-500">{{ $doc->deskripsi }}</div>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $doc->ukuran_file ?? 'N/A' }}
+                            {{ $doc->file_size ?? 'N/A' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             {{ $doc->created_at->format('d M Y') }}
@@ -156,9 +156,9 @@
             </table>
         </div>
         
-        @if($dokumen->hasPages())
+        @if($dokumens->hasPages())
         <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-            {{ $dokumen->links() }}
+            {{ $dokumens->links() }}
         </div>
         @endif
         

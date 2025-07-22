@@ -101,10 +101,10 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $news->penulis }}
+                            {{ $news->author }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            @if($news->is_published)
+                            @if($news->status)
                                 <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
                                     Dipublikasikan
                                 </span>
@@ -115,7 +115,7 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $news->published_at ? $news->published_at->format('d/m/Y') : '-' }}
+                            {{ $news->tanggal_publikasi ? $news->tanggal_publikasi->format('d/m/Y') : '-' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             <div class="flex items-center">

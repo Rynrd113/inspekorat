@@ -23,12 +23,16 @@ class PortalPapuaTengahController extends Controller
 
         // Filter by status
         if ($request->has('status')) {
-            $query->byStatus($request->status);
+            if ($request->status === 'published' || $request->status === 'true' || $request->status === true) {
+                $query->where('status', true);
+            } elseif ($request->status === 'draft' || $request->status === 'false' || $request->status === false) {
+                $query->where('status', false);
+            }
         }
 
         // Filter by kategori
         if ($request->has('kategori')) {
-            $query->byKategori($request->kategori);
+            $query->where('kategori', $request->kategori);
         }
 
         // Search
@@ -37,7 +41,7 @@ class PortalPapuaTengahController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('judul', 'like', "%{$search}%")
                   ->orWhere('konten', 'like', "%{$search}%")
-                  ->orWhere('penulis', 'like', "%{$search}%");
+                  ->orWhere('author', 'like', "%{$search}%");
             });
         }
 
@@ -152,7 +156,7 @@ class PortalPapuaTengahController extends Controller
         if ($filter === 'terpopuler') {
             $query->orderBy('views', 'desc');
         } else {
-            $query->orderBy('published_at', 'desc');
+            $query->orderBy('tanggal_publikasi', 'desc');
         }
         
         $berita = $query->take($limit)->get();

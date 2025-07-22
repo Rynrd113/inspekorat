@@ -89,36 +89,6 @@
     </x-card>
 
     <!-- Services List -->
-    @php
-    $sampleData = collect([
-        (object)[
-            'id' => 1,
-            'nama_layanan' => 'Konsultasi Pengawasan',
-            'deskripsi' => 'Layanan konsultasi terkait pengawasan internal',
-            'kategori' => 'konsultasi',
-            'waktu_pelayanan' => '3 hari kerja',
-            'status' => true
-        ],
-        (object)[
-            'id' => 2,
-            'nama_layanan' => 'Audit Internal',
-            'deskripsi' => 'Layanan audit internal untuk OPD',
-            'kategori' => 'audit',
-            'waktu_pelayanan' => '14 hari kerja',
-            'status' => true
-        ],
-        (object)[
-            'id' => 3,
-            'nama_layanan' => 'Pengawasan Berkala',
-            'deskripsi' => 'Layanan pengawasan berkala untuk OPD',
-            'kategori' => 'pengawasan',
-            'waktu_pelayanan' => '21 hari kerja',
-            'status' => false
-        ]
-    ]);
-    @endphp
-
-    <!-- Services List -->
     <x-card>
         <x-slot:header>
             <div class="flex items-center justify-between">
@@ -126,7 +96,7 @@
                     <i class="fas fa-concierge-bell mr-2 text-blue-600"></i>Daftar Layanan
                 </h2>
                 <div class="text-sm text-gray-500">
-                    Total: {{ $sampleData->count() }} layanan
+                    Total: {{ $pelayanans->total() }} layanan
                 </div>
             </div>
         </x-slot:header>
@@ -153,12 +123,12 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach($sampleData as $row)
+                    @forelse($pelayanans as $pelayanan)
                     <tr class="hover:bg-gray-50 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             <div>
-                                <div class="text-sm font-medium text-gray-900">{{ $row->nama_layanan }}</div>
-                                <div class="text-sm text-gray-500">{{ $row->deskripsi }}</div>
+                                <div class="text-sm font-medium text-gray-900">{{ $pelayanan->nama }}</div>
+                                <div class="text-sm text-gray-500">{{ Str::limit($pelayanan->deskripsi, 100) }}</div>
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -170,17 +140,17 @@
                                 'perizinan' => 'bg-yellow-100 text-yellow-800',
                                 'administrasi' => 'bg-gray-100 text-gray-800'
                             ];
-                            $color = $colors[$row->kategori] ?? 'bg-gray-100 text-gray-800';
+                            $color = $colors[$pelayanan->kategori] ?? 'bg-gray-100 text-gray-800';
                             @endphp
-                            <x-badge variant="{{ $row->kategori }}" size="md">
-                                {{ ucfirst($row->kategori) }}
+                            <x-badge variant="{{ $pelayanan->kategori }}" size="md">
+                                {{ ucfirst($pelayanan->kategori) }}
                             </x-badge>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $row->waktu_pelayanan }}
+                            {{ $pelayanan->waktu_penyelesaian ?? '-' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            @if($row->status)
+                            @if($pelayanan->status)
                             <x-badge variant="success" size="md">Aktif</x-badge>
                             @else
                             <x-badge variant="danger" size="md">Non-aktif</x-badge>
@@ -188,17 +158,17 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex space-x-2">
-                                <a href="{{ route('admin.pelayanan.show', $row->id) }}" 
+                                <a href="{{ route('admin.pelayanan.show', $pelayanan->id) }}" 
                                    class="text-blue-600 hover:text-blue-900" title="Lihat Detail">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 
-                                <a href="{{ route('admin.pelayanan.edit', $row->id) }}" 
+                                <a href="{{ route('admin.pelayanan.edit', $pelayanan->id) }}" 
                                    class="text-indigo-600 hover:text-indigo-900" title="Edit Layanan">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 
-                                <form method="POST" action="{{ route('admin.pelayanan.destroy', $row->id) }}" class="inline">
+                                <form method="POST" action="{{ route('admin.pelayanan.destroy', $pelayanan->id) }}" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" 
@@ -211,12 +181,22 @@
                             </div>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                            <div class="py-8">
+                                <i class="fas fa-concierge-bell text-gray-300 text-4xl mb-4"></i>
+                                <p class="text-lg">Tidak ada pelayanan ditemukan</p>
+                                <p class="text-sm">Mulai dengan menambahkan pelayanan baru</p>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
         
-        @if($sampleData->isEmpty())
+        @if($pelayanans->isEmpty())
         <div class="text-center py-12">
             <i class="fas fa-inbox text-gray-300 text-5xl mb-4"></i>
             <h3 class="text-lg font-medium text-gray-900 mb-2">Belum ada layanan</h3>

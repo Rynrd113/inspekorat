@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@use('Illuminate\Support\Facades\Storage')
+
 @section('title', 'Manajemen Galeri')
 
 @section('header', 'Manajemen Galeri')
@@ -86,106 +88,84 @@
 
     <!-- Gallery Grid -->
     <div class="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+        @if(isset($galeris) && $galeris->count() > 0)
         <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <!-- Sample data - replace with actual data -->
+                @foreach($galeris as $galeri)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="relative">
-                        <img src="https://via.placeholder.com/300x200?text=Kegiatan+Audit" class="w-full h-48 object-cover" alt="Kegiatan Audit">
+                        @if($galeri->file_path && Storage::exists('public/' . $galeri->file_path))
+                            @if(in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif']))
+                                <img src="{{ Storage::url($galeri->file_path) }}" class="w-full h-48 object-cover" alt="{{ $galeri->judul }}">
+                            @else
+                                <div class="bg-gray-800 flex items-center justify-center h-48">
+                                    <i class="fas fa-play-circle text-white text-4xl"></i>
+                                </div>
+                            @endif
+                        @else
+                            <div class="bg-gray-200 flex items-center justify-center h-48">
+                                <i class="fas fa-image text-gray-400 text-4xl"></i>
+                            </div>
+                        @endif
                         <div class="absolute top-2 left-2">
-                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Foto</span>
+                            @if(in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif']))
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Foto</span>
+                            @else
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-cyan-100 text-cyan-800">Video</span>
+                            @endif
                         </div>
                         <div class="absolute top-2 right-2">
-                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
+                            @if($galeri->status)
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
+                            @else
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Non-aktif</span>
+                            @endif
                         </div>
                     </div>
                     <div class="p-4">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Kegiatan Audit Internal</h3>
-                        <p class="text-sm text-gray-600 mb-3">Dokumentasi kegiatan audit internal tahun 2024</p>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $galeri->judul }}</h3>
+                        <p class="text-sm text-gray-600 mb-3">{{ Str::limit($galeri->deskripsi, 100) }}</p>
                         <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-500">15 Jan 2024</span>
+                            <span class="text-sm text-gray-500">{{ $galeri->created_at->format('d M Y') }}</span>
                             <div class="flex space-x-2">
-                                <button type="button" onclick="viewMedia('foto', 'https://via.placeholder.com/800x600?text=Kegiatan+Audit')" class="text-blue-600 hover:text-blue-900" title="Lihat">
+                                <a href="{{ route('admin.galeri.show', $galeri->id) }}" class="text-blue-600 hover:text-blue-900" title="Lihat">
                                     <i class="fas fa-eye"></i>
-                                </button>
-                                <a href="{{ route('admin.galeri.edit', 1) }}" class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                </a>
+                                <a href="{{ route('admin.galeri.edit', $galeri->id) }}" class="text-indigo-600 hover:text-indigo-900" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <button type="button" onclick="confirmDelete(1)" class="text-red-600 hover:text-red-900" title="Hapus">
+                                <button type="button" onclick="confirmDelete({{ $galeri->id }})" class="text-red-600 hover:text-red-900" title="Hapus">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="relative">
-                        <div class="bg-gray-800 flex items-center justify-center h-48">
-                            <i class="fas fa-play-circle text-white text-4xl"></i>
-                        </div>
-                        <div class="absolute top-2 left-2">
-                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-cyan-100 text-cyan-800">Video</span>
-                        </div>
-                        <div class="absolute top-2 right-2">
-                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Sosialisasi WBS</h3>
-                        <p class="text-sm text-gray-600 mb-3">Video sosialisasi Whistle Blowing System</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-500">10 Jan 2024</span>
-                            <div class="flex space-x-2">
-                                <button type="button" onclick="viewMedia('video', '#')" class="text-blue-600 hover:text-blue-900" title="Lihat">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <a href="{{ route('admin.galeri.edit', 2) }}" class="text-indigo-600 hover:text-indigo-900" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <button type="button" onclick="confirmDelete(2)" class="text-red-600 hover:text-red-900" title="Hapus">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="relative">
-                        <img src="https://via.placeholder.com/300x200?text=Fasilitas+Kantor" class="w-full h-48 object-cover" alt="Fasilitas Kantor">
-                        <div class="absolute top-2 left-2">
-                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Foto</span>
-                        </div>
-                        <div class="absolute top-2 right-2">
-                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Fasilitas Kantor</h3>
-                        <p class="text-sm text-gray-600 mb-3">Dokumentasi fasilitas kantor Inspektorat</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm text-gray-500">08 Jan 2024</span>
-                            <div class="flex space-x-2">
-                                <button type="button" onclick="viewMedia('foto', 'https://via.placeholder.com/800x600?text=Fasilitas+Kantor')" class="text-blue-600 hover:text-blue-900" title="Lihat">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <a href="{{ route('admin.galeri.edit', 3) }}" class="text-indigo-600 hover:text-indigo-900" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <button type="button" onclick="confirmDelete(3)" class="text-red-600 hover:text-red-900" title="Hapus">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
-    </div>
-
-    <!-- Pagination -->
-    {{-- Add pagination here when connected to real data --}}
+        
+        @if($galeris->hasPages())
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+            {{ $galeris->links() }}
+        </div>
+        @endif
+        
+        @else
+        <!-- Empty State -->
+        <div class="text-center py-12">
+            <div class="text-gray-400 mb-4">
+                <i class="fas fa-images text-6xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Tidak ada media galeri</h3>
+            <p class="text-gray-600 mb-4">Belum ada foto atau video yang ditambahkan ke galeri.</p>
+            <a href="{{ route('admin.galeri.create') }}" 
+               class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                <i class="fas fa-plus mr-2"></i>
+                Tambah Media Pertama
+            </a>
+        </div>
+        @endif
 </div>
 
 <!-- Media View Modal -->

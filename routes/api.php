@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\InfoKantorController;
 use App\Http\Controllers\Api\WbsController;
 use App\Http\Controllers\Api\PortalPapuaTengahController;
 use App\Http\Controllers\Api\WebPortalController;
+use App\Http\Controllers\Api\PengaduanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,6 +36,15 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('info-kantor', InfoKantorController::class);
     Route::apiResource('portal-papua-tengah', PortalPapuaTengahController::class);
     Route::apiResource('web-portal', WebPortalController::class);
+    
+    // Pengaduan API routes - MISSING SEBELUMNYA!
+    Route::apiResource('pengaduan', PengaduanController::class)->names([
+        'index' => 'api.admin.pengaduan.index',
+        'store' => 'api.admin.pengaduan.store',
+        'show' => 'api.admin.pengaduan.show',
+        'update' => 'api.admin.pengaduan.update',
+        'destroy' => 'api.admin.pengaduan.destroy'
+    ]);
 });
 
 // Public API Routes (accessible without authentication)
@@ -42,6 +52,7 @@ Route::get('portal-papua-tengah/public', [PortalPapuaTengahController::class, 'p
 Route::get('info-kantor/public', [InfoKantorController::class, 'publicIndex']);
 Route::get('web-portal/public', [WebPortalController::class, 'index']);
 Route::post('wbs/public', [WbsController::class, 'publicStore']);
+Route::post('pengaduan/public', [PengaduanController::class, 'store']); // Public pengaduan submission
 
 // Public berita endpoint for homepage
 Route::get('berita', [PortalPapuaTengahController::class, 'publicBerita']);

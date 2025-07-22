@@ -154,23 +154,10 @@
 </div>
 
 <!-- Lightbox Modal -->
-<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center">
-    <div class="relative max-w-4xl max-h-full p-4 w-full">
-        <!-- Close Button -->
-        <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white hover:text-gray-300 z-10 text-2xl">
-            <i class="fas fa-times"></i>
-        </button>
-        
-        <!-- Navigation Buttons -->
-        <button onclick="previousItem()" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-10 text-2xl">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        <button onclick="nextItem()" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-10 text-2xl">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-        
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center" onclick="closeLightbox()">
+    <div class="relative max-w-4xl max-h-full p-4 w-full" onclick="event.stopPropagation()">        
         <!-- Content -->
-        <div id="lightbox-content" class="text-center">
+        <div id="lightbox-content" class="text-center px-16 py-8">
             <!-- Content will be loaded here -->
         </div>
         
@@ -227,7 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Lightbox functionality
-let currentGalleryIndex = 0;
 const galleryData = @json($galeris ?? []);
 
 function openLightbox(itemId) {
@@ -236,7 +222,6 @@ function openLightbox(itemId) {
     const info = document.getElementById('lightbox-info');
     
     const item = galleryData.find(g => g.id === itemId);
-    currentGalleryIndex = galleryData.findIndex(g => g.id === itemId);
     
     if (item) {
         // Display content based on file type
@@ -253,7 +238,7 @@ function openLightbox(itemId) {
             content.innerHTML = `
                 <img src="${item.file_path ? '/storage/' + item.file_path : '/images/placeholder.jpg'}" 
                      alt="${item.judul}" 
-                     class="max-w-full max-h-full object-contain rounded-lg">
+                     class="max-w-full max-h-[70vh] object-contain rounded-lg mx-auto">
             `;
         }
         
@@ -274,20 +259,6 @@ function openLightbox(itemId) {
 
 function closeLightbox() {
     document.getElementById('lightbox').classList.add('hidden');
-}
-
-function previousItem() {
-    if (galleryData.length > 0) {
-        currentGalleryIndex = (currentGalleryIndex - 1 + galleryData.length) % galleryData.length;
-        openLightbox(galleryData[currentGalleryIndex].id);
-    }
-}
-
-function nextItem() {
-    if (galleryData.length > 0) {
-        currentGalleryIndex = (currentGalleryIndex + 1) % galleryData.length;
-        openLightbox(galleryData[currentGalleryIndex].id);
-    }
 }
 
 // Close lightbox with Escape key

@@ -19,13 +19,17 @@ class Faq extends Model
         'kategori',
         'urutan',
         'status',
+        'is_popular',
+        'view_count',
         'created_by',
         'updated_by',
     ];
 
     protected $casts = [
         'status' => 'boolean',
+        'is_popular' => 'boolean',
         'urutan' => 'integer',
+        'view_count' => 'integer',
     ];
 
     /**
@@ -41,7 +45,15 @@ class Faq extends Model
      */
     public function scopeFeatured($query)
     {
-        return $query->where('is_featured', true);
+        return $query->where('is_popular', true);
+    }
+
+    /**
+     * Scope for popular FAQs
+     */
+    public function scopePopular($query)
+    {
+        return $query->where('is_popular', true)->orderBy('view_count', 'desc');
     }
 
     /**

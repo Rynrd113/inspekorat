@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             DokumenSeeder::class,
             GaleriSeeder::class,
             FaqSeeder::class,
+            PengaduanSeeder::class, // Tambahan seeder pengaduan
             // Seeders untuk sistem
             SystemConfigurationSeeder::class,
             AuditLogSeeder::class,

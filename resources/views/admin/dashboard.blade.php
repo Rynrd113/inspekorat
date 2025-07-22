@@ -43,6 +43,23 @@
         </x-card>
         @endif
 
+        @if(auth()->user()->hasAnyRole(['admin', 'superadmin']))
+        <x-card class="hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-comments text-2xl text-green-600"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Pengaduan Masyarakat</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ \App\Models\Pengaduan::count() }}</p>
+                    <p class="text-xs text-gray-500">
+                        <span class="text-yellow-600">{{ \App\Models\Pengaduan::where('status', 'pending')->count() }} pending</span>
+                    </p>
+                </div>
+            </div>
+        </x-card>
+        @endif
+
         @if(auth()->user()->hasAnyRole(['admin_berita', 'content_manager', 'admin', 'superadmin']))
         <x-card class="hover:shadow-md transition-shadow">
             <div class="flex items-center">
@@ -53,7 +70,7 @@
                     <p class="text-sm font-medium text-gray-600">Berita</p>
                     <p class="text-2xl font-bold text-gray-900">{{ \App\Models\PortalPapuaTengah::count() }}</p>
                     <p class="text-xs text-gray-500">
-                        <span class="text-green-600">{{ \App\Models\PortalPapuaTengah::where('is_published', true)->count() }} published</span>
+                        <span class="text-green-600">{{ \App\Models\PortalPapuaTengah::where('status', true)->count() }} published</span>
                     </p>
                 </div>
             </div>

@@ -25,6 +25,13 @@
                         WBS (Whistleblowing System)
                     </a>
                     @endif
+                                     
+                    @if(auth()->user()->hasAnyRole(['admin', 'superadmin']))
+                    <a href="{{ route('admin.pengaduan.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.pengaduan.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
+                        <i class="fas fa-comments mr-3 h-5 w-5"></i>
+                        Pengaduan Masyarakat
+                    </a>
+                    @endif
                     
                     @if(auth()->user()->hasAnyRole(['admin_berita', 'content_manager', 'admin', 'superadmin']))
                     <a href="{{ route('admin.portal-papua-tengah.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.portal-papua-tengah.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">

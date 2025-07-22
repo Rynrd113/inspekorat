@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreWbsRequest;
+use App\Http\Requests\StorePengaduanRequest;
 use App\Models\InfoKantor;
 use App\Models\PortalPapuaTengah;
 use App\Models\PortalOpd;
@@ -12,6 +13,7 @@ use App\Models\Dokumen;
 use App\Models\Galeri;
 use App\Models\Faq;
 use App\Models\WebPortal;
+use App\Models\Pengaduan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -483,8 +485,7 @@ startxref
         // Get popular FAQs for sidebar
         $popularFaqs = Cache::remember('popular_faqs', 600, function () {
             return Faq::where('status', true)
-                ->where('is_popular', true)
-                ->orderBy('view_count', 'desc')
+                ->popular()
                 ->take(5)
                 ->get();
         });
@@ -542,6 +543,46 @@ startxref
     public function pengaduan(): View
     {
         return view('public.pengaduan');
+    }
+
+    /**
+     * Store pengaduan from public form
+     */
+    public function storePengaduan(Request $request)
+    {
+        $validated = $request->validate([
+            'nama_pengadu' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'telepon' => 'nullable|string|max:20',
+            'subjek' => 'required|string|max:255',
+            'isi_pengaduan' => 'required|string',
+            'kategori' => 'required|string',
+            'is_anonymous' => 'boolean',
+            'bukti_files' => 'nullable|array',
+            'bukti_files.*' => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120'
+        ]);
+
+        // Handle anonymous submissions
+        if ($validated['is_anonymous'] ?? false) {
+            $validated['nama_pengadu'] = 'Anonim';
+            $validated['email'] = 'anonim@system.local';
+        }
+
+        // Handle file uploads
+        if ($request->hasFile('bukti_files')) {
+            $filePaths = [];
+            foreach ($request->file('bukti_files') as $file) {
+                $filePaths[] = $file->store('pengaduan-bukti', 'public');
+            }
+            $validated['bukti_files'] = $filePaths;
+        }
+
+        $validated['status'] = 'pending';
+        $validated['tanggal_pengaduan'] = now();
+
+        Pengaduan::create($validated);
+
+        return redirect()->route('public.pengaduan')->with('success', 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.');
     }
 
     /**

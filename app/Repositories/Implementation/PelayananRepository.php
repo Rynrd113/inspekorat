@@ -27,7 +27,7 @@ class PelayananRepository implements PelayananRepositoryInterface
         return Cache::remember('pelayanans.all', 3600, function () {
             return $this->model->with(['creator:id,name', 'updater:id,name'])
                               ->select([
-                                  'id', 'nama_layanan', 'deskripsi', 'kategori', 
+                                  'id', 'nama', 'deskripsi', 'kategori', 
                                   'status', 'waktu_penyelesaian', 'biaya', 'urutan',
                                   'created_at', 'updated_at', 'created_by', 'updated_by'
                               ])
@@ -43,7 +43,7 @@ class PelayananRepository implements PelayananRepositoryInterface
         // Apply filters
         if (!empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
-                $q->where('nama_layanan', 'like', '%' . $filters['search'] . '%')
+                $q->where('nama', 'like', '%' . $filters['search'] . '%')
                   ->orWhere('deskripsi', 'like', '%' . $filters['search'] . '%')
                   ->orWhere('persyaratan', 'like', '%' . $filters['search'] . '%');
             });
@@ -63,7 +63,7 @@ class PelayananRepository implements PelayananRepositoryInterface
                          'updater:id,name,email'
                      ])
                      ->select([
-                         'id', 'nama_layanan', 'deskripsi', 'kategori', 'status', 
+                         'id', 'nama', 'deskripsi', 'kategori', 'status', 
                          'waktu_penyelesaian', 'biaya', 'urutan', 'created_at', 
                          'updated_at', 'created_by', 'updated_by'
                      ])

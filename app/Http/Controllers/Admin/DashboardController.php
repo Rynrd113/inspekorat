@@ -8,6 +8,11 @@ use App\Models\Wbs;
 use App\Models\PortalPapuaTengah;
 use App\Models\PortalOpd;
 use App\Models\User;
+use App\Models\Pengaduan;
+use App\Models\Pelayanan;
+use App\Models\Dokumen;
+use App\Models\Galeri;
+use App\Models\Faq;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -46,6 +51,26 @@ class DashboardController extends Controller
             $totalUsers = User::count();
             $adminUsers = User::where('role', 'LIKE', '%admin%')->count();
 
+            // Pengaduan stats
+            $pengaduanStats = DB::table('pengaduans')
+                ->select(
+                    DB::raw('COUNT(*) as total'),
+                    DB::raw('SUM(CASE WHEN status = "pending" THEN 1 ELSE 0 END) as pending'),
+                    DB::raw('SUM(CASE WHEN status = "proses" THEN 1 ELSE 0 END) as proses'),
+                    DB::raw('SUM(CASE WHEN status = "selesai" THEN 1 ELSE 0 END) as selesai')
+                )
+                ->first();
+
+            // Content stats  
+            $totalPelayanan = Pelayanan::count();
+            $activePelayanan = Pelayanan::where('status', true)->count();
+            $totalDokumen = Dokumen::count();
+            $activeDokumen = Dokumen::where('status', true)->count();
+            $totalGaleri = Galeri::count();
+            $activeGaleri = Galeri::where('status', true)->count();
+            $totalFaq = Faq::count();
+            $activeFaq = Faq::where('status', true)->count();
+
             return [
                 'wbs' => [
                     'total' => $wbsStats->total,
@@ -53,6 +78,12 @@ class DashboardController extends Controller
                     'in_progress' => $wbsStats->in_progress,
                     'resolved' => $wbsStats->resolved,
                     'rejected' => $wbsStats->rejected,
+                ],
+                'pengaduan' => [
+                    'total' => $pengaduanStats->total,
+                    'pending' => $pengaduanStats->pending,
+                    'proses' => $pengaduanStats->proses,
+                    'selesai' => $pengaduanStats->selesai,
                 ],
                 'info_kantor' => [
                     'total' => $totalInfoKantor,

@@ -149,12 +149,12 @@ class User extends Authenticatable
     {
         return match($this->role) {
             'super_admin' => ['all'],
-            'admin' => ['beranda', 'profil', 'unit_kerja', 'pelayanan', 'dokumen', 'berita', 'galeri', 'kontak', 'statistik', 'wbs', 'portal_opd'],
+            'admin' => ['beranda', 'profil', 'unit_kerja', 'pelayanan', 'dokumen', 'berita', 'galeri', 'kontak', 'statistik', 'wbs', 'pengaduan', 'portal_opd'],
             'content_manager' => ['beranda', 'berita', 'galeri', 'faq'],
             'service_manager' => ['beranda', 'pelayanan', 'dokumen', 'kontak'],
             'opd_manager' => ['beranda', 'portal_opd', 'unit_kerja'],
-            'wbs_manager' => ['beranda', 'wbs', 'statistik'],
-            'admin_wbs' => ['beranda', 'wbs'],
+            'wbs_manager' => ['beranda', 'wbs', 'pengaduan', 'statistik'],
+            'admin_wbs' => ['beranda', 'wbs', 'pengaduan'],
             'admin_berita' => ['beranda', 'berita'],
             'admin_portal_opd' => ['beranda', 'portal_opd'],
             'admin_pelayanan' => ['beranda', 'pelayanan'],

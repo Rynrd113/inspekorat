@@ -148,6 +148,8 @@ return new class extends Migration
             $table->string('kategori')->nullable();
             $table->integer('urutan')->default(0);
             $table->boolean('status')->default(true);
+            $table->boolean('is_popular')->default(false);
+            $table->integer('view_count')->default(0);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
@@ -157,6 +159,40 @@ return new class extends Migration
             $table->index('kategori');
             $table->index('status');
             $table->index('urutan');
+            $table->index('is_popular');
+            $table->index('view_count');
+            
+            // Foreign keys
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
+        });
+
+        // Pengaduans (Public Complaints) Table
+        Schema::create('pengaduans', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_pengadu');
+            $table->string('email');
+            $table->string('telepon')->nullable();
+            $table->string('subjek');
+            $table->text('isi_pengaduan');
+            $table->string('kategori')->nullable();
+            $table->enum('status', ['pending', 'proses', 'selesai'])->default('pending');
+            $table->text('tanggapan')->nullable();
+            $table->string('attachment')->nullable();
+            $table->json('bukti_files')->nullable();
+            $table->boolean('is_anonymous')->default(false);
+            $table->timestamp('tanggal_pengaduan')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+            
+            // Indexes
+            $table->index('status');
+            $table->index('kategori');
+            $table->index('email');
+            $table->index('created_at');
+            $table->index('is_anonymous');
             
             // Foreign keys
             $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
@@ -169,6 +205,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('pengaduans');
         Schema::dropIfExists('faqs');
         Schema::dropIfExists('galeris');
         Schema::dropIfExists('dokumens');
