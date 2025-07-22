@@ -17,7 +17,7 @@ class PortalOpdController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = PortalOpd::with(['creator', 'updater'])
+        $query = PortalOpd::query()
                            ->search($request)
                            ->filter($request)
                            ->sorted($request);
@@ -67,7 +67,6 @@ class PortalOpdController extends Controller
             $validated['banner'] = $request->file('banner')->store('portal-opd/banners', 'public');
         }
 
-        $validated['created_by'] = Auth::id();
         $validated['status'] = $request->has('status');
 
         PortalOpd::create($validated);
@@ -81,7 +80,6 @@ class PortalOpdController extends Controller
      */
     public function show(PortalOpd $portalOpd): View
     {
-        $portalOpd->load(['creator', 'updater']);
         return view('admin.portal-opd.show', compact('portalOpd'));
     }
 
@@ -133,7 +131,6 @@ class PortalOpdController extends Controller
             $validated['banner'] = $request->file('banner')->store('portal-opd/banners', 'public');
         }
 
-        $validated['updated_by'] = Auth::id();
         $validated['status'] = $request->has('status');
 
         $portalOpd->update($validated);

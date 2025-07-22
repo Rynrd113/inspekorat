@@ -33,24 +33,9 @@ class PortalOpd extends Model
 
     protected $casts = [
         'status' => 'boolean',
-        'urutan' => 'integer'
+        'urutan' => 'integer',
+        'misi' => 'array'
     ];
-
-    /**
-     * Get the user who created this OPD
-     */
-    public function creator()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    /**
-     * Get the user who last updated this OPD
-     */
-    public function updater()
-    {
-        return $this->belongsTo(User::class, 'updated_by');
-    }
 
     /**
      * Scope for active OPDs

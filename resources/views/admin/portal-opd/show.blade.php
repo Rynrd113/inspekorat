@@ -100,12 +100,13 @@
                 </x-card>
                 @endif
 
-                @if($portalOpd->misi && count($portalOpd->misi) > 0)
+                @if($portalOpd->misi && (is_array($portalOpd->misi) ? count($portalOpd->misi) > 0 : !empty($portalOpd->misi)))
                 <x-card>
                     <div class="px-6 py-4 border-b border-gray-200">
                         <h3 class="text-lg font-medium text-gray-900">Misi</h3>
                     </div>
                     <div class="p-6">
+                        @if(is_array($portalOpd->misi))
                         <ol class="space-y-2">
                             @foreach($portalOpd->misi as $index => $misiItem)
                             @if($misiItem)
@@ -118,6 +119,11 @@
                             @endif
                             @endforeach
                         </ol>
+                        @else
+                        <div class="text-gray-700">
+                            {!! nl2br(e($portalOpd->misi)) !!}
+                        </div>
+                        @endif
                     </div>
                 </x-card>
                 @endif

@@ -80,12 +80,13 @@
                     @endif
 
                     <!-- Misi -->
-                    @if($portalOpd->misi && count($portalOpd->misi) > 0)
+                    @if($portalOpd->misi && (is_array($portalOpd->misi) ? count($portalOpd->misi) > 0 : !empty($portalOpd->misi)))
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <h3 class="text-xl font-bold text-gray-900 mb-4">
                             <i class="fas fa-target text-orange-600 mr-2"></i>
                             Misi
                         </h3>
+                        @if(is_array($portalOpd->misi))
                         <ol class="space-y-2">
                             @foreach($portalOpd->misi as $index => $misiItem)
                             @if($misiItem)
@@ -98,6 +99,11 @@
                             @endif
                             @endforeach
                         </ol>
+                        @else
+                        <div class="text-gray-600">
+                            {!! nl2br(e($portalOpd->misi)) !!}
+                        </div>
+                        @endif
                     </div>
                     @endif
                 </div>
