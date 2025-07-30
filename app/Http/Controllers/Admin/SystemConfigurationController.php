@@ -42,13 +42,31 @@ class SystemConfigurationController extends Controller
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 
+                // Security validation
+                $maxSize = $request->type === 'image' ? 5120 : 10240; // KB
+                if ($file->getSize() > $maxSize * 1024) {
+                    return redirect()->back()->with('error', 'Ukuran file terlalu besar.');
+                }
+                
+                // Validate file type
+                $allowedTypes = $request->type === 'image' 
+                    ? ['jpeg', 'png', 'jpg', 'gif', 'webp']
+                    : ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt'];
+                    
+                if (!in_array(strtolower($file->getClientOriginalExtension()), $allowedTypes)) {
+                    return redirect()->back()->with('error', 'Tipe file tidak diizinkan.');
+                }
+                
                 // Delete old file if exists
                 if ($config->value && Storage::disk('public')->exists($config->value)) {
                     Storage::disk('public')->delete($config->value);
                 }
                 
+                // Generate secure filename
+                $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9\.]/', '', $file->getClientOriginalName());
+                
                 // Store new file
-                $path = $file->store('configurations', 'public');
+                $path = $file->storeAs('configurations', $filename, 'public');
                 $value = $path;
             } else {
                 $value = $config->value; // Keep existing value

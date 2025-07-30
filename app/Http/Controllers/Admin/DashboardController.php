@@ -30,11 +30,12 @@ class DashboardController extends Controller
             $wbsStats = DB::table('wbs')
                 ->select(
                     DB::raw('COUNT(*) as total'),
-                    DB::raw('SUM(CASE WHEN status = "pending" THEN 1 ELSE 0 END) as pending'),
-                    DB::raw('SUM(CASE WHEN status = "in_progress" THEN 1 ELSE 0 END) as in_progress'),
-                    DB::raw('SUM(CASE WHEN status = "resolved" THEN 1 ELSE 0 END) as resolved'),
-                    DB::raw('SUM(CASE WHEN status = "rejected" THEN 1 ELSE 0 END) as rejected')
+                    DB::raw('SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as pending'),
+                    DB::raw('SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as in_progress'),
+                    DB::raw('SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as resolved'),
+                    DB::raw('SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as rejected')
                 )
+                ->addBinding(['pending', 'in_progress', 'resolved', 'rejected'])
                 ->first();
 
             // Using Eloquent for simple counts
@@ -55,10 +56,11 @@ class DashboardController extends Controller
             $pengaduanStats = DB::table('pengaduans')
                 ->select(
                     DB::raw('COUNT(*) as total'),
-                    DB::raw('SUM(CASE WHEN status = "pending" THEN 1 ELSE 0 END) as pending'),
-                    DB::raw('SUM(CASE WHEN status = "proses" THEN 1 ELSE 0 END) as proses'),
-                    DB::raw('SUM(CASE WHEN status = "selesai" THEN 1 ELSE 0 END) as selesai')
+                    DB::raw('SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as pending'),
+                    DB::raw('SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as proses'),
+                    DB::raw('SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as selesai')
                 )
+                ->addBinding(['pending', 'proses', 'selesai'])
                 ->first();
 
             // Content stats  

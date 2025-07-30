@@ -43,14 +43,18 @@ class AuditLogController extends Controller
 
         // Search
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('event', 'like', "%{$search}%")
-                  ->orWhere('auditable_type', 'like', "%{$search}%")
-                  ->orWhereHas('user', function($userQuery) use ($search) {
-                      $userQuery->where('name', 'like', "%{$search}%");
-                  });
-            });
+            $search = trim($request->search);
+            // Sanitize search input
+            $search = preg_replace('/[^a-zA-Z0-9\s\-_.]/', '', $search);
+            if (!empty($search)) {
+                $query->where(function($q) use ($search) {
+                    $q->where('event', 'like', "%{$search}%")
+                      ->orWhere('auditable_type', 'like', "%{$search}%")
+                      ->orWhereHas('user', function($userQuery) use ($search) {
+                          $userQuery->where('name', 'like', "%{$search}%");
+                      });
+                });
+            }
         }
 
         $auditLogs = $query->paginate(20);

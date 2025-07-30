@@ -180,13 +180,34 @@ class DokumenController extends Controller
      */
     public function download(\App\Models\Dokumen $dokumen)
     {
+        // Security checks
         if (!$dokumen->file_dokumen || !\Storage::disk('public')->exists($dokumen->file_dokumen)) {
             abort(404, 'File tidak ditemukan');
+        }
+
+        // Check if file is public or user has permission
+        if (!$dokumen->is_public && !auth()->check()) {
+            abort(403, 'Akses ditolak');
+        }
+
+        // Validate file type for security
+        $allowedMimes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        $filePath = storage_path('app/public/' . $dokumen->file_dokumen);
+        
+        if (file_exists($filePath)) {
+            $mimeType = mime_content_type($filePath);
+            if (!in_array($mimeType, $allowedMimes)) {
+                abort(403, 'Tipe file tidak diizinkan');
+            }
         }
 
         // Increment download counter
         $dokumen->increment('download_count');
 
-        return \Storage::disk('public')->download($dokumen->file_dokumen, $dokumen->judul . '.pdf');
+        // Sanitize filename
+        $filename = preg_replace('/[^a-zA-Z0-9\-_.]/', '', $dokumen->judul);
+        $extension = pathinfo($dokumen->file_dokumen, PATHINFO_EXTENSION);
+        
+        return \Storage::disk('public')->download($dokumen->file_dokumen, $filename . '.' . $extension);
     }
 }

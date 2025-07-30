@@ -733,80 +733,12 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="col-span-1 md:col-span-2">
-                    <div class="flex items-center mb-6">
-                        <div class="h-12 w-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center mr-4 shadow-lg">
-                            <i class="fas fa-shield-alt text-white text-lg"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold">Inspektorat Provinsi Papua Tengah</h3>
-                            <p class="text-blue-300 text-sm">Pengawasan yang Akuntabel dan Transparan</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 mb-6 text-lg leading-relaxed">
-                        Mewujudkan pengawasan yang akuntabel dan transparan untuk tata kelola pemerintahan yang bersih dan profesional demi kemajuan Papua Tengah.
-                    </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors">
-                            <i class="fab fa-facebook-f text-white"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-sky-500 rounded-lg flex items-center justify-center hover:bg-sky-600 transition-colors">
-                            <i class="fab fa-twitter text-white"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-pink-600 rounded-lg flex items-center justify-center hover:bg-pink-700 transition-colors">
-                            <i class="fab fa-instagram text-white"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center hover:bg-red-700 transition-colors">
-                            <i class="fab fa-youtube text-white"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="text-lg font-semibold mb-6">Tautan Cepat</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#beranda" class="text-gray-300 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right mr-2 text-xs"></i>Beranda</a></li>
-                        <li><a href="#layanan" class="text-gray-300 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right mr-2 text-xs"></i>Berita Inspektorat</a></li>
-                        <li><a href="#pintasan-layanan" class="text-gray-300 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right mr-2 text-xs"></i>Pintasan Layanan</a></li>
-                        <li><a href="#informasi" class="text-gray-300 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right mr-2 text-xs"></i>Informasi Kontak</a></li>
-                        <li><a href="{{ route('public.wbs') }}" class="text-gray-300 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right mr-2 text-xs"></i>WBS</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="text-lg font-semibold mb-6">Layanan</h4>
-                    <ul class="space-y-3">
-                        <li><a href="{{ route('public.wbs') }}" class="text-gray-300 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right mr-2 text-xs"></i>Whistleblower System</a></li>
-                        <li><a href="{{ route('public.berita.index') }}" class="text-gray-300 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right mr-2 text-xs"></i>Portal Berita</a></li>
-                        <li><a href="{{ route('public.portal-opd.index') }}" class="text-gray-300 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right mr-2 text-xs"></i>Portal OPD</a></li>
-                        <li><a href="{{ route('public.pelayanan.index') }}" class="text-gray-300 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right mr-2 text-xs"></i>Pelayanan Publik</a></li>
-                        <li><a href="{{ route('public.dokumen.index') }}" class="text-gray-300 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right mr-2 text-xs"></i>Dokumen</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-700 mt-12 pt-8">
-                <div class="flex flex-col md:flex-row justify-between items-center">
-                    <p class="text-gray-300 text-sm">&copy; {{ date('Y') }} Inspektorat Provinsi Papua Tengah. Semua hak dilindungi.</p>
-                    <div class="flex space-x-6 mt-4 md:mt-0">
-                        <a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">Kebijakan Privasi</a>
-                        <a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">Syarat & Ketentuan</a>
-                        <a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">Peta Situs</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    
-    <!-- Back to Top Button -->
-    <button id="backToTop" class="back-to-top">
-        <i class="fas fa-arrow-up"></i>
-    </button>
 </div>
+
+<!-- Back to Top Button -->
+<button id="backToTop" class="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+</button>
 
 @push('scripts')
 <script>

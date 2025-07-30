@@ -42,7 +42,15 @@ class ContentApprovalController extends Controller
             return redirect()->back()->with('error', 'Konten sudah diproses sebelumnya.');
         }
 
-        $approval->approve($request->notes);
+        // Check user permission
+        if (!auth()->user()->canApproveContent()) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk menyetujui konten.');
+        }
+
+        // Sanitize notes
+        $notes = $request->notes ? strip_tags(trim($request->notes)) : null;
+
+        $approval->approve($notes);
 
         return redirect()->route('admin.approvals.index')
             ->with('success', 'Konten berhasil disetujui.');
@@ -61,7 +69,15 @@ class ContentApprovalController extends Controller
             return redirect()->back()->with('error', 'Konten sudah diproses sebelumnya.');
         }
 
-        $approval->reject($request->notes);
+        // Check user permission
+        if (!auth()->user()->canRejectContent()) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk menolak konten.');
+        }
+
+        // Sanitize notes
+        $notes = strip_tags(trim($request->notes));
+
+        $approval->reject($notes);
 
         return redirect()->route('admin.approvals.index')
             ->with('success', 'Konten berhasil ditolak.');

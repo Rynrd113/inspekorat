@@ -119,9 +119,23 @@ class UserController extends Controller
                 ->with('error', 'Anda tidak dapat menghapus akun sendiri.');
         }
 
-        $user->delete();
+        // Prevent deletion of last admin
+        if ($user->isAdmin()) {
+            $adminCount = User::where('role', 'LIKE', '%admin%')->count();
+            if ($adminCount <= 1) {
+                return redirect()->route('admin.users.index')
+                    ->with('error', 'Tidak dapat menghapus admin terakhir.');
+            }
+        }
 
-        return redirect()->route('admin.users.index')
-            ->with('success', 'User berhasil dihapus.');
+        // Soft delete or hard delete based on business logic
+        try {
+            $user->delete();
+            return redirect()->route('admin.users.index')
+                ->with('success', 'User berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.users.index')
+                ->with('error', 'Gagal menghapus user: ' . $e->getMessage());
+        }
     }
 }
