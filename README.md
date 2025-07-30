@@ -34,22 +34,38 @@ Portal informasi dan layanan publik resmi Inspektorat Provinsi Papua Tengah deng
 - **Portal OPD Management**: CRUD lengkap untuk data OPD
 - **Portal Papua Tengah**: Manajemen berita dan konten
 - **WBS Management**: Kelola laporan whistleblower dengan tracking status
+- **Audit Log System**: Sistem logging aktivitas user dengan filter dan export
+- **Content Approval System**: Workflow persetujuan konten dengan status tracking
 - **Multi-Role Support**: 11 level role dengan hak akses berbeda
 - **Performance Monitoring**: Real-time tracking dan optimization
-- **Security Features**: RBAC, CSRF protection, input validation
+- **Security Features**: RBAC, CSRF protection, input validation, activity logging
 
-### 👥 **Sistem Role & Permissions**
-- **SuperAdmin**: Akses penuh termasuk user management dan system settings
+### 👥 **Sistem Role & Permissions (11 Level Role)**
+- **Super Admin**: Akses penuh termasuk user management dan system settings
 - **Admin**: Akses ke semua modul kecuali user management  
-- **Admin Profil**: Khusus mengelola profil organisasi
+- **Admin WBS**: Khusus mengelola laporan WBS
+- **Admin Berita**: Khusus mengelola berita/konten
+- **Admin Portal OPD**: Khusus mengelola data OPD
 - **Admin Pelayanan**: Khusus mengelola layanan publik
 - **Admin Dokumen**: Khusus mengelola repository dokumen
 - **Admin Galeri**: Khusus mengelola galeri foto/video
 - **Admin FAQ**: Khusus mengelola sistem tanya jawab
-- **Admin Portal OPD**: Khusus mengelola data OPD
-- **Admin Berita**: Khusus mengelola berita/konten
-- **Admin WBS**: Khusus mengelola laporan WBS
+- **Content Manager**: Manajemen konten multi-modul
+- **Service Manager**: Manajemen layanan dan pelayanan
+- **OPD Manager**: Manajemen khusus Portal OPD
+- **WBS Manager**: Manajemen khusus Whistleblower System
 - **User**: Akses terbatas/view only dengan dashboard khusus
+
+### 🔍 **Audit & Monitoring System**
+- **Audit Log Management**: Comprehensive logging aktivitas user dengan filter canggih
+- **Content Approval Workflow**: Sistem persetujuan konten dengan status tracking
+- **Performance Monitoring**: Real-time monitoring performa aplikasi dan database
+- **Activity Tracking**: Detailed tracking semua aktivitas CRUD dan admin actions
+- **Export & Reporting**: Export audit logs ke CSV dengan filter custom
+- **Security Logging**: Automatic logout tracking dan suspicious activity detection
+- **Database Query Optimization**: Monitoring slow queries dan optimization alerts
+- **System Configuration**: Konfigurasi system settings dengan management interface
+- **Performance Logs**: Detailed performance metrics untuk endpoint monitoring
 
 ## 💻 Teknologi & Arsitektur
 
@@ -57,11 +73,14 @@ Portal informasi dan layanan publik resmi Inspektorat Provinsi Papua Tengah deng
 - **Frontend**: Bootstrap 5.3 dengan Vite untuk build modern
 - **Database**: MySQL dengan optimasi Query Builder dan Eloquent ORM
 - **Authentication**: Laravel Sanctum dengan custom role middleware
-- **Caching**: Redis/File Cache untuk optimasi performa
+- **Caching**: Redis/File Cache untuk optimasi performa dengan multi-layer strategy
 - **File Storage**: Laravel Storage dengan validasi keamanan
-- **Architecture**: Repository Pattern, Service Layer, Action Classes
-- **Security**: RBAC, CSRF, XSS protection, input validation
-- **Testing**: PHPUnit untuk unit dan feature testing
+- **Architecture**: Repository Pattern, Service Layer, Action Classes dengan Dependency Injection
+- **Security**: RBAC, CSRF, XSS protection, input validation, activity logging
+- **Testing**: PHPUnit untuk unit dan feature testing dengan comprehensive coverage
+- **Job System**: Background job processing dengan Queue system untuk notifications
+- **Monitoring**: Performance monitoring, audit logging, activity tracking
+- **Middleware**: Custom middleware untuk security, logging, dan optimization
 
 ## Instalasi
 
@@ -109,9 +128,13 @@ Portal informasi dan layanan publik resmi Inspektorat Provinsi Papua Tengah deng
    ```
 
    Ini akan membuat tabel dan data sample termasuk:
-   - **SuperAdmin**: `superadmin@inspektorat.id` / `superadmin123`
+   - **Super Admin**: `superadmin@inspektorat.go.id` / `superadmin123`
    - **Admin untuk semua modul**: Setiap admin memiliki akses sesuai rolenya
-   - **Sample Data**: 10 OPD, berita, dokumen, galeri, FAQ, pelayanan, dan data WBS sample
+   - **Manager Roles**: Content, Service, OPD, dan WBS Manager
+   - **Sample Data**: OPD, berita, dokumen, galeri, FAQ, pelayanan, WBS, dan pengaduan
+   - **System Configuration**: Konfigurasi default system
+   - **Audit Logs**: Sample audit data untuk monitoring
+   - **Performance Logs**: Sample performance monitoring data
 
 6. **Build assets**
    ```bash
@@ -129,16 +152,19 @@ Aplikasi akan berjalan di `http://localhost:8000`
 
 | Role | Email | Password | Akses |
 |------|-------|----------|--------|
-| **Super Admin** | `superadmin@inspektorat.id` | `superadmin123` | Semua fitur + User Management |
-| **Admin** | `admin@inspektorat.id` | `admin123` | Semua modul admin |
-| **Admin Profil** | `admin.profil@inspektorat.id` | `adminprofil123` | Hanya Profil |
-| **Admin Pelayanan** | `admin.pelayanan@inspektorat.id` | `adminpelayanan123` | Hanya Pelayanan |
-| **Admin Dokumen** | `admin.dokumen@inspektorat.id` | `admindokumen123` | Hanya Dokumen |
-| **Admin Galeri** | `admin.galeri@inspektorat.id` | `admingaleri123` | Hanya Galeri |
-| **Admin FAQ** | `admin.faq@inspektorat.id` | `adminfaq123` | Hanya FAQ |
-| **Admin WBS** | `admin.wbs@inspektorat.id` | `adminwbs123` | Hanya WBS |
-| **Admin Berita** | `admin.berita@inspektorat.id` | `adminberita123` | Hanya Berita |
-| **Admin Portal OPD** | `admin.opd@inspektorat.id` | `adminopd123` | Hanya Portal OPD |
+| **Super Admin** | `superadmin@inspektorat.go.id` | `superadmin123` | Semua fitur + User Management |
+| **Admin** | `admin@inspektorat.go.id` | `admin123` | Semua modul admin |
+| **Admin WBS** | `admin.wbs@inspektorat.go.id` | `adminwbs123` | Hanya WBS |
+| **Admin Berita** | `admin.berita@inspektorat.go.id` | `adminberita123` | Hanya Berita |
+| **Admin Portal OPD** | `admin.opd@inspektorat.go.id` | `adminopd123` | Hanya Portal OPD |
+| **Admin Pelayanan** | `admin.pelayanan@inspektorat.go.id` | `adminpelayanan123` | Hanya Pelayanan |
+| **Admin Dokumen** | `admin.dokumen@inspektorat.go.id` | `admindokumen123` | Hanya Dokumen |
+| **Admin Galeri** | `admin.galeri@inspektorat.go.id` | `admingaleri123` | Hanya Galeri |
+| **Admin FAQ** | `admin.faq@inspektorat.go.id` | `adminfaq123` | Hanya FAQ |
+| **Content Manager** | `content.manager@inspektorat.go.id` | `contentmanager123` | Multi-Modul Content |
+| **Service Manager** | `service.manager@inspektorat.go.id` | `servicemanager123` | Service Management |
+| **OPD Manager** | `opd.manager@inspektorat.go.id` | `opdmanager123` | OPD Management |
+| **WBS Manager** | `wbs.manager@inspektorat.go.id` | `wbsmanager123` | WBS Management |
 
 **Admin Panel**: `http://localhost:8000/admin`
 
@@ -185,7 +211,7 @@ npm run dev
 php artisan migrate:fresh --seed
 
 # Seed data tertentu
-php artisan db:seed --class=SuperAdminSeeder
+php artisan db:seed --class=UserSeeder
 php artisan db:seed --class=PortalOpdSeeder
 php artisan db:seed --class=PortalPapuaTengahSeeder
 php artisan db:seed --class=PelayananSeeder
@@ -193,6 +219,10 @@ php artisan db:seed --class=DokumenSeeder
 php artisan db:seed --class=GaleriSeeder
 php artisan db:seed --class=FaqSeeder
 php artisan db:seed --class=WbsSeeder
+php artisan db:seed --class=PengaduanSeeder
+php artisan db:seed --class=SystemConfigurationSeeder
+php artisan db:seed --class=AuditLogSeeder
+php artisan db:seed --class=PerformanceLogSeeder
 
 # Jalankan testing
 php artisan test
@@ -226,23 +256,31 @@ php artisan route:list
 ### 🗄️ Struktur Database
 
 ### Tabel Utama
-- `users`: Data pengguna dengan sistem role
+- `users`: Data pengguna dengan sistem role 13-level
 - `portal_opds`: Data OPD Papua Tengah
 - `portal_papua_tengahs`: Konten berita dan artikel
-- `profils`: Data profil organisasi (baru)
-- `pelayanans`: Data layanan publik (baru)
-- `dokumens`: Repository dokumen (baru)
-- `galeris`: Galeri foto dan video (baru)
-- `faqs`: Sistem tanya jawab (baru)
-- `wbs`: Data laporan Whistleblower
+- `pelayanans`: Data layanan publik dengan prosedur lengkap
+- `dokumens`: Repository dokumen dengan kategorisasi
+- `galeris`: Galeri foto dan video dengan metadata
+- `faqs`: Sistem tanya jawab dengan kategorisasi
+- `wbs`: Data laporan Whistleblower dengan tracking
+- `pengaduans`: Sistem pengaduan masyarakat
 - `info_kantors`: Informasi kantor dan kontak
+- `audit_logs`: Comprehensive activity logging
+- `content_approvals`: Content approval workflow
+- `system_configurations`: System configuration management
+- `performance_logs`: Performance monitoring data
+- `web_portals`: External portal links management
 
 ### Relasi Database
-- **Users ↔ All Modules**: Relasi creator/updater untuk audit trail
-- **Category System**: Kategorisasi untuk dokumen, FAQ, dan galeri
-- **File Management**: Integrasi dengan Laravel Storage
-- **Soft Deletes**: Implementasi pada semua model utama
-- **Performance**: Indexing dan caching untuk query optimization
+- **Users ↔ All Modules**: Relasi creator/updater untuk comprehensive audit trail
+- **Category System**: Kategorisasi untuk dokumen, FAQ, galeri, dan berita
+- **File Management**: Integrasi dengan Laravel Storage dan validation
+- **Soft Deletes**: Implementasi pada semua model utama untuk data recovery
+- **Performance**: Strategic indexing dan multi-layer caching untuk query optimization
+- **Audit Trail**: Automatic logging untuk semua CRUD operations
+- **Content Approval**: Workflow approval system dengan status tracking
+- **System Configuration**: Centralized configuration management
 
 ## 🛣️ Route Structure
 
@@ -274,6 +312,8 @@ php artisan route:list
 /admin/portal-opd/* - OPD management
 /admin/portal-papua-tengah/* - Berita management
 /admin/wbs/* - WBS management
+/admin/audit-logs/* - Audit log management
+/admin/approvals/* - Content approval workflow
 ```
 
 ## 🚀 Deployment
@@ -331,6 +371,10 @@ php artisan route:list
 - **Password Hashing**: Laravel default bcrypt hashing
 - **Session Security**: Secure session management
 - **API Security**: Sanctum authentication untuk API endpoints
+- **Activity Logging**: Comprehensive audit trail untuk semua admin actions
+- **Performance Monitoring**: Real-time monitoring dengan threshold alerts
+- **Security Headers**: Custom middleware untuk security headers
+- **Auto-logout**: Automatic logout saat user access public page
 
 ## 🏗️ Architecture & Design Patterns
 
@@ -375,7 +419,31 @@ php artisan route:list
 
 ## 🆕 Update Log
 
-### v3.0.0 - July 2025 (Latest)
+### v5.0.0 - January 2025 (Latest)
+- ✅ **Complete Database Seeder System**: Comprehensive seeding untuk semua modul
+- ✅ **Advanced System Configuration**: SystemConfigurationSeeder dengan konfigurasi lengkap
+- ✅ **Enhanced User Roles**: 13-level role system dengan manager roles
+- ✅ **Performance Log System**: Detailed performance monitoring dan logging
+- ✅ **Audit Log Enhancement**: Comprehensive audit trail dengan export functionality
+- ✅ **Pengaduan System**: Public complaint system dengan status tracking
+- ✅ **Web Portal Management**: External portal links management
+- ✅ **Job Queue System**: Background processing untuk notifications dan reports
+- ✅ **Event-Driven Architecture**: Comprehensive event system dengan listeners
+- ✅ **Testing Framework**: Complete test coverage dengan unit dan feature tests
+
+### v4.0.0 - January 2025
+- ✅ **Advanced Monitoring System**: Comprehensive audit logging dengan filter canggih
+- ✅ **Content Approval Workflow**: Sistem persetujuan konten dengan tracking status
+- ✅ **Performance Monitoring**: Real-time performance tracking dan optimization alerts
+- ✅ **Enhanced Security**: Activity logging, auto-logout, security headers middleware
+- ✅ **Database Optimization**: Query monitoring, slow query alerts, optimization tools
+- ✅ **Advanced Middleware**: Custom middleware untuk logging, performance, dan security
+- ✅ **Export Functionality**: Export audit logs ke CSV dengan filter custom
+- ✅ **Admin Enhancement**: Enhanced admin dashboard dengan real-time statistics
+- ✅ **Trait Integration**: HasAuditLog trait untuk automatic model activity logging
+- ✅ **Job System**: Background job processing untuk notifications dan reports
+
+### v3.0.0 - July 2025
 - ✅ **Complete System Implementation**: Semua 11 modul lengkap
 - ✅ **Enhanced Architecture**: Repository Pattern, Service Layer, Action Classes
 - ✅ **New Modules**: Profil, Pelayanan, Dokumen, Galeri, FAQ
@@ -413,11 +481,39 @@ Proyek ini dikembangkan untuk kepentingan publik Provinsi Papua Tengah. Untuk ko
 ## 🎯 Panduan Penggunaan
 
 ### Sistem Admin Terbaru
-**Dashboard Role-Based:**
+**Sistem Admin Terbaru:**
 - Setiap admin memiliki dashboard khusus sesuai role
 - Quick actions untuk fungsi yang sering digunakan
 - Statistics real-time untuk modul yang dikelola
 - Notifications untuk updates dan alerts
+
+**System Configuration Management:**
+1. Akses menu "System Configuration" di admin dashboard
+2. Manage konfigurasi site (name, description, contact info)
+3. File management settings (max upload size, allowed types)
+4. WBS configuration (auto response, notification settings)
+5. Email configuration untuk notifications
+
+**Audit Log Management:**
+1. Akses menu "Audit Logs" di admin dashboard
+2. Filter berdasarkan user, action, model type, dan tanggal
+3. Export data ke CSV dengan filter custom
+4. Detail view untuk setiap log entry dengan informasi lengkap
+5. Real-time monitoring aktivitas user
+
+**Performance Monitoring:**
+1. Dashboard performance metrics real-time
+2. Slow query detection dan alerts
+3. Memory usage tracking per endpoint
+4. HTTP status code monitoring
+5. Export performance reports
+
+**Content Approval System:**
+1. Sistem workflow untuk persetujuan konten
+2. Status tracking: pending, approved, rejected
+3. Bulk actions untuk approve/reject multiple items
+4. Notes dan alasan untuk setiap approval/rejection
+5. Statistics dan reporting untuk approval rates
 
 **User Management (Super Admin):**
 1. Login sebagai Super Admin
@@ -430,35 +526,61 @@ Proyek ini dikembangkan untuk kepentingan publik Provinsi Papua Tengah. Untuk ko
 
 ### Modul Baru yang Tersedia
 
-**Profil Management:**
-- Kelola visi, misi, dan sejarah organisasi
-- Upload struktur organisasi
-- Manage contact information
-- Update logo dan branding
+**System Configuration:**
+- Centralized system settings management
+- Site configuration (name, description, contact)
+- File upload settings dan security
+- Email notification configuration
+- WBS system configuration
+
+**Performance Monitoring:**
+- Real-time performance metrics
+- Slow query detection
+- Memory usage tracking
+- HTTP response monitoring
+- Export performance reports
+
+**Audit & Activity Logging:**
+- Comprehensive activity logging
+- User action tracking
+- Model change detection
+- Export audit data ke CSV
+- Real-time monitoring dashboard
+
+**Pengaduan Masyarakat:**
+- Public complaint system
+- Status tracking (pending, proses, selesai)
+- Email notifications
+- Admin management interface
+- Reporting dan analytics
 
 **Pelayanan Publik:**
 - CRUD layanan dengan kategorisasi
 - Upload dokumen persyaratan
 - Manage prosedur dan SOP
 - Tracking status layanan
+- Contact person management
 
 **Dokumen Repository:**
 - Upload dan kategorisasi dokumen
 - Kontrol akses public/private
 - Download tracking dan analytics
 - Bulk upload functionality
+- File type validation
 
 **Galeri Management:**
 - Upload foto dan video
 - Album management
 - Thumbnail generation
 - Metadata editing
+- Category management
 
 **FAQ System:**
 - Manage pertanyaan dan jawaban
 - Kategorisasi FAQ
 - Order management
 - Public/private toggle
+- Search functionality
 
 ### Portal OPD (Enhanced)
 **Admin:**
@@ -520,6 +642,9 @@ php artisan storage:link
 - Jalankan `npm run dev` untuk hot reload
 - Enable debug mode: `APP_DEBUG=true` di `.env`
 - Monitor logs: `tail -f storage/logs/laravel.log`
+- Monitor audit logs melalui admin panel `/admin/audit-logs`
+- Gunakan performance monitoring untuk optimize queries
+- Test middleware dengan different user roles untuk ensure proper access control
 
 ## ❓ FAQ
 
@@ -553,12 +678,72 @@ A: Pastikan:
 - Cache di-clear: `php artisan optimize:clear`
 - Role user sesuai dengan akses modul
 
+**Q: Bagaimana cara memonitor aktivitas user?**
+A: Gunakan Audit Log system:
+```bash
+# Akses audit logs di admin panel
+/admin/audit-logs
+
+# Filter berdasarkan user, action, model, tanggal
+# Export ke CSV untuk analisis lebih lanjut
+```
+
+**Q: Bagaimana cara menggunakan Content Approval System?**
+A: 
+1. Content yang perlu approval akan muncul di `/admin/approvals`
+2. Review content dan berikan approval/rejection dengan notes
+3. Gunakan bulk actions untuk multiple approvals
+4. Monitor approval rates di statistics dashboard
+
+**Q: Bagaimana cara memonitor sistem dan performa?**
+A: Gunakan System Monitoring features:
+```bash
+# Akses performance monitoring di admin dashboard
+/admin/performance-logs
+
+# Monitor audit logs untuk tracking aktivitas
+/admin/audit-logs
+
+# Check system configuration
+/admin/system-configuration
+
+# Export monitoring data ke CSV untuk analisis
+```
+
+**Q: Bagaimana cara mengelola sistem konfigurasi?**
+A:
+1. Login sebagai Super Admin atau Admin
+2. Akses menu "System Configuration"
+3. Edit konfigurasi berdasarkan group (general, contact, file_management, wbs, email)
+4. Save configuration untuk apply changes
+5. Monitor changes melalui audit logs
+
+**Q: Error saat monitoring performa?**
+A: Pastikan:
+- Performance monitoring middleware aktif
+- Database table `performance_logs` ada
+- Memory limit PHP mencukupi untuk monitoring
+- Log storage memiliki space yang cukup
+
 **Q: Error saat upload file?**
 A: Pastikan:
 - Storage link: `php artisan storage:link`
 - Permissions: `chmod -R 775 storage/app/public`
 - File size limit sesuai dengan php.ini
 - Folder storage/app/public ada dan writable
+
+**Q: Bagaimana cara backup dan restore data?**
+A:
+```bash
+# Backup database
+php artisan backup:database
+
+# Export specific data
+php artisan db:seed --class=BackupSeeder
+
+# Restore dari backup
+php artisan migrate:fresh --seed
+```
 
 ## �📄 License
 
