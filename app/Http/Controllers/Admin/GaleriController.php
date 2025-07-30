@@ -59,43 +59,27 @@ class GaleriController extends Controller
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
-            'kategori' => 'required|string|in:foto,video',
-            'album' => 'nullable|string|max:100',
-            'tanggal_kegiatan' => 'required|date',
-            'lokasi_kegiatan' => 'nullable|string|max:255',
-            'file_media' => 'required|file|max:20480', // 20MB max
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'boolean',
-            'is_featured' => 'boolean',
-            'tags' => 'nullable|string',
+            'kategori' => 'required|string|max:255',
+            'tanggal_publikasi' => 'required|date',
+            'file_galeri' => 'required|file|max:20480|mimes:jpeg,png,jpg,gif,mp4,avi,mov',
+            'status' => 'nullable|boolean',
         ]);
 
-        // Validate file type based on category
-        if ($validated['kategori'] === 'foto') {
-            $request->validate([
-                'file_media' => 'image|mimes:jpeg,png,jpg,gif,webp'
-            ]);
-        } elseif ($validated['kategori'] === 'video') {
-            $request->validate([
-                'file_media' => 'mimes:mp4,avi,mov,wmv,flv'
-            ]);
+        // Handle file upload
+        if ($request->hasFile('file_galeri')) {
+            $file = $request->file('file_galeri');
+            $folder = 'galeri';
+            $filePath = $file->store($folder, 'public');
+            
+            $validated['file_path'] = $filePath;
+            $validated['file_name'] = $file->getClientOriginalName();
+            $validated['file_type'] = $file->getClientOriginalExtension();
+            $validated['file_size'] = $file->getSize();
         }
 
-        // Handle file uploads
-        if ($request->hasFile('file_media')) {
-            $folder = $validated['kategori'] === 'foto' ? 'galeri/photos' : 'galeri/videos';
-            $validated['file_media'] = $request->file('file_media')->store($folder, 'public');
-        }
-
-        if ($request->hasFile('thumbnail')) {
-            $validated['thumbnail'] = $request->file('thumbnail')
-                ->store('galeri/thumbnails', 'public');
-        }
-
-        // Store gallery item
+        // Set status (default true if not provided)
+        $validated['status'] = $request->has('status') ? true : ($request->input('status') !== null ? (bool)$request->input('status') : true);
         $validated['created_by'] = auth()->id();
-        $validated['status'] = $request->has('status');
-        $validated['is_featured'] = $request->has('is_featured');
 
         \App\Models\Galeri::create($validated);
 
@@ -127,38 +111,31 @@ class GaleriController extends Controller
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
-            'kategori' => 'required|string|in:foto,video',
-            'album' => 'nullable|string|max:100',
-            'tanggal_kegiatan' => 'required|date',
-            'lokasi_kegiatan' => 'nullable|string|max:255',
-            'file_media' => 'nullable|file|max:20480',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'boolean',
-            'is_featured' => 'boolean',
-            'tags' => 'nullable|string',
+            'kategori' => 'required|string|max:255',
+            'tanggal_publikasi' => 'required|date',
+            'file_galeri' => 'nullable|file|max:20480|mimes:jpeg,png,jpg,gif,mp4,avi,mov',
+            'status' => 'nullable|boolean',
         ]);
 
-        // Handle file uploads
-        if ($request->hasFile('file_media')) {
+        // Handle file upload
+        if ($request->hasFile('file_galeri')) {
             // Delete old file if exists
-            if ($galeri->file_media) {
-                \Storage::disk('public')->delete($galeri->file_media);
+            if ($galeri->file_path) {
+                \Storage::disk('public')->delete($galeri->file_path);
             }
-            $folder = $validated['kategori'] === 'foto' ? 'galeri/photos' : 'galeri/videos';
-            $validated['file_media'] = $request->file('file_media')->store($folder, 'public');
+            
+            $file = $request->file('file_galeri');
+            $folder = 'galeri';
+            $filePath = $file->store($folder, 'public');
+            
+            $validated['file_path'] = $filePath;
+            $validated['file_name'] = $file->getClientOriginalName();
+            $validated['file_type'] = $file->getClientOriginalExtension();
+            $validated['file_size'] = $file->getSize();
         }
 
-        if ($request->hasFile('thumbnail')) {
-            // Delete old thumbnail if exists
-            if ($galeri->thumbnail) {
-                \Storage::disk('public')->delete($galeri->thumbnail);
-            }
-            $validated['thumbnail'] = $request->file('thumbnail')
-                ->store('galeri/thumbnails', 'public');
-        }
-
-        $validated['status'] = $request->has('status');
-        $validated['is_featured'] = $request->has('is_featured');
+        // Set status (default true if not provided)
+        $validated['status'] = $request->has('status') ? true : ($request->input('status') !== null ? (bool)$request->input('status') : true);
         $validated['updated_by'] = auth()->id();
 
         // Update gallery item

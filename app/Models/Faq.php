@@ -181,7 +181,7 @@ class Faq extends Model
         return [
             'kategori' => 'exact',
             'status' => 'boolean',
-            'is_featured' => 'boolean',
+            'is_popular' => 'boolean',
             'created_at' => 'date_range',
             'updated_at' => 'date_range',
         ];
@@ -193,7 +193,7 @@ class Faq extends Model
     protected function getSortableFields(): array
     {
         return [
-            'id', 'pertanyaan', 'kategori', 'status', 'is_featured', 'urutan', 'view_count', 'created_at', 'updated_at'
+            'id', 'pertanyaan', 'kategori', 'status', 'is_popular', 'urutan', 'view_count', 'created_at', 'updated_at'
         ];
     }
 }

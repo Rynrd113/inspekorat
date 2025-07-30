@@ -44,55 +44,78 @@
                     </div>
                     
                     <div>
-                        <label for="tipe" class="block text-sm font-medium text-gray-700 mb-2">
-                            Tipe Media <span class="text-red-500">*</span>
-                        </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tipe') border-red-500 @enderror" 
-                                id="tipe" 
-                                name="tipe" 
-                                required 
-                                onchange="toggleMediaFields()">
-                            <option value="">Pilih Tipe</option>
-                            <option value="foto" {{ old('tipe', $galeri->tipe ?? 'foto') == 'foto' ? 'selected' : '' }}>Foto</option>
-                            <option value="video" {{ old('tipe', $galeri->tipe ?? '') == 'video' ? 'selected' : '' }}>Video</option>
-                        </select>
-                        @error('tipe')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                    <div>
                         <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">
                             Kategori <span class="text-red-500">*</span>
                         </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('kategori') border-red-500 @enderror" 
-                                id="kategori" 
-                                name="kategori" 
-                                required>
-                            <option value="">Pilih Kategori</option>
-                            <option value="kegiatan" {{ old('kategori', $galeri->kategori ?? 'kegiatan') == 'kegiatan' ? 'selected' : '' }}>Kegiatan</option>
-                            <option value="acara" {{ old('kategori', $galeri->kategori ?? '') == 'acara' ? 'selected' : '' }}>Acara</option>
-                            <option value="fasilitas" {{ old('kategori', $galeri->kategori ?? '') == 'fasilitas' ? 'selected' : '' }}>Fasilitas</option>
-                            <option value="lainnya" {{ old('kategori', $galeri->kategori ?? '') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
-                        </select>
+                        <input type="text" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('kategori') border-red-500 @enderror" 
+                               id="kategori" 
+                               name="kategori" 
+                               value="{{ old('kategori', $galeri->kategori) }}" 
+                               required>
                         @error('kategori')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
                     
                     <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status <span class="text-red-500">*</span>
+                        <label for="tanggal_publikasi" class="block text-sm font-medium text-gray-700 mb-2">
+                            Tanggal Publikasi <span class="text-red-500">*</span>
                         </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('status') border-red-500 @enderror" 
-                                id="status" 
-                                name="status" 
-                                required>
-                            <option value="aktif" {{ old('status', $galeri->status ?? 'aktif') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                            <option value="nonaktif" {{ old('status', $galeri->status ?? '') == 'nonaktif' ? 'selected' : '' }}>Non-aktif</option>
-                        </select>
+                        <input type="date" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tanggal_publikasi') border-red-500 @enderror" 
+                               id="tanggal_publikasi" 
+                               name="tanggal_publikasi" 
+                               value="{{ old('tanggal_publikasi', $galeri->tanggal_publikasi ? $galeri->tanggal_publikasi->format('Y-m-d') : '') }}" 
+                               required>
+                        @error('tanggal_publikasi')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-2">
+                        Deskripsi
+                    </label>
+                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('deskripsi') border-red-500 @enderror" 
+                              id="deskripsi" 
+                              name="deskripsi" 
+                              rows="4" 
+                              placeholder="Masukkan deskripsi galeri...">{{ old('deskripsi', $galeri->deskripsi) }}</textarea>
+                    @error('deskripsi')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <label for="file_galeri" class="block text-sm font-medium text-gray-700 mb-2">
+                            File Media
+                        </label>
+                        <input type="file" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('file_galeri') border-red-500 @enderror" 
+                               id="file_galeri" 
+                               name="file_galeri" 
+                               accept="image/*,video/*">
+                        @if($galeri->file_path)
+                            <p class="mt-1 text-sm text-gray-500">File saat ini: {{ $galeri->file_name }}</p>
+                        @endif
+                        @error('file_galeri')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    
+                    <div>
+                        <label for="status" class="flex items-center">
+                            <input type="checkbox" 
+                                   class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" 
+                                   id="status" 
+                                   name="status" 
+                                   value="1"
+                                   {{ old('status', $galeri->status) ? 'checked' : '' }}>
+                            <span class="ml-2 text-sm font-medium text-gray-700">Status Aktif</span>
+                        </label>
                         @error('status')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror

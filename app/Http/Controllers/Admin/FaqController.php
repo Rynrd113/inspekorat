@@ -56,14 +56,14 @@ class FaqController extends Controller
             'kategori' => 'required|string|in:' . implode(',', $categories),
             'urutan' => 'nullable|integer|min:1',
             'status' => 'required|string|in:0,1',
-            'is_featured' => 'nullable|string|in:0,1',
+            'is_popular' => 'nullable|string|in:0,1',
             'tags' => 'nullable|string',
         ]);
 
         // Convert string values to appropriate types
         $validated['created_by'] = auth()->id();
         $validated['status'] = $request->status === '1';
-        $validated['is_featured'] = $request->is_featured === '1';
+        $validated['is_popular'] = $request->is_popular === '1';
 
         \App\Models\Faq::create($validated);
 
@@ -100,14 +100,14 @@ class FaqController extends Controller
             'kategori' => 'required|string|in:' . implode(',', $categories),
             'urutan' => 'nullable|integer|min:1',
             'status' => 'required|string|in:0,1',
-            'is_featured' => 'nullable|string|in:0,1',
+            'is_popular' => 'nullable|string|in:0,1',
             'tags' => 'nullable|string',
         ]);
 
         // Convert string values to appropriate types
         $validated['updated_by'] = auth()->id();
         $validated['status'] = $request->status === '1';
-        $validated['is_featured'] = $request->is_featured === '1';
+        $validated['is_popular'] = $request->is_popular === '1';
 
         $faq->update($validated);
 

@@ -140,16 +140,16 @@
                         </div>
                     </div>
 
-                    <!-- Is Featured -->
+                    <!-- Is Popular -->
                     <div>
                         <div class="flex items-center">
                             <input type="checkbox" 
                                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" 
-                                   id="is_featured" 
-                                   name="is_featured" 
+                                   id="is_popular" 
+                                   name="is_popular" 
                                    value="1"
-                                   {{ old('is_featured', $faq->is_featured) ? 'checked' : '' }}>
-                            <label for="is_featured" class="ml-2 block text-sm text-gray-900">
+                                   {{ old('is_popular', $faq->is_popular) ? 'checked' : '' }}>
+                            <label for="is_popular" class="ml-2 block text-sm text-gray-900">
                                 FAQ Unggulan
                             </label>
                         </div>
