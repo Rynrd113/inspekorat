@@ -337,7 +337,75 @@
             
             <!-- Berita List -->
             <div class="space-y-8 mb-16" id="berita-list">
-                <!-- Berita akan dirender dengan JavaScript -->
+                @if($portalPapuaTengah && $portalPapuaTengah->count() > 0)
+                    @foreach($portalPapuaTengah as $berita)
+                        <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
+                            <div class="md:flex">
+                                <!-- Image -->
+                                <div class="md:w-1/3">
+                                    <div class="h-48 md:h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-colors">
+                                        @if($berita->gambar)
+                                            <img src="{{ asset('storage/' . $berita->gambar) }}" 
+                                                 alt="{{ $berita->judul }}" 
+                                                 class="w-full h-full object-cover">
+                                        @else
+                                            <i class="fas fa-image text-blue-400 text-3xl"></i>
+                                        @endif
+                                    </div>
+                                </div>
+                                
+                                <!-- Content -->
+                                <div class="md:w-2/3 p-8">
+                                    <!-- Category -->
+                                    <div class="mb-4">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                            {{ strtoupper($berita->kategori) }}
+                                        </span>
+                                    </div>
+                                    
+                                    <!-- Title -->
+                                    <h3 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors line-clamp-2">
+                                        {{ $berita->judul }}
+                                    </h3>
+                                    
+                                    <!-- Content -->
+                                    <p class="text-gray-600 mb-6 line-clamp-3 leading-relaxed">
+                                        {{ Str::limit(strip_tags($berita->konten), 200) }}
+                                    </p>
+                                    
+                                    <!-- Meta -->
+                                    <div class="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-6">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-user mr-2"></i>
+                                            <span>{{ $berita->author ?? 'Admin' }}</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-calendar mr-2"></i>
+                                            <span>{{ $berita->tanggal_publikasi ? $berita->tanggal_publikasi->format('d M Y') : 'Hari ini' }}</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-eye mr-2"></i>
+                                            <span>{{ number_format($berita->views ?? 0) }} views</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <a href="{{ route('public.berita.show', $berita->id) }}" class="inline-flex items-center px-6 py-3 text-blue-600 hover:text-white border-2 border-blue-600 hover:bg-blue-600 rounded-xl transition-all duration-300 font-semibold group">
+                                        <span>Baca Selengkapnya</span>
+                                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                @else
+                    <div class="text-center py-16">
+                        <div class="max-w-md mx-auto">
+                            <i class="fas fa-newspaper text-gray-300 text-6xl mb-4"></i>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">Belum ada berita tersedia</h3>
+                            <p class="text-gray-500 mb-6">Berita akan segera dipublikasikan.</p>
+                        </div>
+                    </div>
+                @endif
             </div>
             
             <!-- Navigation Tabs -->
@@ -743,184 +811,43 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Load berita terbaru by default
-    loadBerita('terbaru');
-    
-    // Hero slider functionality
+    // Initialize page components  
     initHeroSlider();
-    
-    // Back to top button
     initBackToTop();
-    
-    // Stats counter animation
     animateStats();
+    
+    // Initialize filter buttons with default active state
+    updateFilterButtons('terbaru');
 });
 
 // Global variables
-let currentBeritaData = [];
 let currentFilter = 'terbaru';
 
-// Load berita data
-async function loadBerita(filter = 'terbaru') {
-    try {
-        const response = await fetch(`/api/berita?filter=${filter}&limit=5`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        currentBeritaData = data.data || [];
-        renderBeritaList(currentBeritaData);
-        updateFilterButtons(filter);
-        currentFilter = filter;
-    } catch (error) {
-        console.error('Error loading berita:', error);
-        // Fallback to static data
-        const fallbackData = getFallbackBerita(filter);
-        currentBeritaData = fallbackData;
-        renderBeritaList(currentBeritaData);
-        updateFilterButtons(filter);
-        currentFilter = filter;
-    }
-}
-
-// Fallback berita data
-function getFallbackBerita(filter) {
-    const fallbackBerita = [
-        {
-            id: 1,
-            judul: 'Pelaksanaan Pengawasan Internal di Lingkungan Pemerintah Provinsi Papua Tengah',
-            konten: 'Inspektorat Provinsi Papua Tengah melaksanakan pengawasan internal secara berkala untuk memastikan tata kelola pemerintahan yang baik dan akuntabel.',
-            kategori: 'pengawasan',
-            penulis: 'Tim Inspektorat',
-            published_at: new Date().toISOString(),
-            views: 1250
-        },
-        {
-            id: 2,
-            judul: 'Sosialisasi Implementasi Sistem Pengendalian Intern Pemerintah (SPIP)',
-            konten: 'Kegiatan sosialisasi SPIP dilaksanakan untuk meningkatkan pemahaman aparatur pemerintah tentang sistem pengendalian intern yang efektif.',
-            kategori: 'kegiatan',
-            penulis: 'Bagian SPIP',
-            published_at: new Date(Date.now() - 86400000).toISOString(),
-            views: 890
-        },
-        {
-            id: 3,
-            judul: 'Audit Kinerja Organisasi Perangkat Daerah Tahun 2025',
-            konten: 'Pelaksanaan audit kinerja terhadap OPD di lingkungan Pemerintah Provinsi Papua Tengah untuk menilai efektivitas dan efisiensi program kerja.',
-            kategori: 'audit',
-            penulis: 'Auditor Inspektorat',
-            published_at: new Date(Date.now() - 172800000).toISOString(),
-            views: 1340
-        },
-        {
-            id: 4,
-            judul: 'Pelatihan Audit Internal bagi Aparatur Inspektorat',
-            konten: 'Program pelatihan berkelanjutan untuk meningkatkan kapasitas auditor internal dalam melaksanakan tugas pengawasan.',
-            kategori: 'pelatihan',
-            penulis: 'Sekretariat Inspektorat',
-            published_at: new Date(Date.now() - 259200000).toISOString(),
-            views: 750
-        },
-        {
-            id: 5,
-            judul: 'Laporan Hasil Pengawasan Triwulan IV 2024',
-            konten: 'Publikasi laporan hasil pengawasan yang dilaksanakan Inspektorat Provinsi Papua Tengah pada triwulan keempat tahun 2024.',
-            kategori: 'laporan',
-            penulis: 'Inspektorat Papua Tengah',
-            published_at: new Date(Date.now() - 345600000).toISOString(),
-            views: 2100
-        }
-    ];
-    
-    // Sort berdasarkan filter
-    if (filter === 'terpopuler') {
-        return fallbackBerita.sort((a, b) => b.views - a.views);
-    }
-    
-    return fallbackBerita.sort((a, b) => new Date(b.published_at) - new Date(a.published_at));
-}
-
-// Filter berita function
+// Filter berita function - For now just updates button state
+// Future enhancement: could make AJAX calls for dynamic filtering
 function filterBerita(filter) {
-    loadBerita(filter);
+    updateFilterButtons(filter);
+    currentFilter = filter;
+    
+    console.log('Filter changed to:', filter);
+    // Note: Currently showing server-rendered data from database
+    // Could enhance with AJAX filtering later
 }
 
-// Render berita list
-function renderBeritaList(beritaData) {
-    const container = document.getElementById('berita-list');
+// Note: Fallback data function removed to ensure data comes from database
+
+// Filter berita function (currently shows server-rendered data)
+function filterBerita(filter) {
+    updateFilterButtons(filter);
+    currentFilter = filter;
     
-    if (!beritaData || beritaData.length === 0) {
-        container.innerHTML = `
-            <div class="text-center py-16">
-                <div class="max-w-md mx-auto">
-                    <i class="fas fa-newspaper text-gray-300 text-6xl mb-4"></i>
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">Belum ada berita tersedia</h3>
-                    <p class="text-gray-500 mb-6">Berita akan segera dipublikasikan.</p>
-                </div>
-            </div>
-        `;
-        return;
-    }
-    
-    const beritaHtml = beritaData.map(berita => `
-        <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
-            <div class="md:flex">
-                <!-- Image -->
-                <div class="md:w-1/3">
-                    <div class="h-48 md:h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-colors">
-                        <i class="fas fa-image text-blue-400 text-3xl"></i>
-                    </div>
-                </div>
-                
-                <!-- Content -->
-                <div class="md:w-2/3 p-8">
-                    <!-- Category -->
-                    <div class="mb-4">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                            ${berita.kategori ? berita.kategori.toUpperCase() : 'BERITA'}
-                        </span>
-                    </div>
-                    
-                    <!-- Title -->
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors leading-tight">
-                        <a href="/berita/${berita.id}">${berita.judul || 'Judul Berita'}</a>
-                    </h3>
-                    
-                    <!-- Excerpt -->
-                    <p class="text-gray-600 mb-6 line-clamp-3 leading-relaxed">
-                        ${berita.konten ? berita.konten.replace(/<[^>]*>?/gm, '').substring(0, 150) + '...' : 'Ringkasan berita tidak tersedia...'}
-                    </p>
-                    
-                    <!-- Meta & CTA -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-6 text-sm text-gray-500">
-                            <div class="flex items-center">
-                                <i class="fas fa-user mr-2"></i>
-                                <span>${berita.penulis || 'Admin'}</span>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-calendar mr-2"></i>
-                                <span>${berita.published_at ? new Date(berita.published_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Hari ini'}</span>
-                            </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-eye mr-2"></i>
-                                <span>${berita.views ? berita.views.toLocaleString() : '0'} views</span>
-                            </div>
-                        </div>
-                        
-                        <a href="/berita/${berita.id}" class="inline-flex items-center px-6 py-3 text-blue-600 hover:text-white border-2 border-blue-600 hover:bg-blue-600 rounded-xl transition-all duration-300 font-semibold group">
-                            <span>Baca Selengkapnya</span>
-                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </article>
-    `).join('');
-    
-    container.innerHTML = beritaHtml;
+    console.log('Filter changed to:', filter);
+    // Note: Currently showing server-rendered data from database
+    // Dynamic filtering could be enhanced with AJAX calls later
 }
+
+// Note: renderBeritaList function removed to prevent overriding server-rendered content
+// The berita content is now properly rendered from database via Blade templates
 
 // Update filter buttons
 function updateFilterButtons(activeFilter) {
