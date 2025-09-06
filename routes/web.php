@@ -18,6 +18,11 @@ use App\Http\Controllers\Admin\PengaduanController as AdminPengaduanController;
 use App\Http\Controllers\Admin\WebPortalController as AdminWebPortalController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\PortalOpdController;
+
+// Test route untuk Tailwind CSS
+Route::get('/test-tailwind', function () {
+    return view('test-tailwind');
+});
 use Illuminate\Support\Facades\Route;
 
 /*
