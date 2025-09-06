@@ -112,11 +112,9 @@
                         @php
                             $roleLabels = [
                                 'user' => 'User',
-                                'admin_wbs' => 'Admin WBS',
-                                'admin_berita' => 'Admin Berita',
-                                'admin_portal_opd' => 'Admin Portal OPD',
+                                'content_admin' => 'Content Admin',
                                 'admin' => 'Administrator',
-                                'superadmin' => 'Super Admin'
+                                'super_admin' => 'Super Admin'
                             ];
                         @endphp
                         <div class="text-xs text-blue-100">{{ $roleLabels[auth()->user()->role] ?? 'User' }}</div>

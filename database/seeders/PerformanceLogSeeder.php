@@ -17,6 +17,14 @@ class PerformanceLogSeeder extends Seeder
             return;
         }
 
+        // Get valid user IDs from database
+        $userIds = DB::table('users')->pluck('id')->toArray();
+        
+        if (empty($userIds)) {
+            // If no users exist, skip seeding
+            return;
+        }
+
         $performanceLogs = [];
         
         // Generate sample performance logs untuk berbagai endpoint
@@ -46,7 +54,7 @@ class PerformanceLogSeeder extends Seeder
                 'query_count' => rand(1, 15),
                 'http_status' => $statusCodes[array_rand($statusCodes)],
                 'content_length' => rand(1000, 50000),
-                'user_id' => rand(1, 5),
+                'user_id' => $userIds[array_rand($userIds)], // Use valid user ID
                 'ip_address' => '192.168.1.' . rand(1, 254),
                 'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
                 'created_at' => now()->subDays(rand(0, 30)),

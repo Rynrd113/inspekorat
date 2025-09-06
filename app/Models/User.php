@@ -76,10 +76,7 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return in_array($this->role, [
-            'admin', 'super_admin', 'content_manager', 'service_manager', 
-            'opd_manager', 'wbs_manager', 'admin_wbs', 'admin_berita', 
-            'admin_portal_opd', 'admin_pelayanan', 'admin_dokumen', 
-            'admin_galeri', 'admin_faq'
+            'admin', 'super_admin', 'content_admin'
         ]);
     }
     
@@ -115,12 +112,7 @@ class User extends Authenticatable
         return match($this->role) {
             'super_admin' => 100,
             'admin' => 90,
-            'content_manager' => 80,
-            'service_manager' => 80,
-            'opd_manager' => 80,
-            'wbs_manager' => 80,
-            'admin_wbs', 'admin_berita', 'admin_portal_opd', 
-            'admin_pelayanan', 'admin_dokumen', 'admin_galeri', 'admin_faq' => 70,
+            'content_admin' => 70,
             'user' => 10,
             default => 0
         };
@@ -149,18 +141,8 @@ class User extends Authenticatable
     {
         return match($this->role) {
             'super_admin' => ['all'],
-            'admin' => ['beranda', 'profil', 'unit_kerja', 'pelayanan', 'dokumen', 'berita', 'galeri', 'kontak', 'statistik', 'wbs', 'pengaduan', 'portal_opd'],
-            'content_manager' => ['beranda', 'berita', 'galeri', 'faq'],
-            'service_manager' => ['beranda', 'pelayanan', 'dokumen', 'kontak'],
-            'opd_manager' => ['beranda', 'portal_opd', 'unit_kerja'],
-            'wbs_manager' => ['beranda', 'wbs', 'pengaduan', 'statistik'],
-            'admin_wbs' => ['beranda', 'wbs', 'pengaduan'],
-            'admin_berita' => ['beranda', 'berita'],
-            'admin_portal_opd' => ['beranda', 'portal_opd'],
-            'admin_pelayanan' => ['beranda', 'pelayanan'],
-            'admin_dokumen' => ['beranda', 'dokumen'],
-            'admin_galeri' => ['beranda', 'galeri'],
-            'admin_faq' => ['beranda', 'faq'],
+            'admin' => ['beranda', 'profil', 'unit_kerja', 'pelayanan', 'dokumen', 'berita', 'galeri', 'kontak', 'statistik', 'wbs', 'pengaduan', 'portal_opd', 'faq'],
+            'content_admin' => ['beranda', 'berita', 'galeri', 'faq', 'dokumen'],
             default => ['beranda']
         };
     }
@@ -172,17 +154,7 @@ class User extends Authenticatable
     {
         return [
             'user' => 'User',
-            'admin_wbs' => 'Admin WBS',
-            'admin_berita' => 'Admin Berita',
-            'admin_portal_opd' => 'Admin Portal OPD',
-            'admin_pelayanan' => 'Admin Pelayanan',
-            'admin_dokumen' => 'Admin Dokumen',
-            'admin_galeri' => 'Admin Galeri',
-            'admin_faq' => 'Admin FAQ',
-            'content_manager' => 'Content Manager',
-            'service_manager' => 'Service Manager',
-            'opd_manager' => 'OPD Manager',
-            'wbs_manager' => 'WBS Manager',
+            'content_admin' => 'Content Admin',
             'admin' => 'Admin',
             'super_admin' => 'Super Admin'
         ];
@@ -195,18 +167,8 @@ class User extends Authenticatable
     {
         return match($this->role) {
             'super_admin' => 'Akses penuh ke semua modul termasuk manajemen user',
-            'admin' => 'Akses ke semua modul operasional',
-            'content_manager' => 'Mengelola konten: berita, galeri, FAQ',
-            'service_manager' => 'Mengelola layanan: pelayanan, dokumen, kontak',
-            'opd_manager' => 'Mengelola data OPD dan unit kerja',
-            'wbs_manager' => 'Mengelola WBS dan statistik terkait',
-            'admin_wbs' => 'Khusus mengelola WBS',
-            'admin_berita' => 'Khusus mengelola berita',
-            'admin_portal_opd' => 'Khusus mengelola Portal OPD',
-            'admin_pelayanan' => 'Khusus mengelola pelayanan',
-            'admin_dokumen' => 'Khusus mengelola dokumen',
-            'admin_galeri' => 'Khusus mengelola galeri',
-            'admin_faq' => 'Khusus mengelola FAQ',
+            'admin' => 'Akses ke semua modul operasional dan management',
+            'content_admin' => 'Mengelola konten: berita, galeri, FAQ, dokumen',
             'user' => 'Akses terbatas, hanya view',
             default => 'Role tidak dikenali'
         };

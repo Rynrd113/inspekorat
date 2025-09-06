@@ -3,7 +3,12 @@
 @section('header', 'Tambah User')
 
 @section('breadcrumb')
-<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><a href="{{                     <ul class="text-sm text-gray-600 space-y-1">
+                        <li><strong>User:</strong> Akses terbatas, hanya dapat melihat informasi publik</li>
+                        <li><strong>Content Admin:</strong> Dapat mengelola berita, galeri, FAQ, dan dokumen</li>
+                        <li><strong>Admin:</strong> Dapat mengakses semua modul operasional kecuali manajemen user</li>
+                        <li><strong>Super Admin:</strong> Akses penuh ke semua fitur termasuk manajemen user</li>
+                    </ul>dmin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
 <li><a href="{{ route('admin.users.index') }}" class="text-blue-600 hover:text-blue-800">User</a></li>
 <li><span class="text-gray-500">Tambah</span></li>
 @endsection

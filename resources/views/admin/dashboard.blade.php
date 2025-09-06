@@ -26,7 +26,7 @@
 
     <!-- Summary Statistics -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        @if(auth()->user()->hasAnyRole(['admin_wbs', 'wbs_manager', 'admin', 'superadmin']))
+        @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
         <x-card class="hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -43,7 +43,7 @@
         </x-card>
         @endif
 
-        @if(auth()->user()->hasAnyRole(['admin', 'superadmin']))
+        @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
         <x-card class="hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -60,7 +60,7 @@
         </x-card>
         @endif
 
-        @if(auth()->user()->hasAnyRole(['admin_berita', 'content_manager', 'admin', 'superadmin']))
+        @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
         <x-card class="hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -77,7 +77,7 @@
         </x-card>
         @endif
 
-        @if(auth()->user()->hasAnyRole(['admin_portal_opd', 'opd_manager', 'admin', 'superadmin']))
+        @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
         <x-card class="hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -117,7 +117,7 @@
         </x-slot:header>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            @if(auth()->user()->hasAnyRole(['admin_wbs', 'wbs_manager', 'admin', 'superadmin']))
+            @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
             <div class="text-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
                 <div class="bg-blue-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                     <i class="fas fa-shield-alt text-blue-600 text-lg"></i>
@@ -132,7 +132,7 @@
             </div>
             @endif
 
-            @if(auth()->user()->hasAnyRole(['admin_berita', 'content_manager', 'admin', 'superadmin']))
+            @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
             <div class="text-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
                 <div class="bg-purple-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                     <i class="fas fa-newspaper text-purple-600 text-lg"></i>
@@ -147,7 +147,7 @@
             </div>
             @endif
 
-            @if(auth()->user()->hasAnyRole(['admin_portal_opd', 'opd_manager', 'admin', 'superadmin']))
+            @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
             <div class="text-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
                 <div class="bg-green-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                     <i class="fas fa-building text-green-600 text-lg"></i>
@@ -162,7 +162,7 @@
             </div>
             @endif
 
-            @if(auth()->user()->hasAnyRole(['admin_faq', 'content_manager', 'admin', 'superadmin']))
+            @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
             <div class="text-center p-4 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors">
                 <div class="bg-yellow-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                     <i class="fas fa-question-circle text-yellow-600 text-lg"></i>
@@ -177,7 +177,7 @@
             </div>
             @endif
 
-            @if(auth()->user()->hasAnyRole(['admin_pelayanan', 'service_manager', 'admin', 'superadmin']))
+            @if(auth()->user()->hasAnyRole(['admin', 'admin', 'super_admin']))
             <div class="text-center p-4 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors">
                 <div class="bg-indigo-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                     <i class="fas fa-concierge-bell text-indigo-600 text-lg"></i>
@@ -192,7 +192,7 @@
             </div>
             @endif
 
-            @if(auth()->user()->hasAnyRole(['admin_dokumen', 'service_manager', 'admin', 'superadmin']))
+            @if(auth()->user()->hasAnyRole(['admin', 'admin', 'super_admin']))
             <div class="text-center p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors">
                 <div class="bg-orange-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                     <i class="fas fa-file-alt text-orange-600 text-lg"></i>
@@ -207,7 +207,7 @@
             </div>
             @endif
 
-            @if(auth()->user()->hasAnyRole(['admin_galeri', 'content_manager', 'admin', 'superadmin']))
+            @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
             <div class="text-center p-4 bg-pink-50 rounded-lg hover:bg-pink-100 transition-colors">
                 <div class="bg-pink-100 rounded-full p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                     <i class="fas fa-images text-pink-600 text-lg"></i>
@@ -281,7 +281,7 @@
         </x-slot:header>
         
         <div class="space-y-4">
-            @if(auth()->user()->hasAnyRole(['admin_wbs', 'wbs_manager', 'admin', 'superadmin']))
+            @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
             @php
                 $recentWbs = \App\Models\Wbs::with(['creator:id,name,email', 'updater:id,name,email'])
                     ->select(['id', 'nama_pelapor', 'subjek', 'status', 'created_at', 'created_by', 'updated_by'])
@@ -317,7 +317,7 @@
             @endif
             @endif
 
-            @if(auth()->user()->hasAnyRole(['admin_berita', 'content_manager', 'admin', 'superadmin']))
+            @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
             @php
                 $recentNews = \App\Models\PortalPapuaTengah::latest()->limit(3)->get();
             @endphp
@@ -348,7 +348,7 @@
             @endif
             @endif
 
-            @if(!auth()->user()->hasAnyRole(['admin_wbs', 'wbs_manager', 'admin_berita', 'content_manager', 'admin', 'superadmin']))
+            @if(!auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
             <div class="text-center py-8">
                 <div class="text-gray-400 mb-4">
                     <i class="fas fa-clock text-4xl"></i>

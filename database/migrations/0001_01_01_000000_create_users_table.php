@@ -19,17 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', [
                 'user',
-                'admin_wbs', 
-                'admin_berita', 
-                'admin_portal_opd', 
-                'admin_pelayanan', 
-                'admin_dokumen', 
-                'admin_galeri', 
-                'admin_faq',
-                'content_manager',
-                'service_manager', 
-                'opd_manager',
-                'wbs_manager',
+                'content_admin',
                 'admin',
                 'super_admin'
             ])->default('user');

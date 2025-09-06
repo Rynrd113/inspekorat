@@ -34,17 +34,7 @@ class UserResource extends JsonResource
         $roles = [
             'super_admin' => 'Super Admin',
             'admin' => 'Admin',
-            'admin_wbs' => 'Admin WBS',
-            'admin_berita' => 'Admin Berita',
-            'admin_portal_opd' => 'Admin Portal OPD',
-            'admin_pelayanan' => 'Admin Pelayanan',
-            'admin_dokumen' => 'Admin Dokumen',
-            'admin_galeri' => 'Admin Galeri',
-            'admin_faq' => 'Admin FAQ',
-            'content_manager' => 'Content Manager',
-            'service_manager' => 'Service Manager',
-            'opd_manager' => 'OPD Manager',
-            'wbs_manager' => 'WBS Manager',
+            'content_admin' => 'Content Admin',
             'user' => 'User',
         ];
 

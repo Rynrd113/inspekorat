@@ -25,7 +25,7 @@ class RoleMiddleware
         $user = Auth::user();
 
         // Super admin can access everything
-        if ($user->isSuperAdmin()) {
+        if ($user->role === 'super_admin') {
             return $next($request);
         }
 

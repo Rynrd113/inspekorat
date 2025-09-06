@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <div class="text-2xl font-bold text-gray-900">{{ \App\Models\User::whereIn('role', ['admin', 'superadmin'])->count() ?? 0 }}</div>
+                    <div class="text-2xl font-bold text-gray-900">{{ \App\Models\User::whereIn('role', ['admin', 'super_admin', 'content_admin'])->count() ?? 0 }}</div>
                     <div class="text-sm text-gray-500">Admin</div>
                 </div>
             </div>
@@ -200,11 +200,9 @@
                             @php
                                 $roleColors = [
                                     'user' => 'bg-gray-100 text-gray-800',
-                                    'admin_wbs' => 'bg-purple-100 text-purple-800',
-                                    'admin_berita' => 'bg-green-100 text-green-800',
-                                    'admin_portal_opd' => 'bg-yellow-100 text-yellow-800',
+                                    'content_admin' => 'bg-purple-100 text-purple-800',
                                     'admin' => 'bg-blue-100 text-blue-800',
-                                    'superadmin' => 'bg-red-100 text-red-800'
+                                    'super_admin' => 'bg-red-100 text-red-800'
                                 ];
                                 $colorClass = $roleColors[$user->role] ?? 'bg-gray-100 text-gray-800';
                             @endphp

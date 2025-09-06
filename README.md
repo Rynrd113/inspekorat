@@ -40,19 +40,11 @@ Portal informasi dan layanan publik resmi Inspektorat Provinsi Papua Tengah deng
 - **Performance Monitoring**: Real-time tracking dan optimization
 - **Security Features**: RBAC, CSRF protection, input validation, activity logging
 
-### 👥 **Sistem Role & Permissions (11 Level Role)**
+### 👥 **Sistem Role & Permissions (4 Level Role)**
 - **Super Admin**: Akses penuh termasuk user management dan system settings
-- **Admin**: Akses ke semua modul kecuali user management  
-- **Admin WBS**: Khusus mengelola laporan WBS
-- **Admin Berita**: Khusus mengelola berita/konten
-- **Admin Portal OPD**: Khusus mengelola data OPD
-- **Admin Pelayanan**: Khusus mengelola layanan publik
-- **Admin Dokumen**: Khusus mengelola repository dokumen
-- **Admin Galeri**: Khusus mengelola galeri foto/video
-- **Admin FAQ**: Khusus mengelola sistem tanya jawab
-- **Content Manager**: Manajemen konten multi-modul
-- **Service Manager**: Manajemen layanan dan pelayanan
-- **OPD Manager**: Manajemen khusus Portal OPD
+- **Admin**: Akses ke semua modul operasional kecuali user management  
+- **Content Admin**: Mengelola semua konten (berita, dokumen, galeri, FAQ)
+- **User**: Akses view-only untuk informasi publik
 - **WBS Manager**: Manajemen khusus Whistleblower System
 - **User**: Akses terbatas/view only dengan dashboard khusus
 
@@ -153,18 +145,9 @@ Aplikasi akan berjalan di `http://localhost:8000`
 | Role | Email | Password | Akses |
 |------|-------|----------|--------|
 | **Super Admin** | `superadmin@inspektorat.go.id` | `superadmin123` | Semua fitur + User Management |
-| **Admin** | `admin@inspektorat.go.id` | `admin123` | Semua modul admin |
-| **Admin WBS** | `admin.wbs@inspektorat.go.id` | `adminwbs123` | Hanya WBS |
-| **Admin Berita** | `admin.berita@inspektorat.go.id` | `adminberita123` | Hanya Berita |
-| **Admin Portal OPD** | `admin.opd@inspektorat.go.id` | `adminopd123` | Hanya Portal OPD |
-| **Admin Pelayanan** | `admin.pelayanan@inspektorat.go.id` | `adminpelayanan123` | Hanya Pelayanan |
-| **Admin Dokumen** | `admin.dokumen@inspektorat.go.id` | `admindokumen123` | Hanya Dokumen |
-| **Admin Galeri** | `admin.galeri@inspektorat.go.id` | `admingaleri123` | Hanya Galeri |
-| **Admin FAQ** | `admin.faq@inspektorat.go.id` | `adminfaq123` | Hanya FAQ |
-| **Content Manager** | `content.manager@inspektorat.go.id` | `contentmanager123` | Multi-Modul Content |
-| **Service Manager** | `service.manager@inspektorat.go.id` | `servicemanager123` | Service Management |
-| **OPD Manager** | `opd.manager@inspektorat.go.id` | `opdmanager123` | OPD Management |
-| **WBS Manager** | `wbs.manager@inspektorat.go.id` | `wbsmanager123` | WBS Management |
+| **Admin** | `admin@inspektorat.go.id` | `admin123` | Semua modul operasional |
+| **Content Admin** | `content.admin@inspektorat.go.id` | `contentadmin123` | Kelola konten |
+| **User** | `user@inspektorat.go.id` | `user123` | View-only access |
 
 **Admin Panel**: `http://localhost:8000/admin`
 
@@ -256,7 +239,7 @@ php artisan route:list
 ### 🗄️ Struktur Database
 
 ### Tabel Utama
-- `users`: Data pengguna dengan sistem role 13-level
+- `users`: Data pengguna dengan sistem role 4-level (super_admin, admin, content_admin, user)
 - `portal_opds`: Data OPD Papua Tengah
 - `portal_papua_tengahs`: Konten berita dan artikel
 - `pelayanans`: Data layanan publik dengan prosedur lengkap
