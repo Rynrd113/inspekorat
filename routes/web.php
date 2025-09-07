@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\GaleriController as AdminGaleriController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\AuditLogController as AdminAuditLogController;
 use App\Http\Controllers\Admin\SystemConfigurationController as AdminSystemConfigurationController;
+use App\Http\Controllers\Admin\BrandingController as AdminBrandingController;
 use App\Http\Controllers\Admin\ContentApprovalController as AdminContentApprovalController;
 use App\Http\Controllers\Admin\PengaduanController as AdminPengaduanController;
 use App\Http\Controllers\Admin\WebPortalController as AdminWebPortalController;
@@ -209,6 +210,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('configurations/initialize', [AdminSystemConfigurationController::class, 'initialize'])->name('configurations.initialize');
             Route::get('configurations/export', [AdminSystemConfigurationController::class, 'export'])->name('configurations.export');
             Route::post('configurations/import', [AdminSystemConfigurationController::class, 'import'])->name('configurations.import');
+            
+            // Branding Configuration routes
+            Route::prefix('branding')->name('branding.')->group(function () {
+                Route::get('/', [AdminBrandingController::class, 'index'])->name('index');
+                Route::post('update-branding', [AdminBrandingController::class, 'updateBranding'])->name('update-branding');
+                Route::post('update-social', [AdminBrandingController::class, 'updateSocial'])->name('update-social');
+                Route::post('upload-image', [AdminBrandingController::class, 'uploadImage'])->name('upload-image');
+                Route::get('preview', [AdminBrandingController::class, 'preview'])->name('preview');
+                Route::post('generate-css', [AdminBrandingController::class, 'generateCss'])->name('generate-css');
+                Route::post('reset', [AdminBrandingController::class, 'reset'])->name('reset');
+                Route::get('test', function () {
+                    return view('admin.branding.test');
+                })->name('test');
+            });
         });
         
         // Audit Log routes - only for super_admin

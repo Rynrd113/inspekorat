@@ -82,6 +82,7 @@ class SystemConfiguration extends Model
         return [
             'general' => 'Umum',
             'site' => 'Situs',
+            'branding' => 'Branding & Visual',
             'email' => 'Email',
             'security' => 'Keamanan',
             'backup' => 'Backup',
@@ -150,15 +151,34 @@ class SystemConfiguration extends Model
             // Site configurations
             'site_name' => ['Portal Inspektorat Papua Tengah', 'string', 'Nama situs', 'site', true],
             'site_description' => ['Portal informasi dan layanan publik resmi Inspektorat Provinsi Papua Tengah', 'text', 'Deskripsi situs', 'site', true],
-            'site_logo' => [null, 'image', 'Logo situs', 'site', true],
-            'site_favicon' => [null, 'image', 'Favicon situs', 'site', true],
+            'site_keywords' => ['inspektorat, papua tengah, pemerintah, pengawasan, transparansi', 'string', 'Keywords SEO', 'site', true],
             'site_address' => [null, 'text', 'Alamat kantor', 'site', true],
             'site_phone' => [null, 'string', 'Telepon kantor', 'site', true],
             'site_email' => [null, 'email', 'Email kantor', 'site', true],
-            'site_facebook' => [null, 'url', 'Facebook URL', 'social', true],
-            'site_twitter' => [null, 'url', 'Twitter URL', 'social', true],
-            'site_instagram' => [null, 'url', 'Instagram URL', 'social', true],
-            'site_youtube' => [null, 'url', 'YouTube URL', 'social', true],
+            'site_working_hours' => ['Senin - Jumat: 08:00 - 16:00', 'string', 'Jam kerja', 'site', true],
+            
+            // Branding & Visual configurations
+            'brand_logo_header' => [null, 'image', 'Logo untuk header (ukuran: 200x60px)', 'branding', true],
+            'brand_logo_footer' => [null, 'image', 'Logo untuk footer (ukuran: 120x40px)', 'branding', true],
+            'brand_logo_icon' => [null, 'image', 'Logo icon/symbol (ukuran: 64x64px)', 'branding', true],
+            'brand_favicon' => [null, 'image', 'Favicon website (ukuran: 32x32px)', 'branding', true],
+            'brand_primary_color' => ['#1e40af', 'string', 'Warna utama (format: #hex)', 'branding', true],
+            'brand_secondary_color' => ['#059669', 'string', 'Warna sekunder (format: #hex)', 'branding', true],
+            'brand_accent_color' => ['#dc2626', 'string', 'Warna aksen (format: #hex)', 'branding', true],
+            'brand_gradient_start' => ['#1e40af', 'string', 'Warna awal gradient (format: #hex)', 'branding', false],
+            'brand_gradient_end' => ['#3730a3', 'string', 'Warna akhir gradient (format: #hex)', 'branding', false],
+            'brand_theme_mode' => ['light', 'string', 'Mode tema default (light/dark)', 'branding', false],
+            
+            // Social Media configurations
+            'social_facebook_url' => [null, 'url', 'URL halaman Facebook resmi', 'social', true],
+            'social_twitter_url' => [null, 'url', 'URL halaman Twitter resmi', 'social', true],
+            'social_instagram_url' => [null, 'url', 'URL halaman Instagram resmi', 'social', true],
+            'social_youtube_url' => [null, 'url', 'URL channel YouTube resmi', 'social', true],
+            'social_linkedin_url' => [null, 'url', 'URL halaman LinkedIn resmi', 'social', true],
+            'social_tiktok_url' => [null, 'url', 'URL halaman TikTok resmi', 'social', true],
+            'social_whatsapp_number' => [null, 'string', 'Nomor WhatsApp layanan (format: 628xxx)', 'social', true],
+            'social_telegram_url' => [null, 'url', 'URL channel Telegram resmi', 'social', true],
+            'social_share_enabled' => [true, 'boolean', 'Aktifkan tombol share sosial media', 'social', false],
             
             // Security configurations
             'max_login_attempts' => [5, 'number', 'Maksimal percobaan login', 'security', false],

@@ -97,6 +97,13 @@
                     @endif
                     
                     @if(auth()->user()->isSuperAdmin())
+                    <a href="{{ route('admin.branding.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.branding.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
+                        <i class="fas fa-palette mr-3 h-5 w-5"></i>
+                        Branding & Visual
+                    </a>
+                    @endif
+                    
+                    @if(auth()->user()->isSuperAdmin())
                     <a href="{{ route('admin.audit-logs.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.audit-logs.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-history mr-3 h-5 w-5"></i>
                         Audit Log
