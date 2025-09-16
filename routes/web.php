@@ -8,6 +8,16 @@ use App\Http\Controllers\Admin\PortalOpdController as AdminPortalOpdController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\ProfilController as AdminProfilController;
 use App\Http\Controllers\Admin\PelayananController as AdminPelayananController;
+
+// Test route for logo component
+Route::get('/test-logo', function () {
+    return view('test-logo');
+})->name('test.logo');
+
+// Test route for logo fix
+Route::get('/test-logo-fix', function () {
+    return view('test-logo-fix');
+})->name('test.logo.fix');
 use App\Http\Controllers\Admin\DokumenController as AdminDokumenController;
 use App\Http\Controllers\Admin\GaleriController as AdminGaleriController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;

@@ -94,11 +94,23 @@ class AssetOptimizationMiddleware
         $content = preg_replace_callback(
             '/<img([^>]*?)src=(["\'])([^"\']*?)\.(jpg|jpeg|png)\2([^>]*?)>/i',
             function ($matches) {
-                $webpSrc = str_replace('.' . $matches[4], '.webp', $matches[3]);
-                return '<picture>
-                    <source srcset="' . $webpSrc . '" type="image/webp">
-                    <img' . $matches[1] . 'src=' . $matches[2] . $matches[3] . '.' . $matches[4] . $matches[2] . $matches[5] . ' loading="lazy" decoding="async">
-                </picture>';
+                $fullSrc = $matches[3] . '.' . $matches[4];
+                $webpSrc = str_replace('.' . $matches[4], '.webp', $fullSrc);
+                
+                // Extract the path from the URL for file existence check
+                $webpPath = parse_url($webpSrc, PHP_URL_PATH);
+                $publicWebpPath = public_path($webpPath);
+                
+                // Only add WebP source if the WebP file exists
+                if (file_exists($publicWebpPath)) {
+                    return '<picture>
+                        <source srcset="' . $webpSrc . '" type="image/webp">
+                        <img' . $matches[1] . 'src=' . $matches[2] . $fullSrc . $matches[2] . $matches[5] . ' loading="lazy" decoding="async">
+                    </picture>';
+                } else {
+                    // Just add lazy loading if no WebP version exists
+                    return '<img' . $matches[1] . 'src=' . $matches[2] . $fullSrc . $matches[2] . $matches[5] . ' loading="lazy" decoding="async">';
+                }
             },
             $content
         );

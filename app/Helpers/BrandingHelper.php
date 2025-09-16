@@ -70,7 +70,7 @@ if (!function_exists('site_logo')) {
      * @param string $default
      * @return string
      */
-    function site_logo(string $variant = 'header', string $default = '/logo.svg'): string
+    function site_logo(string $variant = 'header', string $default = '/images/logo.png'): string
     {
         $logoKey = 'logo_' . $variant;
         $logo = branding_config($logoKey);

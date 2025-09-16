@@ -5,13 +5,7 @@
             <!-- Brand Section -->
             <div class="col-span-1 lg:col-span-1">
                 <div class="flex items-center mb-4">
-                    <div class="h-10 w-10 bg-blue-600 rounded flex items-center justify-center mr-3">
-                        <span class="text-white text-sm font-bold">PT</span>
-                    </div>
-                    <div>
-                        <div class="font-bold text-white">Inspektorat Provinsi</div>
-                        <div class="text-sm text-gray-300">Papua Tengah</div>
-                    </div>
+                    <x-site-logo variant="footer" size="md" :show-text="true" class="text-white" />
                 </div>
                 <p class="text-gray-300 text-sm leading-relaxed">
                     Portal resmi Inspektorat Provinsi Papua Tengah untuk layanan publik dan informasi pemerintahan.

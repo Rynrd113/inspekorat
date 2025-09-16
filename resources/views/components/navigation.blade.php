@@ -4,13 +4,9 @@
         <div class="flex items-center justify-between h-16">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="h-10 w-10 bg-blue-600 rounded flex items-center justify-center">
-                        <span class="text-white text-sm font-bold">PT</span>
-                    </div>
-                </div>
-                <div class="ml-3">
-                    <h1 class="text-lg font-semibold text-gray-900">Inspektorat Provinsi</h1>
-                    <p class="text-sm text-gray-500">Papua Tengah</p>
+                    <a href="{{ route('public.index') }}">
+                        <x-site-logo variant="header" size="md" :show-text="true" />
+                    </a>
                 </div>
             </div>
             

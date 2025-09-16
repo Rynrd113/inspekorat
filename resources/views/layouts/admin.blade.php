@@ -6,10 +6,9 @@
     <div class="hidden md:flex md:w-64 md:flex-col">
         <div class="flex flex-col flex-grow pt-5 overflow-y-auto bg-gradient-to-b from-blue-800 to-indigo-800">
             <div class="flex items-center flex-shrink-0 px-4">
-                <div class="text-white">
-                    <h1 class="text-xl font-bold">Admin Panel</h1>
-                    <p class="text-blue-100 text-sm">Portal Inspektorat</p>
-                </div>
+                <a href="{{ route('admin.dashboard') }}">
+                    <x-site-logo variant="header" size="sm" :show-text="true" class="text-white" />
+                </a>
             </div>
             
             <div class="mt-8 flex-grow flex flex-col">
