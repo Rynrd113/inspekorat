@@ -21,7 +21,6 @@ class SystemConfiguration extends Model
 
     protected $casts = [
         'is_public' => 'boolean',
-        'value' => 'json'
     ];
 
     /**
@@ -38,7 +37,29 @@ class SystemConfiguration extends Model
     public static function get($key, $default = null)
     {
         $config = self::where('key', $key)->first();
-        return $config ? $config->value : $default;
+        return $config ? $config->getConvertedValue() : $default;
+    }
+
+    /**
+     * Get value converted to proper type
+     */
+    public function getConvertedValue()
+    {
+        $value = $this->value;
+        
+        switch ($this->type) {
+            case 'boolean':
+                return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false;
+            case 'number':
+            case 'integer':
+                return is_numeric($value) ? (int) $value : 0;
+            case 'array':
+                return is_string($value) ? json_decode($value, true) ?? [] : (array) $value;
+            case 'json':
+                return is_string($value) ? json_decode($value, true) : $value;
+            default:
+                return $value;
+        }
     }
 
     /**

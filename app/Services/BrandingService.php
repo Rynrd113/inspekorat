@@ -25,7 +25,7 @@ class BrandingService
                 'logo_header' => $this->getLogoUrl($config->where('key', 'brand_logo_header')->first()?->value),
                 'logo_footer' => $this->getLogoUrl($config->where('key', 'brand_logo_footer')->first()?->value),
                 'logo_icon' => $this->getLogoUrl($config->where('key', 'brand_logo_icon')->first()?->value),
-                'favicon' => $this->getLogoUrl($config->where('key', 'brand_favicon')->first()?->value),
+                'favicon' => $this->getLogoUrl($config->where('key', 'brand_favicon')->first()?->value) ?: asset('favicon.ico'),
                 'primary_color' => $config->where('key', 'brand_primary_color')->first()?->value ?? '#1e40af',
                 'secondary_color' => $config->where('key', 'brand_secondary_color')->first()?->value ?? '#059669',
                 'accent_color' => $config->where('key', 'brand_accent_color')->first()?->value ?? '#dc2626',
@@ -150,13 +150,30 @@ class BrandingService
             return null;
         }
 
+        // Validate file type
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'svg', 'gif', 'ico'];
+        $extension = strtolower($file->getClientOriginalExtension());
+        
+        if (!in_array($extension, $allowedExtensions)) {
+            return null;
+        }
+
         // Generate filename
-        $filename = $type . '_' . time() . '.' . $file->getClientOriginalExtension();
+        $filename = $type . '_' . time() . '.' . $extension;
+        
+        // Ensure branding directory exists
+        Storage::disk('public')->makeDirectory('branding');
         
         // Store in public storage
         $path = $file->storeAs('branding', $filename, 'public');
         
         if ($path) {
+            // Delete old file if exists
+            $oldConfig = SystemConfiguration::where('key', $type)->first();
+            if ($oldConfig && $oldConfig->value && Storage::disk('public')->exists($oldConfig->value)) {
+                Storage::disk('public')->delete($oldConfig->value);
+            }
+
             // Update configuration
             SystemConfiguration::updateOrCreate(
                 ['key' => $type],
@@ -190,7 +207,18 @@ class BrandingService
             return $path;
         }
 
-        return Storage::url($path);
+        // Handle legacy favicon reference
+        if ($path === 'favicon.png' || $path === 'favicon.ico') {
+            return asset($path);
+        }
+
+        // If it's already a relative path with storage structure, use Storage::url
+        if (str_contains($path, '/')) {
+            return Storage::url($path);
+        }
+
+        // Otherwise, assume it's in branding directory
+        return Storage::url('branding/' . $path);
     }
 
     /**
