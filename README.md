@@ -7,7 +7,47 @@ Portal informasi dan layanan publik resmi Inspektorat Provinsi Papua Tengah deng
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=flat&logo=bootstrap)](https://getbootstrap.com)
 [![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)](https://mysql.com)
 
-## 🚀 Fitur Utama
+## � Dokumentasi
+
+Dokumentasi lengkap aplikasi tersedia di direktori [`docs/`](docs/README.md):
+- [Installation Guide](docs/installation/) - Panduan instalasi dan setup
+- [Development Guide](docs/guides/) - Panduan development dan kustomisasi
+- [API Documentation](docs/specifications/) - Spesifikasi API dan technical docs
+- [Troubleshooting](docs/troubleshooting/) - Panduan penyelesaian masalah
+
+## 🛠️ Quick Start
+
+### Prerequisites
+- PHP 8.2+
+- Composer
+- Node.js & NPM
+- MySQL/MariaDB
+
+### Installation
+```bash
+# Clone repository
+git clone https://github.com/username/inspekorat.git
+cd inspekorat
+
+# Install dependencies
+composer install
+npm install
+
+# Setup environment
+cp .env.example .env
+php artisan key:generate
+
+# Database setup
+php artisan migrate --seed
+
+# Build assets
+npm run build
+
+# Start server
+php artisan serve
+```
+
+## �🚀 Fitur Utama
 
 ### 🌐 **Portal Publik**
 - **Beranda**: Halaman utama dengan hero section dan informasi terkini
@@ -693,6 +733,61 @@ A: Gunakan System Monitoring features:
 # Export monitoring data ke CSV untuk analisis
 ```
 
+## 🗂️ Struktur Direktori
+
+```
+inspekorat/
+├── app/                    # Laravel application code
+├── config/                 # Configuration files
+├── database/              # Migrations, seeders, factories
+├── docs/                  # Documentation
+│   ├── guides/            # Development guides
+│   ├── installation/      # Installation guides
+│   ├── specifications/    # Technical specifications
+│   └── troubleshooting/   # Problem-solving guides
+├── public/                # Web root & public assets
+├── resources/             # Views, CSS, JS source files
+├── routes/                # Route definitions
+├── scripts/               # Utility scripts
+│   └── maintenance/       # Maintenance scripts
+├── storage/               # Application storage
+├── testing/               # E2E testing scripts
+└── tests/                 # PHPUnit tests
+```
+
+## 🧪 Testing
+
+Testing scripts tersedia di direktori `testing/`:
+
+```bash
+# Basic E2E testing
+php testing/test_e2e.php
+
+# API & HTTP endpoints testing
+php testing/test_api_e2e.php
+
+# Comprehensive testing
+php testing/test_comprehensive_e2e.php
+
+# Generate final testing report
+php testing/final_e2e_report.php
+```
+
+## 🔧 Maintenance
+
+Utility scripts untuk maintenance tersedia di `scripts/maintenance/`:
+
+```bash
+# Routine maintenance
+./scripts/maintenance/routine_maintenance.sh
+
+# Check users
+php scripts/maintenance/check_users.php
+
+# Check Vite assets
+./scripts/maintenance/check_vite_assets.sh
+```
+
 **Q: Bagaimana cara mengelola sistem konfigurasi?**
 A:
 1. Login sebagai Super Admin atau Admin
@@ -728,6 +823,6 @@ php artisan db:seed --class=BackupSeeder
 php artisan migrate:fresh --seed
 ```
 
-## �📄 License
+## 📄 License
 
 © 2025 Inspektorat Provinsi Papua Tengah. Dikembangkan untuk kepentingan publik.

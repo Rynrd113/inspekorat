@@ -48,3 +48,11 @@ admin
 Thumbs.db
 bootstrap/cache/routes-*.php
 bootstrap/cache/events.php
+
+# Testing and development files
+testing/logs/
+testing/tmp/
+*.test.log
+
+# Development config (optional)
+.dev-config/
