@@ -4,7 +4,7 @@
 <div class="flex h-screen bg-gray-100">
     <!-- Sidebar -->
     <div class="hidden md:flex md:w-64 md:flex-col">
-        <div class="flex flex-col flex-grow pt-5 overflow-y-auto bg-gradient-to-b from-blue-800 to-indigo-800">
+        <div class="flex flex-col flex-grow pt-5 overflow-y-auto" style="background: var(--brand-gradient, linear-gradient(to bottom, #1e40af, #3730a3));">
             <div class="flex items-center flex-shrink-0 px-4">
                 <a href="{{ route('admin.dashboard') }}">
                     <x-site-logo variant="header" size="sm" :show-text="true" class="text-white" />
@@ -13,7 +13,7 @@
             
             <div class="mt-8 flex-grow flex flex-col">
                 <nav class="flex-1 px-2 pb-4 space-y-1">
-                    <a href="{{ route('admin.dashboard') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.dashboard') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
+                    <a href="{{ route('admin.dashboard') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-blue-100 hover:bg-blue-700' }}" style="{{ request()->routeIs('admin.dashboard') ? 'background-color: var(--brand-primary, #1e40af);' : '' }}">
                         <i class="fas fa-tachometer-alt mr-3 h-5 w-5"></i>
                         Dashboard
                     </a>

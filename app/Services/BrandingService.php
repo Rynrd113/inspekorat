@@ -3,8 +3,11 @@
 namespace App\Services;
 
 use App\Models\SystemConfiguration;
+use App\Services\BrandingPresetService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Intervention\Image\Facades\Image;
 
 class BrandingService
 {
@@ -78,35 +81,6 @@ class BrandingService
     }
 
     /**
-     * Update branding configuration
-     */
-    public function updateBrandingConfig(array $data): bool
-    {
-        try {
-            foreach ($data as $key => $value) {
-                if (str_starts_with($key, 'brand_')) {
-                    SystemConfiguration::updateOrCreate(
-                        ['key' => $key],
-                        [
-                            'value' => $value,
-                            'type' => $this->getConfigType($key),
-                            'group' => 'branding',
-                            'updated_by' => auth()->id()
-                        ]
-                    );
-                }
-            }
-
-            // Clear cache
-            Cache::forget('branding_config');
-            
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-
-    /**
      * Update social media configuration
      */
     public function updateSocialConfig(array $data): bool
@@ -136,7 +110,7 @@ class BrandingService
     }
 
     /**
-     * Upload and process branding image
+     * Upload and validate branding image with security checks
      */
     public function uploadBrandingImage($file, string $type): ?string
     {
@@ -144,22 +118,51 @@ class BrandingService
             return null;
         }
 
-        $allowedTypes = ['brand_logo_header', 'brand_logo_footer', 'brand_logo_icon', 'brand_favicon'];
+        // Validate against security standards
+        $tempPath = $file->getPathname();
+        $securityErrors = BrandingPresetService::validateImageSecurity($tempPath);
         
-        if (!in_array($type, $allowedTypes)) {
-            return null;
+        if (!empty($securityErrors)) {
+            throw new \InvalidArgumentException('Security validation failed: ' . implode(', ', $securityErrors));
         }
 
-        // Validate file type
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'svg', 'gif', 'ico'];
+        // Get constraints for this type
+        $constraints = BrandingPresetService::getLogoConstraints();
+        $typeKey = str_replace('brand_logo_', '', $type);
+        $typeKey = str_replace('brand_', '', $typeKey);
+        
+        if (!isset($constraints[$typeKey])) {
+            throw new \InvalidArgumentException('Invalid logo type');
+        }
+
+        $constraint = $constraints[$typeKey];
+        
+        // Validate file format
         $extension = strtolower($file->getClientOriginalExtension());
-        
-        if (!in_array($extension, $allowedExtensions)) {
-            return null;
+        if (!in_array($extension, $constraint['formats'])) {
+            throw new \InvalidArgumentException(
+                'Format tidak didukung. Gunakan: ' . implode(', ', $constraint['formats'])
+            );
         }
 
-        // Generate filename
-        $filename = $type . '_' . time() . '.' . $extension;
+        // Validate file size (in KB)
+        if ($file->getSize() > ($constraint['max_size'] * 1024)) {
+            throw new \InvalidArgumentException(
+                'Ukuran file terlalu besar. Maksimal: ' . $constraint['max_size'] . 'KB'
+            );
+        }
+
+        // Validate image dimensions
+        $imageInfo = getimagesize($tempPath);
+        if ($imageInfo && ($imageInfo[0] > $constraint['max_width'] || $imageInfo[1] > $constraint['max_height'])) {
+            throw new \InvalidArgumentException(
+                'Dimensi gambar terlalu besar. Maksimal: ' . 
+                $constraint['max_width'] . 'x' . $constraint['max_height'] . 'px'
+            );
+        }
+
+        // Generate secure filename
+        $filename = $type . '_' . time() . '_' . hash('sha256', $file->getClientOriginalName()) . '.' . $extension;
         
         // Ensure branding directory exists
         Storage::disk('public')->makeDirectory('branding');
@@ -181,6 +184,7 @@ class BrandingService
                     'value' => $path,
                     'type' => 'image',
                     'group' => 'branding',
+                    'description' => $this->getImageDescription($type),
                     'updated_by' => auth()->id()
                 ]
             );
@@ -221,8 +225,114 @@ class BrandingService
         return Storage::url('branding/' . $path);
     }
 
+        /**
+     * Get image description for different types
+     */
+    private function getImageDescription(string $type): string
+    {
+        $descriptions = [
+            'brand_logo_header' => 'Logo untuk header website',
+            'brand_logo_footer' => 'Logo untuk footer website', 
+            'brand_logo_icon' => 'Icon logo untuk favicon dan aplikasi',
+            'brand_favicon' => 'Favicon website'
+        ];
+
+        return $descriptions[$type] ?? 'Logo branding';
+    }
+
     /**
-     * Get configuration type based on key
+     * Update branding configuration with validation
+     */
+    public function updateBrandingConfig(array $data): bool
+    {
+        try {
+            // If preset is selected, use preset colors
+            if (isset($data['color_preset']) && $data['color_preset'] !== 'custom') {
+                $presets = BrandingPresetService::getColorPresets();
+                if (isset($presets[$data['color_preset']])) {
+                    $preset = $presets[$data['color_preset']];
+                    $data['brand_primary_color'] = $preset['primary'];
+                    $data['brand_secondary_color'] = $preset['secondary'];
+                    $data['brand_accent_color'] = $preset['accent'];
+                }
+            }
+
+            // Validate colors against accessibility standards
+            foreach (['brand_primary_color', 'brand_secondary_color', 'brand_accent_color'] as $colorKey) {
+                if (isset($data[$colorKey])) {
+                    if (!BrandingPresetService::validateColorContrast($data[$colorKey])) {
+                        \Log::warning("Color {$data[$colorKey]} may have accessibility issues");
+                    }
+                }
+            }
+
+            foreach ($data as $key => $value) {
+                if (str_starts_with($key, 'brand_')) {
+                    SystemConfiguration::updateOrCreate(
+                        ['key' => $key],
+                        [
+                            'value' => $value,
+                            'type' => $this->getConfigType($key),
+                            'group' => 'branding',
+                            'updated_by' => auth()->id()
+                        ]
+                    );
+                }
+            }
+
+            // Clear cache
+            Cache::forget('branding_config');
+            
+            return true;
+        } catch (\Exception $e) {
+            \Log::error('Failed to update branding config: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Get available color presets
+     */
+    public function getColorPresets(): array
+    {
+        return BrandingPresetService::getColorPresets();
+    }
+
+    /**
+     * Get accessible color presets only
+     */
+    public function getAccessiblePresets(): array
+    {
+        return BrandingPresetService::getAccessiblePresets();
+    }
+
+    /**
+     * Get logo constraints
+     */
+    public function getLogoConstraints(): array
+    {
+        return BrandingPresetService::getLogoConstraints();
+    }
+
+    /**
+     * Get typography presets
+     */
+    public function getTypographyPresets(): array
+    {
+        return BrandingPresetService::getTypographyPresets();
+    }
+
+    /**
+     * Clear all caches
+     */
+    public function clearCache(): void
+    {
+        Cache::forget('branding_config');
+        Cache::forget('social_config');
+    }
+
+    /**
+     * Get configuration type for a key
      */
     private function getConfigType(string $key): string
     {
@@ -243,15 +353,6 @@ class BrandingService
         }
 
         return 'string';
-    }
-
-    /**
-     * Clear all branding cache
-     */
-    public function clearCache(): void
-    {
-        Cache::forget('branding_config');
-        Cache::forget('social_config');
     }
 
     /**
