@@ -24,11 +24,11 @@
                 <x-site-logo variant="header" size="lg" :show-text="true" />
             </div>
             
-            <!-- Helper function test -->
+            <!-- Simple logo test -->
             <div>
-                <h3 class="text-lg font-semibold mb-2">Via Helper Function:</h3>
-                <img src="{{ site_logo('header') }}" alt="Helper Logo" class="h-16 w-auto border">
-                <p class="text-sm text-gray-600 mt-1">URL: {{ site_logo('header') }}</p>
+                <h3 class="text-lg font-semibold mb-2">Default Logo:</h3>
+                <img src="{{ asset('images/logo.png') }}" alt="Default Logo" class="h-16 w-auto border">
+                <p class="text-sm text-gray-600 mt-1">URL: {{ asset('images/logo.png') }}</p>
             </div>
             
             <div class="bg-green-50 border border-green-200 rounded p-4">

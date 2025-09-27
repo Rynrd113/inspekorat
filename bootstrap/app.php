@@ -23,7 +23,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'asset.optimize' => \App\Http\Middleware\AssetOptimizationMiddleware::class,
             'admin.logout.public' => \App\Http\Middleware\AdminLogoutOnPublic::class,
             'admin.redirect' => \App\Http\Middleware\AdminRedirectMiddleware::class,
-            'branding.security' => \App\Http\Middleware\BrandingSecurityMiddleware::class,
         ]);
         
         $middleware->append([

@@ -22,7 +22,11 @@ class SiteLogo extends Component
         $this->variant = $variant;
         $this->size = $size;
         $this->showText = $showText;
-        $this->logoUrl = site_logo($variant);
+        
+        // Simple logo implementation without branding system
+        $defaultLogo = asset('images/logo.png');
+        $this->logoUrl = $defaultLogo;
+        
         $this->siteName = config('app.name', 'Portal Inspektorat');
     }
 
