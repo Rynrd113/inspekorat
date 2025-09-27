@@ -23,7 +23,6 @@ use App\Http\Controllers\Admin\GaleriController as AdminGaleriController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\AuditLogController as AdminAuditLogController;
 use App\Http\Controllers\Admin\SystemConfigurationController as AdminSystemConfigurationController;
-use App\Http\Controllers\Admin\BrandingController as AdminBrandingController;
 use App\Http\Controllers\Admin\ContentApprovalController as AdminContentApprovalController;
 use App\Http\Controllers\Admin\PengaduanController as AdminPengaduanController;
 use App\Http\Controllers\Admin\WebPortalController as AdminWebPortalController;
@@ -220,44 +219,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('configurations/initialize', [AdminSystemConfigurationController::class, 'initialize'])->name('configurations.initialize');
             Route::get('configurations/export', [AdminSystemConfigurationController::class, 'export'])->name('configurations.export');
             Route::post('configurations/import', [AdminSystemConfigurationController::class, 'import'])->name('configurations.import');
-            
-            // Branding Configuration routes with security middleware
-            Route::prefix('branding')->name('branding.')->middleware('branding.security')->group(function () {
-                Route::get('/', [AdminBrandingController::class, 'index'])->name('index');
-                Route::post('update-branding', [AdminBrandingController::class, 'updateBranding'])->name('update-branding');
-                Route::post('update-social', [AdminBrandingController::class, 'updateSocial'])->name('update-social');
-                Route::post('upload-image', [AdminBrandingController::class, 'uploadImage'])->name('upload-image');
-                Route::get('preview', [AdminBrandingController::class, 'preview'])->name('preview');
-                Route::post('generate-css', [AdminBrandingController::class, 'generateCss'])->name('generate-css');
-                Route::post('reset', [AdminBrandingController::class, 'reset'])->name('reset');
-                Route::get('constraints', function () {
-                    return response()->json(\App\Services\BrandingPresetService::getLogoConstraints());
-                })->name('constraints');
-                Route::get('presets', function () {
-                    return response()->json(\App\Services\BrandingPresetService::getAccessiblePresets());
-                })->name('presets');
-                Route::get('test', function () {
-                    return view('admin.branding.test');
-                })->name('test');
-                
-                Route::get('quick-test', [AdminBrandingController::class, 'quickTest'])->name('quick-test');
-                
-                // Debug route
-                Route::get('debug', function () {
-                    $brandingService = app(\App\Services\BrandingService::class);
-                    $branding = $brandingService->getBrandingConfig();
-                    $social = $brandingService->getSocialConfig();
-                    
-                    return response()->json([
-                        'user' => auth()->user()->only(['name', 'email']),
-                        'is_admin' => auth()->user()->isAdmin(),
-                        'is_super_admin' => auth()->user()->isSuperAdmin(),
-                        'branding_config' => $branding,
-                        'social_config' => $social,
-                        'color_presets' => \App\Services\BrandingPresetService::getAccessiblePresets()
-                    ]);
-                })->name('debug');
-            });
         });
         
         // Audit Log routes - only for super_admin

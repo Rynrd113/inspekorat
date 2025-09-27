@@ -22,12 +22,6 @@
     <!-- Vite Assets -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- Brand Colors CSS Variables (Government Standard) -->
-    <link rel="stylesheet" href="{{ asset('css/branding-variables.css') }}">
-    
-    <!-- Brand Colors Inline (Dynamic from Database) -->
-    {!! brand_css_vars() !!}
-    
     <!-- Smooth Scroll CSS -->
     <style>
         html {
