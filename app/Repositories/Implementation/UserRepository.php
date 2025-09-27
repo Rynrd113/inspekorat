@@ -98,10 +98,7 @@ class UserRepository implements UserRepositoryInterface
     {
         return Cache::remember('users.admins', 600, function () {
             return $this->model->whereIn('role', [
-                'admin', 'super_admin', 'content_manager', 'service_manager', 
-                'opd_manager', 'wbs_manager', 'admin_wbs', 'admin_berita', 
-                'admin_portal_opd', 'admin_pelayanan', 'admin_dokumen', 
-                'admin_galeri', 'admin_faq'
+                'content_admin', 'admin', 'super_admin'
             ])->orderBy('name')->get();
         });
     }
@@ -147,10 +144,7 @@ class UserRepository implements UserRepositoryInterface
                 'active' => $this->model->where('status', 'active')->count(),
                 'inactive' => $this->model->where('status', 'inactive')->count(),
                 'admins' => $this->model->whereIn('role', [
-                    'admin', 'super_admin', 'content_manager', 'service_manager',
-                    'opd_manager', 'wbs_manager', 'admin_wbs', 'admin_berita',
-                    'admin_portal_opd', 'admin_pelayanan', 'admin_dokumen',
-                    'admin_galeri', 'admin_faq'
+                    'content_admin', 'admin', 'super_admin'
                 ])->count(),
                 'users' => $this->model->where('role', 'user')->count(),
                 'recent_logins' => $this->model->whereNotNull('last_login')

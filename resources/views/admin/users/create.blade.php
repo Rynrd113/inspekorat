@@ -3,12 +3,7 @@
 @section('header', 'Tambah User')
 
 @section('breadcrumb')
-<li><a href="{{                     <ul class="text-sm text-gray-600 space-y-1">
-                        <li><strong>User:</strong> Akses terbatas, hanya dapat melihat informasi publik</li>
-                        <li><strong>Content Admin:</strong> Dapat mengelola berita, galeri, FAQ, dan dokumen</li>
-                        <li><strong>Admin:</strong> Dapat mengakses semua modul operasional kecuali manajemen user</li>
-                        <li><strong>Super Admin:</strong> Akses penuh ke semua fitur termasuk manajemen user</li>
-                    </ul>dmin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
+<li><a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a></li>
 <li><a href="{{ route('admin.users.index') }}" class="text-blue-600 hover:text-blue-800">User</a></li>
 <li><span class="text-gray-500">Tambah</span></li>
 @endsection
@@ -105,11 +100,8 @@
                 <div class="mt-2 text-sm text-gray-600">
                     <p class="font-medium mb-1">Deskripsi Role:</p>
                     <ul class="space-y-1 text-xs">
-                        <li><strong>User:</strong> Akses terbatas, hanya dapat melihat informasi publik</li>
-                        <li><strong>Admin WBS:</strong> Dapat mengelola data Whistleblowing System</li>
-                        <li><strong>Admin Berita:</strong> Dapat mengelola berita dan portal berita</li>
-                        <li><strong>Admin Portal OPD:</strong> Dapat mengelola data Portal OPD</li>
-                        <li><strong>Admin:</strong> Dapat mengakses semua modul admin kecuali manajemen user</li>
+                        <li><strong>Content Admin:</strong> Dapat mengelola konten: berita, galeri, FAQ, dan dokumen</li>
+                        <li><strong>Admin:</strong> Dapat mengakses semua modul operasional kecuali manajemen user</li>
                         <li><strong>Super Admin:</strong> Akses penuh ke semua fitur termasuk manajemen user</li>
                     </ul>
                 </div>

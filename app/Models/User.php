@@ -131,7 +131,7 @@ class User extends Authenticatable
      */
     public function canApproveContent(): bool
     {
-        return $this->hasAnyRole(['super_admin', 'admin', 'content_manager']);
+        return $this->hasAnyRole(['super_admin', 'admin']);
     }
     
     /**
@@ -154,6 +154,18 @@ class User extends Authenticatable
     {
         return [
             'user' => 'User',
+            'content_admin' => 'Content Admin',
+            'admin' => 'Admin',
+            'super_admin' => 'Super Admin'
+        ];
+    }
+    
+    /**
+     * Get admin-assignable roles (excludes 'user' role)
+     */
+    public static function getAdminAssignableRoles(): array
+    {
+        return [
             'content_admin' => 'Content Admin',
             'admin' => 'Admin',
             'super_admin' => 'Super Admin'

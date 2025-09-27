@@ -43,7 +43,7 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        $roles = User::getRoles();
+        $roles = User::getAdminAssignableRoles();
         return view('admin.users.create', compact('roles'));
     }
 
@@ -56,7 +56,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|string|in:' . implode(',', array_keys(User::getRoles())),
+            'role' => 'required|string|in:' . implode(',', array_keys(User::getAdminAssignableRoles())),
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -80,7 +80,7 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        $roles = User::getRoles();
+        $roles = User::getAdminAssignableRoles();
         return view('admin.users.edit', compact('user', 'roles'));
     }
 
@@ -93,7 +93,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'required|string|in:' . implode(',', array_keys(User::getRoles())),
+            'role' => 'required|string|in:' . implode(',', array_keys(User::getAdminAssignableRoles())),
         ]);
 
         if (!empty($validated['password'])) {
