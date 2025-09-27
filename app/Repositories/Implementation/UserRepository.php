@@ -146,7 +146,6 @@ class UserRepository implements UserRepositoryInterface
                 'admins' => $this->model->whereIn('role', [
                     'content_admin', 'admin', 'super_admin'
                 ])->count(),
-                'users' => $this->model->where('role', 'user')->count(),
                 'recent_logins' => $this->model->whereNotNull('last_login')
                                                 ->where('last_login', '>=', now()->subDays(30))
                                                 ->count(),

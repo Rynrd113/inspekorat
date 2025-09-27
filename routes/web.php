@@ -86,7 +86,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         
         // WBS routes - protected by role middleware
-        Route::middleware('role:admin_wbs,wbs_manager,admin,super_admin')->group(function () {
+        Route::middleware('role:admin,super_admin')->group(function () {
             Route::get('wbs', [AdminWbsController::class, 'index'])->name('wbs.index');
             Route::get('wbs/create', [AdminWbsController::class, 'create'])->name('wbs.create');
             Route::post('wbs', [AdminWbsController::class, 'store'])->name('wbs.store');
@@ -96,8 +96,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('wbs/{wbs}', [AdminWbsController::class, 'destroy'])->name('wbs.destroy');
         });
         
-        // Portal Papua Tengah (News) routes - protected by role middleware
-        Route::middleware('role:admin_berita,content_manager,admin,super_admin')->group(function () {
+                // Portal Papua Tengah (News) routes - protected by role middleware
+        Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::get('portal-papua-tengah', [AdminPortalPapuaTengahController::class, 'index'])->name('portal-papua-tengah.index');
             Route::get('portal-papua-tengah/create', [AdminPortalPapuaTengahController::class, 'create'])->name('portal-papua-tengah.create');
             Route::post('portal-papua-tengah', [AdminPortalPapuaTengahController::class, 'store'])->name('portal-papua-tengah.store');
@@ -108,7 +108,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Portal OPD routes - protected by role middleware
-        Route::middleware('role:admin_portal_opd,opd_manager,admin,super_admin')->group(function () {
+        Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::get('portal-opd', [AdminPortalOpdController::class, 'index'])->name('portal-opd.index');
             Route::post('portal-opd/sync', [AdminPortalOpdController::class, 'sync'])->name('portal-opd.sync');
             Route::get('portal-opd/create', [AdminPortalOpdController::class, 'create'])->name('portal-opd.create');
@@ -120,7 +120,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Info Kantor routes - protected by role middleware (missing routes)
-        Route::middleware('role:admin_info_kantor,admin,super_admin')->group(function () {
+        Route::middleware('role:admin,super_admin')->group(function () {
             Route::get('info-kantor', [\App\Http\Controllers\Admin\InfoKantorController::class, 'index'])->name('info-kantor.index');
             Route::get('info-kantor/create', [\App\Http\Controllers\Admin\InfoKantorController::class, 'create'])->name('info-kantor.create');
             Route::post('info-kantor', [\App\Http\Controllers\Admin\InfoKantorController::class, 'store'])->name('info-kantor.store');
@@ -131,7 +131,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Profil routes - protected by role middleware
-        Route::middleware('role:admin_profil,admin,super_admin')->group(function () {
+        Route::middleware('role:admin,super_admin')->group(function () {
             Route::get('profil', [AdminProfilController::class, 'index'])->name('profil.index');
             Route::get('profil/create', [AdminProfilController::class, 'create'])->name('profil.create');
             Route::post('profil', [AdminProfilController::class, 'store'])->name('profil.store');
@@ -142,7 +142,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Pelayanan routes - protected by role middleware
-        Route::middleware('role:admin_pelayanan,service_manager,admin,super_admin')->group(function () {
+        Route::middleware('role:admin,super_admin')->group(function () {
             Route::get('pelayanan', [AdminPelayananController::class, 'index'])->name('pelayanan.index');
             Route::get('pelayanan/create', [AdminPelayananController::class, 'create'])->name('pelayanan.create');
             Route::post('pelayanan', [AdminPelayananController::class, 'store'])->name('pelayanan.store');
@@ -153,7 +153,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Dokumen routes - protected by role middleware
-        Route::middleware('role:admin_dokumen,service_manager,admin,super_admin')->group(function () {
+        Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::get('dokumen', [AdminDokumenController::class, 'index'])->name('dokumen.index');
             Route::get('dokumen/create', [AdminDokumenController::class, 'create'])->name('dokumen.create');
             Route::post('dokumen', [AdminDokumenController::class, 'store'])->name('dokumen.store');
@@ -165,7 +165,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         
         // Galeri routes - protected by role middleware
-        Route::middleware('role:admin_galeri,content_manager,admin,super_admin')->group(function () {
+        Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::get('galeri', [AdminGaleriController::class, 'index'])->name('galeri.index');
             Route::get('galeri/create', [AdminGaleriController::class, 'create'])->name('galeri.create');
             Route::post('galeri', [AdminGaleriController::class, 'store'])->name('galeri.store');
@@ -176,8 +176,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('galeri/bulk-upload', [AdminGaleriController::class, 'bulkUpload'])->name('galeri.bulk-upload');
         });
         
-        // FAQ routes - accessible by admin_faq, admin, super_admin
-        Route::middleware('role:admin_faq,content_manager,admin,super_admin')->group(function () {
+        // FAQ routes - accessible by content_admin, admin, super_admin
+        Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::get('faq', [AdminFaqController::class, 'index'])->name('faq.index');
             Route::get('faq/create', [AdminFaqController::class, 'create'])->name('faq.create');
             Route::post('faq', [AdminFaqController::class, 'store'])->name('faq.store');

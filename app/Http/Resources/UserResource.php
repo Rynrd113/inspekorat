@@ -35,7 +35,6 @@ class UserResource extends JsonResource
             'super_admin' => 'Super Admin',
             'admin' => 'Admin',
             'content_admin' => 'Content Admin',
-            'user' => 'User',
         ];
 
         return $roles[$this->role] ?? 'Unknown';

@@ -76,7 +76,7 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return in_array($this->role, [
-            'admin', 'super_admin', 'content_admin'
+            'content_admin', 'admin', 'super_admin'
         ]);
     }
     
@@ -113,7 +113,6 @@ class User extends Authenticatable
             'super_admin' => 100,
             'admin' => 90,
             'content_admin' => 70,
-            'user' => 10,
             default => 0
         };
     }
@@ -153,7 +152,6 @@ class User extends Authenticatable
     public static function getRoles(): array
     {
         return [
-            'user' => 'User',
             'content_admin' => 'Content Admin',
             'admin' => 'Admin',
             'super_admin' => 'Super Admin'
@@ -181,7 +179,6 @@ class User extends Authenticatable
             'super_admin' => 'Akses penuh ke semua modul termasuk manajemen user',
             'admin' => 'Akses ke semua modul operasional dan management',
             'content_admin' => 'Mengelola konten: berita, galeri, FAQ, dokumen',
-            'user' => 'Akses terbatas, hanya view',
             default => 'Role tidak dikenali'
         };
     }

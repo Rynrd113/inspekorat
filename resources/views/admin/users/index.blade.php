@@ -199,7 +199,6 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                             @php
                                 $roleColors = [
-                                    'user' => 'bg-gray-100 text-gray-800',
                                     'content_admin' => 'bg-purple-100 text-purple-800',
                                     'admin' => 'bg-blue-100 text-blue-800',
                                     'super_admin' => 'bg-red-100 text-red-800'

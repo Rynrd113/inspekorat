@@ -18,56 +18,56 @@
                         Dashboard
                     </a>
                     
-                    @if(auth()->user()->hasAnyRole(['admin_wbs', 'wbs_manager', 'admin', 'superadmin']))
+                    @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
                     <a href="{{ route('admin.wbs.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.wbs.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-shield-alt mr-3 h-5 w-5"></i>
                         WBS (Whistleblowing System)
                     </a>
                     @endif
                                      
-                    @if(auth()->user()->hasAnyRole(['admin', 'superadmin']))
+                    @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
                     <a href="{{ route('admin.pengaduan.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.pengaduan.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-comments mr-3 h-5 w-5"></i>
                         Pengaduan Masyarakat
                     </a>
                     @endif
                     
-                    @if(auth()->user()->hasAnyRole(['admin_berita', 'content_manager', 'admin', 'superadmin']))
+                    @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.portal-papua-tengah.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.portal-papua-tengah.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-newspaper mr-3 h-5 w-5"></i>
                         Portal Berita
                     </a>
                     @endif
                     
-                    @if(auth()->user()->hasAnyRole(['admin_portal_opd', 'opd_manager', 'admin', 'superadmin']))
+                    @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.portal-opd.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.portal-opd.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-building mr-3 h-5 w-5"></i>
                         Portal OPD
                     </a>
                     @endif
                     
-                    @if(auth()->user()->hasAnyRole(['admin_faq', 'content_manager', 'admin', 'superadmin']))
+                    @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.faq.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.faq.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-question-circle mr-3 h-5 w-5"></i>
                         FAQ
                     </a>
                     @endif
                     
-                    @if(auth()->user()->hasAnyRole(['admin_pelayanan', 'service_manager', 'admin', 'superadmin']))
+                    @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
                     <a href="{{ route('admin.pelayanan.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.pelayanan.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-concierge-bell mr-3 h-5 w-5"></i>
                         Pelayanan
                     </a>
                     @endif
                     
-                    @if(auth()->user()->hasAnyRole(['admin_dokumen', 'service_manager', 'admin', 'superadmin']))
+                    @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.dokumen.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.dokumen.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-file-alt mr-3 h-5 w-5"></i>
                         Dokumen
                     </a>
                     @endif
                     
-                    @if(auth()->user()->hasAnyRole(['admin_galeri', 'content_manager', 'admin', 'superadmin']))
+                    @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.galeri.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.galeri.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-images mr-3 h-5 w-5"></i>
                         Galeri
@@ -117,7 +117,6 @@
                         <div class="text-sm font-medium text-white">{{ auth()->user()->name }}</div>
                         @php
                             $roleLabels = [
-                                'user' => 'User',
                                 'content_admin' => 'Content Admin',
                                 'admin' => 'Administrator',
                                 'super_admin' => 'Super Admin'

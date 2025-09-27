@@ -32,10 +32,12 @@ $roleMapping = [
     'wbs_manager' => 'admin',
     
     // Yang sudah benar tetap sama
-    'user' => 'user',
     'admin' => 'admin',
     'super_admin' => 'super_admin',
     'content_admin' => 'content_admin',
+    
+    // Hapus user biasa - tidak digunakan lagi
+    'user' => 'content_admin',
 ];
 
 $updatedCount = 0;

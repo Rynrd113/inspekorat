@@ -41,15 +41,6 @@ class UserSeeder extends Seeder
                 'role' => 'content_admin',
                 'email_verified_at' => now(),
             ],
-            
-            // Regular User
-            [
-                'name' => 'Regular User',
-                'email' => 'user@inspektorat.go.id',
-                'password' => Hash::make('user123'),
-                'role' => 'user',
-                'email_verified_at' => now(),
-            ],
         ];
 
         // Buat semua user
@@ -68,7 +59,6 @@ class UserSeeder extends Seeder
         $this->command->info('Super Admin: superadmin@inspektorat.go.id / superadmin123');
         $this->command->info('Admin: admin@inspektorat.go.id / admin123');
         $this->command->info('Content Admin: content.admin@inspektorat.go.id / contentadmin123');
-        $this->command->info('User: user@inspektorat.go.id / user123');
         $this->command->info('=================================');
     }
 }

@@ -18,11 +18,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', [
-                'user',
                 'content_admin',
                 'admin',
                 'super_admin'
-            ])->default('user');
+            ])->default('content_admin');
             $table->boolean('status')->default(true);
             $table->rememberToken();
             $table->timestamps();
