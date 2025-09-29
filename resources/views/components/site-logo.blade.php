@@ -30,7 +30,7 @@ $textSizeClass = $textSizeClasses[$size] ?? $textSizeClasses['md'];
     @if($showText && ($variant === 'header' || $variant === 'footer'))
         <div class="ml-3 {{ $attributes->get('class', '') }}">
             <h1 class="{{ $textSizeClass }} font-bold leading-tight">Inspektorat</h1>
-            <p class="text-sm opacity-75">Papua Tengah</p>
+            <p class="text-sm opacity-75">Provinsi Papua Tengah</p>
         </div>
     @endif
 </div>
