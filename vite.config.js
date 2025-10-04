@@ -112,11 +112,12 @@ export default defineConfig({
     },
     // Server configuration untuk development
     server: {
-        host: 'localhost',
+        host: true, // Allow external connections
         port: 5173,
+        https: false, // Let Herd handle HTTPS
         hmr: {
-            host: 'localhost',
             port: 5173,
+            clientPort: 5173, // Use same port for HMR
         },
         watch: {
             usePolling: true,
@@ -129,6 +130,16 @@ export default defineConfig({
                 changeOrigin: true,
                 secure: false,
             },
+        },
+        // Allow CORS for port forwarding
+        cors: {
+            origin: true,
+            credentials: true,
+        },
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
         },
     },
     // CSS optimization

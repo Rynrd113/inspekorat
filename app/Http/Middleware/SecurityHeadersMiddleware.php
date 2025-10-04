@@ -26,15 +26,18 @@ class SecurityHeadersMiddleware
         $isDevelopment = in_array(config('app.env'), ['local', 'dusk.local', 'testing']);
         
         if ($isDevelopment) {
-            // Development CSP - allow Vite dev server
-            $csp = "default-src 'self' http://localhost:5173; " .
-                   "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:5173; " .
-                   "script-src-elem 'self' 'unsafe-inline' http://localhost:5173; " .
-                   "style-src 'self' 'unsafe-inline' http://localhost:5173 https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
-                   "style-src-elem 'self' 'unsafe-inline' http://localhost:5173 https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
-                   "img-src 'self' data: https: http://localhost:5173; " .
-                   "font-src 'self' https://fonts.bunny.net https://cdnjs.cloudflare.com http://localhost:5173; " .
-                   "connect-src 'self' http://localhost:5173 ws://localhost:5173; " .
+            // Development CSP - allow Vite dev server (both HTTP and HTTPS, multiple ports)
+            $viteHosts = "http://localhost:5173 https://localhost:5173 https://inspekorat.test:5173 https://vite.inspekorat.test:5173 http://localhost:5174 https://localhost:5174";
+            $wsHosts = "ws://localhost:5173 wss://localhost:5173 wss://inspekorat.test:5173 ws://localhost:5174 wss://localhost:5174";
+            
+            $csp = "default-src 'self' {$viteHosts}; " .
+                   "script-src 'self' 'unsafe-inline' 'unsafe-eval' {$viteHosts}; " .
+                   "script-src-elem 'self' 'unsafe-inline' {$viteHosts}; " .
+                   "style-src 'self' 'unsafe-inline' {$viteHosts} https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
+                   "style-src-elem 'self' 'unsafe-inline' {$viteHosts} https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
+                   "img-src 'self' data: https: {$viteHosts}; " .
+                   "font-src 'self' https://fonts.bunny.net https://cdnjs.cloudflare.com {$viteHosts}; " .
+                   "connect-src 'self' {$viteHosts} {$wsHosts}; " .
                    "frame-ancestors 'none';";
         } else {
             // Production CSP - more restrictive
