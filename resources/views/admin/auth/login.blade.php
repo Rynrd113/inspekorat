@@ -94,17 +94,6 @@
                 </div>
             </div>
         </x-card>
-
-        <!-- Demo Credentials Info -->
-        <x-card class="bg-blue-50 border-blue-200">
-            <div class="text-center">
-                <h3 class="text-sm font-medium text-blue-900 mb-2">Demo Credentials</h3>
-                <div class="text-xs text-blue-700 space-y-1">
-                    <p><strong>Admin:</strong> admin@inspektorat.go.id / admin123</p>
-                    <p><strong>Super Admin:</strong> superadmin@inspektorat.go.id / superadmin123</p>
-                </div>
-            </div>
-        </x-card>
     </div>
 </div>
 @endsection

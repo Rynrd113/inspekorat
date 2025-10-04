@@ -51,10 +51,10 @@ class PublicController extends Controller
         $infoKantor->nama = 'Inspektorat Provinsi Papua Tengah';
         $infoKantor->alamat = 'Jl. Raya Nabire No. 123, Nabire, Papua Tengah';
         $infoKantor->telepon = '(0984) 21234';
-        $infoKantor->email = 'inspektorat@paputengah.go.id';
+        $infoKantor->email = 'inspektorat@papuatengah.go.id';
         $infoKantor->jam_operasional = 'Senin - Jumat: 08:00 - 16:00 WIT';
         $infoKantor->koordinat = '-3.3683, 135.4956'; // Koordinat Nabire
-        $infoKantor->website = 'https://inspektorat.paputengah.go.id';
+        $infoKantor->website = 'https://inspektorat.papuatengah.go.id';
         $infoKantor->fax = '(0984) 21235';
 
         return view('public.index', compact('portalPapuaTengah', 'infoKantor', 'stats'));
@@ -167,12 +167,9 @@ class PublicController extends Controller
         // Get organization profile data
         $profil = [
             'nama_organisasi' => 'Inspektorat Provinsi Papua Tengah',
-            'visi' => 'Terwujudnya Pengawasan Internal yang Profesional dan Akuntabel untuk Mewujudkan Good Governance di Papua Tengah',
+            'visi' => 'Terwujudnya Aparatur dan Hasil Pengawasan Internal yang Profesional dan Berkualitas demi Pelayanan Publik vang Prima',
             'misi' => [
-                'Melaksanakan pengawasan internal yang berkualitas',
-                'Memberikan assurance dan consulting yang optimal',
-                'Meningkatkan kapasitas pengawasan internal',
-                'Memperkuat sistem pengendalian internal pemerintah'
+                'Mewujudkan Peningkatan Kualitas Aparatur dan Hasil Pengawasan untuk mendorong Pelayanan Publik dan Pemerintahan yang Akuntabel'
             ],
             'sejarah' => 'Inspektorat Provinsi Papua Tengah dibentuk seiring dengan pembentukan provinsi Papua Tengah...',
         ];
@@ -512,7 +509,7 @@ startxref
             'nama' => 'Inspektorat Provinsi Papua Tengah',
             'alamat' => 'Jl. Raya Nabire No. 123, Nabire, Papua Tengah',
             'telepon' => '(0984) 21234',
-            'email' => 'inspektorat@paputengah.go.id',
+            'email' => 'inspektorat@papuatengah.go.id',
             'jam_operasional' => 'Senin - Jumat: 08:00 - 16:00 WIT'
         ];
 

@@ -41,7 +41,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Visi</label>
                         <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
                             <p class="text-gray-800 italic">
-                                "Terwujudnya Pengawasan Internal yang Profesional dan Akuntabel untuk Mewujudkan Good Governance di Papua Tengah"
+                                "Terwujudnya Aparatur dan Hasil Pengawasan Internal yang Profesional dan Berkualitas demi Pelayanan Publik vang Prima"
                             </p>
                         </div>
                     </div>
@@ -53,19 +53,7 @@
                             <ol class="space-y-2">
                                 <li class="flex items-start space-x-2">
                                     <span class="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 text-sm font-bold rounded-full flex items-center justify-center">1</span>
-                                    <span class="text-gray-800">Melaksanakan pengawasan internal yang berkualitas</span>
-                                </li>
-                                <li class="flex items-start space-x-2">
-                                    <span class="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 text-sm font-bold rounded-full flex items-center justify-center">2</span>
-                                    <span class="text-gray-800">Memberikan assurance dan consulting yang optimal</span>
-                                </li>
-                                <li class="flex items-start space-x-2">
-                                    <span class="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 text-sm font-bold rounded-full flex items-center justify-center">3</span>
-                                    <span class="text-gray-800">Meningkatkan kapasitas pengawasan internal</span>
-                                </li>
-                                <li class="flex items-start space-x-2">
-                                    <span class="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 text-sm font-bold rounded-full flex items-center justify-center">4</span>
-                                    <span class="text-gray-800">Memperkuat sistem pengendalian internal pemerintah</span>
+                                    <span class="text-gray-800">Mewujudkan Peningkatan Kualitas Aparatur dan Hasil Pengawasan untuk mendorong Pelayanan Publik dan Pemerintahan yang Akuntabel</span>
                                 </li>
                             </ol>
                         </div>

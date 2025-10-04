@@ -1,6 +1,6 @@
 /**
  * Admin Panel Common Functions
- * Portal Inspektorat Papua Selatan
+ * Portal Inspektorat Papua Tengah
  */
 
 // Global admin functions

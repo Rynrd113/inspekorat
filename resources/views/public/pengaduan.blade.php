@@ -1,7 +1,10 @@
 @extends('layouts.public')
 
 @section('title', 'Pengaduan Masyarakat - Portal Inspektorat Papua Tengah')
-@section('description', 'Sampaikan pengaduan, kritik, dan saran kepada Inspektorat Provinsi Papua Tengah secara online.')
+@section('description', 'Sampaikan pengaduan, kritik, dan saran kepada Inspektorat                         <div class="flex items-start">
+                            <i class="fas fa-envelope text-gray-400 mt-0.5 mr-3"></i>
+                            <span class="text-gray-600">inspektorat@papuatengah.go.id</span>
+                        </div>insi Papua Tengah secara online.')
 
 @section('content')
 
@@ -35,7 +38,7 @@
                 Pengaduan Masyarakat
             </h1>
             <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                Sampaikan pengaduan, kritik, dan saran Anda kepada Inspektorat Provinsi Papua Selatan. 
+                Sampaikan pengaduan, kritik, dan saran Anda kepada Inspektorat Provinsi Papua Tengah. 
                 Kami akan menindaklanjuti setiap pengaduan yang masuk.
             </p>
         </div>
@@ -187,11 +190,11 @@
                         </div>
                         <div class="flex items-center">
                             <i class="fas fa-envelope text-gray-400 mr-3"></i>
-                            <span class="text-gray-600">inspektorat@papuaselatan.go.id</span>
+                            <span class="text-gray-600">inspektorat@papuatengah.go.id</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-map-marker-alt text-gray-400 mt-0.5 mr-3"></i>
-                            <span class="text-gray-600">Jl. Trans Papua, Merauke, Papua Selatan 99611</span>
+                            <span class="text-gray-600">Jl. Trans Papua, Merauke, Papua Tengah 99611</span>
                         </div>
                     </div>
                 </x-card>

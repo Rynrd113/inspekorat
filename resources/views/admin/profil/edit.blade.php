@@ -61,7 +61,7 @@
                                       name="visi" 
                                       rows="3"
                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('visi') border-red-500 @enderror"
-                                      required>{{ old('visi', 'Terwujudnya Pengawasan Internal yang Profesional dan Akuntabel untuk Mewujudkan Good Governance di Papua Tengah') }}</textarea>
+                                      required>{{ old('visi', 'Terwujudnya Aparatur dan Hasil Pengawasan Internal yang Profesional dan Berkualitas demi Pelayanan Publik vang Prima') }}</textarea>
                             @error('visi')
                                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -76,42 +76,9 @@
                                 <div class="flex items-center space-x-2">
                                     <input type="text" 
                                            name="misi[]" 
-                                           value="{{ old('misi.0', 'Melaksanakan pengawasan internal yang berkualitas') }}"
+                                           value="{{ old('misi.0', 'Mewujudkan Peningkatan Kualitas Aparatur dan Hasil Pengawasan untuk mendorong Pelayanan Publik dan Pemerintahan yang Akuntabel') }}"
                                            class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                            placeholder="Misi 1"
-                                           required>
-                                    <button type="button" onclick="removeMisi(this)" class="text-red-500 hover:text-red-700">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                                <div class="flex items-center space-x-2">
-                                    <input type="text" 
-                                           name="misi[]" 
-                                           value="{{ old('misi.1', 'Memberikan assurance dan consulting yang optimal') }}"
-                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                           placeholder="Misi 2"
-                                           required>
-                                    <button type="button" onclick="removeMisi(this)" class="text-red-500 hover:text-red-700">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                                <div class="flex items-center space-x-2">
-                                    <input type="text" 
-                                           name="misi[]" 
-                                           value="{{ old('misi.2', 'Meningkatkan kapasitas pengawasan internal') }}"
-                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                           placeholder="Misi 3"
-                                           required>
-                                    <button type="button" onclick="removeMisi(this)" class="text-red-500 hover:text-red-700">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                                <div class="flex items-center space-x-2">
-                                    <input type="text" 
-                                           name="misi[]" 
-                                           value="{{ old('misi.3', 'Memperkuat sistem pengendalian internal pemerintah') }}"
-                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                           placeholder="Misi 4"
                                            required>
                                     <button type="button" onclick="removeMisi(this)" class="text-red-500 hover:text-red-700">
                                         <i class="fas fa-times"></i>

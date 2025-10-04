@@ -129,7 +129,7 @@
                             <i class="fas fa-envelope text-blue-600 mr-3 mt-1"></i>
                             <div>
                                 <h6 class="font-medium text-gray-900 mb-1">Email</h6>
-                                <p class="text-gray-600">{{ $kontak->email ?? 'inspektorat@paputengah.go.id' }}</p>
+                                <p class="text-gray-600">{{ $kontak->email ?? 'inspektorat@papuatengah.go.id' }}</p>
                             </div>
                         </div>
                         

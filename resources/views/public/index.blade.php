@@ -777,7 +777,7 @@
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Website</h3>
                     <div class="text-gray-600 text-lg">
                         <a href="{{ $infoKantor->website }}" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors">
-                            inspektorat.paputengah.go.id
+                            inspektorat.papuatengah.go.id
                         </a>
                     </div>
                 </div>

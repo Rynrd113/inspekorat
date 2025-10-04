@@ -121,7 +121,7 @@
                         </div>
                         <div>
                             <p class="text-sm font-medium text-gray-900">Email</p>
-                            <p class="text-gray-600">inspektorat@paputengah.go.id</p>
+                            <p class="text-gray-600">inspektorat@papuatengah.go.id</p>
                         </div>
                     </div>
 
@@ -131,7 +131,7 @@
                         </div>
                         <div>
                             <p class="text-sm font-medium text-gray-900">Website</p>
-                            <p class="text-gray-600">https://inspektorat.paputengah.go.id</p>
+                            <p class="text-gray-600">https://inspektorat.papuatengah.go.id</p>
                         </div>
                     </div>
 
