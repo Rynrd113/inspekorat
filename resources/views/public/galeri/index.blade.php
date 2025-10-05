@@ -63,7 +63,7 @@
                                                  class="w-full h-full object-cover" 
                                                  loading="lazy" 
                                                  decoding="async"
-                                                 onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center\'><i class=\'fas fa-image text-gray-400 text-4xl\'></i><br><small class=\'text-xs text-gray-500 mt-2\'>Gambar tidak dapat dimuat</small></div>'">
+                                                 onerror="this.style.display='none'; const errorDiv = document.createElement('div'); errorDiv.className='w-full h-full flex items-center justify-center bg-gray-100'; const icon = document.createElement('i'); icon.className='fas fa-image text-gray-400 text-4xl'; const text = document.createElement('small'); text.className='text-xs text-gray-500 mt-2 block'; text.textContent='Gambar tidak dapat dimuat'; errorDiv.appendChild(icon); errorDiv.appendChild(text); this.parentElement.appendChild(errorDiv);">
                                         @else
                                             <div class="w-full h-full flex items-center justify-center">
                                                 <i class="fas fa-image text-gray-400 text-4xl"></i>
@@ -160,19 +160,95 @@
 </div>
 
 <!-- Lightbox Modal -->
-<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center" onclick="closeLightbox()">
-    <div class="relative max-w-4xl max-h-full p-4 w-full" onclick="event.stopPropagation()">        
-        <!-- Content -->
-        <div id="lightbox-content" class="text-center px-16 py-8">
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden" onclick="closeLightbox()">
+    <!-- Close Button -->
+    <button onclick="closeLightbox()" class="absolute top-4 right-4 z-60 text-white hover:text-gray-300 transition-colors p-2">
+        <i class="fas fa-times text-2xl"></i>
+    </button>
+    
+    <!-- Main Container -->
+    <div class="h-full w-full relative" onclick="event.stopPropagation()">        
+        <!-- Content Area -->
+        <div id="lightbox-content" class="absolute inset-0 flex items-center justify-center p-4" style="bottom: 200px;">
             <!-- Content will be loaded here -->
         </div>
         
-        <!-- Info Panel -->
-        <div id="lightbox-info" class="absolute bottom-4 left-4 right-4 bg-black bg-opacity-50 text-white p-4 rounded">
+        <!-- Info Panel - Fixed at bottom -->
+        <div id="lightbox-info" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-85 text-white p-4 border-t border-gray-700 h-48 overflow-y-auto backdrop-blur-sm">
             <!-- Info will be loaded here -->
         </div>
     </div>
 </div>
+
+@push('styles')
+<style>
+/* Lightbox responsive styles */
+#lightbox {
+    backdrop-filter: blur(5px);
+}
+
+#lightbox-content {
+    z-index: 10;
+}
+
+#lightbox-info {
+    z-index: 20;
+}
+
+#lightbox-content img {
+    transition: transform 0.3s ease;
+    max-height: calc(100vh - 220px) !important;
+}
+
+#lightbox-content img:hover {
+    transform: scale(1.02);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    #lightbox-content {
+        padding: 1rem;
+        bottom: 180px !important;
+    }
+    
+    #lightbox-info {
+        height: 180px !important;
+        padding: 1rem;
+    }
+    
+    #lightbox-info h3 {
+        font-size: 1.125rem;
+    }
+    
+    #lightbox-info p {
+        font-size: 0.875rem;
+    }
+    
+    .rounded-full {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+    }
+    
+    #lightbox-content img {
+        max-height: calc(100vh - 200px) !important;
+    }
+}
+
+@media (max-width: 640px) {
+    #lightbox-content {
+        bottom: 160px !important;
+    }
+    
+    #lightbox-info {
+        height: 160px !important;
+    }
+    
+    #lightbox-content img {
+        max-height: calc(100vh - 180px) !important;
+    }
+}
+</style>
+@endpush
 
 @push('scripts')
 <script>
@@ -232,49 +308,158 @@ function openLightbox(itemId) {
     if (item) {
         // Display content based on file type
         if (['mp4', 'avi', 'mov', 'wmv'].includes(item.file_type)) {
-            content.innerHTML = `
-                <div class="bg-gray-900 rounded-lg p-8 flex items-center justify-center" style="min-height: 400px;">
-                    <div class="text-center">
-                        <i class="fas fa-play-circle text-white text-6xl mb-4"></i>
-                        <p class="text-white text-lg">Video Player akan segera tersedia</p>
-                    </div>
-                </div>
-            `;
+            // Clear content first
+            content.innerHTML = '';
+            
+            // Create video placeholder elements safely
+            const videoContainer = document.createElement('div');
+            videoContainer.className = 'bg-gray-900 rounded-lg p-8 flex items-center justify-center h-96';
+            
+            const textCenter = document.createElement('div');
+            textCenter.className = 'text-center';
+            
+            const playIcon = document.createElement('i');
+            playIcon.className = 'fas fa-play-circle text-white text-6xl mb-4';
+            
+            const videoText = document.createElement('p');
+            videoText.className = 'text-white text-lg';
+            videoText.textContent = 'Video Player akan segera tersedia';
+            
+            textCenter.appendChild(playIcon);
+            textCenter.appendChild(videoText);
+            videoContainer.appendChild(textCenter);
+            content.appendChild(videoContainer);
         } else {
             const storageUrl = '{{ asset("storage") }}';
             const placeholderUrl = '{{ asset("images/placeholder.jpg") }}';
             const imageSrc = item.file_path ? `${storageUrl}/${item.file_path}` : placeholderUrl;
             
-            content.innerHTML = `
-                <img src="${imageSrc}" 
-                     alt="${item.judul}" 
-                     class="max-w-full max-h-[70vh] object-contain rounded-lg mx-auto">
-            `;
+            // Clear content first
+            content.innerHTML = '';
+            
+            // Create image element safely
+            const img = document.createElement('img');
+            img.src = imageSrc;
+            img.alt = item.judul || '';
+            img.className = 'max-w-full object-contain rounded-lg cursor-zoom-in';
+            img.style.cssText = 'max-height: calc(100vh - 220px); width: auto; height: auto;';
+            img.loading = 'lazy';
+            img.onclick = function() { toggleImageZoom(this); };
+            img.onerror = function() { this.src = placeholderUrl; };
+            
+            content.appendChild(img);
         }
         
-        // Display info
-        info.innerHTML = `
-            <h3 class="text-xl font-bold mb-2">${item.judul}</h3>
-            <p class="text-gray-300 mb-2">${item.deskripsi || ''}</p>
-            <div class="flex flex-wrap gap-4 text-sm">
-                <span class="bg-blue-600 px-2 py-1 rounded">${item.kategori}</span>
-                ${item.tanggal_publikasi ? `<span class="mr-4"><i class="fas fa-calendar mr-1"></i> ${new Date(item.tanggal_publikasi).toLocaleDateString('id-ID')}</span>` : ''}
-                ${item.deskripsi ? `<span class="mr-4"><i class="fas fa-map-marker-alt mr-1"></i> ${item.deskripsi}</span>` : ''}
-            </div>
-        `;
+        // Display info safely with DOM manipulation
+        info.innerHTML = '';
+        
+        const infoContainer = document.createElement('div');
+        infoContainer.className = 'flex flex-col md:flex-row md:items-start gap-4';
+        
+        // Left side content
+        const leftDiv = document.createElement('div');
+        leftDiv.className = 'flex-1';
+        
+        const title = document.createElement('h3');
+        title.className = 'text-xl font-bold mb-2 text-white';
+        title.textContent = item.judul || '';
+        leftDiv.appendChild(title);
+        
+        if (item.deskripsi) {
+            const description = document.createElement('p');
+            description.className = 'text-gray-300 mb-3 text-sm leading-relaxed';
+            description.textContent = item.deskripsi;
+            leftDiv.appendChild(description);
+        }
+        
+        // Right side badges
+        const rightDiv = document.createElement('div');
+        rightDiv.className = 'flex flex-wrap gap-2 text-sm';
+        
+        // Category badge
+        const categoryBadge = document.createElement('span');
+        categoryBadge.className = 'bg-blue-600 px-3 py-1 rounded-full text-white';
+        categoryBadge.textContent = item.kategori || 'Umum';
+        rightDiv.appendChild(categoryBadge);
+        
+        // Date badge
+        if (item.tanggal_publikasi) {
+            const dateBadge = document.createElement('span');
+            dateBadge.className = 'bg-gray-700 px-3 py-1 rounded-full text-gray-300';
+            
+            const calendarIcon = document.createElement('i');
+            calendarIcon.className = 'fas fa-calendar mr-1';
+            dateBadge.appendChild(calendarIcon);
+            
+            const dateText = document.createTextNode(' ' + new Date(item.tanggal_publikasi).toLocaleDateString('id-ID'));
+            dateBadge.appendChild(dateText);
+            
+            rightDiv.appendChild(dateBadge);
+        }
+        
+        // File type badge
+        if (item.file_type) {
+            const typeBadge = document.createElement('span');
+            typeBadge.className = 'bg-green-600 px-3 py-1 rounded-full text-white';
+            typeBadge.textContent = item.file_type.toUpperCase();
+            rightDiv.appendChild(typeBadge);
+        }
+        
+        infoContainer.appendChild(leftDiv);
+        infoContainer.appendChild(rightDiv);
+        info.appendChild(infoContainer);
         
         lightbox.classList.remove('hidden');
     }
 }
 
 function closeLightbox() {
-    document.getElementById('lightbox').classList.add('hidden');
+    const lightbox = document.getElementById('lightbox');
+    lightbox.classList.add('hidden');
+    // Reset scroll position
+    document.body.style.overflow = 'auto';
 }
 
 // Close lightbox with Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeLightbox();
+    }
+});
+
+// Image zoom functionality
+function toggleImageZoom(img) {
+    if (img.style.transform === 'scale(2)') {
+        img.style.transform = 'scale(1)';
+        img.style.cursor = 'zoom-in';
+        img.parentElement.style.overflow = 'hidden';
+    } else {
+        img.style.transform = 'scale(2)';
+        img.style.cursor = 'zoom-out';
+        img.parentElement.style.overflow = 'auto';
+    }
+}
+
+// Touch gestures for mobile
+let touchStartX = 0;
+let touchStartY = 0;
+
+document.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+});
+
+document.addEventListener('touchend', function(e) {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+    
+    // Swipe down to close lightbox
+    if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY > 100) {
+        if (document.getElementById('lightbox').classList.contains('hidden') === false) {
+            closeLightbox();
+        }
     }
 });
 </script>
