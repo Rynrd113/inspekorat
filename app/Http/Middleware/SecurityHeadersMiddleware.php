@@ -26,15 +26,15 @@ class SecurityHeadersMiddleware
         $isDevelopment = in_array(config('app.env'), ['local', 'dusk.local', 'testing']);
         
         if ($isDevelopment) {
-            // Development CSP - allow Vite dev server
-            $csp = "default-src 'self' http://localhost:5173; " .
-                   "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:5173; " .
-                   "script-src-elem 'self' 'unsafe-inline' http://localhost:5173; " .
-                   "style-src 'self' 'unsafe-inline' http://localhost:5173 https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
-                   "style-src-elem 'self' 'unsafe-inline' http://localhost:5173 https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
-                   "img-src 'self' data: https: http://localhost:5173; " .
-                   "font-src 'self' https://fonts.bunny.net https://cdnjs.cloudflare.com http://localhost:5173; " .
-                   "connect-src 'self' http://localhost:5173 ws://localhost:5173; " .
+            // Development CSP - allow Vite dev server and local development
+            $csp = "default-src 'self' http://localhost:* http://127.0.0.1:*; " .
+                   "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:* http://127.0.0.1:*; " .
+                   "script-src-elem 'self' 'unsafe-inline' http://localhost:* http://127.0.0.1:*; " .
+                   "style-src 'self' 'unsafe-inline' http://localhost:* http://127.0.0.1:* https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
+                   "style-src-elem 'self' 'unsafe-inline' http://localhost:* http://127.0.0.1:* https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
+                   "img-src 'self' data: https: http: http://localhost:* http://127.0.0.1:*; " .
+                   "font-src 'self' https://fonts.bunny.net https://cdnjs.cloudflare.com http://localhost:* http://127.0.0.1:*; " .
+                   "connect-src 'self' http://localhost:* http://127.0.0.1:* ws://localhost:* ws://127.0.0.1:*; " .
                    "frame-ancestors 'none';";
         } else {
             // Production CSP - more restrictive

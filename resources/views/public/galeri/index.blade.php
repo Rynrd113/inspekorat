@@ -1,5 +1,7 @@
 @extends('layouts.public')
 
+@use('Illuminate\Support\Facades\Storage')
+
 @section('title', 'Galeri Kegiatan - Inspektorat Papua Tengah')
 @section('description', 'Dokumentasi foto dan video kegiatan Inspektorat Provinsi Papua Tengah.')
 
@@ -55,13 +57,17 @@
                                 <!-- Image/Video Thumbnail -->
                                 <div class="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200">
                                     @if(in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif']))
-                                        @if($galeri->file_path && Storage::exists('public/' . $galeri->file_path))
-                                            <img src="{{ Storage::url($galeri->file_path) }}" 
+                                        @if($galeri->file_path && Storage::disk('public')->exists($galeri->file_path))
+                                            <img src="{{ asset('storage/' . $galeri->file_path) }}" 
                                                  alt="{{ $galeri->judul }}" 
-                                                 class="w-full h-full object-cover">
+                                                 class="w-full h-full object-cover" 
+                                                 loading="lazy" 
+                                                 decoding="async"
+                                                 onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center\'><i class=\'fas fa-image text-gray-400 text-4xl\'></i><br><small class=\'text-xs text-gray-500 mt-2\'>Gambar tidak dapat dimuat</small></div>'">
                                         @else
                                             <div class="w-full h-full flex items-center justify-center">
                                                 <i class="fas fa-image text-gray-400 text-4xl"></i>
+                                                <br><small class="text-xs text-gray-500 mt-2">File tidak ditemukan</small>
                                             </div>
                                         @endif
                                         <div class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded text-xs">
@@ -235,8 +241,12 @@ function openLightbox(itemId) {
                 </div>
             `;
         } else {
+            const storageUrl = '{{ asset("storage") }}';
+            const placeholderUrl = '{{ asset("images/placeholder.jpg") }}';
+            const imageSrc = item.file_path ? `${storageUrl}/${item.file_path}` : placeholderUrl;
+            
             content.innerHTML = `
-                <img src="${item.file_path ? '/storage/' + item.file_path : '/images/placeholder.jpg'}" 
+                <img src="${imageSrc}" 
                      alt="${item.judul}" 
                      class="max-w-full max-h-[70vh] object-contain rounded-lg mx-auto">
             `;
