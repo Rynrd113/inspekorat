@@ -68,8 +68,20 @@
                                     @endif
                                     <div class="mt-2 text-xs text-gray-500">
                                         <div>File Type: <code>{{ $galeri->file_type ?? 'null' }}</code></div>
-                                        <div>Is Image: <code>{{ $galeri->is_image ? 'true' : 'false' }}</code></div>
-                                        <div>Is Video: <code>{{ $galeri->is_video ? 'true' : 'false' }}</code></div>
+                                        <div>Status: 
+                                            @if($galeri->is_image)
+                                                <span class="text-blue-600">Image</span>
+                                            @elseif($galeri->is_video)
+                                                <span class="text-green-600">Video</span>
+                                            @else
+                                                <span class="text-gray-600">Other</span>
+                                            @endif
+                                        </div>
+                                        @if($galeri->thumbnail)
+                                            <div>Thumbnail: <span class="text-green-600">✓ Available</span></div>
+                                        @else
+                                            <div>Thumbnail: <span class="text-red-600">✗ Not Available</span></div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="p-4 bg-gray-50 rounded-lg">

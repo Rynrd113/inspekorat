@@ -96,9 +96,19 @@
                     <div class="relative">
                         @if($galeri->thumbnail && Storage::exists('public/' . $galeri->thumbnail))
                             <img src="{{ Storage::url($galeri->thumbnail) }}" class="w-full h-48 object-cover" alt="{{ $galeri->judul }}">
+                            <div class="absolute bottom-2 left-2">
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                    <i class="fas fa-image mr-1"></i>Thumbnail
+                                </span>
+                            </div>
                         @elseif($galeri->file_path && Storage::exists('public/' . $galeri->file_path))
                             @if($galeri->is_image)
                                 <img src="{{ Storage::url($galeri->file_path) }}" class="w-full h-48 object-cover" alt="{{ $galeri->judul }}">
+                                <div class="absolute bottom-2 left-2">
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        <i class="fas fa-image mr-1"></i>Original
+                                    </span>
+                                </div>
                             @elseif($galeri->is_video)
                                 <div class="bg-gray-800 flex items-center justify-center h-48">
                                     <i class="fas fa-play-circle text-white text-4xl"></i>
@@ -111,6 +121,11 @@
                         @else
                             <div class="bg-gray-200 flex items-center justify-center h-48">
                                 <i class="fas fa-image text-gray-400 text-4xl"></i>
+                                <div class="absolute bottom-2 left-2">
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                                        <i class="fas fa-exclamation mr-1"></i>No File
+                                    </span>
+                                </div>
                             </div>
                         @endif
                         <div class="absolute top-2 left-2">

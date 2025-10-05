@@ -136,7 +136,10 @@
                     @error('thumbnail')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
-                    <p class="mt-1 text-sm text-gray-500">Gambar preview. Format: JPG, JPEG, PNG, GIF. Maksimal 5MB. Untuk video, sangat disarankan menggunakan thumbnail.</p>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Gambar preview untuk media. Format: JPG, JPEG, PNG, GIF. Maksimal 5MB.<br>
+                        <strong>Catatan:</strong> Jika tidak diisi, untuk foto akan otomatis menggunakan foto itu sendiri sebagai thumbnail.
+                    </p>
                     <div id="thumbnailPreview" class="mt-2"></div>
                 </div>
 

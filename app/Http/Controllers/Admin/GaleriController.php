@@ -78,9 +78,18 @@ class GaleriController extends Controller
             $validated['file_name'] = $file->getClientOriginalName();
             $validated['file_type'] = $file->getClientOriginalExtension();
             $validated['file_size'] = $file->getSize();
+            
+            // Auto-generate thumbnail for images if no custom thumbnail is uploaded
+            $fileExtension = strtolower($file->getClientOriginalExtension());
+            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            
+            if (in_array($fileExtension, $imageExtensions) && !$request->hasFile('thumbnail')) {
+                // For images, use the main image as thumbnail (copy the same file)
+                $validated['thumbnail'] = $filePath;
+            }
         }
 
-        // Handle thumbnail upload
+        // Handle custom thumbnail upload (overrides auto-generated thumbnail)
         if ($request->hasFile('thumbnail')) {
             $thumbnailFile = $request->file('thumbnail');
             $thumbnailPath = $thumbnailFile->store('galeri/thumbnails', 'public');
@@ -146,12 +155,21 @@ class GaleriController extends Controller
             $validated['file_name'] = $file->getClientOriginalName();
             $validated['file_type'] = $file->getClientOriginalExtension();
             $validated['file_size'] = $file->getSize();
+            
+            // Auto-generate thumbnail for images if no custom thumbnail is uploaded
+            $fileExtension = strtolower($file->getClientOriginalExtension());
+            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            
+            if (in_array($fileExtension, $imageExtensions) && !$request->hasFile('thumbnail')) {
+                // For images, use the main image as thumbnail
+                $validated['thumbnail'] = $filePath;
+            }
         }
 
-        // Handle thumbnail upload
+        // Handle custom thumbnail upload (overrides auto-generated thumbnail)
         if ($request->hasFile('thumbnail')) {
-            // Delete old thumbnail if exists
-            if ($galeri->thumbnail) {
+            // Delete old thumbnail if exists and it's different from main file
+            if ($galeri->thumbnail && $galeri->thumbnail !== $galeri->file_path) {
                 \Storage::disk('public')->delete($galeri->thumbnail);
             }
             
