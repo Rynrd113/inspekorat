@@ -26,30 +26,15 @@ class SecurityHeadersMiddleware
         $isDevelopment = in_array(config('app.env'), ['local', 'dusk.local', 'testing']);
         
         if ($isDevelopment) {
-            // Development CSP - allow everything needed for development
-            $viteHosts = "http://localhost:5173 https://localhost:5173 " .
-                        "http://inspekorat.test:5173 https://inspekorat.test:5173 " .
-                        "http://vite.inspekorat.test:5173 https://vite.inspekorat.test:5173 " .
-                        "http://localhost:5174 https://localhost:5174";
-            $wsHosts = "ws://localhost:5173 wss://localhost:5173 " .
-                      "ws://inspekorat.test:5173 wss://inspekorat.test:5173 " .
-                      "ws://localhost:5174 wss://localhost:5174";
-            
-            // Support for forwarded URLs (VS Code port forwarding, etc)
-            $allowedHosts = "'self' {$viteHosts}";
-            if ($request->header('X-Forwarded-Host')) {
-                $forwardedHost = $request->header('X-Forwarded-Host');
-                $allowedHosts .= " https://{$forwardedHost} http://{$forwardedHost}";
-            }
-            
-            $csp = "default-src {$allowedHosts}; " .
-                   "script-src {$allowedHosts} 'unsafe-inline' 'unsafe-eval'; " .
-                   "script-src-elem {$allowedHosts} 'unsafe-inline'; " .
-                   "style-src {$allowedHosts} 'unsafe-inline' https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
-                   "style-src-elem {$allowedHosts} 'unsafe-inline' https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
-                   "img-src {$allowedHosts} data: https:; " .
-                   "font-src {$allowedHosts} https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
-                   "connect-src {$allowedHosts} {$wsHosts}; " .
+            // Development CSP - allow Vite dev server
+            $csp = "default-src 'self' http://localhost:5173; " .
+                   "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:5173; " .
+                   "script-src-elem 'self' 'unsafe-inline' http://localhost:5173; " .
+                   "style-src 'self' 'unsafe-inline' http://localhost:5173 https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
+                   "style-src-elem 'self' 'unsafe-inline' http://localhost:5173 https://fonts.bunny.net https://cdnjs.cloudflare.com; " .
+                   "img-src 'self' data: https: http://localhost:5173; " .
+                   "font-src 'self' https://fonts.bunny.net https://cdnjs.cloudflare.com http://localhost:5173; " .
+                   "connect-src 'self' http://localhost:5173 ws://localhost:5173; " .
                    "frame-ancestors 'none';";
         } else {
             // Production CSP - more restrictive

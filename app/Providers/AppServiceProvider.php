@@ -54,18 +54,5 @@ class AppServiceProvider extends ServiceProvider
     {
         // Register model observers
         Pelayanan::observe(PelayananObserver::class);
-
-        // Handle forwarded URLs for port forwarding (GitHub Codespaces, VS Code, etc.)
-        if (request()->hasHeader('X-Forwarded-Proto') || request()->hasHeader('X-Forwarded-Host')) {
-            \URL::forceScheme('https');
-            
-            // Set secure proxy headers with proper Laravel 12 constants
-            request()->setTrustedProxies(['*'], 
-                \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR |
-                \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST |
-                \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT |
-                \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO
-            );
-        }
     }
 }
