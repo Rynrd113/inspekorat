@@ -168,10 +168,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('galeri', [AdminGaleriController::class, 'index'])->name('galeri.index');
             Route::get('galeri/create', [AdminGaleriController::class, 'create'])->name('galeri.create');
             Route::post('galeri', [AdminGaleriController::class, 'store'])->name('galeri.store');
-            Route::get('galeri/{galeri}', [AdminGaleriController::class, 'show'])->name('galeri.show');
-            Route::get('galeri/{galeri}/edit', [AdminGaleriController::class, 'edit'])->name('galeri.edit');
-            Route::put('galeri/{galeri}', [AdminGaleriController::class, 'update'])->name('galeri.update');
-            Route::delete('galeri/{galeri}', [AdminGaleriController::class, 'destroy'])->name('galeri.destroy');
+            Route::get('galeri/{id}', [AdminGaleriController::class, 'show'])->name('galeri.show');
+            Route::get('galeri/{id}/edit', [AdminGaleriController::class, 'edit'])->name('galeri.edit');
+            Route::put('galeri/{id}', [AdminGaleriController::class, 'update'])->name('galeri.update');
+            Route::delete('galeri/{id}', [AdminGaleriController::class, 'destroy'])->name('galeri.destroy');
             Route::post('galeri/bulk-upload', [AdminGaleriController::class, 'bulkUpload'])->name('galeri.bulk-upload');
         });
         

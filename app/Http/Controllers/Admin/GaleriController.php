@@ -37,6 +37,8 @@ class GaleriController extends Controller
         }
 
         $galeris = $query->with(['creator', 'updater'])
+                         ->whereNotNull('id')
+                         ->where('id', '>', 0)
                          ->latest()
                          ->paginate(10);
 
@@ -62,6 +64,7 @@ class GaleriController extends Controller
             'kategori' => 'required|string|max:255',
             'tanggal_publikasi' => 'required|date',
             'file_galeri' => 'required|file|max:20480|mimes:jpeg,png,jpg,gif,mp4,avi,mov',
+            'thumbnail' => 'nullable|file|max:5120|mimes:jpeg,png,jpg,gif',
             'status' => 'nullable|boolean',
         ]);
 
@@ -77,6 +80,13 @@ class GaleriController extends Controller
             $validated['file_size'] = $file->getSize();
         }
 
+        // Handle thumbnail upload
+        if ($request->hasFile('thumbnail')) {
+            $thumbnailFile = $request->file('thumbnail');
+            $thumbnailPath = $thumbnailFile->store('galeri/thumbnails', 'public');
+            $validated['thumbnail'] = $thumbnailPath;
+        }
+
         // Set status (default true if not provided)
         $validated['status'] = $request->has('status') ? true : ($request->input('status') !== null ? (bool)$request->input('status') : true);
         $validated['created_by'] = auth()->id();
@@ -90,30 +100,34 @@ class GaleriController extends Controller
     /**
      * Display the specified gallery item
      */
-    public function show(\App\Models\Galeri $galeri)
+    public function show($id)
     {
+        $galeri = \App\Models\Galeri::findOrFail($id);
         return view('admin.galeri.show', compact('galeri'));
     }
 
     /**
      * Show the form for editing the specified gallery item
      */
-    public function edit(\App\Models\Galeri $galeri)
+    public function edit($id)
     {
+        $galeri = \App\Models\Galeri::findOrFail($id);
         return view('admin.galeri.edit', compact('galeri'));
     }
 
     /**
      * Update the specified gallery item
      */
-    public function update(Request $request, \App\Models\Galeri $galeri)
+    public function update(Request $request, $id)
     {
+        $galeri = \App\Models\Galeri::findOrFail($id);
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'kategori' => 'required|string|max:255',
             'tanggal_publikasi' => 'required|date',
             'file_galeri' => 'nullable|file|max:20480|mimes:jpeg,png,jpg,gif,mp4,avi,mov',
+            'thumbnail' => 'nullable|file|max:5120|mimes:jpeg,png,jpg,gif',
             'status' => 'nullable|boolean',
         ]);
 
@@ -134,6 +148,18 @@ class GaleriController extends Controller
             $validated['file_size'] = $file->getSize();
         }
 
+        // Handle thumbnail upload
+        if ($request->hasFile('thumbnail')) {
+            // Delete old thumbnail if exists
+            if ($galeri->thumbnail) {
+                \Storage::disk('public')->delete($galeri->thumbnail);
+            }
+            
+            $thumbnailFile = $request->file('thumbnail');
+            $thumbnailPath = $thumbnailFile->store('galeri/thumbnails', 'public');
+            $validated['thumbnail'] = $thumbnailPath;
+        }
+
         // Set status (default true if not provided)
         $validated['status'] = $request->has('status') ? true : ($request->input('status') !== null ? (bool)$request->input('status') : true);
         $validated['updated_by'] = auth()->id();
@@ -148,11 +174,13 @@ class GaleriController extends Controller
     /**
      * Remove the specified gallery item
      */
-    public function destroy(\App\Models\Galeri $galeri)
+    public function destroy($id)
     {
+        $galeri = \App\Models\Galeri::findOrFail($id);
+        
         // Delete associated files
-        if ($galeri->file_media) {
-            \Storage::disk('public')->delete($galeri->file_media);
+        if ($galeri->file_path) {
+            \Storage::disk('public')->delete($galeri->file_path);
         }
         if ($galeri->thumbnail) {
             \Storage::disk('public')->delete($galeri->thumbnail);

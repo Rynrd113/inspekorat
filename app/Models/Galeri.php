@@ -10,6 +10,9 @@ class Galeri extends Model
     use HasFactory;
 
     protected $table = 'galeris';
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
         'judul',
@@ -19,6 +22,7 @@ class Galeri extends Model
         'file_name',
         'file_type',
         'file_size',
+        'thumbnail',
         'status',
         'tanggal_publikasi',
         'created_by',

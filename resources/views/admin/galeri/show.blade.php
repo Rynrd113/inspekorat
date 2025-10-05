@@ -23,7 +23,7 @@
                     Detail Galeri
                 </h2>
                 <div class="flex space-x-3">
-                    <a href="{{ route('admin.galeri.edit', $galeri) }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                    <a href="/admin/galeri/{{ $galeri->id }}/edit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                         <i class="fas fa-edit mr-2"></i>Edit
                     </a>
                     <button type="button" onclick="confirmDelete({{ $galeri->id }})" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
@@ -53,15 +53,24 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="p-4 bg-gray-50 rounded-lg">
                                     <h3 class="text-sm font-medium text-gray-500 mb-1">Tipe</h3>
-                                    @if(($galeri->tipe ?? 'foto') == 'foto')
+                                    @if($galeri->is_image)
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                             <i class="fas fa-image mr-1"></i>Foto
                                         </span>
-                                    @else
+                                    @elseif($galeri->is_video)
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                             <i class="fas fa-video mr-1"></i>Video
                                         </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                            <i class="fas fa-file mr-1"></i>{{ strtoupper($galeri->file_type ?? 'Unknown') }}
+                                        </span>
                                     @endif
+                                    <div class="mt-2 text-xs text-gray-500">
+                                        <div>File Type: <code>{{ $galeri->file_type ?? 'null' }}</code></div>
+                                        <div>Is Image: <code>{{ $galeri->is_image ? 'true' : 'false' }}</code></div>
+                                        <div>Is Video: <code>{{ $galeri->is_video ? 'true' : 'false' }}</code></div>
+                                    </div>
                                 </div>
                                 <div class="p-4 bg-gray-50 rounded-lg">
                                     <h3 class="text-sm font-medium text-gray-500 mb-1">Kategori</h3>
@@ -108,13 +117,14 @@
                     </div>
                 </div>
                 <div>
-                    @if(($galeri->tipe ?? 'foto') == 'foto')
+                    @if($galeri->is_image)
                         @if($galeri->file_path)
                             <div class="text-center">
                                 <img src="{{ asset('storage/' . $galeri->file_path) }}" 
                                      alt="{{ $galeri->judul }}" 
                                      class="w-full max-w-md h-auto rounded-lg border border-gray-300 mx-auto">
                                 <p class="text-sm text-gray-500 mt-2">{{ $galeri->judul }}</p>
+                                <p class="text-xs text-gray-400 mt-1">File type: {{ strtoupper($galeri->file_type) }}</p>
                             </div>
                         @else
                             <div class="text-center">
@@ -126,23 +136,15 @@
                                 </div>
                             </div>
                         @endif
-                    @else
-                        @if($galeri->url_video)
-                            <div class="text-center">
-                                <div class="aspect-video bg-gray-100 rounded-lg flex items-center justify-center border border-gray-300">
-                                    <a href="{{ $galeri->url_video }}" target="_blank" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
-                                        <i class="fas fa-play mr-2"></i>Tonton Video
-                                    </a>
-                                </div>
-                                <p class="text-sm text-gray-500 mt-2">Video eksternal: {{ $galeri->url_video }}</p>
-                            </div>
-                        @elseif($galeri->file_path)
+                    @elseif($galeri->is_video)
+                        @if($galeri->file_path)
                             <div class="text-center">
                                 <video controls class="w-full max-w-md h-auto rounded-lg border border-gray-300 mx-auto">
-                                    <source src="{{ asset('storage/' . $galeri->file_path) }}" type="video/mp4">
+                                    <source src="{{ asset('storage/' . $galeri->file_path) }}" type="video/{{ $galeri->file_type }}">
                                     Your browser does not support the video tag.
                                 </video>
                                 <p class="text-sm text-gray-500 mt-2">{{ $galeri->judul }}</p>
+                                <p class="text-xs text-gray-400 mt-1">File type: {{ strtoupper($galeri->file_type) }}</p>
                             </div>
                         @else
                             <div class="text-center">
@@ -154,14 +156,25 @@
                                 </div>
                             </div>
                         @endif
-                        @if($galeri->thumbnail)
-                            <div class="mt-4 text-center">
-                                <p class="text-sm text-gray-500 mb-2">Thumbnail:</p>
-                                <img src="{{ asset('storage/' . $galeri->thumbnail) }}" 
-                                     alt="Thumbnail" 
-                                     class="w-32 h-32 object-cover rounded-lg border border-gray-300 mx-auto">
+                    @else
+                        <div class="text-center">
+                            <div class="w-full max-w-md h-64 bg-gray-100 rounded-lg flex items-center justify-center border border-gray-300 mx-auto">
+                                <div class="text-gray-400">
+                                    <i class="fas fa-file text-4xl mb-2"></i>
+                                    <p class="text-sm">File type: {{ strtoupper($galeri->file_type ?? 'Unknown') }}</p>
+                                    <p class="text-xs">File tidak didukung untuk preview</p>
+                                </div>
                             </div>
-                        @endif
+                        </div>
+                    @endif
+                    
+                    @if($galeri->thumbnail)
+                        <div class="mt-4 text-center">
+                            <p class="text-sm text-gray-500 mb-2">Thumbnail:</p>
+                            <img src="{{ asset('storage/' . $galeri->thumbnail) }}" 
+                                 alt="Thumbnail" 
+                                 class="w-32 h-32 object-cover rounded-lg border border-gray-300 mx-auto">
+                        </div>
                     @endif
                 </div>
             </div>
@@ -172,7 +185,7 @@
                         <i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar
                     </a>
                     <div class="flex space-x-3">
-                        <a href="{{ route('admin.galeri.edit', $galeri) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                        <a href="/admin/galeri/{{ $galeri->id }}/edit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                             <i class="fas fa-edit mr-2"></i>Edit
                         </a>
                         <button type="button" onclick="confirmDelete({{ $galeri->id }})" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
@@ -230,8 +243,7 @@
 
 <script>
 function confirmDelete(id) {
-    const baseUrl = "{{ route('admin.galeri.destroy', ':id') }}";
-    document.getElementById('deleteForm').action = baseUrl.replace(':id', id);
+    document.getElementById('deleteForm').action = '/admin/galeri/' + id;
     document.getElementById('deleteModal').classList.remove('hidden');
 }
 
@@ -245,116 +257,5 @@ document.getElementById('deleteModal').addEventListener('click', function(e) {
         closeDeleteModal();
     }
 });
-</script>
-@endsection
-                                <tr>
-                                    <th>Dibuat Oleh</th>
-                                    <td>{{ $galeri->creator->name ?? 'System' }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Tanggal Dibuat</th>
-                                    <td>{{ $galeri->created_at ? $galeri->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
-                                </tr>
-                                @if($galeri->updated_at)
-                                <tr>
-                                    <th>Terakhir Diupdate</th>
-                                    <td>{{ $galeri->updated_at->format('d/m/Y H:i') }}</td>
-                                </tr>
-                                @endif
-                            </table>
-                        </div>
-                        <div class="col-md-4">
-                            <!-- Media Preview -->
-                            <div class="mb-3">
-                                <label class="form-label"><strong>Media:</strong></label>
-                                <div class="text-center">
-                                    @if($galeri->file_media)
-                                        @if($galeri->kategori == 'foto')
-                                            <img src="{{ Storage::url($galeri->file_media) }}" 
-                                                 alt="{{ $galeri->judul }}" 
-                                                 class="img-fluid rounded shadow" 
-                                                 style="max-height: 300px;">
-                                        @elseif($galeri->kategori == 'video')
-                                            <video controls class="img-fluid rounded shadow" style="max-height: 300px;">
-                                                <source src="{{ Storage::url($galeri->file_media) }}" type="video/mp4">
-                                                Your browser does not support the video tag.
-                                            </video>
-                                        @endif
-                                    @elseif($galeri->thumbnail)
-                                        <img src="{{ Storage::url($galeri->thumbnail) }}" 
-                                             alt="Thumbnail {{ $galeri->judul }}" 
-                                             class="img-fluid rounded shadow" 
-                                             style="max-height: 300px;">
-                                    @else
-                                        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;">
-                                            <i class="fas fa-image text-muted" style="font-size: 3rem;"></i>
-                                        </div>
-                                        <small class="text-muted">Tidak ada media</small>
-                                    @endif
-                                </div>
-                            </div>
-                            
-                            @if($galeri->thumbnail && $galeri->file_media)
-                            <div class="mb-3">
-                                <label class="form-label"><strong>Thumbnail:</strong></label>
-                                <div class="text-center">
-                                    <img src="{{ Storage::url($galeri->thumbnail) }}" 
-                                         alt="Thumbnail {{ $galeri->judul }}" 
-                                         class="img-fluid rounded shadow" 
-                                         style="max-height: 150px;">
-                                </div>
-                            </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="d-flex justify-content-between">
-                        <a href="{{ route('admin.galeri.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Kembali ke Daftar
-                        </a>
-                        <div>
-                            <a href="{{ route('admin.galeri.edit', $galeri) }}" class="btn btn-warning">
-                                <i class="fas fa-edit"></i> Edit Galeri
-                            </a>
-                            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $galeri->id }})">
-                                <i class="fas fa-trash"></i> Hapus
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Apakah Anda yakin ingin menghapus item galeri ini? File media terkait juga akan dihapus dan tindakan ini tidak dapat dibatalkan.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <form id="deleteForm" method="POST" style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Hapus</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-function confirmDelete(id) {
-    document.getElementById('deleteForm').action = '{{ route("admin.galeri.destroy", "") }}/' + id;
-    new bootstrap.Modal(document.getElementById('deleteModal')).show();
-}
 </script>
 @endsection

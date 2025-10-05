@@ -43,26 +43,6 @@
                     </div>
                     
                     <div>
-                        <label for="tipe" class="block text-sm font-medium text-gray-700 mb-2">
-                            Tipe Media <span class="text-red-500">*</span>
-                        </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tipe') border-red-500 @enderror" 
-                                id="tipe" 
-                                name="tipe" 
-                                required 
-                                onchange="toggleMediaFields()">
-                            <option value="">Pilih Tipe</option>
-                            <option value="foto" {{ old('tipe') == 'foto' ? 'selected' : '' }}>Foto</option>
-                            <option value="video" {{ old('tipe') == 'video' ? 'selected' : '' }}>Video</option>
-                        </select>
-                        @error('tipe')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                    <div>
                         <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">
                             Kategori <span class="text-red-500">*</span>
                         </label>
@@ -80,18 +60,34 @@
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <label for="tanggal_publikasi" class="block text-sm font-medium text-gray-700 mb-2">
+                            Tanggal Publikasi <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tanggal_publikasi') border-red-500 @enderror" 
+                               id="tanggal_publikasi" 
+                               name="tanggal_publikasi" 
+                               value="{{ old('tanggal_publikasi') }}" 
+                               required>
+                        @error('tanggal_publikasi')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                     
                     <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status <span class="text-red-500">*</span>
+                        <label for="status" class="flex items-center">
+                            <input type="checkbox" 
+                                   class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" 
+                                   id="status" 
+                                   name="status" 
+                                   value="1"
+                                   {{ old('status') ? 'checked' : 'checked' }}>
+                            <span class="ml-2 text-sm font-medium text-gray-700">Status Aktif</span>
                         </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('status') border-red-500 @enderror" 
-                                id="status" 
-                                name="status" 
-                                required>
-                            <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                            <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>Non-aktif</option>
-                        </select>
                         @error('status')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -111,74 +107,37 @@
                     @enderror
                 </div>
 
-                <!-- File Upload for Foto -->
-                <div id="fotoFields" style="display: none;">
-                    <div class="mt-6">
-                        <label for="file_foto" class="block text-sm font-medium text-gray-700 mb-2">
-                            File Foto <span class="text-red-500">*</span>
-                        </label>
-                        <input type="file" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('file_foto') border-red-500 @enderror" 
-                               id="file_foto" 
-                               name="file_foto" 
-                               accept="image/*">
-                        @error('file_foto')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                        <p class="mt-1 text-sm text-gray-500">Format: JPG, JPEG, PNG, GIF. Maksimal 5MB.</p>
-                        <div id="fotoPreview" class="mt-2"></div>
-                    </div>
+                <div class="mt-6">
+                    <label for="file_galeri" class="block text-sm font-medium text-gray-700 mb-2">
+                        File Media <span class="text-red-500">*</span>
+                    </label>
+                    <input type="file" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('file_galeri') border-red-500 @enderror" 
+                           id="file_galeri" 
+                           name="file_galeri" 
+                           accept="image/*,video/*"
+                           required>
+                    @error('file_galeri')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                    <p class="mt-1 text-sm text-gray-500">Format: JPG, JPEG, PNG, GIF untuk gambar atau MP4, AVI, MOV untuk video. Maksimal 20MB.</p>
+                    <div id="filePreview" class="mt-2"></div>
                 </div>
 
-                <!-- File Upload for Video -->
-                <div id="videoFields" style="display: none;">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                        <div>
-                            <label for="file_video" class="block text-sm font-medium text-gray-700 mb-2">
-                                File Video
-                            </label>
-                            <input type="file" 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('file_video') border-red-500 @enderror" 
-                                   id="file_video" 
-                                   name="file_video" 
-                                   accept="video/*">
-                            @error('file_video')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                            <p class="mt-1 text-sm text-gray-500">Format: MP4, AVI, MOV. Maksimal 50MB.</p>
-                        </div>
-                        <div>
-                            <label for="url_video" class="block text-sm font-medium text-gray-700 mb-2">
-                                URL Video (YouTube/Vimeo)
-                            </label>
-                            <input type="url" 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('url_video') border-red-500 @enderror" 
-                                   id="url_video" 
-                                   name="url_video" 
-                                   value="{{ old('url_video') }}" 
-                                   placeholder="https://www.youtube.com/watch?v=...">
-                            @error('url_video')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                            <p class="mt-1 text-sm text-gray-500">Opsional. Jika diisi, akan menggunakan URL ini daripada file upload.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-6">
-                        <label for="thumbnail" class="block text-sm font-medium text-gray-700 mb-2">
-                            Thumbnail Video
-                        </label>
-                        <input type="file" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('thumbnail') border-red-500 @enderror" 
-                               id="thumbnail" 
-                               name="thumbnail" 
-                               accept="image/*">
-                        @error('thumbnail')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                        <p class="mt-1 text-sm text-gray-500">Gambar preview untuk video. Format: JPG, JPEG, PNG. Maksimal 2MB.</p>
-                        <div id="thumbnailPreview" class="mt-2"></div>
-                    </div>
+                <div class="mt-6">
+                    <label for="thumbnail" class="block text-sm font-medium text-gray-700 mb-2">
+                        Thumbnail (Opsional)
+                    </label>
+                    <input type="file" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('thumbnail') border-red-500 @enderror" 
+                           id="thumbnail" 
+                           name="thumbnail" 
+                           accept="image/*">
+                    @error('thumbnail')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                    <p class="mt-1 text-sm text-gray-500">Gambar preview. Format: JPG, JPEG, PNG, GIF. Maksimal 5MB. Untuk video, sangat disarankan menggunakan thumbnail.</p>
+                    <div id="thumbnailPreview" class="mt-2"></div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -199,15 +158,16 @@
                     </div>
                     
                     <div>
-                        <label for="tanggal_ambil" class="block text-sm font-medium text-gray-700 mb-2">
-                            Tanggal Pengambilan
+                        <label for="album" class="block text-sm font-medium text-gray-700 mb-2">
+                            Album
                         </label>
-                        <input type="date" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tanggal_ambil') border-red-500 @enderror" 
-                               id="tanggal_ambil" 
-                               name="tanggal_ambil" 
-                               value="{{ old('tanggal_ambil') }}">
-                        @error('tanggal_ambil')
+                        <input type="text" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('album') border-red-500 @enderror" 
+                               id="album" 
+                               name="album" 
+                               value="{{ old('album') }}" 
+                               placeholder="Nama album">
+                        @error('album')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -228,42 +188,72 @@
 
 @push('scripts')
 <script>
-function toggleMediaFields() {
-    const tipe = document.getElementById('tipe').value;
-    const fotoFields = document.getElementById('fotoFields');
-    const videoFields = document.getElementById('videoFields');
-    const fileFoto = document.getElementById('file_foto');
-    
-    if (tipe === 'foto') {
-        fotoFields.style.display = 'block';
-        videoFields.style.display = 'none';
-        fileFoto.required = true;
-    } else if (tipe === 'video') {
-        fotoFields.style.display = 'none';
-        videoFields.style.display = 'block';
-        fileFoto.required = false;
-    } else {
-        fotoFields.style.display = 'none';
-        videoFields.style.display = 'none';
-        fileFoto.required = false;
-    }
-}
-
-// Validasi file video
-document.getElementById('file_video').addEventListener('change', function(e) {
+// File preview functionality
+document.getElementById('file_galeri').addEventListener('change', function(e) {
     const file = e.target.files[0];
+    const preview = document.getElementById('filePreview');
+    
     if (file) {
         const fileSize = file.size / 1024 / 1024; // Convert to MB
-        if (fileSize > 50) {
-            alert('Ukuran video terlalu besar. Maksimal 50MB.');
+        const maxSize = 20; // 20MB
+        
+        if (fileSize > maxSize) {
+            alert(`Ukuran file terlalu besar. Maksimal ${maxSize}MB.`);
             e.target.value = '';
+            preview.innerHTML = '';
+            return;
         }
+        
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = `<img src="${e.target.result}" class="w-48 h-48 object-cover rounded-lg border border-gray-300 mt-2">`;
+            };
+            reader.readAsDataURL(file);
+        } else if (file.type.startsWith('video/')) {
+            preview.innerHTML = `<div class="border rounded-md p-3 bg-gray-50 mt-2">
+                <i class="fas fa-video text-blue-600 mr-2"></i>
+                <span>${file.name}</span>
+                <span class="text-gray-500 text-sm ml-2">(${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+            </div>`;
+        } else {
+            preview.innerHTML = '';
+        }
+    } else {
+        preview.innerHTML = '';
     }
 });
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-    toggleMediaFields();
+// Thumbnail preview functionality
+document.getElementById('thumbnail').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('thumbnailPreview');
+    
+    if (file) {
+        const fileSize = file.size / 1024 / 1024; // Convert to MB
+        const maxSize = 5; // 5MB
+        
+        if (fileSize > maxSize) {
+            alert(`Ukuran thumbnail terlalu besar. Maksimal ${maxSize}MB.`);
+            e.target.value = '';
+            preview.innerHTML = '';
+            return;
+        }
+        
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = `<img src="${e.target.result}" class="w-32 h-32 object-cover rounded-lg border border-gray-300 mt-2">`;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            alert('Thumbnail harus berupa file gambar.');
+            e.target.value = '';
+            preview.innerHTML = '';
+        }
+    } else {
+        preview.innerHTML = '';
+    }
 });
 </script>
 @endpush

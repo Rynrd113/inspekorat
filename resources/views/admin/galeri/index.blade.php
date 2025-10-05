@@ -94,12 +94,18 @@
                 @foreach($galeris as $galeri)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="relative">
-                        @if($galeri->file_path && Storage::exists('public/' . $galeri->file_path))
-                            @if(in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif']))
+                        @if($galeri->thumbnail && Storage::exists('public/' . $galeri->thumbnail))
+                            <img src="{{ Storage::url($galeri->thumbnail) }}" class="w-full h-48 object-cover" alt="{{ $galeri->judul }}">
+                        @elseif($galeri->file_path && Storage::exists('public/' . $galeri->file_path))
+                            @if($galeri->is_image)
                                 <img src="{{ Storage::url($galeri->file_path) }}" class="w-full h-48 object-cover" alt="{{ $galeri->judul }}">
-                            @else
+                            @elseif($galeri->is_video)
                                 <div class="bg-gray-800 flex items-center justify-center h-48">
                                     <i class="fas fa-play-circle text-white text-4xl"></i>
+                                </div>
+                            @else
+                                <div class="bg-gray-600 flex items-center justify-center h-48">
+                                    <i class="fas fa-file text-white text-4xl"></i>
                                 </div>
                             @endif
                         @else
@@ -108,10 +114,12 @@
                             </div>
                         @endif
                         <div class="absolute top-2 left-2">
-                            @if(in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif']))
+                            @if($galeri->is_image)
                                 <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Foto</span>
-                            @else
+                            @elseif($galeri->is_video)
                                 <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-cyan-100 text-cyan-800">Video</span>
+                            @else
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">{{ strtoupper($galeri->file_type) }}</span>
                             @endif
                         </div>
                         <div class="absolute top-2 right-2">
@@ -128,15 +136,27 @@
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-gray-500">{{ $galeri->created_at->format('d M Y') }}</span>
                             <div class="flex space-x-2">
-                                <a href="{{ route('admin.galeri.show', $galeri->id) }}" class="text-blue-600 hover:text-blue-900" title="Lihat">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{{ route('admin.galeri.edit', $galeri->id) }}" class="text-indigo-600 hover:text-indigo-900" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <button type="button" onclick="confirmDelete({{ $galeri->id }})" class="text-red-600 hover:text-red-900" title="Hapus">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                @if($galeri && $galeri->id)
+                                    <a href="/admin/galeri/{{ $galeri->id }}" class="text-blue-600 hover:text-blue-900" title="Lihat">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="/admin/galeri/{{ $galeri->id }}/edit" class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button type="button" 
+                                            onclick="confirmDelete({{ $galeri->id }})" 
+                                            class="text-red-600 hover:text-red-900" 
+                                            title="Hapus"
+                                            data-delete-url="/admin/galeri/{{ $galeri->id }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                @else
+                                    <span class="text-gray-400 text-sm">
+                                        ID: {{ $galeri->id ?? 'null' }} - Data tidak valid
+                                        <br>
+                                        Debug: {{ json_encode($galeri->toArray()) }}
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -222,7 +242,7 @@
                 </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <form id="deleteForm" method="POST" class="inline">
+                <form id="deleteForm" method="POST" action="#" class="inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
@@ -257,7 +277,12 @@ function closeMediaModal() {
 }
 
 function confirmDelete(id) {
-    document.getElementById('deleteForm').action = `{{ route('admin.galeri.index') }}/${id}`;
+    // Find the button that was clicked and get its data-delete-url
+    const button = event.target.closest('button[data-delete-url]');
+    const deleteUrl = button.getAttribute('data-delete-url');
+    
+    const form = document.getElementById('deleteForm');
+    form.action = deleteUrl;
     document.getElementById('deleteModal').classList.remove('hidden');
 }
 
