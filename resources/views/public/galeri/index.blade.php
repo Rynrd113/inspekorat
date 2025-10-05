@@ -162,7 +162,7 @@
 <!-- Lightbox Modal -->
 <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden" onclick="closeLightbox()">
     <!-- Close Button -->
-    <button onclick="closeLightbox()" class="absolute top-4 right-4 z-60 text-white hover:text-gray-300 transition-colors p-2">
+    <button onclick="event.stopPropagation(); closeLightbox();" class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors p-2" style="z-index: 9999;">
         <i class="fas fa-times text-2xl"></i>
     </button>
     
