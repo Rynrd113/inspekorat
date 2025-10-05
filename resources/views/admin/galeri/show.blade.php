@@ -179,15 +179,6 @@
                             </div>
                         </div>
                     @endif
-                    
-                    @if($galeri->thumbnail)
-                        <div class="mt-4 text-center">
-                            <p class="text-sm text-gray-500 mb-2">Thumbnail:</p>
-                            <img src="{{ asset('storage/' . $galeri->thumbnail) }}" 
-                                 alt="Thumbnail" 
-                                 class="w-32 h-32 object-cover rounded-lg border border-gray-300 mx-auto">
-                        </div>
-                    @endif
                 </div>
             </div>
 
