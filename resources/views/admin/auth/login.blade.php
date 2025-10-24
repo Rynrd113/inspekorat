@@ -42,7 +42,7 @@
                         type="email" 
                         name="email" 
                         label="Email Administrator" 
-                        placeholder="admin@inspektorat.go.id"
+                        placeholder="Masukkan email Anda"
                         required 
                         id="email"
                         value="{{ old('email') }}"
