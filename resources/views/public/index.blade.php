@@ -33,14 +33,16 @@
     .slide {
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+        transition: opacity 0.6s ease-in-out;
         pointer-events: none;
+        z-index: 1;
     }
     
     .slide.active {
-        opacity: 1;
-        visibility: visible;
+        opacity: 1 !important;
+        visibility: visible !important;
         pointer-events: auto;
+        z-index: 10;
     }
     
     /* Slider dots */
@@ -896,52 +898,78 @@ function initHeroSlider() {
     }
     
     let currentSlide = 0;
+    let autoPlayTimer = null;
     
     function showSlide(index) {
-        console.log('Showing slide:', index);
+        console.log('Switching to slide:', index);
         
-        // Remove active class from all slides
-        slides.forEach((slide, i) => {
-            if (i === index) {
-                slide.classList.add('active');
-            } else {
-                slide.classList.remove('active');
-            }
+        // Remove active from all slides and dots
+        slides.forEach((slide) => {
+            slide.classList.remove('active');
         });
         
-        // Update dots
-        dots.forEach((dot, i) => {
-            if (i === index) {
-                dot.classList.add('active');
-            } else {
-                dot.classList.remove('active');
-            }
+        dots.forEach((dot) => {
+            dot.classList.remove('active');
         });
+        
+        // Add active to current slide and dot
+        if (slides[index]) {
+            slides[index].classList.add('active');
+        }
+        
+        if (dots[index]) {
+            dots[index].classList.add('active');
+        }
+        
+        currentSlide = index;
     }
     
     function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
+        const nextIndex = (currentSlide + 1) % slides.length;
+        showSlide(nextIndex);
     }
     
     function prevSlideFunc() {
-        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-        showSlide(currentSlide);
+        const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(prevIndex);
     }
     
-    // Event listeners for buttons
+    function startAutoPlay() {
+        stopAutoPlay();
+        autoPlayTimer = setInterval(() => {
+            nextSlide();
+        }, 5000);
+        console.log('Auto-play started');
+    }
+    
+    function stopAutoPlay() {
+        if (autoPlayTimer) {
+            clearInterval(autoPlayTimer);
+            autoPlayTimer = null;
+        }
+    }
+    
+    function resetAutoPlay() {
+        stopAutoPlay();
+        startAutoPlay();
+    }
+    
+    // Event listener for Next button
     if (nextBtn) {
         nextBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             console.log('Next button clicked');
             nextSlide();
             resetAutoPlay();
         });
     }
     
+    // Event listener for Prev button
     if (prevBtn) {
         prevBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             console.log('Prev button clicked');
             prevSlideFunc();
             resetAutoPlay();
@@ -952,30 +980,25 @@ function initHeroSlider() {
     dots.forEach((dot, index) => {
         dot.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             console.log('Dot clicked:', index);
-            currentSlide = index;
-            showSlide(currentSlide);
+            showSlide(index);
             resetAutoPlay();
         });
     });
     
-    // Auto-play slider
-    function startAutoPlay() {
-        sliderInterval = setInterval(nextSlide, 5000);
-    }
-    
-    function resetAutoPlay() {
-        if (sliderInterval) {
-            clearInterval(sliderInterval);
-        }
-        startAutoPlay();
-    }
-    
-    // Initialize first slide
+    // Initialize - show first slide
     showSlide(0);
     
     // Start auto-play
     startAutoPlay();
+    
+    // Pause on hover
+    const sliderContainer = document.querySelector('.hero-slider');
+    if (sliderContainer) {
+        sliderContainer.addEventListener('mouseenter', stopAutoPlay);
+        sliderContainer.addEventListener('mouseleave', startAutoPlay);
+    }
     
     console.log('Slider initialized successfully!');
 }
