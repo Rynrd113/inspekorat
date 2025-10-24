@@ -1,0 +1,374 @@
+/* ============================================
+   RESPONSIVE DESIGN IMPROVEMENTS
+   For Portal Inspektorat Papua Tengah
+   ============================================ */
+
+/* Mobile First Approach - Base styles for mobile */
+
+/* Typography Responsive */
+@media (max-width: 640px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 769px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* Container Padding */
+.container-responsive {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+    .container-responsive {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container-responsive {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+/* Button Responsive */
+.btn-responsive {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+}
+
+@media (min-width: 640px) {
+    .btn-responsive {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* Card Responsive */
+.card-responsive {
+    padding: 1rem;
+    border-radius: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .card-responsive {
+        padding: 1.5rem;
+        border-radius: 1rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .card-responsive {
+        padding: 2rem;
+        border-radius: 1.5rem;
+    }
+}
+
+/* Image Responsive */
+.img-responsive {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Grid Responsive */
+.grid-responsive-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .grid-responsive-2 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+.grid-responsive-3 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .grid-responsive-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid-responsive-3 {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+.grid-responsive-4 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 480px) {
+    .grid-responsive-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    .grid-responsive-4 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1280px) {
+    .grid-responsive-4 {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+    }
+}
+
+/* Heading Responsive */
+.heading-xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+
+@media (min-width: 640px) {
+    .heading-xl {
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .heading-xl {
+        font-size: 3rem;
+        line-height: 1;
+    }
+}
+
+@media (min-width: 1024px) {
+    .heading-xl {
+        font-size: 3.75rem;
+        line-height: 1;
+    }
+}
+
+/* Section Padding Responsive */
+.section-py {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+@media (min-width: 640px) {
+    .section-py {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .section-py {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+    }
+}
+
+/* Mobile Menu Improvements */
+@media (max-width: 768px) {
+    #mobile-menu {
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+    }
+    
+    #mobile-menu a {
+        padding: 0.875rem 1rem;
+        font-size: 1rem;
+    }
+}
+
+/* Table Responsive */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+    .table-responsive table {
+        font-size: 0.875rem;
+    }
+    
+    .table-responsive th,
+    .table-responsive td {
+        padding: 0.5rem;
+    }
+}
+
+/* Form Responsive */
+@media (max-width: 640px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="number"],
+    textarea,
+    select {
+        font-size: 16px !important; /* Prevent zoom on iOS */
+    }
+}
+
+/* Modal Responsive */
+@media (max-width: 640px) {
+    .modal {
+        padding: 1rem;
+    }
+    
+    .modal-content {
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+}
+
+/* Navigation Sticky Fix for Mobile */
+@media (max-width: 768px) {
+    header.sticky {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+}
+
+/* Prevent horizontal scroll on mobile */
+body {
+    overflow-x: hidden;
+}
+
+/* Touch-friendly sizes */
+@media (max-width: 768px) {
+    button,
+    a.btn,
+    input[type="submit"] {
+        min-height: 44px; /* Apple's recommended touch target */
+        min-width: 44px;
+    }
+}
+
+/* Improve readability on mobile */
+@media (max-width: 640px) {
+    p {
+        line-height: 1.6;
+    }
+    
+    .text-justify {
+        text-align: left;
+    }
+}
+
+/* Back to top button responsive */
+.back-to-top {
+    bottom: 1rem !important;
+    right: 1rem !important;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+}
+
+@media (min-width: 640px) {
+    .back-to-top {
+        bottom: 1.5rem !important;
+        right: 1.5rem !important;
+        width: 3rem !important;
+        height: 3rem !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    .back-to-top {
+        bottom: 2rem !important;
+        right: 2rem !important;
+    }
+}
+
+/* Footer Responsive */
+@media (max-width: 640px) {
+    footer {
+        text-align: center;
+    }
+    
+    footer .grid {
+        gap: 2rem;
+    }
+}
+
+/* Utility Classes for Responsive Spacing */
+.mt-responsive {
+    margin-top: 1rem;
+}
+
+@media (min-width: 640px) {
+    .mt-responsive {
+        margin-top: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .mt-responsive {
+        margin-top: 2rem;
+    }
+}
+
+.mb-responsive {
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 640px) {
+    .mb-responsive {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .mb-responsive {
+        margin-bottom: 2rem;
+    }
+}
+
+/* Safe Area Insets for Notched Devices */
+@supports (padding: max(0px)) {
+    body {
+        padding-left: max(0px, env(safe-area-inset-left));
+        padding-right: max(0px, env(safe-area-inset-right));
+    }
+    
+    header {
+        padding-left: max(0px, env(safe-area-inset-left));
+        padding-right: max(0px, env(safe-area-inset-right));
+    }
+}
+
+/* Landscape Mode Adjustments for Mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero-slider {
+        height: 100vh !important;
+        min-height: 100vh !important;
+    }
+    
+    .section-py {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+}
