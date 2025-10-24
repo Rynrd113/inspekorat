@@ -68,8 +68,7 @@
             <div class="md:hidden">
                 <button type="button" 
                         class="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600" 
-                        id="mobile-menu-button"
-                        onclick="toggleMobileMenu()">
+                        id="mobile-menu-button">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
             </div>
@@ -135,34 +134,3 @@
         </div>
     </div>
 </header>
-
-<script>
-function toggleMobileMenu() {
-    const menu = document.getElementById('mobile-menu');
-    const button = document.getElementById('mobile-menu-button');
-    const icon = button.querySelector('i');
-    
-    if (menu.classList.contains('hidden')) {
-        menu.classList.remove('hidden');
-        icon.classList.remove('fa-bars');
-        icon.classList.add('fa-times');
-    } else {
-        menu.classList.add('hidden');
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-    }
-}
-
-// Close mobile menu when clicking outside
-document.addEventListener('click', function(event) {
-    const menu = document.getElementById('mobile-menu');
-    const button = document.getElementById('mobile-menu-button');
-    
-    if (!menu.contains(event.target) && !button.contains(event.target)) {
-        menu.classList.add('hidden');
-        const icon = button.querySelector('i');
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-    }
-});
-</script>
