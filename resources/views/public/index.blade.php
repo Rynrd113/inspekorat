@@ -29,18 +29,39 @@
         box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.4);
     }
     
-    /* Slider styles */
+    /* Slider styles - CRITICAL */
     .slide {
         opacity: 0;
-        transition: opacity 0.5s ease-in-out;
+        visibility: hidden;
+        transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+        pointer-events: none;
     }
     
     .slide.active {
         opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+    
+    /* Slider dots */
+    .slider-dot {
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.5);
     }
     
     .slider-dot.active {
         background-color: rgba(255, 255, 255, 1);
+        transform: scale(1.2);
+    }
+    
+    /* Slider buttons */
+    #prevSlide, #nextSlide {
+        cursor: pointer;
+        user-select: none;
+    }
+    
+    #prevSlide:active, #nextSlide:active {
+        transform: translateY(-50%) scale(0.95);
     }
     
     /* Animation styles */
@@ -810,7 +831,10 @@
 
 @push('scripts')
 <script>
+// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing page components...');
+    
     // Initialize page components  
     initHeroSlider();
     initBackToTop();
@@ -818,51 +842,37 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize filter buttons with default active state
     updateFilterButtons('terbaru');
+    
+    console.log('All components initialized successfully!');
 });
 
 // Global variables
 let currentFilter = 'terbaru';
+let sliderInterval = null;
 
-// Filter berita function - For now just updates button state
-// Future enhancement: could make AJAX calls for dynamic filtering
+// Filter berita function
 function filterBerita(filter) {
     updateFilterButtons(filter);
     currentFilter = filter;
-    
     console.log('Filter changed to:', filter);
-    // Note: Currently showing server-rendered data from database
-    // Could enhance with AJAX filtering later
 }
-
-// Note: Fallback data function removed to ensure data comes from database
-
-// Filter berita function (currently shows server-rendered data)
-function filterBerita(filter) {
-    updateFilterButtons(filter);
-    currentFilter = filter;
-    
-    console.log('Filter changed to:', filter);
-    // Note: Currently showing server-rendered data from database
-    // Dynamic filtering could be enhanced with AJAX calls later
-}
-
-// Note: renderBeritaList function removed to prevent overriding server-rendered content
-// The berita content is now properly rendered from database via Blade templates
 
 // Update filter buttons
 function updateFilterButtons(activeFilter) {
     const btnTerbaru = document.getElementById('btn-terbaru');
     const btnTerpopuler = document.getElementById('btn-terpopuler');
     
+    if (!btnTerbaru || !btnTerpopuler) return;
+    
     // Reset all buttons
-    btnTerbaru.className = 'px-8 py-3 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200';
-    btnTerpopuler.className = 'px-8 py-3 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200';
+    btnTerbaru.className = 'px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg sm:rounded-xl transition-all duration-200';
+    btnTerpopuler.className = 'px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg sm:rounded-xl transition-all duration-200';
     
     // Set active button
     if (activeFilter === 'terbaru') {
-        btnTerbaru.className = 'px-8 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl transition-all duration-200 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg';
+        btnTerbaru.className = 'px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg sm:rounded-xl transition-all duration-200 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg';
     } else if (activeFilter === 'terpopuler') {
-        btnTerpopuler.className = 'px-8 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl transition-all duration-200 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg';
+        btnTerpopuler.className = 'px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg sm:rounded-xl transition-all duration-200 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg';
     }
 }
 
@@ -873,14 +883,39 @@ function initHeroSlider() {
     const prevBtn = document.getElementById('prevSlide');
     const nextBtn = document.getElementById('nextSlide');
     
+    console.log('Slider elements found:', {
+        slides: slides.length,
+        dots: dots.length,
+        prevBtn: !!prevBtn,
+        nextBtn: !!nextBtn
+    });
+    
+    if (slides.length === 0) {
+        console.error('No slides found!');
+        return;
+    }
+    
     let currentSlide = 0;
     
     function showSlide(index) {
+        console.log('Showing slide:', index);
+        
+        // Remove active class from all slides
         slides.forEach((slide, i) => {
-            slide.classList.toggle('active', i === index);
+            if (i === index) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
         });
+        
+        // Update dots
         dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
+            if (i === index) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
         });
     }
     
@@ -889,24 +924,60 @@ function initHeroSlider() {
         showSlide(currentSlide);
     }
     
-    function prevSlide() {
+    function prevSlideFunc() {
         currentSlide = (currentSlide - 1 + slides.length) % slides.length;
         showSlide(currentSlide);
     }
     
-    // Event listeners
-    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    // Event listeners for buttons
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Next button clicked');
+            nextSlide();
+            resetAutoPlay();
+        });
+    }
     
+    if (prevBtn) {
+        prevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Prev button clicked');
+            prevSlideFunc();
+            resetAutoPlay();
+        });
+    }
+    
+    // Event listeners for dots
     dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
+        dot.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Dot clicked:', index);
             currentSlide = index;
             showSlide(currentSlide);
+            resetAutoPlay();
         });
     });
     
     // Auto-play slider
-    setInterval(nextSlide, 5000);
+    function startAutoPlay() {
+        sliderInterval = setInterval(nextSlide, 5000);
+    }
+    
+    function resetAutoPlay() {
+        if (sliderInterval) {
+            clearInterval(sliderInterval);
+        }
+        startAutoPlay();
+    }
+    
+    // Initialize first slide
+    showSlide(0);
+    
+    // Start auto-play
+    startAutoPlay();
+    
+    console.log('Slider initialized successfully!');
 }
 
 // Back to top functionality
@@ -928,6 +999,8 @@ function initBackToTop() {
                 behavior: 'smooth'
             });
         });
+        
+        console.log('Back to top initialized');
     }
 }
 
@@ -935,8 +1008,12 @@ function initBackToTop() {
 function animateStats() {
     const stats = document.querySelectorAll('#stat-opd, #stat-berita, #stat-wbs, #stat-views');
     
+    if (stats.length === 0) return;
+    
     stats.forEach(stat => {
         const target = parseInt(stat.textContent.replace(/,/g, ''));
+        if (isNaN(target)) return;
+        
         let current = 0;
         const increment = target / 100;
         
@@ -949,6 +1026,8 @@ function animateStats() {
             stat.textContent = Math.floor(current).toLocaleString();
         }, 20);
     });
+    
+    console.log('Stats animation initialized');
 }
 
 // Mobile menu toggle
@@ -958,14 +1037,6 @@ function toggleMobileMenu() {
         mobileMenu.classList.toggle('hidden');
     }
 }
-
-// Add mobile menu event listener
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuBtn = document.querySelector('[onclick="toggleMobileMenu()"]');
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-    }
-});
 </script>
 @endpush
 
