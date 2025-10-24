@@ -1,0 +1,31 @@
+{
+  "_vendor.BPTwnBaP.js": {
+    "file": "assets/js/vendor.BPTwnBaP.js",
+    "name": "vendor"
+  },
+  "resources/css/admin.css": {
+    "file": "assets/css/admin.B4kEJNCe.css",
+    "src": "resources/css/admin.css",
+    "isEntry": true
+  },
+  "resources/css/app.css": {
+    "file": "assets/css/app.XvjT3w6G.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/admin.js": {
+    "file": "assets/js/admin.C_JRrEvs.js",
+    "name": "admin",
+    "src": "resources/js/admin.js",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/js/app.1Rrg2c8X.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_vendor.BPTwnBaP.js"
+    ]
+  }
+}
