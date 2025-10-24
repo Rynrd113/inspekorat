@@ -27,6 +27,9 @@ class PublicController extends Controller
      */
     public function index(): View
     {
+        // Track visitor
+        $this->trackVisitor();
+
         // Cache data public untuk performa - ambil hanya 5 berita terbaru
         $portalPapuaTengah = Cache::remember('public_portal_papua_tengah', 600, function () {
             return PortalPapuaTengah::published()
@@ -36,15 +39,13 @@ class PublicController extends Controller
                 ->get();
         });
 
-        // Cache statistik public untuk performa
-        $stats = Cache::remember('public_stats', 300, function () {
-            return [
-                'portal_opd' => PortalOpd::active()->count(),
-                'berita' => PortalPapuaTengah::published()->count(),
-                'wbs' => Wbs::count(),
-                'total_views' => DB::table('portal_papua_tengahs')->sum('views') + 1250, // Base views
-            ];
-        });
+        // Get real-time statistics from database
+        $stats = [
+            'portal_opd' => PortalOpd::active()->count(),
+            'berita' => PortalPapuaTengah::published()->count(),
+            'wbs' => Wbs::count(),
+            'total_views' => $this->getTotalViews(),
+        ];
 
         // Info kantor statis
         $infoKantor = new \stdClass();
@@ -58,6 +59,41 @@ class PublicController extends Controller
         $infoKantor->fax = '(0984) 21235';
 
         return view('public.index', compact('portalPapuaTengah', 'infoKantor', 'stats'));
+    }
+
+    /**
+     * Track website visitor
+     */
+    private function trackVisitor(): void
+    {
+        $cacheKey = 'visitor_' . request()->ip() . '_' . date('Ymd');
+        
+        // Only count unique visitors per day
+        if (!Cache::has($cacheKey)) {
+            // Increment visitor count in system_configurations
+            DB::table('system_configurations')
+                ->where('key', 'total_visitors')
+                ->increment('value');
+            
+            // Cache for 24 hours
+            Cache::put($cacheKey, true, now()->addDay());
+        }
+    }
+
+    /**
+     * Get total views from all sources
+     */
+    private function getTotalViews(): int
+    {
+        // Get visitor count from system_configurations
+        $totalVisitors = DB::table('system_configurations')
+            ->where('key', 'total_visitors')
+            ->value('value') ?? 0;
+        
+        // Add views from portal_papua_tengahs
+        $portalViews = DB::table('portal_papua_tengahs')->sum('views') ?? 0;
+        
+        return (int)$totalVisitors + (int)$portalViews;
     }
 
     /**

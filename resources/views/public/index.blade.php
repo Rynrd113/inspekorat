@@ -279,7 +279,7 @@
             <!-- Statistics Numbers -->
             <div class="bg-gradient-to-r from-gray-50 to-blue-50 rounded-3xl shadow-2xl p-8 lg:p-12">
                 <div class="text-center mb-12">
-                    <h3 class="text-3xl font-bold text-gray-900 mb-4">Statistik Portal Papua Tengah</h3>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-4">Statistik Portal Provinsi Papua Tengah</h3>
                     <p class="text-gray-600 text-lg">Data terkini layanan dan informasi yang tersedia di portal</p>
                 </div>
                 
@@ -288,7 +288,7 @@
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-2xl mb-6">
                             <i class="fas fa-building text-emerald-600 text-2xl"></i>
                         </div>
-                        <div class="text-3xl lg:text-4xl font-bold text-gray-900 mb-2" id="stat-opd">{{ $stats['portal_opd'] ?? '10' }}</div>
+                        <div class="text-3xl lg:text-4xl font-bold text-gray-900 mb-2" id="stat-opd">{{ number_format($stats['portal_opd'] ?? 0) }}</div>
                         <div class="text-sm text-gray-600 font-medium">OPD Terdaftar</div>
                     </div>
                     
@@ -296,7 +296,7 @@
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-2xl mb-6">
                             <i class="fas fa-newspaper text-blue-600 text-2xl"></i>
                         </div>
-                        <div class="text-3xl lg:text-4xl font-bold text-gray-900 mb-2" id="stat-berita">{{ $stats['berita'] ?? '25' }}</div>
+                        <div class="text-3xl lg:text-4xl font-bold text-gray-900 mb-2" id="stat-berita">{{ number_format($stats['berita'] ?? 0) }}</div>
                         <div class="text-sm text-gray-600 font-medium">Berita Aktif</div>
                     </div>
                     
@@ -304,7 +304,7 @@
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-2xl mb-6">
                             <i class="fas fa-shield-alt text-red-600 text-2xl"></i>
                         </div>
-                        <div class="text-3xl lg:text-4xl font-bold text-gray-900 mb-2" id="stat-wbs">{{ $stats['wbs'] ?? '50' }}</div>
+                        <div class="text-3xl lg:text-4xl font-bold text-gray-900 mb-2" id="stat-wbs">{{ number_format($stats['wbs'] ?? 0) }}</div>
                         <div class="text-sm text-gray-600 font-medium">Laporan WBS</div>
                     </div>
                     
@@ -312,7 +312,7 @@
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-2xl mb-6">
                             <i class="fas fa-eye text-purple-600 text-2xl"></i>
                         </div>
-                        <div class="text-3xl lg:text-4xl font-bold text-gray-900 mb-2" id="stat-views">{{ $stats['total_views'] ?? '1,250' }}</div>
+                        <div class="text-3xl lg:text-4xl font-bold text-gray-900 mb-2" id="stat-views">{{ number_format($stats['total_views'] ?? 0) }}</div>
                         <div class="text-sm text-gray-600 font-medium">Total Kunjungan</div>
                     </div>
                 </div>
