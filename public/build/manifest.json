@@ -4,12 +4,12 @@
     "name": "vendor"
   },
   "resources/css/admin.css": {
-    "file": "assets/css/admin.B4kEJNCe.css",
+    "file": "assets/css/admin.DMVLHyvx.css",
     "src": "resources/css/admin.css",
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/css/app.XvjT3w6G.css",
+    "file": "assets/css/app.DQMqYUs2.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -20,12 +20,18 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/js/app.1Rrg2c8X.js",
+    "file": "assets/js/app.D2VXhb79.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
       "_vendor.BPTwnBaP.js"
     ]
+  },
+  "resources/js/public.js": {
+    "file": "assets/js/public.CZEOE7uh.js",
+    "name": "public",
+    "src": "resources/js/public.js",
+    "isEntry": true
   }
 }

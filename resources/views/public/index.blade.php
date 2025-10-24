@@ -837,20 +837,17 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Initializing page components...');
     
-    // Initialize page components  
-    initHeroSlider();
-    initBackToTop();
-    animateStats();
-    
     // Initialize filter buttons with default active state
     updateFilterButtons('terbaru');
+    
+    // Animate stats if visible
+    animateStats();
     
     console.log('All components initialized successfully!');
 });
 
 // Global variables
 let currentFilter = 'terbaru';
-let sliderInterval = null;
 
 // Filter berita function
 function filterBerita(filter) {
@@ -878,155 +875,6 @@ function updateFilterButtons(activeFilter) {
     }
 }
 
-// Hero slider functionality
-function initHeroSlider() {
-    const slides = document.querySelectorAll('.slide');
-    const dots = document.querySelectorAll('.slider-dot');
-    const prevBtn = document.getElementById('prevSlide');
-    const nextBtn = document.getElementById('nextSlide');
-    
-    console.log('Slider elements found:', {
-        slides: slides.length,
-        dots: dots.length,
-        prevBtn: !!prevBtn,
-        nextBtn: !!nextBtn
-    });
-    
-    if (slides.length === 0) {
-        console.error('No slides found!');
-        return;
-    }
-    
-    let currentSlide = 0;
-    let autoPlayTimer = null;
-    
-    function showSlide(index) {
-        console.log('Switching to slide:', index);
-        
-        // Remove active from all slides and dots
-        slides.forEach((slide) => {
-            slide.classList.remove('active');
-        });
-        
-        dots.forEach((dot) => {
-            dot.classList.remove('active');
-        });
-        
-        // Add active to current slide and dot
-        if (slides[index]) {
-            slides[index].classList.add('active');
-        }
-        
-        if (dots[index]) {
-            dots[index].classList.add('active');
-        }
-        
-        currentSlide = index;
-    }
-    
-    function nextSlide() {
-        const nextIndex = (currentSlide + 1) % slides.length;
-        showSlide(nextIndex);
-    }
-    
-    function prevSlideFunc() {
-        const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
-        showSlide(prevIndex);
-    }
-    
-    function startAutoPlay() {
-        stopAutoPlay();
-        autoPlayTimer = setInterval(() => {
-            nextSlide();
-        }, 5000);
-        console.log('Auto-play started');
-    }
-    
-    function stopAutoPlay() {
-        if (autoPlayTimer) {
-            clearInterval(autoPlayTimer);
-            autoPlayTimer = null;
-        }
-    }
-    
-    function resetAutoPlay() {
-        stopAutoPlay();
-        startAutoPlay();
-    }
-    
-    // Event listener for Next button
-    if (nextBtn) {
-        nextBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Next button clicked');
-            nextSlide();
-            resetAutoPlay();
-        });
-    }
-    
-    // Event listener for Prev button
-    if (prevBtn) {
-        prevBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Prev button clicked');
-            prevSlideFunc();
-            resetAutoPlay();
-        });
-    }
-    
-    // Event listeners for dots
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Dot clicked:', index);
-            showSlide(index);
-            resetAutoPlay();
-        });
-    });
-    
-    // Initialize - show first slide
-    showSlide(0);
-    
-    // Start auto-play
-    startAutoPlay();
-    
-    // Pause on hover
-    const sliderContainer = document.querySelector('.hero-slider');
-    if (sliderContainer) {
-        sliderContainer.addEventListener('mouseenter', stopAutoPlay);
-        sliderContainer.addEventListener('mouseleave', startAutoPlay);
-    }
-    
-    console.log('Slider initialized successfully!');
-}
-
-// Back to top functionality
-function initBackToTop() {
-    const backToTopBtn = document.getElementById('backToTop');
-    
-    if (backToTopBtn) {
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 100) {
-                backToTopBtn.style.display = 'block';
-            } else {
-                backToTopBtn.style.display = 'none';
-            }
-        });
-        
-        backToTopBtn.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-        
-        console.log('Back to top initialized');
-    }
-}
-
 // Animate stats counter
 function animateStats() {
     const stats = document.querySelectorAll('#stat-opd, #stat-berita, #stat-wbs, #stat-views');
@@ -1051,14 +899,6 @@ function animateStats() {
     });
     
     console.log('Stats animation initialized');
-}
-
-// Mobile menu toggle
-function toggleMobileMenu() {
-    const mobileMenu = document.getElementById('mobile-menu');
-    if (mobileMenu) {
-        mobileMenu.classList.toggle('hidden');
-    }
 }
 </script>
 @endpush

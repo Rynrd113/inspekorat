@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     
     <!-- Vite Assets -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/public.js'])
     
     <!-- Additional Styles -->
     @stack('styles')
