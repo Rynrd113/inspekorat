@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Lightbox functionality
-const galleryData = @json($galeris->map(function($item) {
+const galleryData = {!! json_encode($galeris->map(function($item) {
     return [
         'id' => $item->id,
         'judul' => $item->judul,
@@ -306,7 +306,7 @@ const galleryData = @json($galeris->map(function($item) {
         'file_type' => $item->file_type,
         'tanggal_publikasi' => $item->tanggal_publikasi,
     ];
-}) ?? []);
+})) !!};
 
 function openLightbox(itemId) {
     const lightbox = document.getElementById('lightbox');
