@@ -100,7 +100,6 @@ class BulkGaleriImportSeeder extends Seeder
                     'tanggal_publikasi' => now()->subDays(rand(1, 365)), // Random date 1-365 hari lalu
                     'created_by' => 1,
                     'status' => true,
-                    'view_count' => rand(5, 200),
                 ]);
                 
                 $number = $imported + 1;
