@@ -463,7 +463,20 @@ startxref
             }
         );
 
-        return view('public.galeri.index', compact('galeris'));
+        // Prepare simplified data for JavaScript lightbox
+        $galeriData = $galeris->map(function($item) {
+            return [
+                'id' => $item->id,
+                'judul' => $item->judul,
+                'deskripsi' => $item->deskripsi ? \Illuminate\Support\Str::limit($item->deskripsi, 200) : null,
+                'kategori' => $item->kategori,
+                'file_path' => $item->file_path,
+                'file_type' => $item->file_type,
+                'tanggal_publikasi' => $item->tanggal_publikasi,
+            ];
+        });
+
+        return view('public.galeri.index', compact('galeris', 'galeriData'));
     }
 
     /**

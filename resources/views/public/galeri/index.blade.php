@@ -296,17 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Lightbox functionality
-const galleryData = {!! json_encode($galeris->map(function($item) {
-    return [
-        'id' => $item->id,
-        'judul' => $item->judul,
-        'deskripsi' => $item->deskripsi ? \Illuminate\Support\Str::limit($item->deskripsi, 200) : null,
-        'kategori' => $item->kategori,
-        'file_path' => $item->file_path,
-        'file_type' => $item->file_type,
-        'tanggal_publikasi' => $item->tanggal_publikasi,
-    ];
-})) !!};
+const galleryData = @json($galeriData ?? []);
 
 console.log('Gallery Data loaded:', galleryData ? galleryData.length + ' items' : 'empty');
 
