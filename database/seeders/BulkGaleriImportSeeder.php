@@ -103,7 +103,8 @@ class BulkGaleriImportSeeder extends Seeder
                     'view_count' => rand(5, 200),
                 ]);
                 
-                $this->command->info("✅ [{$imported + 1}] {$filename} → {$judul} ({$kategori}) - {$dimensions}");
+                $number = $imported + 1;
+                $this->command->info("✅ [{$number}] {$filename} → {$judul} ({$kategori}) - {$dimensions}");
                 $imported++;
                 
             } catch (\Exception $e) {
