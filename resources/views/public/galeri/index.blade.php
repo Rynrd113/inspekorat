@@ -58,7 +58,7 @@
                                 <div class="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200">
                                     @if(in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif']))
                                         @if($galeri->file_path && Storage::disk('public')->exists($galeri->file_path))
-                                            <img src="{{ asset('storage/' . $galeri->file_path) }}" 
+                                            <img src="{{ asset('public/storage/' . $galeri->file_path) }}" 
                                                  alt="{{ $galeri->judul }}" 
                                                  class="w-full h-full object-cover" 
                                                  loading="lazy" 
