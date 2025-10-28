@@ -51,7 +51,7 @@
                         <div class="gallery-item group cursor-pointer" 
                              data-type="{{ $galeri->file_type ?? 'jpg' }}" 
                              data-category="{{ strtolower($galeri->kategori ?? 'umum') }}"
-                             onclick="openLightbox({{ $galeri->id ?? 0 }})">
+                             onclick="openGaleriLightbox({{ $galeri->id ?? 0 }})">>
                             
                             <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 overflow-hidden">
                                 <!-- Image/Video Thumbnail -->
@@ -160,9 +160,9 @@
 </div>
 
 <!-- Lightbox Modal -->
-<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden" onclick="closeLightbox()">
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden" onclick="closeGaleriLightbox()">
     <!-- Close Button -->
-    <button onclick="event.stopPropagation(); closeLightbox();" class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors p-2" style="z-index: 9999;">
+    <button onclick="event.stopPropagation(); closeGaleriLightbox();" class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors p-2" style="z-index: 9999;">
         <i class="fas fa-times text-2xl"></i>
     </button>
     
@@ -308,12 +308,16 @@ const galleryData = {!! json_encode($galeris->map(function($item) {
     ];
 })) !!};
 
-function openLightbox(itemId) {
+console.log('Gallery Data loaded:', galleryData ? galleryData.length + ' items' : 'empty');
+
+function openGaleriLightbox(itemId) {
+    console.log('Opening lightbox for ID:', itemId);
     const lightbox = document.getElementById('lightbox');
     const content = document.getElementById('lightbox-content');
     const info = document.getElementById('lightbox-info');
     
     const item = galleryData.find(g => g.id === itemId);
+    console.log('Found item:', item);
     
     if (item) {
         // Display content based on file type
@@ -423,7 +427,7 @@ function openLightbox(itemId) {
     }
 }
 
-function closeLightbox() {
+function closeGaleriLightbox() {
     const lightbox = document.getElementById('lightbox');
     lightbox.classList.add('hidden');
     // Reset scroll position
@@ -433,7 +437,7 @@ function closeLightbox() {
 // Close lightbox with Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-        closeLightbox();
+        closeGaleriLightbox();
     }
 });
 
@@ -468,7 +472,7 @@ document.addEventListener('touchend', function(e) {
     // Swipe down to close lightbox
     if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY > 100) {
         if (document.getElementById('lightbox').classList.contains('hidden') === false) {
-            closeLightbox();
+            closeGaleriLightbox();
         }
     }
 });
