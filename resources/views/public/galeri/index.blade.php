@@ -330,7 +330,7 @@ function openLightbox(itemId) {
             videoContainer.appendChild(textCenter);
             content.appendChild(videoContainer);
         } else {
-            const storageUrl = '{{ asset("storage") }}';
+            const storageUrl = '{{ asset("public/storage") }}';
             const placeholderUrl = '{{ asset("images/placeholder.jpg") }}';
             const imageSrc = item.file_path ? `${storageUrl}/${item.file_path}` : placeholderUrl;
             
