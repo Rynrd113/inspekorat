@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Lightbox functionality
-const galleryData = @json($galeriData ?? []);
+const galleryData = {!! json_encode($galeriData ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) !!};
 
 console.log('Gallery Data loaded:', galleryData ? galleryData.length + ' items' : 'empty');
 
