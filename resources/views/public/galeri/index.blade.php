@@ -257,50 +257,46 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const galleryItems = document.querySelectorAll('.gallery-item');
+// Filter functionality
+var filterBtns = document.querySelectorAll('.filter-btn');
+var galleryItems = document.querySelectorAll('.gallery-item');
 
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const filter = this.dataset.filter;
-
-            // Update active button
-            filterBtns.forEach(b => {
-                b.classList.remove('bg-blue-600', 'text-white');
-                b.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
-            });
-            this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
-            this.classList.add('bg-blue-600', 'text-white');
-
-            // Filter items
-            galleryItems.forEach(item => {
-                const itemType = item.dataset.type;
-                const itemCategory = item.dataset.category;
-                
-                // Map file extensions to filter types
-                let itemFilterType = itemType;
-                if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(itemType)) {
-                    itemFilterType = 'foto';
-                } else if (['mp4', 'avi', 'mov', 'wmv'].includes(itemType)) {
-                    itemFilterType = 'video';
-                } else if (['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(itemType)) {
-                    itemFilterType = 'dokumen';
-                }
-                
-                if (filter === 'all' || 
-                    filter === itemFilterType || 
-                    filter === itemCategory) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
+for (var i = 0; i < filterBtns.length; i++) {
+    filterBtns[i].addEventListener('click', function() {
+        var filter = this.getAttribute('data-filter');
+        
+        // Update active button
+        for (var j = 0; j < filterBtns.length; j++) {
+            filterBtns[j].classList.remove('bg-blue-600', 'text-white');
+            filterBtns[j].classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+        }
+        this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+        this.classList.add('bg-blue-600', 'text-white');
+        
+        // Filter items
+        for (var k = 0; k < galleryItems.length; k++) {
+            var item = galleryItems[k];
+            var itemType = item.getAttribute('data-type');
+            var itemFilterType = itemType;
+            
+            if (itemType === 'jpg' || itemType === 'jpeg' || itemType === 'png' || itemType === 'gif') {
+                itemFilterType = 'foto';
+            } else if (itemType === 'mp4' || itemType === 'avi' || itemType === 'mov') {
+                itemFilterType = 'video';
+            } else if (itemType === 'pdf' || itemType === 'doc' || itemType === 'docx') {
+                itemFilterType = 'dokumen';
+            }
+            
+            if (filter === 'all' || filter === itemFilterType) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        }
     });
-});
+}
 
-// Lightbox functionality - Simple version
+// Lightbox functions
 function openGaleriLightbox(itemId) {
     var lightbox = document.getElementById('lightbox');
     var content = document.getElementById('lightbox-content');
@@ -308,26 +304,43 @@ function openGaleriLightbox(itemId) {
     
     if (!lightbox || !content || !info) return;
     
-    var galleryItem = document.querySelector('.gallery-item[onclick*="' + itemId + '"]');
+    var items = document.querySelectorAll('.gallery-item');
+    var galleryItem = null;
+    
+    for (var i = 0; i < items.length; i++) {
+        var onclick = items[i].getAttribute('onclick');
+        if (onclick && onclick.indexOf(itemId) !== -1) {
+            galleryItem = items[i];
+            break;
+        }
+    }
+    
     if (!galleryItem) return;
     
-    var fileType = galleryItem.getAttribute('data-type') || 'jpg';
-    var filePath = galleryItem.getAttribute('data-path') || '';
-    var judul = galleryItem.getAttribute('data-judul') || '';
-    var deskripsi = galleryItem.getAttribute('data-deskripsi') || '';
-    var kategori = galleryItem.getAttribute('data-kategori') || 'Umum';
-    var tanggal = galleryItem.getAttribute('data-tanggal') || '';
+    var filePath = galleryItem.getAttribute('data-path');
+    var judul = galleryItem.getAttribute('data-judul');
+    var deskripsi = galleryItem.getAttribute('data-deskripsi');
+    var kategori = galleryItem.getAttribute('data-kategori');
+    var tanggal = galleryItem.getAttribute('data-tanggal');
     
-    content.innerHTML = '';
-    info.innerHTML = '';
+    // Build image HTML
+    var imgHtml = '<img src="{{ asset("public/storage") }}/' + filePath + '" ';
+    imgHtml += 'alt="' + judul + '" ';
+    imgHtml += 'class="max-w-full max-h-full object-contain rounded-lg" ';
+    imgHtml += 'style="max-height: calc(100vh - 220px);">';
     
-    // Display image
-    var storageUrl = '{{ asset("public/storage") }}';
-    var imageSrc = storageUrl + '/' + filePath;
-    content.innerHTML = '<img src="' + imageSrc + '" alt="' + judul + '" class="max-w-full max-h-full object-contain rounded-lg" style="max-height: calc(100vh - 220px);">';
+    content.innerHTML = imgHtml;
     
-    // Display info
-    info.innerHTML = '<div class="text-white"><h3 class="text-xl font-bold mb-2">' + judul + '</h3><p class="text-gray-300 mb-3">' + deskripsi + '</p><div class="flex gap-2 text-sm"><span class="bg-blue-600 px-3 py-1 rounded-full">' + kategori + '</span><span class="bg-gray-700 px-3 py-1 rounded-full">' + tanggal + '</span></div></div>';
+    // Build info HTML
+    var infoHtml = '<div class="text-white">';
+    infoHtml += '<h3 class="text-xl font-bold mb-2">' + judul + '</h3>';
+    infoHtml += '<p class="text-gray-300 mb-3">' + deskripsi + '</p>';
+    infoHtml += '<div class="flex gap-2 text-sm">';
+    infoHtml += '<span class="bg-blue-600 px-3 py-1 rounded-full">' + kategori + '</span>';
+    infoHtml += '<span class="bg-gray-700 px-3 py-1 rounded-full">' + tanggal + '</span>';
+    infoHtml += '</div></div>';
+    
+    info.innerHTML = infoHtml;
     
     lightbox.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
@@ -341,8 +354,9 @@ function closeGaleriLightbox() {
     }
 }
 
+// Close on Escape key
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' || e.keyCode === 27) {
         closeGaleriLightbox();
     }
 });
