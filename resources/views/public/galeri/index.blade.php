@@ -51,6 +51,11 @@
                         <div class="gallery-item group cursor-pointer" 
                              data-type="{{ $galeri->file_type ?? 'jpg' }}" 
                              data-category="{{ strtolower($galeri->kategori ?? 'umum') }}"
+                             data-path="{{ $galeri->file_path }}"
+                             data-judul="{{ $galeri->judul }}"
+                             data-deskripsi="{{ $galeri->deskripsi }}"
+                             data-tanggal="{{ $galeri->tanggal_publikasi ? \Carbon\Carbon::parse($galeri->tanggal_publikasi)->format('d M Y') : 'N/A' }}"
+                             data-kategori="{{ $galeri->kategori ?? 'umum' }}"
                              onclick="openGaleriLightbox({{ $galeri->id ?? 0 }})">
                             
                             <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 overflow-hidden">
@@ -295,10 +300,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Lightbox functionality
-const galleryData = {!! json_encode($galeriData ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE) !!};
-
-console.log('Gallery Data loaded:', galleryData ? galleryData.length + ' items' : 'empty');
+// Lightbox functionality - Load data on demand via data attributes
+console.log('Galeri lightbox initialized');
 
 function openGaleriLightbox(itemId) {
     console.log('Opening lightbox for ID:', itemId);
@@ -306,12 +309,25 @@ function openGaleriLightbox(itemId) {
     const content = document.getElementById('lightbox-content');
     const info = document.getElementById('lightbox-info');
     
-    const item = galleryData.find(g => g.id === itemId);
-    console.log('Found item:', item);
+    // Find the gallery item element
+    const galleryItem = document.querySelector(`.gallery-item[onclick*="${itemId}"]`);
+    if (!galleryItem) {
+        console.error('Gallery item not found for ID:', itemId);
+        return;
+    }
     
-    if (item) {
-        // Display content based on file type
-        if (['mp4', 'avi', 'mov', 'wmv'].includes(item.file_type)) {
+    // Get data from data attributes
+    const fileType = galleryItem.getAttribute('data-type');
+    const filePath = galleryItem.getAttribute('data-path');
+    const judul = galleryItem.getAttribute('data-judul');
+    const deskripsi = galleryItem.getAttribute('data-deskripsi');
+    const kategori = galleryItem.getAttribute('data-kategori');
+    const tanggal = galleryItem.getAttribute('data-tanggal');
+    
+    console.log('Item data:', {fileType, filePath, judul, kategori, tanggal});
+    
+    // Display content based on file type
+    if (['mp4', 'avi', 'mov', 'wmv'].includes(fileType)) {
             // Clear content first
             content.innerHTML = '';
             
@@ -336,7 +352,7 @@ function openGaleriLightbox(itemId) {
         } else {
             const storageUrl = '{{ asset("public/storage") }}';
             const placeholderUrl = '{{ asset("images/placeholder.jpg") }}';
-            const imageSrc = item.file_path ? `${storageUrl}/${item.file_path}` : placeholderUrl;
+            const imageSrc = filePath ? `${storageUrl}/${filePath}` : placeholderUrl;
             
             // Clear content first
             content.innerHTML = '';
@@ -344,7 +360,7 @@ function openGaleriLightbox(itemId) {
             // Create image element safely
             const img = document.createElement('img');
             img.src = imageSrc;
-            img.alt = item.judul || '';
+            img.alt = judul || '';
             img.className = 'max-w-full object-contain rounded-lg cursor-zoom-in';
             img.style.cssText = 'max-height: calc(100vh - 220px); width: auto; height: auto;';
             img.loading = 'lazy';
@@ -366,13 +382,13 @@ function openGaleriLightbox(itemId) {
         
         const title = document.createElement('h3');
         title.className = 'text-xl font-bold mb-2 text-white';
-        title.textContent = item.judul || '';
+        title.textContent = judul || '';
         leftDiv.appendChild(title);
         
-        if (item.deskripsi) {
+        if (deskripsi) {
             const description = document.createElement('p');
             description.className = 'text-gray-300 mb-3 text-sm leading-relaxed';
-            description.textContent = item.deskripsi;
+            description.textContent = deskripsi;
             leftDiv.appendChild(description);
         }
         
@@ -383,11 +399,11 @@ function openGaleriLightbox(itemId) {
         // Category badge
         const categoryBadge = document.createElement('span');
         categoryBadge.className = 'bg-blue-600 px-3 py-1 rounded-full text-white';
-        categoryBadge.textContent = item.kategori || 'Umum';
+        categoryBadge.textContent = kategori || 'Umum';
         rightDiv.appendChild(categoryBadge);
         
         // Date badge
-        if (item.tanggal_publikasi) {
+        if (tanggal) {
             const dateBadge = document.createElement('span');
             dateBadge.className = 'bg-gray-700 px-3 py-1 rounded-full text-gray-300';
             
@@ -395,17 +411,17 @@ function openGaleriLightbox(itemId) {
             calendarIcon.className = 'fas fa-calendar mr-1';
             dateBadge.appendChild(calendarIcon);
             
-            const dateText = document.createTextNode(' ' + new Date(item.tanggal_publikasi).toLocaleDateString('id-ID'));
+            const dateText = document.createTextNode(' ' + tanggal);
             dateBadge.appendChild(dateText);
             
             rightDiv.appendChild(dateBadge);
         }
         
         // File type badge
-        if (item.file_type) {
+        if (fileType) {
             const typeBadge = document.createElement('span');
             typeBadge.className = 'bg-green-600 px-3 py-1 rounded-full text-white';
-            typeBadge.textContent = item.file_type.toUpperCase();
+            typeBadge.textContent = fileType.toUpperCase();
             rightDiv.appendChild(typeBadge);
         }
         
