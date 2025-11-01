@@ -51,7 +51,7 @@
                         <div class="gallery-item group cursor-pointer" 
                              data-type="{{ $galeri->file_type ?? 'jpg' }}" 
                              data-category="{{ strtolower($galeri->kategori ?? 'umum') }}"
-                             onclick="openGaleriLightbox({{ $galeri->id ?? 0 }})">>
+                             onclick="openGaleriLightbox({{ $galeri->id ?? 0 }})">
                             
                             <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 overflow-hidden">
                                 <!-- Image/Video Thumbnail -->
