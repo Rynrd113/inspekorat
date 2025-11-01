@@ -328,7 +328,7 @@ function openGaleriLightbox(itemId) {
         console.log('Item data:', {fileType, filePath, judul, kategori, tanggal});
         
         // Display content based on file type
-    if (['mp4', 'avi', 'mov', 'wmv'].includes(fileType)) {
+        if (['mp4', 'avi', 'mov', 'wmv'].includes(fileType)) {
             // Clear content first
             content.innerHTML = '';
             
