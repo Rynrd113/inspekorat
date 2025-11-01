@@ -257,44 +257,47 @@
 
 @push('scripts')
 <script>
-// Filter functionality
-var filterBtns = document.querySelectorAll('.filter-btn');
-var galleryItems = document.querySelectorAll('.gallery-item');
+// Galeri v1.1 - Cache busting
+(function() {
+    // Filter functionality
+    var filterBtns = document.querySelectorAll('.filter-btn');
+    var galleryItems = document.querySelectorAll('.gallery-item');
 
-for (var i = 0; i < filterBtns.length; i++) {
-    filterBtns[i].addEventListener('click', function() {
-        var filter = this.getAttribute('data-filter');
-        
-        // Update active button
-        for (var j = 0; j < filterBtns.length; j++) {
-            filterBtns[j].classList.remove('bg-blue-600', 'text-white');
-            filterBtns[j].classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
-        }
-        this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
-        this.classList.add('bg-blue-600', 'text-white');
-        
-        // Filter items
-        for (var k = 0; k < galleryItems.length; k++) {
-            var item = galleryItems[k];
-            var itemType = item.getAttribute('data-type');
-            var itemFilterType = itemType;
+    for (var i = 0; i < filterBtns.length; i++) {
+        filterBtns[i].addEventListener('click', function() {
+            var filter = this.getAttribute('data-filter');
             
-            if (itemType === 'jpg' || itemType === 'jpeg' || itemType === 'png' || itemType === 'gif') {
-                itemFilterType = 'foto';
-            } else if (itemType === 'mp4' || itemType === 'avi' || itemType === 'mov') {
-                itemFilterType = 'video';
-            } else if (itemType === 'pdf' || itemType === 'doc' || itemType === 'docx') {
-                itemFilterType = 'dokumen';
+            // Update active button
+            for (var j = 0; j < filterBtns.length; j++) {
+                filterBtns[j].classList.remove('bg-blue-600', 'text-white');
+                filterBtns[j].classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
             }
+            this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+            this.classList.add('bg-blue-600', 'text-white');
             
-            if (filter === 'all' || filter === itemFilterType) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
+            // Filter items
+            for (var k = 0; k < galleryItems.length; k++) {
+                var item = galleryItems[k];
+                var itemType = item.getAttribute('data-type');
+                var itemFilterType = itemType;
+                
+                if (itemType === 'jpg' || itemType === 'jpeg' || itemType === 'png' || itemType === 'gif') {
+                    itemFilterType = 'foto';
+                } else if (itemType === 'mp4' || itemType === 'avi' || itemType === 'mov') {
+                    itemFilterType = 'video';
+                } else if (itemType === 'pdf' || itemType === 'doc' || itemType === 'docx') {
+                    itemFilterType = 'dokumen';
+                }
+                
+                if (filter === 'all' || filter === itemFilterType) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
             }
-        }
-    });
-}
+        });
+    }
+})();
 
 // Lightbox functions
 function openGaleriLightbox(itemId) {
@@ -302,7 +305,10 @@ function openGaleriLightbox(itemId) {
     var content = document.getElementById('lightbox-content');
     var info = document.getElementById('lightbox-info');
     
-    if (!lightbox || !content || !info) return;
+    if (!lightbox || !content || !info) {
+        console.log('Lightbox elements not found');
+        return;
+    }
     
     var items = document.querySelectorAll('.gallery-item');
     var galleryItem = null;
@@ -315,35 +321,48 @@ function openGaleriLightbox(itemId) {
         }
     }
     
-    if (!galleryItem) return;
+    if (!galleryItem) {
+        console.log('Gallery item not found for ID:', itemId);
+        return;
+    }
     
-    var filePath = galleryItem.getAttribute('data-path');
-    var judul = galleryItem.getAttribute('data-judul');
-    var deskripsi = galleryItem.getAttribute('data-deskripsi');
-    var kategori = galleryItem.getAttribute('data-kategori');
-    var tanggal = galleryItem.getAttribute('data-tanggal');
+    var filePath = galleryItem.getAttribute('data-path') || '';
+    var judul = galleryItem.getAttribute('data-judul') || 'Untitled';
+    var deskripsi = galleryItem.getAttribute('data-deskripsi') || '';
+    var kategori = galleryItem.getAttribute('data-kategori') || 'Umum';
+    var tanggal = galleryItem.getAttribute('data-tanggal') || '';
     
-    // Build image HTML
-    var imgHtml = '<img src="{{ asset("public/storage") }}/' + filePath + '" ';
+    console.log('Opening:', judul, filePath);
+    
+    // Build image HTML - Fix asset URL
+    var imageUrl = '/storage/' + filePath;
+    var imgHtml = '<img src="' + imageUrl + '" ';
     imgHtml += 'alt="' + judul + '" ';
     imgHtml += 'class="max-w-full max-h-full object-contain rounded-lg" ';
-    imgHtml += 'style="max-height: calc(100vh - 220px);">';
+    imgHtml += 'style="max-height: calc(100vh - 220px);" ';
+    imgHtml += 'onerror="console.error(\'Image failed to load:\', this.src);">';
     
     content.innerHTML = imgHtml;
     
     // Build info HTML
     var infoHtml = '<div class="text-white">';
     infoHtml += '<h3 class="text-xl font-bold mb-2">' + judul + '</h3>';
-    infoHtml += '<p class="text-gray-300 mb-3">' + deskripsi + '</p>';
-    infoHtml += '<div class="flex gap-2 text-sm">';
+    if (deskripsi) {
+        infoHtml += '<p class="text-gray-300 mb-3">' + deskripsi + '</p>';
+    }
+    infoHtml += '<div class="flex gap-2 text-sm flex-wrap">';
     infoHtml += '<span class="bg-blue-600 px-3 py-1 rounded-full">' + kategori + '</span>';
-    infoHtml += '<span class="bg-gray-700 px-3 py-1 rounded-full">' + tanggal + '</span>';
+    if (tanggal) {
+        infoHtml += '<span class="bg-gray-700 px-3 py-1 rounded-full">' + tanggal + '</span>';
+    }
     infoHtml += '</div></div>';
     
     info.innerHTML = infoHtml;
     
     lightbox.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    
+    console.log('Lightbox opened successfully');
 }
 
 function closeGaleriLightbox() {
@@ -360,6 +379,8 @@ document.addEventListener('keydown', function(e) {
         closeGaleriLightbox();
     }
 });
+
+console.log('Galeri script v1.1 loaded');
 </script>
 @endpush
 @endsection
