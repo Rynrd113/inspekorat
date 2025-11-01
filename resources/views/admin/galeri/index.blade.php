@@ -268,13 +268,13 @@
 @push('scripts')
 <script>
 function viewMedia(type, src) {
-    const mediaContent = document.getElementById('mediaContent');
-    const modal = document.getElementById('mediaModal');
+    var mediaContent = document.getElementById('mediaContent');
+    var modal = document.getElementById('mediaModal');
     
     if (type === 'foto') {
-        mediaContent.innerHTML = `<img src="${src}" class="max-w-full max-h-96 object-contain" alt="Media">`;
+        mediaContent.innerHTML = '<img src="' + src + '" class="max-w-full max-h-96 object-contain" alt="Media">';
     } else if (type === 'video') {
-        mediaContent.innerHTML = `<video controls class="max-w-full max-h-96"><source src="${src}" type="video/mp4">Your browser does not support the video tag.</video>`;
+        mediaContent.innerHTML = '<video controls class="max-w-full max-h-96"><source src="' + src + '" type="video/mp4">Your browser does not support the video tag.</video>';
     }
     
     modal.classList.remove('hidden');
@@ -285,11 +285,10 @@ function closeMediaModal() {
 }
 
 function confirmDelete(id) {
-    // Find the button that was clicked and get its data-delete-url
-    const button = event.target.closest('button[data-delete-url]');
-    const deleteUrl = button.getAttribute('data-delete-url');
+    // Build the delete URL
+    var deleteUrl = '/admin/galeri/' + id;
     
-    const form = document.getElementById('deleteForm');
+    var form = document.getElementById('deleteForm');
     form.action = deleteUrl;
     document.getElementById('deleteModal').classList.remove('hidden');
 }
@@ -297,7 +296,6 @@ function confirmDelete(id) {
 function closeDeleteModal() {
     document.getElementById('deleteModal').classList.add('hidden');
 }
-
 
 // Close modals when clicking outside
 document.getElementById('mediaModal').addEventListener('click', function(e) {
