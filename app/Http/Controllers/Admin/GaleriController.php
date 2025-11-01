@@ -25,6 +25,15 @@ class GaleriController extends Controller
         if ($request->filled('kategori')) {
             $query->where('kategori', $request->kategori);
         }
+        
+        // Filter by tipe
+        if ($request->filled('tipe')) {
+            if ($request->tipe === 'foto') {
+                $query->whereIn('file_type', ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+            } elseif ($request->tipe === 'video') {
+                $query->whereIn('file_type', ['mp4', 'avi', 'mov', 'wmv', 'flv']);
+            }
+        }
 
         // Filter by status
         if ($request->filled('status')) {
@@ -40,7 +49,8 @@ class GaleriController extends Controller
                          ->whereNotNull('id')
                          ->where('id', '>', 0)
                          ->latest()
-                         ->paginate(10);
+                         ->paginate(12)
+                         ->appends($request->query());
 
         return view('admin.galeri.index', compact('galeris'));
     }

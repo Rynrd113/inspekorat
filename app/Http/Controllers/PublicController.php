@@ -453,15 +453,11 @@ startxref
             $query->where('kategori', $request->kategori);
         }
 
-        $galeris = Cache::remember(
-            'public_galeri_' . md5($request->fullUrl()), 
-            600, 
-            function () use ($query) {
-                return $query->orderBy('tanggal_publikasi', 'desc')
-                           ->orderBy('created_at', 'desc')
-                           ->get();
-            }
-        );
+        // Add pagination
+        $galeris = $query->orderBy('tanggal_publikasi', 'desc')
+                       ->orderBy('created_at', 'desc')
+                       ->paginate(12)
+                       ->appends($request->query());
 
         return view('public.galeri.index', compact('galeris'));
     }

@@ -107,6 +107,13 @@
                         </div>
                     @endforeach
                 </div>
+                
+                <!-- Pagination -->
+                @if($galeris->hasPages())
+                <div class="mt-8">
+                    {{ $galeris->links() }}
+                </div>
+                @endif
             @else
                 <!-- Empty State -->
                 <div class="text-center py-16">
@@ -119,40 +126,6 @@
                     </div>
                 </div>
             @endif
-        </div>
-    </section>
-
-    <!-- Statistics Section -->
-    <section class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Statistik Galeri</h2>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-blue-600 mb-2" id="total-photos">
-                        {{ isset($galeris) ? $galeris->whereIn('file_type', ['jpg', 'jpeg', 'png', 'gif'])->count() : 0 }}
-                    </div>
-                    <div class="text-gray-600">Foto</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-purple-600 mb-2" id="total-videos">
-                        {{ isset($galeris) ? $galeris->whereIn('file_type', ['mp4', 'avi', 'mov', 'wmv'])->count() : 0 }}
-                    </div>
-                    <div class="text-gray-600">Video</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-green-600 mb-2" id="total-docs">
-                        {{ isset($galeris) ? $galeris->whereIn('file_type', ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'])->count() : 0 }}
-                    </div>
-                    <div class="text-gray-600">Dokumen</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-orange-600 mb-2" id="total-events">
-                        {{ isset($galeris) ? $galeris->unique('tanggal_publikasi')->count() : 0 }}
-                    </div>
-                    <div class="text-gray-600">Kegiatan</div>
-                </div>
-            </div>
         </div>
     </section>
 </div>
