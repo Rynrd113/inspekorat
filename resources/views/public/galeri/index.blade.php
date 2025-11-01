@@ -304,29 +304,30 @@ document.addEventListener('DOMContentLoaded', function() {
 console.log('Galeri lightbox initialized');
 
 function openGaleriLightbox(itemId) {
-    console.log('Opening lightbox for ID:', itemId);
-    const lightbox = document.getElementById('lightbox');
-    const content = document.getElementById('lightbox-content');
-    const info = document.getElementById('lightbox-info');
-    
-    // Find the gallery item element
-    const galleryItem = document.querySelector(`.gallery-item[onclick*="${itemId}"]`);
-    if (!galleryItem) {
-        console.error('Gallery item not found for ID:', itemId);
-        return;
-    }
-    
-    // Get data from data attributes
-    const fileType = galleryItem.getAttribute('data-type');
-    const filePath = galleryItem.getAttribute('data-path');
-    const judul = galleryItem.getAttribute('data-judul');
-    const deskripsi = galleryItem.getAttribute('data-deskripsi');
-    const kategori = galleryItem.getAttribute('data-kategori');
-    const tanggal = galleryItem.getAttribute('data-tanggal');
-    
-    console.log('Item data:', {fileType, filePath, judul, kategori, tanggal});
-    
-    // Display content based on file type
+    try {
+        console.log('Opening lightbox for ID:', itemId);
+        const lightbox = document.getElementById('lightbox');
+        const content = document.getElementById('lightbox-content');
+        const info = document.getElementById('lightbox-info');
+        
+        // Find the gallery item element
+        const galleryItem = document.querySelector(`.gallery-item[onclick*="${itemId}"]`);
+        if (!galleryItem) {
+            console.error('Gallery item not found for ID:', itemId);
+            return;
+        }
+        
+        // Get data from data attributes
+        const fileType = galleryItem.getAttribute('data-type');
+        const filePath = galleryItem.getAttribute('data-path');
+        const judul = galleryItem.getAttribute('data-judul');
+        const deskripsi = galleryItem.getAttribute('data-deskripsi');
+        const kategori = galleryItem.getAttribute('data-kategori');
+        const tanggal = galleryItem.getAttribute('data-tanggal');
+        
+        console.log('Item data:', {fileType, filePath, judul, kategori, tanggal});
+        
+        // Display content based on file type
     if (['mp4', 'avi', 'mov', 'wmv'].includes(fileType)) {
             // Clear content first
             content.innerHTML = '';
@@ -430,6 +431,11 @@ function openGaleriLightbox(itemId) {
         info.appendChild(infoContainer);
         
         lightbox.classList.remove('hidden');
+        // Prevent body scroll when lightbox is open
+        document.body.style.overflow = 'hidden';
+    } catch (error) {
+        console.error('Error opening lightbox:', error);
+        alert('Terjadi kesalahan saat membuka galeri. Silakan coba lagi.');
     }
 }
 
