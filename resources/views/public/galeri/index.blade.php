@@ -48,31 +48,24 @@
             @if($galeris && $galeris->count() > 0)
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="gallery-grid">
                     @foreach($galeris as $galeri)
-                        <div class="gallery-item group cursor-pointer" 
+                        <div class="gallery-item group" 
                              data-type="{{ $galeri->file_type ?? 'jpg' }}" 
-                             data-category="{{ strtolower($galeri->kategori ?? 'umum') }}"
-                             data-path="{{ $galeri->file_path }}"
-                             data-judul="{{ $galeri->judul }}"
-                             data-deskripsi="{{ $galeri->deskripsi }}"
-                             data-tanggal="{{ $galeri->tanggal_publikasi ? \Carbon\Carbon::parse($galeri->tanggal_publikasi)->format('d M Y') : 'N/A' }}"
-                             data-kategori="{{ $galeri->kategori ?? 'umum' }}"
-                             onclick="openGaleriLightbox({{ $galeri->id ?? 0 }})">
+                             data-category="{{ strtolower($galeri->kategori ?? 'umum') }}">
                             
-                            <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 overflow-hidden">
+                            <a href="{{ in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif']) ? asset('storage/' . $galeri->file_path) : '#' }}" 
+                               target="_blank" 
+                               class="block bg-white rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 overflow-hidden">
                                 <!-- Image/Video Thumbnail -->
                                 <div class="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200">
                                     @if(in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif']))
                                         @if($galeri->file_path && Storage::disk('public')->exists($galeri->file_path))
-                                            <img src="{{ asset('public/storage/' . $galeri->file_path) }}" 
+                                            <img src="{{ asset('storage/' . $galeri->file_path) }}" 
                                                  alt="{{ $galeri->judul }}" 
                                                  class="w-full h-full object-cover" 
-                                                 loading="lazy" 
-                                                 decoding="async"
-                                                 onerror="this.style.display='none'; const errorDiv = document.createElement('div'); errorDiv.className='w-full h-full flex items-center justify-center bg-gray-100'; const icon = document.createElement('i'); icon.className='fas fa-image text-gray-400 text-4xl'; const text = document.createElement('small'); text.className='text-xs text-gray-500 mt-2 block'; text.textContent='Gambar tidak dapat dimuat'; errorDiv.appendChild(icon); errorDiv.appendChild(text); this.parentElement.appendChild(errorDiv);">
+                                                 loading="lazy">
                                         @else
                                             <div class="w-full h-full flex items-center justify-center">
                                                 <i class="fas fa-image text-gray-400 text-4xl"></i>
-                                                <br><small class="text-xs text-gray-500 mt-2">File tidak ditemukan</small>
                                             </div>
                                         @endif
                                         <div class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded text-xs">
@@ -95,8 +88,8 @@
                                     @endif
                                     
                                     <!-- Hover Overlay -->
-                                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
-                                        <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></i>
+                                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                                        <i class="fas fa-eye text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></i>
                                     </div>
                                 </div>
 
@@ -110,7 +103,7 @@
                                         <span>{{ $galeri->tanggal_publikasi ? \Carbon\Carbon::parse($galeri->tanggal_publikasi)->format('d M Y') : 'N/A' }}</span>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     @endforeach
                 </div>
@@ -164,223 +157,46 @@
     </section>
 </div>
 
-<!-- Lightbox Modal -->
-<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden" onclick="closeGaleriLightbox()">
-    <!-- Close Button -->
-    <button onclick="event.stopPropagation(); closeGaleriLightbox();" class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors p-2" style="z-index: 9999;">
-        <i class="fas fa-times text-2xl"></i>
-    </button>
-    
-    <!-- Main Container -->
-    <div class="h-full w-full relative" onclick="event.stopPropagation()">        
-        <!-- Content Area -->
-        <div id="lightbox-content" class="absolute inset-0 flex items-center justify-center p-4" style="bottom: 200px;">
-            <!-- Content will be loaded here -->
-        </div>
-        
-        <!-- Info Panel - Fixed at bottom -->
-        <div id="lightbox-info" class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-85 text-white p-4 border-t border-gray-700 h-48 overflow-y-auto backdrop-blur-sm">
-            <!-- Info will be loaded here -->
-        </div>
-    </div>
-</div>
-
-@push('styles')
-<style>
-/* Lightbox responsive styles */
-#lightbox {
-    backdrop-filter: blur(5px);
-}
-
-#lightbox-content {
-    z-index: 10;
-}
-
-#lightbox-info {
-    z-index: 20;
-}
-
-#lightbox-content img {
-    transition: transform 0.3s ease;
-    max-height: calc(100vh - 220px) !important;
-}
-
-#lightbox-content img:hover {
-    transform: scale(1.02);
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-    #lightbox-content {
-        padding: 1rem;
-        bottom: 180px !important;
-    }
-    
-    #lightbox-info {
-        height: 180px !important;
-        padding: 1rem;
-    }
-    
-    #lightbox-info h3 {
-        font-size: 1.125rem;
-    }
-    
-    #lightbox-info p {
-        font-size: 0.875rem;
-    }
-    
-    .rounded-full {
-        font-size: 0.75rem;
-        padding: 0.25rem 0.75rem;
-    }
-    
-    #lightbox-content img {
-        max-height: calc(100vh - 200px) !important;
-    }
-}
-
-@media (max-width: 640px) {
-    #lightbox-content {
-        bottom: 160px !important;
-    }
-    
-    #lightbox-info {
-        height: 160px !important;
-    }
-    
-    #lightbox-content img {
-        max-height: calc(100vh - 180px) !important;
-    }
-}
-</style>
-@endpush
-
 @push('scripts')
 <script>
-// Galeri v1.1 - Cache busting
-(function() {
-    // Filter functionality
-    var filterBtns = document.querySelectorAll('.filter-btn');
-    var galleryItems = document.querySelectorAll('.gallery-item');
+// Simple filter functionality
+var filterBtns = document.querySelectorAll('.filter-btn');
+var galleryItems = document.querySelectorAll('.gallery-item');
 
-    for (var i = 0; i < filterBtns.length; i++) {
-        filterBtns[i].addEventListener('click', function() {
-            var filter = this.getAttribute('data-filter');
-            
-            // Update active button
-            for (var j = 0; j < filterBtns.length; j++) {
-                filterBtns[j].classList.remove('bg-blue-600', 'text-white');
-                filterBtns[j].classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
-            }
-            this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
-            this.classList.add('bg-blue-600', 'text-white');
-            
-            // Filter items
-            for (var k = 0; k < galleryItems.length; k++) {
-                var item = galleryItems[k];
-                var itemType = item.getAttribute('data-type');
-                var itemFilterType = itemType;
-                
-                if (itemType === 'jpg' || itemType === 'jpeg' || itemType === 'png' || itemType === 'gif') {
-                    itemFilterType = 'foto';
-                } else if (itemType === 'mp4' || itemType === 'avi' || itemType === 'mov') {
-                    itemFilterType = 'video';
-                } else if (itemType === 'pdf' || itemType === 'doc' || itemType === 'docx') {
-                    itemFilterType = 'dokumen';
-                }
-                
-                if (filter === 'all' || filter === itemFilterType) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            }
-        });
-    }
-})();
-
-// Lightbox functions
-function openGaleriLightbox(itemId) {
-    var lightbox = document.getElementById('lightbox');
-    var content = document.getElementById('lightbox-content');
-    var info = document.getElementById('lightbox-info');
-    
-    if (!lightbox || !content || !info) {
-        console.log('Lightbox elements not found');
-        return;
-    }
-    
-    var items = document.querySelectorAll('.gallery-item');
-    var galleryItem = null;
-    
-    for (var i = 0; i < items.length; i++) {
-        var onclick = items[i].getAttribute('onclick');
-        if (onclick && onclick.indexOf(itemId) !== -1) {
-            galleryItem = items[i];
-            break;
+for (var i = 0; i < filterBtns.length; i++) {
+    filterBtns[i].addEventListener('click', function() {
+        var filter = this.getAttribute('data-filter');
+        
+        // Update active button
+        for (var j = 0; j < filterBtns.length; j++) {
+            filterBtns[j].classList.remove('bg-blue-600', 'text-white');
+            filterBtns[j].classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
         }
-    }
-    
-    if (!galleryItem) {
-        console.log('Gallery item not found for ID:', itemId);
-        return;
-    }
-    
-    var filePath = galleryItem.getAttribute('data-path') || '';
-    var judul = galleryItem.getAttribute('data-judul') || 'Untitled';
-    var deskripsi = galleryItem.getAttribute('data-deskripsi') || '';
-    var kategori = galleryItem.getAttribute('data-kategori') || 'Umum';
-    var tanggal = galleryItem.getAttribute('data-tanggal') || '';
-    
-    console.log('Opening:', judul, filePath);
-    
-    // Build image HTML - Fix asset URL
-    var imageUrl = '/storage/' + filePath;
-    var imgHtml = '<img src="' + imageUrl + '" ';
-    imgHtml += 'alt="' + judul + '" ';
-    imgHtml += 'class="max-w-full max-h-full object-contain rounded-lg" ';
-    imgHtml += 'style="max-height: calc(100vh - 220px);" ';
-    imgHtml += 'onerror="console.error(\'Image failed to load:\', this.src);">';
-    
-    content.innerHTML = imgHtml;
-    
-    // Build info HTML
-    var infoHtml = '<div class="text-white">';
-    infoHtml += '<h3 class="text-xl font-bold mb-2">' + judul + '</h3>';
-    if (deskripsi) {
-        infoHtml += '<p class="text-gray-300 mb-3">' + deskripsi + '</p>';
-    }
-    infoHtml += '<div class="flex gap-2 text-sm flex-wrap">';
-    infoHtml += '<span class="bg-blue-600 px-3 py-1 rounded-full">' + kategori + '</span>';
-    if (tanggal) {
-        infoHtml += '<span class="bg-gray-700 px-3 py-1 rounded-full">' + tanggal + '</span>';
-    }
-    infoHtml += '</div></div>';
-    
-    info.innerHTML = infoHtml;
-    
-    lightbox.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-    
-    console.log('Lightbox opened successfully');
+        this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+        this.classList.add('bg-blue-600', 'text-white');
+        
+        // Filter items
+        for (var k = 0; k < galleryItems.length; k++) {
+            var item = galleryItems[k];
+            var itemType = item.getAttribute('data-type');
+            var itemFilterType = itemType;
+            
+            if (itemType === 'jpg' || itemType === 'jpeg' || itemType === 'png' || itemType === 'gif') {
+                itemFilterType = 'foto';
+            } else if (itemType === 'mp4' || itemType === 'avi' || itemType === 'mov') {
+                itemFilterType = 'video';
+            } else if (itemType === 'pdf' || itemType === 'doc' || itemType === 'docx') {
+                itemFilterType = 'dokumen';
+            }
+            
+            if (filter === 'all' || filter === itemFilterType) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        }
+    });
 }
-
-function closeGaleriLightbox() {
-    var lightbox = document.getElementById('lightbox');
-    if (lightbox) {
-        lightbox.classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
-}
-
-// Close on Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' || e.keyCode === 27) {
-        closeGaleriLightbox();
-    }
-});
-
-console.log('Galeri script v1.1 loaded');
 </script>
 @endpush
 @endsection
