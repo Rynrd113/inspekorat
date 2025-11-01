@@ -300,190 +300,50 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Lightbox functionality - Load data on demand via data attributes
-console.log('Galeri lightbox initialized');
-
+// Lightbox functionality - Simple version
 function openGaleriLightbox(itemId) {
-    try {
-        console.log('Opening lightbox for ID:', itemId);
-        const lightbox = document.getElementById('lightbox');
-        const content = document.getElementById('lightbox-content');
-        const info = document.getElementById('lightbox-info');
-        
-        // Find the gallery item element
-        const galleryItem = document.querySelector(`.gallery-item[onclick*="${itemId}"]`);
-        if (!galleryItem) {
-            console.error('Gallery item not found for ID:', itemId);
-            return;
-        }
-        
-        // Get data from data attributes
-        const fileType = galleryItem.getAttribute('data-type');
-        const filePath = galleryItem.getAttribute('data-path');
-        const judul = galleryItem.getAttribute('data-judul');
-        const deskripsi = galleryItem.getAttribute('data-deskripsi');
-        const kategori = galleryItem.getAttribute('data-kategori');
-        const tanggal = galleryItem.getAttribute('data-tanggal');
-        
-        console.log('Item data:', {fileType, filePath, judul, kategori, tanggal});
-        
-        // Display content based on file type
-        if (['mp4', 'avi', 'mov', 'wmv'].includes(fileType)) {
-            // Clear content first
-            content.innerHTML = '';            // Create video placeholder elements safely
-            const videoContainer = document.createElement('div');
-            videoContainer.className = 'bg-gray-900 rounded-lg p-8 flex items-center justify-center h-96';
-            
-            const textCenter = document.createElement('div');
-            textCenter.className = 'text-center';
-            
-            const playIcon = document.createElement('i');
-            playIcon.className = 'fas fa-play-circle text-white text-6xl mb-4';
-            
-            const videoText = document.createElement('p');
-            videoText.className = 'text-white text-lg';
-            videoText.textContent = 'Video Player akan segera tersedia';
-            
-            textCenter.appendChild(playIcon);
-            textCenter.appendChild(videoText);
-            videoContainer.appendChild(textCenter);
-            content.appendChild(videoContainer);
-        } else {
-            const storageUrl = '{{ asset("public/storage") }}';
-            const placeholderUrl = '{{ asset("images/placeholder.jpg") }}';
-            const imageSrc = filePath ? `${storageUrl}/${filePath}` : placeholderUrl;
-            
-            // Clear content first
-            content.innerHTML = '';
-            
-            // Create image element safely
-            const img = document.createElement('img');
-            img.src = imageSrc;
-            img.alt = judul || '';
-            img.className = 'max-w-full object-contain rounded-lg cursor-zoom-in';
-            img.style.cssText = 'max-height: calc(100vh - 220px); width: auto; height: auto;';
-            img.loading = 'lazy';
-            img.onclick = function() { toggleImageZoom(this); };
-            img.onerror = function() { this.src = placeholderUrl; };
-            
-            content.appendChild(img);
-        }
-        
-        // Display info safely with DOM manipulation
-        info.innerHTML = '';
-        
-        const infoContainer = document.createElement('div');
-        infoContainer.className = 'flex flex-col md:flex-row md:items-start gap-4';
-        
-        // Left side content
-        const leftDiv = document.createElement('div');
-        leftDiv.className = 'flex-1';
-        
-        const title = document.createElement('h3');
-        title.className = 'text-xl font-bold mb-2 text-white';
-        title.textContent = judul || '';
-        leftDiv.appendChild(title);
-        
-        if (deskripsi) {
-            const description = document.createElement('p');
-            description.className = 'text-gray-300 mb-3 text-sm leading-relaxed';
-            description.textContent = deskripsi;
-            leftDiv.appendChild(description);
-        }
-        
-        // Right side badges
-        const rightDiv = document.createElement('div');
-        rightDiv.className = 'flex flex-wrap gap-2 text-sm';
-        
-        // Category badge
-        const categoryBadge = document.createElement('span');
-        categoryBadge.className = 'bg-blue-600 px-3 py-1 rounded-full text-white';
-        categoryBadge.textContent = kategori || 'Umum';
-        rightDiv.appendChild(categoryBadge);
-        
-        // Date badge
-        if (tanggal) {
-            const dateBadge = document.createElement('span');
-            dateBadge.className = 'bg-gray-700 px-3 py-1 rounded-full text-gray-300';
-            
-            const calendarIcon = document.createElement('i');
-            calendarIcon.className = 'fas fa-calendar mr-1';
-            dateBadge.appendChild(calendarIcon);
-            
-            const dateText = document.createTextNode(' ' + tanggal);
-            dateBadge.appendChild(dateText);
-            
-            rightDiv.appendChild(dateBadge);
-        }
-        
-        // File type badge
-        if (fileType) {
-            const typeBadge = document.createElement('span');
-            typeBadge.className = 'bg-green-600 px-3 py-1 rounded-full text-white';
-            typeBadge.textContent = fileType.toUpperCase();
-            rightDiv.appendChild(typeBadge);
-        }
-        
-        infoContainer.appendChild(leftDiv);
-        infoContainer.appendChild(rightDiv);
-        info.appendChild(infoContainer);
-        
-        lightbox.classList.remove('hidden');
-        // Prevent body scroll when lightbox is open
-        document.body.style.overflow = 'hidden';
-    } catch (error) {
-        console.error('Error opening lightbox:', error);
-        alert('Terjadi kesalahan saat membuka galeri. Silakan coba lagi.');
-    }
+    var lightbox = document.getElementById('lightbox');
+    var content = document.getElementById('lightbox-content');
+    var info = document.getElementById('lightbox-info');
+    
+    if (!lightbox || !content || !info) return;
+    
+    var galleryItem = document.querySelector('.gallery-item[onclick*="' + itemId + '"]');
+    if (!galleryItem) return;
+    
+    var fileType = galleryItem.getAttribute('data-type') || 'jpg';
+    var filePath = galleryItem.getAttribute('data-path') || '';
+    var judul = galleryItem.getAttribute('data-judul') || '';
+    var deskripsi = galleryItem.getAttribute('data-deskripsi') || '';
+    var kategori = galleryItem.getAttribute('data-kategori') || 'Umum';
+    var tanggal = galleryItem.getAttribute('data-tanggal') || '';
+    
+    content.innerHTML = '';
+    info.innerHTML = '';
+    
+    // Display image
+    var storageUrl = '{{ asset("public/storage") }}';
+    var imageSrc = storageUrl + '/' + filePath;
+    content.innerHTML = '<img src="' + imageSrc + '" alt="' + judul + '" class="max-w-full max-h-full object-contain rounded-lg" style="max-height: calc(100vh - 220px);">';
+    
+    // Display info
+    info.innerHTML = '<div class="text-white"><h3 class="text-xl font-bold mb-2">' + judul + '</h3><p class="text-gray-300 mb-3">' + deskripsi + '</p><div class="flex gap-2 text-sm"><span class="bg-blue-600 px-3 py-1 rounded-full">' + kategori + '</span><span class="bg-gray-700 px-3 py-1 rounded-full">' + tanggal + '</span></div></div>';
+    
+    lightbox.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
 }
 
 function closeGaleriLightbox() {
-    const lightbox = document.getElementById('lightbox');
-    lightbox.classList.add('hidden');
-    // Reset scroll position
-    document.body.style.overflow = 'auto';
+    var lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+        lightbox.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
 }
 
-// Close lightbox with Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeGaleriLightbox();
-    }
-});
-
-// Image zoom functionality
-function toggleImageZoom(img) {
-    if (img.style.transform === 'scale(2)') {
-        img.style.transform = 'scale(1)';
-        img.style.cursor = 'zoom-in';
-        img.parentElement.style.overflow = 'hidden';
-    } else {
-        img.style.transform = 'scale(2)';
-        img.style.cursor = 'zoom-out';
-        img.parentElement.style.overflow = 'auto';
-    }
-}
-
-// Touch gestures for mobile
-let touchStartX = 0;
-let touchStartY = 0;
-
-document.addEventListener('touchstart', function(e) {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-});
-
-document.addEventListener('touchend', function(e) {
-    const touchEndX = e.changedTouches[0].clientX;
-    const touchEndY = e.changedTouches[0].clientY;
-    const deltaX = touchEndX - touchStartX;
-    const deltaY = touchEndY - touchStartY;
-    
-    // Swipe down to close lightbox
-    if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY > 100) {
-        if (document.getElementById('lightbox').classList.contains('hidden') === false) {
-            closeGaleriLightbox();
-        }
     }
 });
 </script>
