@@ -94,19 +94,12 @@
                 @foreach($galeris as $galeri)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
                     <div class="relative">
-                        @if($galeri->thumbnail && Storage::exists('public/' . $galeri->thumbnail))
-                            <img src="{{ Storage::url($galeri->thumbnail) }}" class="w-full h-48 object-cover" alt="{{ $galeri->judul }}">
-                            <div class="absolute bottom-2 left-2">
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                    <i class="fas fa-image mr-1"></i>Thumbnail
-                                </span>
-                            </div>
                         @if($galeri->file_path && Storage::disk('public')->exists($galeri->file_path))
                             @if($galeri->is_image)
-                                <img src="{{ asset('public/storage/' . $galeri->file_path) }}" class="w-full h-48 object-cover" alt="{{ $galeri->judul }}">
+                                <img src="{{ asset('uploads/' . $galeri->file_path) }}" class="w-full h-48 object-cover" alt="{{ $galeri->judul }}">
                                 <div class="absolute bottom-2 left-2">
                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                                        <i class="fas fa-image mr-1"></i>Original
+                                        <i class="fas fa-image mr-1"></i>Foto
                                     </span>
                                 </div>
                             @elseif($galeri->is_video)
