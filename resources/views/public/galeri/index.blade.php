@@ -330,9 +330,7 @@ function openGaleriLightbox(itemId) {
         // Display content based on file type
         if (['mp4', 'avi', 'mov', 'wmv'].includes(fileType)) {
             // Clear content first
-            content.innerHTML = '';
-            
-            // Create video placeholder elements safely
+            content.innerHTML = '';            // Create video placeholder elements safely
             const videoContainer = document.createElement('div');
             videoContainer.className = 'bg-gray-900 rounded-lg p-8 flex items-center justify-center h-96';
             
