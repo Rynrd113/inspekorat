@@ -265,9 +265,9 @@
     </div>
 </div>
 
-@push('scripts')
 <script>
-function viewMedia(type, src) {
+// Define functions in global scope
+window.viewMedia = function(type, src) {
     var mediaContent = document.getElementById('mediaContent');
     var modal = document.getElementById('mediaModal');
     
@@ -278,37 +278,51 @@ function viewMedia(type, src) {
     }
     
     modal.classList.remove('hidden');
-}
+};
 
-function closeMediaModal() {
+window.closeMediaModal = function() {
     document.getElementById('mediaModal').classList.add('hidden');
-}
+};
 
-function confirmDelete(id) {
+window.confirmDelete = function(id) {
     // Build the delete URL
     var deleteUrl = '/admin/galeri/' + id;
     
     var form = document.getElementById('deleteForm');
     form.action = deleteUrl;
     document.getElementById('deleteModal').classList.remove('hidden');
-}
+};
 
-function closeDeleteModal() {
+window.closeDeleteModal = function() {
     document.getElementById('deleteModal').classList.add('hidden');
+};
+
+// Close modals when clicking outside - wait for DOM to be ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initModalListeners);
+} else {
+    initModalListeners();
 }
 
-// Close modals when clicking outside
-document.getElementById('mediaModal')?.addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeMediaModal();
+function initModalListeners() {
+    var mediaModal = document.getElementById('mediaModal');
+    var deleteModal = document.getElementById('deleteModal');
+    
+    if (mediaModal) {
+        mediaModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeMediaModal();
+            }
+        });
     }
-});
-
-document.getElementById('deleteModal')?.addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeDeleteModal();
+    
+    if (deleteModal) {
+        deleteModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteModal();
+            }
+        });
     }
-});
+}
 </script>
-@endpush
 @endsection
