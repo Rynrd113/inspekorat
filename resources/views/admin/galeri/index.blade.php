@@ -152,12 +152,15 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <button type="button" 
-                                            onclick="confirmDelete({{ $galeri->id }})" 
+                                            onclick="if(confirm('Yakin ingin menghapus media ini?')) { document.getElementById('deleteForm{{ $galeri->id }}').submit(); }" 
                                             class="text-red-600 hover:text-red-900" 
-                                            title="Hapus"
-                                            data-delete-url="/admin/galeri/{{ $galeri->id }}">
+                                            title="Hapus">
                                         <i class="fas fa-trash"></i>
                                     </button>
+                                    <form id="deleteForm{{ $galeri->id }}" method="POST" action="/admin/galeri/{{ $galeri->id }}" style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
                                 @else
                                     <span class="text-gray-400 text-sm">
                                         ID: {{ $galeri->id ?? 'null' }} - Data tidak valid
@@ -195,142 +198,4 @@
         </div>
         @endif
     </div>
-
-    <!-- Media View Modal -->
-    <div id="mediaModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-            
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                            Media Preview
-                        </h3>
-                        <button type="button" onclick="closeMediaModal()" class="text-gray-400 hover:text-gray-600">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <div id="mediaContent" class="flex items-center justify-center">
-                        <!-- Media content will be loaded here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Modal -->
-    <div id="deleteModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-            
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <i class="fas fa-exclamation-triangle text-red-600"></i>
-                        </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                Konfirmasi Hapus
-                            </h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-500">
-                                    Apakah Anda yakin ingin menghapus media ini?
-                                </p>
-                                <p class="text-xs text-gray-400 mt-1">
-                                    Tindakan ini tidak dapat dibatalkan.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <form id="deleteForm" method="POST" action="" class="inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                            Hapus
-                        </button>
-                    </form>
-                    <button type="button" onclick="closeDeleteModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                        Batal
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
-
-<script type="text/javascript">
-// Define functions immediately when script loads
-window.viewMedia = function(type, src) {
-    console.log('viewMedia called:', type, src);
-    var mediaContent = document.getElementById('mediaContent');
-    var modal = document.getElementById('mediaModal');
-    
-    if (type === 'foto') {
-        mediaContent.innerHTML = '<img src="' + src + '" class="max-w-full max-h-96 object-contain" alt="Media">';
-    } else if (type === 'video') {
-        mediaContent.innerHTML = '<video controls class="max-w-full max-h-96"><source src="' + src + '" type="video/mp4">Your browser does not support the video tag.</video>';
-    }
-    
-    modal.classList.remove('hidden');
-};
-
-window.closeMediaModal = function() {
-    console.log('closeMediaModal called');
-    document.getElementById('mediaModal').classList.add('hidden');
-};
-
-window.confirmDelete = function(id) {
-    console.log('confirmDelete called with id:', id);
-    var deleteUrl = '/admin/galeri/' + id;
-    var form = document.getElementById('deleteForm');
-    form.action = deleteUrl;
-    document.getElementById('deleteModal').classList.remove('hidden');
-};
-
-window.closeDeleteModal = function() {
-    console.log('closeDeleteModal called');
-    document.getElementById('deleteModal').classList.add('hidden');
-};
-
-// Initialize modal listeners when DOM is ready
-function initGaleriModals() {
-    console.log('Initializing galeri modals...');
-    var mediaModal = document.getElementById('mediaModal');
-    var deleteModal = document.getElementById('deleteModal');
-    
-    if (mediaModal) {
-        mediaModal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                window.closeMediaModal();
-            }
-        });
-        console.log('Media modal listener added');
-    }
-    
-    if (deleteModal) {
-        deleteModal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                window.closeDeleteModal();
-            }
-        });
-        console.log('Delete modal listener added');
-    }
-}
-
-// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGaleriModals);
-} else {
-    initGaleriModals();
-}
-
-console.log('Galeri scripts loaded, confirmDelete available:', typeof window.confirmDelete);
-</script>
