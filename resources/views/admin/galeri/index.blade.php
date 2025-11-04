@@ -266,68 +266,71 @@
     </div>
 @endsection
 
-@push('scripts')
-<script>
-// Define functions in global scope immediately
-(function() {
-    'use strict';
+<script type="text/javascript">
+// Define functions immediately when script loads
+window.viewMedia = function(type, src) {
+    console.log('viewMedia called:', type, src);
+    var mediaContent = document.getElementById('mediaContent');
+    var modal = document.getElementById('mediaModal');
     
-    window.viewMedia = function(type, src) {
-        var mediaContent = document.getElementById('mediaContent');
-        var modal = document.getElementById('mediaModal');
-        
-        if (type === 'foto') {
-            mediaContent.innerHTML = '<img src="' + src + '" class="max-w-full max-h-96 object-contain" alt="Media">';
-        } else if (type === 'video') {
-            mediaContent.innerHTML = '<video controls class="max-w-full max-h-96"><source src="' + src + '" type="video/mp4">Your browser does not support the video tag.</video>';
-        }
-        
-        modal.classList.remove('hidden');
-    };
-
-    window.closeMediaModal = function() {
-        document.getElementById('mediaModal').classList.add('hidden');
-    };
-
-    window.confirmDelete = function(id) {
-        var deleteUrl = '/admin/galeri/' + id;
-        var form = document.getElementById('deleteForm');
-        form.action = deleteUrl;
-        document.getElementById('deleteModal').classList.remove('hidden');
-    };
-
-    window.closeDeleteModal = function() {
-        document.getElementById('deleteModal').classList.add('hidden');
-    };
-
-    // Initialize modal listeners
-    function initModalListeners() {
-        var mediaModal = document.getElementById('mediaModal');
-        var deleteModal = document.getElementById('deleteModal');
-        
-        if (mediaModal) {
-            mediaModal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    window.closeMediaModal();
-                }
-            });
-        }
-        
-        if (deleteModal) {
-            deleteModal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    window.closeDeleteModal();
-                }
-            });
-        }
+    if (type === 'foto') {
+        mediaContent.innerHTML = '<img src="' + src + '" class="max-w-full max-h-96 object-contain" alt="Media">';
+    } else if (type === 'video') {
+        mediaContent.innerHTML = '<video controls class="max-w-full max-h-96"><source src="' + src + '" type="video/mp4">Your browser does not support the video tag.</video>';
     }
+    
+    modal.classList.remove('hidden');
+};
 
-    // Run when script loads
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initModalListeners);
-    } else {
-        initModalListeners();
+window.closeMediaModal = function() {
+    console.log('closeMediaModal called');
+    document.getElementById('mediaModal').classList.add('hidden');
+};
+
+window.confirmDelete = function(id) {
+    console.log('confirmDelete called with id:', id);
+    var deleteUrl = '/admin/galeri/' + id;
+    var form = document.getElementById('deleteForm');
+    form.action = deleteUrl;
+    document.getElementById('deleteModal').classList.remove('hidden');
+};
+
+window.closeDeleteModal = function() {
+    console.log('closeDeleteModal called');
+    document.getElementById('deleteModal').classList.add('hidden');
+};
+
+// Initialize modal listeners when DOM is ready
+function initGaleriModals() {
+    console.log('Initializing galeri modals...');
+    var mediaModal = document.getElementById('mediaModal');
+    var deleteModal = document.getElementById('deleteModal');
+    
+    if (mediaModal) {
+        mediaModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                window.closeMediaModal();
+            }
+        });
+        console.log('Media modal listener added');
     }
-})();
+    
+    if (deleteModal) {
+        deleteModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                window.closeDeleteModal();
+            }
+        });
+        console.log('Delete modal listener added');
+    }
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGaleriModals);
+} else {
+    initGaleriModals();
+}
+
+console.log('Galeri scripts loaded, confirmDelete available:', typeof window.confirmDelete);
 </script>
-@endpush
