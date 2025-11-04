@@ -56,11 +56,6 @@
                        class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium {{ request()->routeIs('public.kontak') ? 'text-blue-600' : '' }}">
                         Kontak
                     </a>
-                    
-                    <a href="{{ route('admin.login') }}" 
-                       class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
-                        Login
-                    </a>
                 </div>
             </nav>
             
@@ -125,11 +120,6 @@
             <a href="{{ route('public.kontak') }}" 
                class="block px-3 py-2 text-gray-700 hover:text-blue-600 {{ request()->routeIs('public.kontak') ? 'text-blue-600' : '' }}">
                 Kontak
-            </a>
-            
-            <a href="{{ route('admin.login') }}" 
-               class="block px-3 py-2 text-blue-600 font-medium hover:bg-blue-50">
-                Admin
             </a>
         </div>
     </div>
