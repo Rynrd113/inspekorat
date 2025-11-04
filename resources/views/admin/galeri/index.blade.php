@@ -265,6 +265,7 @@
     </div>
 </div>
 
+@push('scripts')
 <script>
 function viewMedia(type, src) {
     var mediaContent = document.getElementById('mediaContent');
@@ -297,18 +298,17 @@ function closeDeleteModal() {
 }
 
 // Close modals when clicking outside
-window.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('mediaModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeMediaModal();
-        }
-    });
+document.getElementById('mediaModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeMediaModal();
+    }
+});
 
-    document.getElementById('deleteModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeDeleteModal();
-        }
-    });
+document.getElementById('deleteModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeDeleteModal();
+    }
 });
 </script>
+@endpush
 @endsection
