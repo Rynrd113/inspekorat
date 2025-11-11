@@ -9,8 +9,8 @@
     <meta name="description" content="@yield('description', 'Portal Informasi Pemerintahan Inspektorat Provinsi Papua Tengah - Layanan publik dan informasi pemerintahan.')">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="{{ asset('logo.svg') }}">
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo.png') }}">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

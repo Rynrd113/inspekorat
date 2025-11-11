@@ -14,7 +14,7 @@ const STATIC_ASSETS = [
     '/js/app.js',
     '/css/admin.css',
     '/js/admin.js',
-    '/favicon.ico',
+    '/images/logo.png',
     '/logo.svg',
     '/manifest.json',
     '/offline.html',
