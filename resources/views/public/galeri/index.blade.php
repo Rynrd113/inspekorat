@@ -35,9 +35,6 @@
                 <button class="filter-btn px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors" data-filter="video">
                     Video
                 </button>
-                <button class="filter-btn px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors" data-filter="dokumen">
-                    Dokumen
-                </button>
             </div>
         </div>
     </section>
@@ -132,44 +129,66 @@
 
 @push('scripts')
 <script>
-// Simple filter functionality
-var filterBtns = document.querySelectorAll('.filter-btn');
-var galleryItems = document.querySelectorAll('.gallery-item');
+// Galeri filter functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
 
-for (var i = 0; i < filterBtns.length; i++) {
-    filterBtns[i].addEventListener('click', function() {
-        var filter = this.getAttribute('data-filter');
-        
-        // Update active button
-        for (var j = 0; j < filterBtns.length; j++) {
-            filterBtns[j].classList.remove('bg-blue-600', 'text-white');
-            filterBtns[j].classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
-        }
-        this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
-        this.classList.add('bg-blue-600', 'text-white');
-        
-        // Filter items
-        for (var k = 0; k < galleryItems.length; k++) {
-            var item = galleryItems[k];
-            var itemType = item.getAttribute('data-type');
-            var itemFilterType = itemType;
-            
-            if (itemType === 'jpg' || itemType === 'jpeg' || itemType === 'png' || itemType === 'gif') {
-                itemFilterType = 'foto';
-            } else if (itemType === 'mp4' || itemType === 'avi' || itemType === 'mov') {
-                itemFilterType = 'video';
-            } else if (itemType === 'pdf' || itemType === 'doc' || itemType === 'docx') {
-                itemFilterType = 'dokumen';
-            }
-            
-            if (filter === 'all' || filter === itemFilterType) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-        }
+    // Initialize filter
+    function initializeFilter() {
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filter = this.getAttribute('data-filter');
+                
+                // Update active button styling
+                filterBtns.forEach(button => {
+                    button.classList.remove('bg-blue-600', 'text-white', 'active');
+                    button.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+                });
+                
+                this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+                this.classList.add('bg-blue-600', 'text-white', 'active');
+                
+                // Filter gallery items
+                galleryItems.forEach(item => {
+                    const itemType = item.getAttribute('data-type');
+                    let itemCategory = '';
+                    
+                    // Map file types to categories
+                    if (itemType && (itemType === 'jpg' || itemType === 'jpeg' || itemType === 'png' || itemType === 'gif')) {
+                        itemCategory = 'foto';
+                    } else if (itemType && (itemType === 'mp4' || itemType === 'avi' || itemType === 'mov' || itemType === 'wmv')) {
+                        itemCategory = 'video';
+                    }
+                    
+                    // Show/hide items with animation
+                    if (filter === 'all' || filter === itemCategory) {
+                        item.style.display = 'block';
+                        item.style.opacity = '0';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1)';
+                        }, 50);
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 200);
+                    }
+                });
+            });
+        });
+    }
+
+    // Initialize when DOM is ready
+    initializeFilter();
+    
+    // Add smooth transitions
+    galleryItems.forEach(item => {
+        item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
     });
-}
+});
 </script>
 @endpush
 @endsection
