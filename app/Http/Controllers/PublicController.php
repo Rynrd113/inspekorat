@@ -443,7 +443,18 @@ startxref
     {
         $query = Galeri::where('status', true);
 
-        // Filter by file type if specified
+        // Filter by file type based on filter parameter
+        if ($request->filled('filter')) {
+            $filter = $request->filter;
+            if ($filter === 'foto') {
+                $query->whereIn('file_type', ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+            } elseif ($filter === 'video') {
+                $query->whereIn('file_type', ['mp4', 'avi', 'mov', 'wmv', 'webm']);
+            }
+            // 'all' or any other value will show all items (no additional filter)
+        }
+
+        // Filter by file type if specified (backward compatibility)
         if ($request->filled('type')) {
             $query->where('file_type', $request->type);
         }

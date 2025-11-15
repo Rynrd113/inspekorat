@@ -26,15 +26,18 @@
     <section class="py-8 bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap justify-center gap-4 mb-8">
-                <button class="filter-btn active px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors" data-filter="all" data-target="#gallery-grid">
+                <a href="{{ route('public.galeri.index') }}" 
+                   class="filter-btn {{ !request('filter') || request('filter') == 'all' ? 'active bg-blue-600 text-white' : 'bg-white text-gray-700 border border-gray-300' }} px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
                     Semua
-                </button>
-                <button class="filter-btn px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors" data-filter="foto" data-target="#gallery-grid">
+                </a>
+                <a href="{{ route('public.galeri.index', ['filter' => 'foto']) }}" 
+                   class="filter-btn {{ request('filter') == 'foto' ? 'active bg-blue-600 text-white' : 'bg-white text-gray-700 border border-gray-300' }} px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
                     Foto
-                </button>
-                <button class="filter-btn px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors" data-filter="video" data-target="#gallery-grid">
+                </a>
+                <a href="{{ route('public.galeri.index', ['filter' => 'video']) }}" 
+                   class="filter-btn {{ request('filter') == 'video' ? 'active bg-blue-600 text-white' : 'bg-white text-gray-700 border border-gray-300' }} px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
                     Video
-                </button>
+                </a>
             </div>
         </div>
     </section>
@@ -45,9 +48,8 @@
             @if($galeris && $galeris->count() > 0)
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="gallery-grid">
                     @foreach($galeris as $galeri)
-                        <div class="filterable-item group" 
-                             data-type="{{ $galeri->file_type ?? 'jpg' }}" 
-                             data-category="{{ in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif', 'webp']) ? 'foto' : (in_array($galeri->file_type, ['mp4', 'avi', 'mov', 'wmv', 'webm']) ? 'video' : 'other') }}">
+                        <div class="gallery-item group" 
+                             data-type="{{ $galeri->file_type ?? 'jpg' }}">
                             
                             <a href="{{ in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif']) ? asset('uploads/' . $galeri->file_path) : '#' }}" 
                                target="_blank" 
