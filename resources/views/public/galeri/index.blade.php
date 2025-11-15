@@ -26,13 +26,13 @@
     <section class="py-8 bg-white shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap justify-center gap-4 mb-8">
-                <button class="filter-btn active px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors" data-filter="all">
+                <button class="filter-btn active px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors" data-filter="all" data-target="#gallery-grid">
                     Semua
                 </button>
-                <button class="filter-btn px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors" data-filter="foto">
+                <button class="filter-btn px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors" data-filter="foto" data-target="#gallery-grid">
                     Foto
                 </button>
-                <button class="filter-btn px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors" data-filter="video">
+                <button class="filter-btn px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors" data-filter="video" data-target="#gallery-grid">
                     Video
                 </button>
             </div>
@@ -45,9 +45,9 @@
             @if($galeris && $galeris->count() > 0)
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="gallery-grid">
                     @foreach($galeris as $galeri)
-                        <div class="gallery-item group" 
+                        <div class="filterable-item group" 
                              data-type="{{ $galeri->file_type ?? 'jpg' }}" 
-                             data-category="{{ strtolower($galeri->kategori ?? 'umum') }}">
+                             data-category="{{ in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif', 'webp']) ? 'foto' : (in_array($galeri->file_type, ['mp4', 'avi', 'mov', 'wmv', 'webm']) ? 'video' : 'other') }}">
                             
                             <a href="{{ in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif']) ? asset('uploads/' . $galeri->file_path) : '#' }}" 
                                target="_blank" 
@@ -127,53 +127,5 @@
     </section>
 </div>
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Get filter buttons and gallery items
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    
-    // Add click event to each filter button
-    filterBtns.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            const filter = this.dataset.filter;
-            
-            // Remove active class from all buttons
-            filterBtns.forEach(function(button) {
-                button.classList.remove('bg-blue-600', 'text-white');
-                button.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
-            });
-            
-            // Add active class to clicked button
-            this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
-            this.classList.add('bg-blue-600', 'text-white');
-            
-            // Filter gallery items
-            galleryItems.forEach(function(item) {
-                const itemType = item.dataset.type;
-                let showItem = false;
-                
-                if (filter === 'all') {
-                    showItem = true;
-                } else if (filter === 'foto' && ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(itemType)) {
-                    showItem = true;
-                } else if (filter === 'video' && ['mp4', 'avi', 'mov', 'wmv', 'webm'].includes(itemType)) {
-                    showItem = true;
-                }
-                
-                if (showItem) {
-                    item.style.display = 'block';
-                    item.style.opacity = '1';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
-    });
-    
-    console.log('Gallery filter initialized with', filterBtns.length, 'buttons and', galleryItems.length, 'items');
-});
-</script>
-@endpush
+
 @endsection

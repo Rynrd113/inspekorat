@@ -203,21 +203,28 @@ function initFilterFunctionality() {
             const filter = this.dataset.filter;
             const targetContainer = this.dataset.target;
             
-            // Update active button
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+            // Update active button styling
+            filterButtons.forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-600', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+            });
+            
+            this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
+            this.classList.add('active', 'bg-blue-600', 'text-white');
             
             // Filter items
-            const items = document.querySelectorAll(`${targetContainer} .filterable-item`);
-            items.forEach(item => {
-                if (filter === 'all' || item.dataset.category === filter) {
-                    item.style.display = 'block';
-                    item.classList.add('animate-fade-in');
-                } else {
-                    item.style.display = 'none';
-                    item.classList.remove('animate-fade-in');
-                }
-            });
+            if (targetContainer) {
+                const items = document.querySelectorAll(`${targetContainer} .filterable-item`);
+                items.forEach(item => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.style.display = 'block';
+                        item.classList.add('animate-fade-in');
+                    } else {
+                        item.style.display = 'none';
+                        item.classList.remove('animate-fade-in');
+                    }
+                });
+            }
         });
     });
 }
