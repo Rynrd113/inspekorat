@@ -369,11 +369,12 @@
                         <div class="gallery-slide min-w-full sm:min-w-[50%] lg:min-w-[33.333%] xl:min-w-[25%] px-3">
                             <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                                 <div class="relative h-64 bg-gray-200 overflow-hidden">
-                                    @if($galeri->file_path && Storage::disk('public')->exists($galeri->file_path))
-                                        <img src="{{ asset('storage/' . $galeri->file_path) }}" 
+                                    @if($galeri->file_path)
+                                        <img src="{{ asset('uploads/' . $galeri->file_path) }}" 
                                              alt="{{ $galeri->judul }}" 
                                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                             loading="lazy">
+                                             loading="lazy"
+                                             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100\'><i class=\'fas fa-image text-pink-300 text-4xl\'></i></div>';">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100">
                                             <i class="fas fa-image text-pink-300 text-4xl"></i>
