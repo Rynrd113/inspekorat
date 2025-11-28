@@ -374,7 +374,10 @@
                                              alt="{{ $galeri->judul }}" 
                                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                              loading="lazy"
-                                             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100\'><i class=\'fas fa-image text-pink-300 text-4xl\'></i></div>';">
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="w-full h-full items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100 hidden">
+                                            <i class="fas fa-image text-pink-300 text-4xl"></i>
+                                        </div>
                                     @else
                                         <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100">
                                             <i class="fas fa-image text-pink-300 text-4xl"></i>
