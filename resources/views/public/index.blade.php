@@ -1,5 +1,7 @@
 @extends('layouts.public')
 
+@use('Illuminate\Support\Facades\Storage')
+
 @section('title', 'Portal Informasi Pemerintahan - Inspektorat Papua Tengah')
 @section('description', 'Portal resmi Inspektorat Provinsi Papua Tengah - Akses layanan publik, informasi pemerintahan, dan laporan WBS.')
 
@@ -342,6 +344,77 @@
             </div>
         </div>
     </section>
+
+    <!-- Latest Gallery Section -->
+    @if($latestGallery && $latestGallery->count() > 0)
+    <section class="py-16 bg-gradient-to-br from-purple-50 to-pink-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center justify-center w-14 h-14 bg-pink-100 rounded-2xl mb-4">
+                    <i class="fas fa-camera text-pink-600 text-2xl"></i>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                    Galeri Foto Terbaru
+                </h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Dokumentasi kegiatan dan momen penting Inspektorat Provinsi Papua Tengah
+                </p>
+            </div>
+
+            <!-- Simple Gallery Carousel -->
+            <div class="relative">
+                <div class="gallery-carousel overflow-hidden">
+                    <div class="gallery-track flex transition-transform duration-500 ease-out">
+                        @foreach($latestGallery as $galeri)
+                        <div class="gallery-slide min-w-full sm:min-w-[50%] lg:min-w-[33.333%] xl:min-w-[25%] px-3">
+                            <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                                <div class="relative h-64 bg-gray-200 overflow-hidden">
+                                    @if($galeri->file_path && Storage::disk('public')->exists($galeri->file_path))
+                                        <img src="{{ asset('storage/' . $galeri->file_path) }}" 
+                                             alt="{{ $galeri->judul }}" 
+                                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                             loading="lazy">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100">
+                                            <i class="fas fa-image text-pink-300 text-4xl"></i>
+                                        </div>
+                                    @endif
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="font-semibold text-gray-900 line-clamp-2 mb-2">{{ $galeri->judul }}</h3>
+                                    <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ $galeri->deskripsi }}</p>
+                                    <div class="flex items-center justify-between text-xs text-gray-500">
+                                        <span class="bg-pink-100 text-pink-700 px-2 py-1 rounded">{{ $galeri->kategori }}</span>
+                                        <span>{{ $galeri->tanggal_publikasi ? \Carbon\Carbon::parse($galeri->tanggal_publikasi)->format('d M Y') : '' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                
+                <!-- Navigation Buttons -->
+                <button type="button" class="gallery-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-800 hover:bg-pink-600 hover:text-white transition-colors z-10">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button type="button" class="gallery-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-800 hover:bg-pink-600 hover:text-white transition-colors z-10">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- View All Button -->
+            <div class="text-center mt-12">
+                <a href="{{ route('public.galeri.index') }}" class="inline-flex items-center px-8 py-3 bg-pink-600 text-white rounded-xl hover:bg-pink-700 transition-colors font-semibold shadow-lg hover:shadow-xl">
+                    <i class="fas fa-images mr-2"></i>
+                    Lihat Semua Galeri
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    @endif
 
     <!-- Berita Inspektorat Section -->
     <section id="layanan" class="py-12 sm:py-16 lg:py-24 bg-gray-50">
@@ -900,6 +973,65 @@ function animateStats() {
     
     console.log('Stats animation initialized');
 }
+
+// Simple Gallery Carousel
+document.addEventListener('DOMContentLoaded', function() {
+    const track = document.querySelector('.gallery-track');
+    const slides = document.querySelectorAll('.gallery-slide');
+    const prevBtn = document.querySelector('.gallery-prev');
+    const nextBtn = document.querySelector('.gallery-next');
+    
+    if (!track || slides.length === 0) return;
+    
+    let currentIndex = 0;
+    const slidesPerView = window.innerWidth >= 1280 ? 4 : window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1;
+    const maxIndex = Math.max(0, slides.length - slidesPerView);
+    
+    function updateCarousel() {
+        const slideWidth = slides[0].offsetWidth;
+        track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+        
+        // Update button states
+        if (prevBtn) prevBtn.disabled = currentIndex === 0;
+        if (nextBtn) nextBtn.disabled = currentIndex >= maxIndex;
+    }
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCarousel();
+            }
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function() {
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+                updateCarousel();
+            }
+        });
+    }
+    
+    // Auto-play carousel
+    setInterval(function() {
+        if (currentIndex < maxIndex) {
+            currentIndex++;
+        } else {
+            currentIndex = 0;
+        }
+        updateCarousel();
+    }, 5000);
+    
+    // Update on window resize
+    window.addEventListener('resize', function() {
+        currentIndex = 0;
+        updateCarousel();
+    });
+    
+    updateCarousel();
+});
 </script>
 @endpush
 

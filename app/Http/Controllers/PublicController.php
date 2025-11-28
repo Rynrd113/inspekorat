@@ -39,6 +39,16 @@ class PublicController extends Controller
                 ->get();
         });
 
+        // Get latest gallery items (photos only)
+        $latestGallery = Cache::remember('public_latest_gallery', 600, function () {
+            return Galeri::where('status', true)
+                ->whereIn('file_type', ['jpg', 'jpeg', 'png', 'gif', 'webp'])
+                ->orderBy('tanggal_publikasi', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->take(8)
+                ->get();
+        });
+
         // Get real-time statistics from database
         $stats = [
             'portal_opd' => PortalOpd::active()->count(),
@@ -58,7 +68,7 @@ class PublicController extends Controller
         $infoKantor->website = 'https://inspektorat.papuatengah.go.id';
         $infoKantor->fax = '(0984) 21235';
 
-        return view('public.index', compact('portalPapuaTengah', 'infoKantor', 'stats'));
+        return view('public.index', compact('portalPapuaTengah', 'latestGallery', 'infoKantor', 'stats'));
     }
 
     /**
