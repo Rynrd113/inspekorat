@@ -363,11 +363,12 @@
 
             <!-- Simple Gallery Carousel -->
             <div class="relative">
-                <div class="gallery-slider relative overflow-hidden">
-                    @foreach($latestGallery as $index => $galeri)
-                    <div class="gallery-slide-item {{ $index === 0 ? 'active' : '' }} absolute inset-0 w-full opacity-0 transition-opacity duration-500">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-3">
-                            @foreach($latestGallery->slice($index * 4, 4) as $item)
+                <div class="gallery-slider relative h-auto min-h-[400px]">
+                    @php $chunks = $latestGallery->chunk(4); @endphp
+                    @foreach($chunks as $index => $chunk)
+                    <div class="gallery-slide-item {{ $index === 0 ? 'active' : '' }} absolute inset-0 w-full transition-opacity duration-500" style="opacity: {{ $index === 0 ? '1' : '0' }}; z-index: {{ $index === 0 ? '10' : '1' }};">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            @foreach($chunk as $item)
                             <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                                 <div class="relative h-64 bg-gray-200 overflow-hidden">
                                     @if($item->file_path)
@@ -403,8 +404,8 @@
                 
                 <!-- Navigation Dots -->
                 <div class="flex justify-center items-center space-x-3 mt-8">
-                    @foreach($latestGallery->chunk(4) as $index => $chunk)
-                    <button type="button" class="gallery-dot w-3 h-3 rounded-full bg-pink-300 hover:bg-pink-600 transition-all duration-300 {{ $index === 0 ? 'active bg-pink-600' : '' }}" data-slide="{{ $index }}"></button>
+                    @foreach($chunks as $index => $chunk)
+                    <button type="button" class="gallery-dot w-3 h-3 rounded-full transition-all duration-300 {{ $index === 0 ? 'active bg-pink-600' : 'bg-pink-300 hover:bg-pink-500' }}" data-slide="{{ $index }}"></button>
                     @endforeach
                 </div>
             </div>
