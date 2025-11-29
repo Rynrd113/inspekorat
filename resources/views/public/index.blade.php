@@ -978,117 +978,157 @@ function animateStats() {
     console.log('Stats animation initialized');
 }
 
-// Simple Gallery Carousel
-document.addEventListener('DOMContentLoaded', function() {
-    const track = document.querySelector('.gallery-track');
-    const slides = document.querySelectorAll('.gallery-slide');
-    const prevBtn = document.querySelector('.gallery-prev');
-    const nextBtn = document.querySelector('.gallery-next');
+// Simple Gallery Carousel - Fixed Version
+(function() {
+    let currentSlide = 0;
+    let slidesToShow = 1;
+    let totalSlides = 0;
+    let autoplayTimer = null;
     
-    if (!track || slides.length === 0) {
-        console.log('Gallery carousel not found or no slides');
-        return;
-    }
-    
-    let currentIndex = 0;
-    let slidesPerView = 1;
-    let autoPlayInterval;
-    
-    function getSlidesPerView() {
-        if (window.innerWidth >= 1280) return 4;
-        if (window.innerWidth >= 1024) return 3;
-        if (window.innerWidth >= 640) return 2;
-        return 1;
-    }
-    
-    function updateCarousel() {
-        slidesPerView = getSlidesPerView();
-        const maxIndex = Math.max(0, slides.length - slidesPerView);
+    function initCarousel() {
+        const carousel = document.querySelector('.gallery-carousel');
+        const track = document.querySelector('.gallery-track');
+        const slides = document.querySelectorAll('.gallery-slide');
+        const prevBtn = document.querySelector('.gallery-prev');
+        const nextBtn = document.querySelector('.gallery-next');
         
-        // Ensure currentIndex is within bounds
-        if (currentIndex > maxIndex) {
-            currentIndex = maxIndex;
+        if (!carousel || !track || slides.length === 0) {
+            console.log('Gallery carousel elements not found');
+            return;
         }
         
-        const slideWidth = track.offsetWidth / slidesPerView;
-        const translateX = -(currentIndex * slideWidth);
-        track.style.transform = `translateX(${translateX}px)`;
+        totalSlides = slides.length;
+        console.log('Gallery carousel found with', totalSlides, 'slides');
         
-        // Update button visibility
-        if (prevBtn) {
-            prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
-            prevBtn.style.pointerEvents = currentIndex === 0 ? 'none' : 'auto';
-        }
-        if (nextBtn) {
-            nextBtn.style.opacity = currentIndex >= maxIndex ? '0.5' : '1';
-            nextBtn.style.pointerEvents = currentIndex >= maxIndex ? 'none' : 'auto';
+        function updateSlidesToShow() {
+            const width = window.innerWidth;
+            if (width >= 1280) slidesToShow = 4;
+            else if (width >= 1024) slidesToShow = 3;
+            else if (width >= 640) slidesToShow = 2;
+            else slidesToShow = 1;
         }
         
-        console.log('Carousel updated:', { currentIndex, maxIndex, slidesPerView });
-    }
-    
-    function goToPrev() {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateCarousel();
-            resetAutoPlay();
-        }
-    }
-    
-    function goToNext() {
-        slidesPerView = getSlidesPerView();
-        const maxIndex = Math.max(0, slides.length - slidesPerView);
-        if (currentIndex < maxIndex) {
-            currentIndex++;
-            updateCarousel();
-            resetAutoPlay();
-        }
-    }
-    
-    function resetAutoPlay() {
-        if (autoPlayInterval) {
-            clearInterval(autoPlayInterval);
-        }
-        startAutoPlay();
-    }
-    
-    function startAutoPlay() {
-        autoPlayInterval = setInterval(function() {
-            slidesPerView = getSlidesPerView();
-            const maxIndex = Math.max(0, slides.length - slidesPerView);
-            if (currentIndex < maxIndex) {
-                currentIndex++;
-            } else {
-                currentIndex = 0;
+        function moveSlide() {
+            updateSlidesToShow();
+            const maxSlide = Math.max(0, totalSlides - slidesToShow);
+            
+            // Keep currentSlide in bounds
+            if (currentSlide > maxSlide) currentSlide = maxSlide;
+            if (currentSlide < 0) currentSlide = 0;
+            
+            const percentage = -(currentSlide * (100 / slidesToShow));
+            track.style.transform = `translateX(${percentage}%)`;
+            
+            // Update buttons
+            if (prevBtn) {
+                if (currentSlide === 0) {
+                    prevBtn.style.opacity = '0.3';
+                    prevBtn.style.cursor = 'not-allowed';
+                } else {
+                    prevBtn.style.opacity = '1';
+                    prevBtn.style.cursor = 'pointer';
+                }
             }
-            updateCarousel();
-        }, 5000);
+            
+            if (nextBtn) {
+                if (currentSlide >= maxSlide) {
+                    nextBtn.style.opacity = '0.3';
+                    nextBtn.style.cursor = 'not-allowed';
+                } else {
+                    nextBtn.style.opacity = '1';
+                    nextBtn.style.cursor = 'pointer';
+                }
+            }
+            
+            console.log('Moved to slide', currentSlide, 'of', maxSlide);
+        }
+        
+        function nextSlide() {
+            updateSlidesToShow();
+            const maxSlide = Math.max(0, totalSlides - slidesToShow);
+            if (currentSlide < maxSlide) {
+                currentSlide++;
+                moveSlide();
+                resetAutoplay();
+            }
+        }
+        
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                moveSlide();
+                resetAutoplay();
+            }
+        }
+        
+        function autoplay() {
+            updateSlidesToShow();
+            const maxSlide = Math.max(0, totalSlides - slidesToShow);
+            if (currentSlide >= maxSlide) {
+                currentSlide = 0;
+            } else {
+                currentSlide++;
+            }
+            moveSlide();
+        }
+        
+        function startAutoplay() {
+            stopAutoplay();
+            autoplayTimer = setInterval(autoplay, 5000);
+        }
+        
+        function stopAutoplay() {
+            if (autoplayTimer) {
+                clearInterval(autoplayTimer);
+                autoplayTimer = null;
+            }
+        }
+        
+        function resetAutoplay() {
+            startAutoplay();
+        }
+        
+        // Event listeners
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Prev button clicked');
+                prevSlide();
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Next button clicked');
+                nextSlide();
+            });
+        }
+        
+        // Window resize
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                moveSlide();
+            }, 200);
+        });
+        
+        // Initialize
+        updateSlidesToShow();
+        moveSlide();
+        startAutoplay();
+        
+        console.log('Gallery carousel initialized successfully');
     }
     
-    // Event listeners
-    if (prevBtn) {
-        prevBtn.addEventListener('click', goToPrev);
+    // Wait for DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCarousel);
+    } else {
+        initCarousel();
     }
-    
-    if (nextBtn) {
-        nextBtn.addEventListener('click', goToNext);
-    }
-    
-    // Update on window resize
-    let resizeTimeout;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(function() {
-            updateCarousel();
-        }, 250);
-    });
-    
-    // Initial update and start autoplay
-    updateCarousel();
-    startAutoPlay();
-    
-    console.log('Gallery carousel initialized with', slides.length, 'slides');
-});
+})();
 </script>
 @endpush
 
