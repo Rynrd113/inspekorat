@@ -363,10 +363,10 @@
 
             <!-- Simple Gallery Carousel -->
             <div class="relative">
-                <div class="gallery-slider relative h-auto min-h-[400px]">
+                <div class="gallery-slider relative overflow-hidden">
                     @php $chunks = $latestGallery->chunk(4); @endphp
                     @foreach($chunks as $index => $chunk)
-                    <div class="gallery-slide-item {{ $index === 0 ? 'active' : '' }} absolute inset-0 w-full transition-opacity duration-500" style="opacity: {{ $index === 0 ? '1' : '0' }}; z-index: {{ $index === 0 ? '10' : '1' }};">
+                    <div class="gallery-slide-item {{ $index === 0 ? 'active' : '' }}" style="display: {{ $index === 0 ? 'block' : 'none' }};">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             @foreach($chunk as $item)
                             <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
@@ -980,7 +980,7 @@ function animateStats() {
     console.log('Stats animation initialized');
 }
 
-// Gallery Slider (using same logic as hero slider)
+// Gallery Slider (simplified with display toggle)
 (function() {
     const gallerySlides = document.querySelectorAll('.gallery-slide-item');
     const galleryDots = document.querySelectorAll('.gallery-dot');
@@ -993,11 +993,10 @@ function animateStats() {
     }
 
     function showGallerySlide(index) {
-        // Remove active from all slides
+        // Hide all slides
         gallerySlides.forEach(slide => {
+            slide.style.display = 'none';
             slide.classList.remove('active');
-            slide.style.opacity = '0';
-            slide.style.zIndex = '1';
         });
         
         // Remove active from all dots
@@ -1006,14 +1005,13 @@ function animateStats() {
             dot.classList.add('bg-pink-300');
         });
         
-        // Add active to current slide
+        // Show current slide
         if (gallerySlides[index]) {
+            gallerySlides[index].style.display = 'block';
             gallerySlides[index].classList.add('active');
-            gallerySlides[index].style.opacity = '1';
-            gallerySlides[index].style.zIndex = '10';
         }
         
-        // Add active to current dot
+        // Activate current dot
         if (galleryDots[index]) {
             galleryDots[index].classList.add('active', 'bg-pink-600');
             galleryDots[index].classList.remove('bg-pink-300');
@@ -1029,14 +1027,6 @@ function animateStats() {
             next = 0;
         }
         showGallerySlide(next);
-    }
-
-    function prevGallerySlide() {
-        let prev = currentGallerySlide - 1;
-        if (prev < 0) {
-            prev = gallerySlides.length - 1;
-        }
-        showGallerySlide(prev);
     }
 
     function startGalleryAutoplay() {
