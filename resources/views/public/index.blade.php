@@ -985,56 +985,109 @@ document.addEventListener('DOMContentLoaded', function() {
     const prevBtn = document.querySelector('.gallery-prev');
     const nextBtn = document.querySelector('.gallery-next');
     
-    if (!track || slides.length === 0) return;
-    
-    let currentIndex = 0;
-    const slidesPerView = window.innerWidth >= 1280 ? 4 : window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1;
-    const maxIndex = Math.max(0, slides.length - slidesPerView);
-    
-    function updateCarousel() {
-        const slideWidth = slides[0].offsetWidth;
-        track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-        
-        // Update button states
-        if (prevBtn) prevBtn.disabled = currentIndex === 0;
-        if (nextBtn) nextBtn.disabled = currentIndex >= maxIndex;
+    if (!track || slides.length === 0) {
+        console.log('Gallery carousel not found or no slides');
+        return;
     }
     
-    if (prevBtn) {
-        prevBtn.addEventListener('click', function() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateCarousel();
+    let currentIndex = 0;
+    let slidesPerView = 1;
+    let autoPlayInterval;
+    
+    function getSlidesPerView() {
+        if (window.innerWidth >= 1280) return 4;
+        if (window.innerWidth >= 1024) return 3;
+        if (window.innerWidth >= 640) return 2;
+        return 1;
+    }
+    
+    function updateCarousel() {
+        slidesPerView = getSlidesPerView();
+        const maxIndex = Math.max(0, slides.length - slidesPerView);
+        
+        // Ensure currentIndex is within bounds
+        if (currentIndex > maxIndex) {
+            currentIndex = maxIndex;
+        }
+        
+        const slideWidth = track.offsetWidth / slidesPerView;
+        const translateX = -(currentIndex * slideWidth);
+        track.style.transform = `translateX(${translateX}px)`;
+        
+        // Update button visibility
+        if (prevBtn) {
+            prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
+            prevBtn.style.pointerEvents = currentIndex === 0 ? 'none' : 'auto';
+        }
+        if (nextBtn) {
+            nextBtn.style.opacity = currentIndex >= maxIndex ? '0.5' : '1';
+            nextBtn.style.pointerEvents = currentIndex >= maxIndex ? 'none' : 'auto';
+        }
+        
+        console.log('Carousel updated:', { currentIndex, maxIndex, slidesPerView });
+    }
+    
+    function goToPrev() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateCarousel();
+            resetAutoPlay();
+        }
+    }
+    
+    function goToNext() {
+        slidesPerView = getSlidesPerView();
+        const maxIndex = Math.max(0, slides.length - slidesPerView);
+        if (currentIndex < maxIndex) {
+            currentIndex++;
+            updateCarousel();
+            resetAutoPlay();
+        }
+    }
+    
+    function resetAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+        }
+        startAutoPlay();
+    }
+    
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(function() {
+            slidesPerView = getSlidesPerView();
+            const maxIndex = Math.max(0, slides.length - slidesPerView);
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+            } else {
+                currentIndex = 0;
             }
-        });
+            updateCarousel();
+        }, 5000);
+    }
+    
+    // Event listeners
+    if (prevBtn) {
+        prevBtn.addEventListener('click', goToPrev);
     }
     
     if (nextBtn) {
-        nextBtn.addEventListener('click', function() {
-            if (currentIndex < maxIndex) {
-                currentIndex++;
-                updateCarousel();
-            }
-        });
+        nextBtn.addEventListener('click', goToNext);
     }
     
-    // Auto-play carousel
-    setInterval(function() {
-        if (currentIndex < maxIndex) {
-            currentIndex++;
-        } else {
-            currentIndex = 0;
-        }
-        updateCarousel();
-    }, 5000);
-    
     // Update on window resize
+    let resizeTimeout;
     window.addEventListener('resize', function() {
-        currentIndex = 0;
-        updateCarousel();
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            updateCarousel();
+        }, 250);
     });
     
+    // Initial update and start autoplay
     updateCarousel();
+    startAutoPlay();
+    
+    console.log('Gallery carousel initialized with', slides.length, 'slides');
 });
 </script>
 @endpush
