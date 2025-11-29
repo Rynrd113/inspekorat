@@ -363,15 +363,16 @@
 
             <!-- Simple Gallery Carousel -->
             <div class="relative">
-                <div class="gallery-carousel overflow-hidden">
-                    <div class="gallery-track flex transition-transform duration-500 ease-out">
-                        @foreach($latestGallery as $galeri)
-                        <div class="gallery-slide min-w-full sm:min-w-[50%] lg:min-w-[33.333%] xl:min-w-[25%] px-3">
+                <div class="gallery-slider relative overflow-hidden">
+                    @foreach($latestGallery as $index => $galeri)
+                    <div class="gallery-slide-item {{ $index === 0 ? 'active' : '' }} absolute inset-0 w-full opacity-0 transition-opacity duration-500">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 px-3">
+                            @foreach($latestGallery->slice($index * 4, 4) as $item)
                             <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                                 <div class="relative h-64 bg-gray-200 overflow-hidden">
-                                    @if($galeri->file_path)
-                                        <img src="{{ asset('uploads/' . $galeri->file_path) }}" 
-                                             alt="{{ $galeri->judul }}" 
+                                    @if($item->file_path)
+                                        <img src="{{ asset('uploads/' . $item->file_path) }}" 
+                                             alt="{{ $item->judul }}" 
                                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                              loading="lazy"
                                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
@@ -386,26 +387,26 @@
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 </div>
                                 <div class="p-4">
-                                    <h3 class="font-semibold text-gray-900 line-clamp-2 mb-2">{{ $galeri->judul }}</h3>
-                                    <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ $galeri->deskripsi }}</p>
+                                    <h3 class="font-semibold text-gray-900 line-clamp-2 mb-2">{{ $item->judul }}</h3>
+                                    <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ $item->deskripsi }}</p>
                                     <div class="flex items-center justify-between text-xs text-gray-500">
-                                        <span class="bg-pink-100 text-pink-700 px-2 py-1 rounded">{{ $galeri->kategori }}</span>
-                                        <span>{{ $galeri->tanggal_publikasi ? \Carbon\Carbon::parse($galeri->tanggal_publikasi)->format('d M Y') : '' }}</span>
+                                        <span class="bg-pink-100 text-pink-700 px-2 py-1 rounded">{{ $item->kategori }}</span>
+                                        <span>{{ $item->tanggal_publikasi ? \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') : '' }}</span>
                                     </div>
                                 </div>
                             </div>
+                            @endforeach
                         </div>
-                        @endforeach
                     </div>
+                    @endforeach
                 </div>
                 
-                <!-- Navigation Buttons -->
-                <button type="button" class="gallery-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-800 hover:bg-pink-600 hover:text-white transition-colors z-10">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button type="button" class="gallery-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-800 hover:bg-pink-600 hover:text-white transition-colors z-10">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
+                <!-- Navigation Dots -->
+                <div class="flex justify-center items-center space-x-3 mt-8">
+                    @foreach($latestGallery->chunk(4) as $index => $chunk)
+                    <button type="button" class="gallery-dot w-3 h-3 rounded-full bg-pink-300 hover:bg-pink-600 transition-all duration-300 {{ $index === 0 ? 'active bg-pink-600' : '' }}" data-slide="{{ $index }}"></button>
+                    @endforeach
+                </div>
             </div>
 
             <!-- View All Button -->
@@ -978,156 +979,93 @@ function animateStats() {
     console.log('Stats animation initialized');
 }
 
-// Simple Gallery Carousel - Fixed Version
+// Gallery Slider (using same logic as hero slider)
 (function() {
-    let currentSlide = 0;
-    let slidesToShow = 1;
-    let totalSlides = 0;
-    let autoplayTimer = null;
-    
-    function initCarousel() {
-        const carousel = document.querySelector('.gallery-carousel');
-        const track = document.querySelector('.gallery-track');
-        const slides = document.querySelectorAll('.gallery-slide');
-        const prevBtn = document.querySelector('.gallery-prev');
-        const nextBtn = document.querySelector('.gallery-next');
-        
-        if (!carousel || !track || slides.length === 0) {
-            console.log('Gallery carousel elements not found');
-            return;
-        }
-        
-        totalSlides = slides.length;
-        console.log('Gallery carousel found with', totalSlides, 'slides');
-        
-        function updateSlidesToShow() {
-            const width = window.innerWidth;
-            if (width >= 1280) slidesToShow = 4;
-            else if (width >= 1024) slidesToShow = 3;
-            else if (width >= 640) slidesToShow = 2;
-            else slidesToShow = 1;
-        }
-        
-        function moveSlide() {
-            updateSlidesToShow();
-            const maxSlide = Math.max(0, totalSlides - slidesToShow);
-            
-            // Keep currentSlide in bounds
-            if (currentSlide > maxSlide) currentSlide = maxSlide;
-            if (currentSlide < 0) currentSlide = 0;
-            
-            const percentage = -(currentSlide * (100 / slidesToShow));
-            track.style.transform = `translateX(${percentage}%)`;
-            
-            // Update buttons
-            if (prevBtn) {
-                if (currentSlide === 0) {
-                    prevBtn.style.opacity = '0.3';
-                    prevBtn.style.cursor = 'not-allowed';
-                } else {
-                    prevBtn.style.opacity = '1';
-                    prevBtn.style.cursor = 'pointer';
-                }
-            }
-            
-            if (nextBtn) {
-                if (currentSlide >= maxSlide) {
-                    nextBtn.style.opacity = '0.3';
-                    nextBtn.style.cursor = 'not-allowed';
-                } else {
-                    nextBtn.style.opacity = '1';
-                    nextBtn.style.cursor = 'pointer';
-                }
-            }
-            
-            console.log('Moved to slide', currentSlide, 'of', maxSlide);
-        }
-        
-        function nextSlide() {
-            updateSlidesToShow();
-            const maxSlide = Math.max(0, totalSlides - slidesToShow);
-            if (currentSlide < maxSlide) {
-                currentSlide++;
-                moveSlide();
-                resetAutoplay();
-            }
-        }
-        
-        function prevSlide() {
-            if (currentSlide > 0) {
-                currentSlide--;
-                moveSlide();
-                resetAutoplay();
-            }
-        }
-        
-        function autoplay() {
-            updateSlidesToShow();
-            const maxSlide = Math.max(0, totalSlides - slidesToShow);
-            if (currentSlide >= maxSlide) {
-                currentSlide = 0;
-            } else {
-                currentSlide++;
-            }
-            moveSlide();
-        }
-        
-        function startAutoplay() {
-            stopAutoplay();
-            autoplayTimer = setInterval(autoplay, 5000);
-        }
-        
-        function stopAutoplay() {
-            if (autoplayTimer) {
-                clearInterval(autoplayTimer);
-                autoplayTimer = null;
-            }
-        }
-        
-        function resetAutoplay() {
-            startAutoplay();
-        }
-        
-        // Event listeners
-        if (prevBtn) {
-            prevBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                console.log('Prev button clicked');
-                prevSlide();
-            });
-        }
-        
-        if (nextBtn) {
-            nextBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                console.log('Next button clicked');
-                nextSlide();
-            });
-        }
-        
-        // Window resize
-        let resizeTimer;
-        window.addEventListener('resize', function() {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(function() {
-                moveSlide();
-            }, 200);
+    const gallerySlides = document.querySelectorAll('.gallery-slide-item');
+    const galleryDots = document.querySelectorAll('.gallery-dot');
+    let currentGallerySlide = 0;
+    let galleryAutoplayInterval;
+
+    if (gallerySlides.length === 0) {
+        console.log('No gallery slides found');
+        return;
+    }
+
+    function showGallerySlide(index) {
+        // Remove active from all slides
+        gallerySlides.forEach(slide => {
+            slide.classList.remove('active');
+            slide.style.opacity = '0';
+            slide.style.zIndex = '1';
         });
         
-        // Initialize
-        updateSlidesToShow();
-        moveSlide();
-        startAutoplay();
+        // Remove active from all dots
+        galleryDots.forEach(dot => {
+            dot.classList.remove('active', 'bg-pink-600');
+            dot.classList.add('bg-pink-300');
+        });
         
-        console.log('Gallery carousel initialized successfully');
+        // Add active to current slide
+        if (gallerySlides[index]) {
+            gallerySlides[index].classList.add('active');
+            gallerySlides[index].style.opacity = '1';
+            gallerySlides[index].style.zIndex = '10';
+        }
+        
+        // Add active to current dot
+        if (galleryDots[index]) {
+            galleryDots[index].classList.add('active', 'bg-pink-600');
+            galleryDots[index].classList.remove('bg-pink-300');
+        }
+        
+        currentGallerySlide = index;
+        console.log('Gallery slide changed to:', index);
     }
+
+    function nextGallerySlide() {
+        let next = currentGallerySlide + 1;
+        if (next >= gallerySlides.length) {
+            next = 0;
+        }
+        showGallerySlide(next);
+    }
+
+    function prevGallerySlide() {
+        let prev = currentGallerySlide - 1;
+        if (prev < 0) {
+            prev = gallerySlides.length - 1;
+        }
+        showGallerySlide(prev);
+    }
+
+    function startGalleryAutoplay() {
+        galleryAutoplayInterval = setInterval(nextGallerySlide, 5000);
+    }
+
+    function stopGalleryAutoplay() {
+        if (galleryAutoplayInterval) {
+            clearInterval(galleryAutoplayInterval);
+        }
+    }
+
+    function resetGalleryAutoplay() {
+        stopGalleryAutoplay();
+        startGalleryAutoplay();
+    }
+
+    // Dot navigation
+    galleryDots.forEach((dot, index) => {
+        dot.addEventListener('click', function() {
+            showGallerySlide(index);
+            resetGalleryAutoplay();
+        });
+    });
+
+    // Initialize
+    showGallerySlide(0);
+    startGalleryAutoplay();
     
-    // Wait for DOM ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCarousel);
-    } else {
-        initCarousel();
-    }
+    console.log('Gallery slider initialized with', gallerySlides.length, 'slides');
 })();
 </script>
 @endpush
