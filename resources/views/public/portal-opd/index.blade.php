@@ -47,19 +47,9 @@
         <div class="opd-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($portalOpds as $opd)
             <div class="opd-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <!-- Banner -->
-                <div class="h-48 bg-gradient-to-r from-blue-500 to-indigo-600 relative">
-                    <img src="{{ $opd->banner_url }}" alt="{{ $opd->nama_opd }}" 
-                         class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-                    
-                    <!-- Logo -->
-                    <div class="absolute bottom-4 left-4">
-                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-                            <img src="{{ $opd->logo_url }}" alt="{{ $opd->nama_opd }}" 
-                                 class="w-12 h-12 object-cover rounded-full">
-                        </div>
-                    </div>
+                <!-- Header -->
+                <div class="h-32 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
+                    <i class="fas fa-building text-white text-5xl opacity-50"></i>
                 </div>
 
                 <!-- Content -->
