@@ -71,7 +71,18 @@ class PortalOpd extends Model
     public function getLogoUrlAttribute()
     {
         if ($this->logo) {
-            return asset('storage/' . $this->logo);
+            // Check if file exists in storage, otherwise try uploads
+            $storagePath = public_path('storage/' . $this->logo);
+            $uploadsPath = public_path('uploads/' . $this->logo);
+            
+            if (file_exists($storagePath)) {
+                return asset('storage/' . $this->logo);
+            } elseif (file_exists($uploadsPath)) {
+                return asset('uploads/' . $this->logo);
+            } else {
+                // Try direct path
+                return asset($this->logo);
+            }
         }
         return asset('images/default-opd-logo.png');
     }
