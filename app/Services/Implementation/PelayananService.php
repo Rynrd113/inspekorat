@@ -45,8 +45,8 @@ class PelayananService implements PelayananServiceInterface
 
             $pelayanan = $this->pelayananRepository->create($data);
 
-            // Dispatch event
-            event(new PelayananCreated($pelayanan));
+            // Event will be handled by Observer (faster)
+            // event(new PelayananCreated($pelayanan));
 
             return $pelayanan;
         });
@@ -79,8 +79,8 @@ class PelayananService implements PelayananServiceInterface
 
             $result = $this->pelayananRepository->update($id, $data);
 
-            // Dispatch event
-            event(new PelayananUpdated($pelayanan->fresh()));
+            // Event will be handled by Observer (faster)
+            // event(new PelayananUpdated($pelayanan->fresh()));
 
             return $result;
         });
