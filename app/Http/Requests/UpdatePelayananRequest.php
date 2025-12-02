@@ -22,11 +22,11 @@ class UpdatePelayananRequest extends FormRequest
         return [
             'nama_layanan' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'prosedur' => 'required|array',
-            'prosedur.*' => 'required|string',
-            'persyaratan' => 'required|array',
-            'persyaratan.*' => 'required|string',
-            'waktu_pelayanan' => 'required|string',
+            'prosedur' => 'nullable|array',
+            'prosedur.*' => 'nullable|string',
+            'persyaratan' => 'nullable|array',
+            'persyaratan.*' => 'nullable|string',
+            'waktu_pelayanan' => 'nullable|string',
             'biaya' => 'nullable|string',
             'dasar_hukum' => 'nullable|string',
             'kategori' => 'required|string|in:audit,konsultasi,reviu,evaluasi,pengawasan,lainnya',
@@ -68,8 +68,26 @@ class UpdatePelayananRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        // Filter empty values from arrays
+        $prosedur = $this->input('prosedur', []);
+        $persyaratan = $this->input('persyaratan', []);
+        
+        if (is_array($prosedur)) {
+            $prosedur = array_values(array_filter($prosedur, function($value) {
+                return !empty(trim($value));
+            }));
+        }
+        
+        if (is_array($persyaratan)) {
+            $persyaratan = array_values(array_filter($persyaratan, function($value) {
+                return !empty(trim($value));
+            }));
+        }
+        
         $this->merge([
             'status' => $this->has('status'),
+            'prosedur' => !empty($prosedur) ? $prosedur : null,
+            'persyaratan' => !empty($persyaratan) ? $persyaratan : null,
         ]);
     }
 }
