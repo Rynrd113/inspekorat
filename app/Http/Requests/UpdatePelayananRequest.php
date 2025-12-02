@@ -86,8 +86,8 @@ class UpdatePelayananRequest extends FormRequest
         
         $this->merge([
             'status' => $this->has('status'),
-            'prosedur' => !empty($prosedur) ? $prosedur : null,
-            'persyaratan' => !empty($persyaratan) ? $persyaratan : null,
+            'prosedur' => $prosedur,
+            'persyaratan' => $persyaratan,
         ]);
     }
 }
