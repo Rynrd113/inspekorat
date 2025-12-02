@@ -114,8 +114,15 @@
                             Prosedur
                         </label>
                         <div id="prosedur-container">
-                            @if(old('prosedur', $pelayanan->prosedur ?? []))
-                                @foreach(old('prosedur', $pelayanan->prosedur ?? []) as $index => $prosedur)
+                            @php
+                                $prosedurData = old('prosedur', 
+                                    is_array($pelayanan->prosedur ?? null) 
+                                        ? $pelayanan->prosedur 
+                                        : (json_decode($pelayanan->prosedur ?? '[]', true) ?: [])
+                                );
+                            @endphp
+                            @if($prosedurData)
+                                @foreach($prosedurData as $index => $prosedur)
                                 <div class="flex items-center mb-2 prosedur-item">
                                     <span class="text-gray-500 mr-2">{{ $index + 1 }}.</span>
                                     <input type="text" 
