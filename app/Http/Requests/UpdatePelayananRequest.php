@@ -22,10 +22,8 @@ class UpdatePelayananRequest extends FormRequest
         return [
             'nama_layanan' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'prosedur' => 'nullable|array',
-            'prosedur.*' => 'nullable|string',
-            'persyaratan' => 'nullable|array',
-            'persyaratan.*' => 'nullable|string',
+            'prosedur' => 'nullable|string',
+            'persyaratan' => 'nullable|string',
             'waktu_pelayanan' => 'nullable|string',
             'biaya' => 'nullable|string',
             'dasar_hukum' => 'nullable|string',
@@ -68,26 +66,32 @@ class UpdatePelayananRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        // Filter empty values from arrays
-        $prosedur = $this->input('prosedur', []);
-        $persyaratan = $this->input('persyaratan', []);
+        // Convert textarea to array (split by newlines)
+        $prosedur = $this->input('prosedur', '');
+        $persyaratan = $this->input('persyaratan', '');
         
-        if (is_array($prosedur)) {
-            $prosedur = array_values(array_filter($prosedur, function($value) {
-                return !empty(trim($value));
-            }));
+        if (is_string($prosedur)) {
+            $prosedurArray = array_values(array_filter(
+                explode("\n", $prosedur),
+                fn($line) => !empty(trim($line))
+            ));
+        } else {
+            $prosedurArray = [];
         }
         
-        if (is_array($persyaratan)) {
-            $persyaratan = array_values(array_filter($persyaratan, function($value) {
-                return !empty(trim($value));
-            }));
+        if (is_string($persyaratan)) {
+            $persyaratanArray = array_values(array_filter(
+                explode("\n", $persyaratan),
+                fn($line) => !empty(trim($line))
+            ));
+        } else {
+            $persyaratanArray = [];
         }
         
         $this->merge([
             'status' => $this->has('status'),
-            'prosedur' => $prosedur,
-            'persyaratan' => $persyaratan,
+            'prosedur_array' => $prosedurArray,
+            'persyaratan_array' => $persyaratanArray,
         ]);
     }
 }

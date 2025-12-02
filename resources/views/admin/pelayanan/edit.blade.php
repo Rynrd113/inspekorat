@@ -65,48 +65,25 @@
                         <label for="persyaratan" class="block text-sm font-medium text-gray-700 mb-2">
                             Syarat & Ketentuan
                         </label>
-                        <!-- Hidden input to ensure array is sent even if empty -->
-                        <input type="hidden" name="persyaratan[]" value="">
-                        <div id="persyaratan-container">
-                            @php
-                                $persyaratanData = old('persyaratan', 
-                                    is_array($pelayanan->persyaratan ?? null) 
-                                        ? $pelayanan->persyaratan 
-                                        : (json_decode($pelayanan->persyaratan ?? '[]', true) ?: [])
-                                );
-                            @endphp
-                            @if($persyaratanData)
-                                @foreach($persyaratanData as $index => $persyaratan)
-                                <div class="flex items-center mb-2 persyaratan-item">
-                                    <input type="text" 
-                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('persyaratan.*') border-red-500 @enderror" 
-                                           name="persyaratan[]" 
-                                           value="{{ $persyaratan }}" 
-                                           placeholder="Masukkan syarat">
-                                    <button type="button" class="ml-2 px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 remove-persyaratan" onclick="removePersyaratan(this)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                                @endforeach
-                            @else
-                                <div class="flex items-center mb-2 persyaratan-item">
-                                    <input type="text" 
-                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                                           name="persyaratan[]" 
-                                           placeholder="Masukkan syarat">
-                                    <button type="button" class="ml-2 px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 remove-persyaratan" onclick="removePersyaratan(this)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            @endif
-                        </div>
-                        <button type="button" class="mt-2 px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onclick="addPersyaratan()">
-                            <i class="fas fa-plus mr-1"></i>Tambah Syarat
-                        </button>
+                        @php
+                            $persyaratanText = old('persyaratan');
+                            if (!$persyaratanText && isset($pelayanan->persyaratan)) {
+                                if (is_array($pelayanan->persyaratan)) {
+                                    $persyaratanText = implode("\n", $pelayanan->persyaratan);
+                                } else {
+                                    $arr = json_decode($pelayanan->persyaratan, true);
+                                    $persyaratanText = is_array($arr) ? implode("\n", $arr) : $pelayanan->persyaratan;
+                                }
+                            }
+                        @endphp
+                        <textarea 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('persyaratan') border-red-500 @enderror" 
+                            id="persyaratan" 
+                            name="persyaratan" 
+                            rows="5"
+                            placeholder="Masukkan syarat, satu per baris">{{ $persyaratanText }}</textarea>
+                        <p class="mt-1 text-sm text-gray-500">Tulis setiap syarat di baris baru</p>
                         @error('persyaratan')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                        @error('persyaratan.*')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -115,50 +92,25 @@
                         <label for="prosedur" class="block text-sm font-medium text-gray-700 mb-2">
                             Prosedur
                         </label>
-                        <!-- Hidden input to ensure array is sent even if empty -->
-                        <input type="hidden" name="prosedur[]" value="">
-                        <div id="prosedur-container">
-                            @php
-                                $prosedurData = old('prosedur', 
-                                    is_array($pelayanan->prosedur ?? null) 
-                                        ? $pelayanan->prosedur 
-                                        : (json_decode($pelayanan->prosedur ?? '[]', true) ?: [])
-                                );
-                            @endphp
-                            @if($prosedurData)
-                                @foreach($prosedurData as $index => $prosedur)
-                                <div class="flex items-center mb-2 prosedur-item">
-                                    <span class="text-gray-500 mr-2">{{ $index + 1 }}.</span>
-                                    <input type="text" 
-                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('prosedur.*') border-red-500 @enderror" 
-                                           name="prosedur[]" 
-                                           value="{{ $prosedur }}" 
-                                           placeholder="Masukkan langkah prosedur">
-                                    <button type="button" class="ml-2 px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 remove-prosedur" onclick="removeProsedur(this)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                                @endforeach
-                            @else
-                                <div class="flex items-center mb-2 prosedur-item">
-                                    <span class="text-gray-500 mr-2">1.</span>
-                                    <input type="text" 
-                                           class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                                           name="prosedur[]" 
-                                           placeholder="Masukkan langkah prosedur">
-                                    <button type="button" class="ml-2 px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 remove-prosedur" onclick="removeProsedur(this)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            @endif
-                        </div>
-                        <button type="button" class="mt-2 px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onclick="addProsedur()">
-                            <i class="fas fa-plus mr-1"></i>Tambah Prosedur
-                        </button>
+                        @php
+                            $prosedurText = old('prosedur');
+                            if (!$prosedurText && isset($pelayanan->prosedur)) {
+                                if (is_array($pelayanan->prosedur)) {
+                                    $prosedurText = implode("\n", $pelayanan->prosedur);
+                                } else {
+                                    $arr = json_decode($pelayanan->prosedur, true);
+                                    $prosedurText = is_array($arr) ? implode("\n", $arr) : $pelayanan->prosedur;
+                                }
+                            }
+                        @endphp
+                        <textarea 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('prosedur') border-red-500 @enderror" 
+                            id="prosedur" 
+                            name="prosedur" 
+                            rows="5"
+                            placeholder="Masukkan prosedur, satu per baris">{{ $prosedurText }}</textarea>
+                        <p class="mt-1 text-sm text-gray-500">Tulis setiap langkah di baris baru</p>
                         @error('prosedur')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                        @error('prosedur.*')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -258,64 +210,4 @@
             />
         </form>
     </x-admin.form-section>
-
-<script>
-function addProsedur() {
-    const container = document.getElementById('prosedur-container');
-    const items = container.querySelectorAll('.prosedur-item');
-    const newIndex = items.length + 1;
-    
-    const newItem = document.createElement('div');
-    newItem.className = 'flex items-center mb-2 prosedur-item';
-    newItem.innerHTML = `
-        <span class="text-gray-500 mr-2">${newIndex}.</span>
-        <input type="text" 
-               class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-               name="prosedur[]" 
-               placeholder="Masukkan langkah prosedur">
-        <button type="button" class="ml-2 px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 remove-prosedur" onclick="removeProsedur(this)">
-            <i class="fas fa-trash"></i>
-        </button>
-    `;
-    container.appendChild(newItem);
-}
-
-function removeProsedur(button) {
-    const item = button.closest('.prosedur-item');
-    item.remove();
-    updateProsedurNumbers();
-}
-
-function updateProsedurNumbers() {
-    const items = document.querySelectorAll('.prosedur-item');
-    items.forEach((item, index) => {
-        const numberSpan = item.querySelector('span');
-        if (numberSpan) {
-            numberSpan.textContent = (index + 1) + '.';
-        }
-    });
-}
-
-function addPersyaratan() {
-    const container = document.getElementById('persyaratan-container');
-    
-    const newItem = document.createElement('div');
-    newItem.className = 'flex items-center mb-2 persyaratan-item';
-    newItem.innerHTML = `
-        <input type="text" 
-               class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-               name="persyaratan[]" 
-               placeholder="Masukkan syarat">
-        <button type="button" class="ml-2 px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 remove-persyaratan" onclick="removePersyaratan(this)">
-            <i class="fas fa-trash"></i>
-        </button>
-    `;
-    container.appendChild(newItem);
-}
-
-function removePersyaratan(button) {
-    const item = button.closest('.persyaratan-item');
-    item.remove();
-}
-</script>
 @endsection
