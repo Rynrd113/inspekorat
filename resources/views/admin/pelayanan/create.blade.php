@@ -11,8 +11,25 @@
 @endsection
 
 @section('main-content')
-
-    <div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
+<div class="min-h-screen flex items-center justify-center bg-gray-50">
+    <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+        <div class="mb-6">
+            <i class="fas fa-tools text-6xl text-yellow-500 mb-4"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-3">
+            Dalam Tahap Pengembangan
+        </h2>
+        <p class="text-gray-600 mb-6">
+            Fitur tambah pelayanan sedang dalam tahap pengembangan dan akan segera tersedia.
+        </p>
+        <a href="{{ route('admin.pelayanan.index') }}" 
+           class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Kembali ke Daftar Pelayanan
+        </a>
+    </div>
+</div>
+@endsection
         <div class="p-6 border-b border-gray-200">
             <h2 class="text-xl font-semibold text-gray-900">
                 <i class="fas fa-plus mr-2 text-blue-600"></i>
