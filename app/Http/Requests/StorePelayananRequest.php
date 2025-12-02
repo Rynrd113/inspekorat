@@ -22,11 +22,7 @@ class StorePelayananRequest extends FormRequest
         return [
             'nama_layanan' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'prosedur' => 'required|array',
-            'prosedur.*' => 'required|string',
-            'persyaratan' => 'required|array',
-            'persyaratan.*' => 'required|string',
-            'waktu_pelayanan' => 'required|string',
+            'waktu_pelayanan' => 'nullable|string',
             'biaya' => 'nullable|string',
             'dasar_hukum' => 'nullable|string',
             'kategori' => 'required|string|in:audit,konsultasi,reviu,evaluasi,pengawasan,lainnya',
@@ -46,13 +42,6 @@ class StorePelayananRequest extends FormRequest
             'nama_layanan.required' => 'Nama layanan wajib diisi.',
             'nama_layanan.max' => 'Nama layanan maksimal 255 karakter.',
             'deskripsi.required' => 'Deskripsi layanan wajib diisi.',
-            'prosedur.required' => 'Prosedur layanan wajib diisi.',
-            'prosedur.array' => 'Prosedur harus berupa array.',
-            'prosedur.*.required' => 'Setiap prosedur wajib diisi.',
-            'persyaratan.required' => 'Persyaratan layanan wajib diisi.',
-            'persyaratan.array' => 'Persyaratan harus berupa array.',
-            'persyaratan.*.required' => 'Setiap persyaratan wajib diisi.',
-            'waktu_pelayanan.required' => 'Waktu pelayanan wajib diisi.',
             'kategori.required' => 'Kategori layanan wajib dipilih.',
             'kategori.in' => 'Kategori layanan tidak valid.',
             'file_formulir.file' => 'File formulir harus berupa file.',
@@ -71,5 +60,37 @@ class StorePelayananRequest extends FormRequest
         $this->merge([
             'status' => $this->has('status'),
         ]);
+    }
+    
+    /**
+     * Get validated data with prosedur and persyaratan converted to arrays.
+     */
+    public function validated($key = null, $default = null)
+    {
+        $validated = parent::validated($key, $default);
+        
+        // Convert textarea to array for prosedur
+        $prosedur = $this->input('prosedur', '');
+        if (is_string($prosedur) && !empty($prosedur)) {
+            $validated['prosedur'] = array_values(array_filter(
+                array_map('trim', explode("\n", $prosedur)),
+                fn($line) => !empty($line)
+            ));
+        } else {
+            $validated['prosedur'] = [];
+        }
+        
+        // Convert textarea to array for persyaratan
+        $persyaratan = $this->input('persyaratan', '');
+        if (is_string($persyaratan) && !empty($persyaratan)) {
+            $validated['persyaratan'] = array_values(array_filter(
+                array_map('trim', explode("\n", $persyaratan)),
+                fn($line) => !empty($line)
+            ));
+        } else {
+            $validated['persyaratan'] = [];
+        }
+        
+        return $validated;
     }
 }

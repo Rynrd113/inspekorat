@@ -27,12 +27,12 @@
                     <div>
                         <x-input
                             label="Nama Pelayanan"
-                            name="nama"
-                            id="nama"
+                            name="nama_layanan"
+                            id="nama_layanan"
                             type="text"
-                            value="{{ old('nama') }}"
+                            value="{{ old('nama_layanan') }}"
                             required="true"
-                            :error="$errors->first('nama')"
+                            :error="$errors->first('nama_layanan')"
                         />
                     </div>
                     
@@ -70,38 +70,48 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <div>
-                        <x-input
-                            label="Syarat & Ketentuan"
-                            name="syarat"
-                            id="syarat"
-                            type="textarea"
-                            rows="3"
-                            :error="$errors->first('syarat')"
-                        >{{ old('syarat') }}</x-input>
+                        <label for="persyaratan" class="block text-sm font-medium text-gray-700 mb-2">
+                            Syarat & Ketentuan
+                        </label>
+                        <textarea 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('persyaratan') border-red-500 @enderror" 
+                            id="persyaratan" 
+                            name="persyaratan" 
+                            rows="5"
+                            placeholder="Masukkan syarat, satu per baris">{{ old('persyaratan') }}</textarea>
+                        <p class="mt-1 text-sm text-gray-500">Tulis setiap syarat di baris baru</p>
+                        @error('persyaratan')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
                     
                     <div>
-                        <x-input
-                            label="Prosedur"
-                            name="prosedur"
-                            id="prosedur"
-                            type="textarea"
-                            rows="3"
-                            :error="$errors->first('prosedur')"
-                        >{{ old('prosedur') }}</x-input>
+                        <label for="prosedur" class="block text-sm font-medium text-gray-700 mb-2">
+                            Prosedur
+                        </label>
+                        <textarea 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('prosedur') border-red-500 @enderror" 
+                            id="prosedur" 
+                            name="prosedur" 
+                            rows="5"
+                            placeholder="Masukkan prosedur, satu per baris">{{ old('prosedur') }}</textarea>
+                        <p class="mt-1 text-sm text-gray-500">Tulis setiap langkah di baris baru</p>
+                        @error('prosedur')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <div>
                         <x-input
-                            label="Waktu Layanan"
-                            name="waktu_layanan"
-                            id="waktu_layanan"
+                            label="Waktu Pelayanan"
+                            name="waktu_pelayanan"
+                            id="waktu_pelayanan"
                             type="text"
-                            value="{{ old('waktu_layanan') }}"
+                            value="{{ old('waktu_pelayanan') }}"
                             placeholder="Contoh: 7 hari kerja"
-                            :error="$errors->first('waktu_layanan')"
+                            :error="$errors->first('waktu_pelayanan')"
                         />
                     </div>
                     
@@ -121,13 +131,13 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <div>
                         <x-input
-                            label="Kontak"
-                            name="kontak"
-                            id="kontak"
+                            label="Kontak Penanggung Jawab"
+                            name="kontak_penanggung_jawab"
+                            id="kontak_penanggung_jawab"
                             type="text"
-                            value="{{ old('kontak') }}"
+                            value="{{ old('kontak_penanggung_jawab') }}"
                             placeholder="Nomor telepon atau email"
-                            :error="$errors->first('kontak')"
+                            :error="$errors->first('kontak_penanggung_jawab')"
                         />
                     </div>
                     
@@ -135,13 +145,18 @@
                         <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
                             Status <span class="text-red-500">*</span>
                         </label>
-                        <select class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors @error('status') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror" 
-                                id="status" 
-                                name="status" 
-                                required>
-                            <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                            <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>Non-aktif</option>
-                        </select>
+                        <div class="flex items-center">
+                            <input type="checkbox" 
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" 
+                                   id="status" 
+                                   name="status" 
+                                   value="1"
+                                   {{ old('status') ? 'checked' : '' }}>
+                            <label for="status" class="ml-2 block text-sm text-gray-900">
+                                Aktif
+                            </label>
+                        </div>
+                        <p class="mt-1 text-sm text-gray-500">Centang untuk mengaktifkan layanan</p>
                         @error('status')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -149,18 +164,18 @@
                 </div>
 
                 <div class="mt-6">
-                    <label for="gambar" class="block text-sm font-medium text-gray-700 mb-2">
-                        Gambar
+                    <label for="file_formulir" class="block text-sm font-medium text-gray-700 mb-2">
+                        File Formulir
                     </label>
                     <input type="file" 
-                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors @error('gambar') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror" 
-                           id="gambar" 
-                           name="gambar" 
-                           accept="image/*">
-                    @error('gambar')
+                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors @error('file_formulir') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror" 
+                           id="file_formulir" 
+                           name="file_formulir" 
+                           accept=".pdf,.doc,.docx">
+                    @error('file_formulir')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
-                    <p class="mt-1 text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB.</p>
+                    <p class="mt-1 text-sm text-gray-500">Format: PDF, DOC, DOCX. Maksimal 2MB.</p>
                 </div>
 
                 <div class="flex justify-between items-center mt-6 pt-6 border-t border-gray-200">
