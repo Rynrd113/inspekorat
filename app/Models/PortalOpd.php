@@ -93,7 +93,18 @@ class PortalOpd extends Model
     public function getBannerUrlAttribute()
     {
         if ($this->banner) {
-            return asset('storage/' . $this->banner);
+            // Check if file exists in storage, otherwise try uploads
+            $storagePath = public_path('storage/' . $this->banner);
+            $uploadsPath = public_path('uploads/' . $this->banner);
+            
+            if (file_exists($storagePath)) {
+                return asset('storage/' . $this->banner);
+            } elseif (file_exists($uploadsPath)) {
+                return asset('uploads/' . $this->banner);
+            } else {
+                // Try direct path
+                return asset($this->banner);
+            }
         }
         return asset('images/default-opd-banner.jpg');
     }
