@@ -65,6 +65,8 @@
                         <label for="persyaratan" class="block text-sm font-medium text-gray-700 mb-2">
                             Syarat & Ketentuan
                         </label>
+                        <!-- Hidden input to ensure array is sent even if empty -->
+                        <input type="hidden" name="persyaratan[]" value="">
                         <div id="persyaratan-container">
                             @php
                                 $persyaratanData = old('persyaratan', 
@@ -113,6 +115,8 @@
                         <label for="prosedur" class="block text-sm font-medium text-gray-700 mb-2">
                             Prosedur
                         </label>
+                        <!-- Hidden input to ensure array is sent even if empty -->
+                        <input type="hidden" name="prosedur[]" value="">
                         <div id="prosedur-container">
                             @php
                                 $prosedurData = old('prosedur', 
