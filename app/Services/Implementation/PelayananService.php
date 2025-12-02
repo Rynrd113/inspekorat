@@ -62,17 +62,6 @@ class PelayananService implements PelayananServiceInterface
             }
 
             $data = $request->validated();
-            
-            // Convert textarea strings to arrays for storage
-            if (isset($data['prosedur_array'])) {
-                $data['prosedur'] = $data['prosedur_array'];
-                unset($data['prosedur_array']);
-            }
-            
-            if (isset($data['persyaratan_array'])) {
-                $data['persyaratan'] = $data['persyaratan_array'];
-                unset($data['persyaratan_array']);
-            }
 
             // Handle file upload
             if ($request->hasFile('file_formulir')) {

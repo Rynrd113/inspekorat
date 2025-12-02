@@ -22,8 +22,6 @@ class UpdatePelayananRequest extends FormRequest
         return [
             'nama_layanan' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'prosedur' => 'nullable|string',
-            'persyaratan' => 'nullable|string',
             'waktu_pelayanan' => 'nullable|string',
             'biaya' => 'nullable|string',
             'dasar_hukum' => 'nullable|string',
@@ -44,13 +42,6 @@ class UpdatePelayananRequest extends FormRequest
             'nama_layanan.required' => 'Nama layanan wajib diisi.',
             'nama_layanan.max' => 'Nama layanan maksimal 255 karakter.',
             'deskripsi.required' => 'Deskripsi layanan wajib diisi.',
-            'prosedur.required' => 'Prosedur layanan wajib diisi.',
-            'prosedur.array' => 'Prosedur harus berupa array.',
-            'prosedur.*.required' => 'Setiap prosedur wajib diisi.',
-            'persyaratan.required' => 'Persyaratan layanan wajib diisi.',
-            'persyaratan.array' => 'Persyaratan harus berupa array.',
-            'persyaratan.*.required' => 'Setiap persyaratan wajib diisi.',
-            'waktu_pelayanan.required' => 'Waktu pelayanan wajib diisi.',
             'kategori.required' => 'Kategori layanan wajib dipilih.',
             'kategori.in' => 'Kategori layanan tidak valid.',
             'file_formulir.file' => 'File formulir harus berupa file.',
@@ -93,5 +84,26 @@ class UpdatePelayananRequest extends FormRequest
             'prosedur_array' => $prosedurArray,
             'persyaratan_array' => $persyaratanArray,
         ]);
+    }
+    
+    /**
+     * Get validated data with prosedur and persyaratan as arrays.
+     */
+    public function validated($key = null, $default = null)
+    {
+        $validated = parent::validated($key, $default);
+        
+        // Replace string fields with array versions
+        if (isset($validated['prosedur_array'])) {
+            $validated['prosedur'] = $validated['prosedur_array'];
+            unset($validated['prosedur_array']);
+        }
+        
+        if (isset($validated['persyaratan_array'])) {
+            $validated['persyaratan'] = $validated['persyaratan_array'];
+            unset($validated['persyaratan_array']);
+        }
+        
+        return $validated;
     }
 }
