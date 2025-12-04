@@ -245,23 +245,25 @@ document.getElementById('pengaduan-form').addEventListener('submit', async funct
     try {
         const formData = new FormData(this);
         
-        const response = await fetch('/api/v1/pengaduans', {
+        const response = await fetch('{{ route("public.pengaduan.store") }}', {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json',
             },
             body: formData
         });
         
         const result = await response.json();
         
-        if (response.ok) {
+        if (response.ok || result.success) {
             // Success
-            showAlert('success', result.message || 'Pengaduan berhasil dikirim!');
+            showAlert('success', 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.');
             this.reset();
         } else {
-            // Error
-            throw new Error(result.message || 'Terjadi kesalahan saat mengirim pengaduan');
+            // Error with validation
+            const errorMsg = result.message || Object.values(result.errors || {}).flat().join(', ') || 'Terjadi kesalahan saat mengirim pengaduan';
+            throw new Error(errorMsg);
         }
     } catch (error) {
         showAlert('error', error.message);

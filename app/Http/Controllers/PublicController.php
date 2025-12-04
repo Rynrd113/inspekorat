@@ -632,6 +632,14 @@ startxref
 
         Pengaduan::create($validated);
 
+        // Check if AJAX request
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.'
+            ]);
+        }
+
         return redirect()->route('public.pengaduan')->with('success', 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.');
     }
 
