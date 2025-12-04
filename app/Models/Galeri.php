@@ -15,6 +15,7 @@ class Galeri extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
+        'album_id',
         'judul',
         'deskripsi',
         'kategori',
@@ -59,11 +60,11 @@ class Galeri extends Model
     }
 
     /**
-     * Scope for specific album
+     * Relationship: Album
      */
-    public function scopeByAlbum($query, $album)
+    public function album()
     {
-        return $query->where('kategori', $album);
+        return $this->belongsTo(Album::class);
     }
 
     /**

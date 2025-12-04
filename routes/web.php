@@ -20,6 +20,7 @@ Route::get('/test-logo-fix', function () {
 })->name('test.logo.fix');
 use App\Http\Controllers\Admin\DokumenController as AdminDokumenController;
 use App\Http\Controllers\Admin\GaleriController as AdminGaleriController;
+use App\Http\Controllers\Admin\AlbumController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\AuditLogController as AdminAuditLogController;
 use App\Http\Controllers\Admin\SystemConfigurationController as AdminSystemConfigurationController;
@@ -55,6 +56,7 @@ Route::middleware('admin.logout.public')->group(function () {
     Route::get('/dokumen/{id}/download', [PublicController::class, 'dokumenDownload'])->name('public.dokumen.download');
     Route::get('/dokumen/{id}/preview', [PublicController::class, 'dokumenPreview'])->name('public.dokumen.preview');
     Route::get('/galeri', [PublicController::class, 'galeri'])->name('public.galeri.index');
+    Route::get('/galeri/album/{slug}', [PublicController::class, 'album'])->name('public.album');
     Route::get('/galeri/{id}', [PublicController::class, 'galeriShow'])->name('public.galeri.show');
     Route::get('/faq', [PublicController::class, 'faq'])->name('public.faq');
     Route::get('/kontak', [PublicController::class, 'kontak'])->name('public.kontak');
@@ -163,6 +165,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('dokumen/{dokumen}/download', [AdminDokumenController::class, 'download'])->name('dokumen.download');
         });
         
+        // Album routes - protected by role middleware
+        Route::middleware('role:content_admin,admin,super_admin')->group(function () {
+            Route::resource('albums', AlbumController::class);
+            Route::post('albums/{album}/upload-photos', [AlbumController::class, 'uploadPhotos'])->name('albums.upload-photos');
+        });
+        
         // Galeri routes - protected by role middleware
         Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::get('galeri', [AdminGaleriController::class, 'index'])->name('galeri.index');
@@ -173,6 +181,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('galeri/{id}', [AdminGaleriController::class, 'update'])->name('galeri.update');
             Route::delete('galeri/{id}', [AdminGaleriController::class, 'destroy'])->name('galeri.destroy');
             Route::post('galeri/bulk-upload', [AdminGaleriController::class, 'bulkUpload'])->name('galeri.bulk-upload');
+            Route::post('galeri/bulk-move', [AdminGaleriController::class, 'bulkMove'])->name('galeri.bulk-move');
         });
         
         // FAQ routes - accessible by content_admin, admin, super_admin

@@ -40,19 +40,22 @@ class GaleriController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Filter by album
-        if ($request->filled('album')) {
-            $query->where('album', 'like', '%' . $request->album . '%');
+        // Filter by album_id
+        if ($request->filled('album_id')) {
+            $query->where('album_id', $request->album_id);
         }
 
-        $galeris = $query->with(['creator', 'updater'])
+        $galeris = $query->with(['creator', 'updater', 'album'])
                          ->whereNotNull('id')
                          ->where('id', '>', 0)
                          ->latest()
                          ->paginate(12)
                          ->appends($request->query());
 
-        return view('admin.galeri.index', compact('galeris'));
+        // Get all albums for filter dropdown
+        $albums = \App\Models\Album::active()->orderBy('nama_album')->get();
+
+        return view('admin.galeri.index', compact('galeris', 'albums'));
     }
 
     /**
@@ -60,7 +63,8 @@ class GaleriController extends Controller
      */
     public function create()
     {
-        return view('admin.galeri.create');
+        $albums = \App\Models\Album::active()->orderBy('nama_album')->get();
+        return view('admin.galeri.create', compact('albums'));
     }
 
     /**
@@ -69,6 +73,7 @@ class GaleriController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'album_id' => 'nullable|exists:albums,id',
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'kategori' => 'required|string|max:255',
@@ -237,5 +242,22 @@ class GaleriController extends Controller
 
         return redirect()->route('admin.galeri.index')
             ->with('success', 'Bulk upload berhasil');
+    }
+
+    /**
+     * Bulk move photos to another album
+     */
+    public function bulkMove(Request $request)
+    {
+        $request->validate([
+            'photo_ids' => 'required|array|min:1',
+            'photo_ids.*' => 'exists:galeris,id',
+            'album_id' => 'required|exists:albums,id',
+        ]);
+
+        $count = \App\Models\Galeri::whereIn('id', $request->photo_ids)
+            ->update(['album_id' => $request->album_id]);
+
+        return back()->with('success', "{$count} foto berhasil dipindahkan ke album!");
     }
 }

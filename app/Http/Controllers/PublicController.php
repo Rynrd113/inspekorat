@@ -447,52 +447,57 @@ startxref
     }
 
     /**
-     * Show gallery
+     * Show gallery - now showing albums instead of individual photos
      */
     public function galeri(Request $request): View
     {
-        $query = Galeri::where('status', true);
+        // Get active albums with photo count
+        $albums = \App\Models\Album::active()
+            ->roots() // Only root albums
+            ->with(['children', 'photos'])
+            ->orderBy('urutan')
+            ->orderBy('tanggal_kegiatan', 'desc')
+            ->orderBy('nama_album')
+            ->paginate(12);
 
-        // Filter by file type based on filter parameter
-        if ($request->filled('filter')) {
-            $filter = $request->filter;
-            if ($filter === 'foto') {
-                $query->whereIn('file_type', ['jpg', 'jpeg', 'png', 'gif', 'webp']);
-            } elseif ($filter === 'video') {
-                $query->whereIn('file_type', ['mp4', 'avi', 'mov', 'wmv', 'webm']);
-            }
-            // 'all' or any other value will show all items (no additional filter)
-        }
-
-        // Filter by file type if specified (backward compatibility)
-        if ($request->filled('type')) {
-            $query->where('file_type', $request->type);
-        }
-
-        // Filter by category if specified
-        if ($request->filled('kategori')) {
-            $query->where('kategori', $request->kategori);
-        }
-
-        // Add pagination
-        $galeris = $query->orderBy('tanggal_publikasi', 'desc')
-                       ->orderBy('created_at', 'desc')
-                       ->paginate(12)
-                       ->appends($request->query());
-
-        return view('public.galeri.index', compact('galeris'));
+        return view('public.galeri', compact('albums'));
     }
 
     /**
-     * Show specific gallery item
+     * Show photos in a specific album
+     */
+    public function album($slug): View
+    {
+        $album = \App\Models\Album::where('slug', $slug)
+            ->where('status', true)
+            ->with(['children', 'photos' => function($query) {
+                $query->where('status', true)
+                    ->orderBy('tanggal_publikasi', 'desc');
+            }, 'parent'])
+            ->firstOrFail();
+
+        // Get photos with pagination
+        $photos = $album->photos()->where('status', true)->paginate(24);
+
+        return view('public.album', compact('album', 'photos'));
+    }
+
+    /**
+     * Show specific gallery item (keep for backward compatibility)
      */
     public function galeriShow($id): View
     {
         $galeri = Galeri::where('status', true)->findOrFail($id);
         
-        // Get related items from same category
+        // Get related items from same album or category
         $related = Galeri::where('status', true)
-            ->where('kategori', $galeri->kategori)
+            ->where(function($q) use ($galeri) {
+                if ($galeri->album_id) {
+                    $q->where('album_id', $galeri->album_id);
+                } else {
+                    $q->where('kategori', $galeri->kategori);
+                }
+            })
             ->where('id', '!=', $galeri->id)
             ->orderBy('tanggal_publikasi', 'desc')
             ->take(6)

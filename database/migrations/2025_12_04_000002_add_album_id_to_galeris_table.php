@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('galeris', function (Blueprint $table) {
+            $table->foreignId('album_id')->nullable()->after('id')->constrained('albums')->onDelete('set null');
+            $table->index('album_id');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('galeris', function (Blueprint $table) {
+            $table->dropForeign(['album_id']);
+            $table->dropIndex(['album_id']);
+            $table->dropColumn('album_id');
+        });
+    }
+};
