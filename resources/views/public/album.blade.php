@@ -105,14 +105,12 @@
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Foto</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 @foreach($photos as $photo)
-                @php
-                    $photoIndex = $loop->index;
-                @endphp
-                <div class="group relative aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer photo-item"
-                     data-photo-index="{{ $photoIndex }}">
-                    <img src="{{ asset('storage/' . $photo->file_path) }}" 
+                <div class="group relative aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
+                     onclick="openLightbox({{ $loop->index }})">
+                    <img src="{{ asset('storage/' . $photo->file_path) }}?w=400&h=400&fit=crop" 
                          alt="{{ $photo->judul }}" 
-                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                         loading="lazy">
                     
                     <!-- Overlay on Hover -->
                     <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
@@ -178,21 +176,6 @@ const photos = @json($photos->items());
 const baseUrl = '{{ asset('storage') }}';
 let currentPhotoIndex = 0;
 
-// Event delegation for photo clicks
-document.addEventListener('DOMContentLoaded', function() {
-    const photoItems = document.querySelectorAll('.photo-item');
-    photoItems.forEach(function(item) {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const index = parseInt(this.getAttribute('data-photo-index'));
-            if (!isNaN(index) && index >= 0 && index < photos.length) {
-                openLightbox(index);
-            }
-        });
-    });
-});
-
 function openLightbox(index) {
     currentPhotoIndex = index;
     showPhoto();
@@ -210,12 +193,16 @@ function showPhoto() {
     if (!photo) return;
     
     document.getElementById('lightbox-image').src = baseUrl + '/' + photo.file_path;
-    document.getElementById('lightbox-title').textContent = photo.judul;
-    document.getElementById('lightbox-date').textContent = new Date(photo.tanggal_publikasi).toLocaleDateString('id-ID', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
+    document.getElementById('lightbox-title').textContent = photo.judul || '';
+    
+    if (photo.tanggal_publikasi) {
+        document.getElementById('lightbox-date').textContent = new Date(photo.tanggal_publikasi).toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    }
+    
     document.getElementById('lightbox-counter').textContent = `${currentPhotoIndex + 1} / ${photos.length}`;
 }
 
@@ -231,7 +218,8 @@ function previousPhoto() {
 
 // Keyboard navigation
 document.addEventListener('keydown', function(e) {
-    if (document.getElementById('lightbox').classList.contains('hidden')) return;
+    const lightbox = document.getElementById('lightbox');
+    if (!lightbox || lightbox.classList.contains('hidden')) return;
     
     if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowRight') nextPhoto();
