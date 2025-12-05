@@ -105,9 +105,10 @@
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Foto</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 @foreach($photos as $photo)
-                <div class="group relative aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
-                     onclick="openLightbox({{ $loop->index }})">
-                    <img src="{{ asset('storage/' . $photo->file_path) }}?w=400&h=400&fit=crop" 
+                <a href="{{ asset('storage/' . $photo->file_path) }}" 
+                   target="_blank"
+                   class="group relative aspect-square bg-gray-200 rounded-lg overflow-hidden block">
+                    <img src="{{ asset('storage/' . $photo->file_path) }}" 
                          alt="{{ $photo->judul }}" 
                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                          loading="lazy">
@@ -121,7 +122,7 @@
                     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity">
                         <p class="text-white text-sm font-medium truncate">{{ $photo->judul }}</p>
                     </div>
-                </div>
+                </a>
                 @endforeach
             </div>
 
@@ -143,87 +144,4 @@
         @endif
     </div>
 </div>
-
-<!-- Lightbox Modal -->
-<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-95 hidden z-50 flex items-center justify-center">
-    <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300 z-10">
-        <i class="fas fa-times"></i>
-    </button>
-
-    <button onclick="previousPhoto()" class="absolute left-4 text-white text-4xl hover:text-gray-300 z-10">
-        <i class="fas fa-chevron-left"></i>
-    </button>
-
-    <button onclick="nextPhoto()" class="absolute right-4 text-white text-4xl hover:text-gray-300 z-10">
-        <i class="fas fa-chevron-right"></i>
-    </button>
-
-    <div class="max-w-5xl max-h-screen p-4">
-        <img id="lightbox-image" src="" alt="" class="max-w-full max-h-screen object-contain"
-             onerror="this.onerror=null; this.src='{{ asset('images/image-not-found.jpg') }}';">
-        <div class="text-center mt-4">
-            <h3 id="lightbox-title" class="text-white text-xl font-semibold"></h3>
-            <p id="lightbox-date" class="text-gray-300 text-sm mt-2"></p>
-            <p id="lightbox-counter" class="text-gray-400 text-sm mt-2"></p>
-        </div>
-    </div>
-</div>
 @endsection
-
-@push('scripts')
-<script>
-const photos = @json($photos->items());
-const baseUrl = '{{ asset('storage') }}';
-let currentPhotoIndex = 0;
-
-function openLightbox(index) {
-    currentPhotoIndex = index;
-    showPhoto();
-    document.getElementById('lightbox').classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeLightbox() {
-    document.getElementById('lightbox').classList.add('hidden');
-    document.body.style.overflow = 'auto';
-}
-
-function showPhoto() {
-    const photo = photos[currentPhotoIndex];
-    if (!photo) return;
-    
-    document.getElementById('lightbox-image').src = baseUrl + '/' + photo.file_path;
-    document.getElementById('lightbox-title').textContent = photo.judul || '';
-    
-    if (photo.tanggal_publikasi) {
-        document.getElementById('lightbox-date').textContent = new Date(photo.tanggal_publikasi).toLocaleDateString('id-ID', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
-    }
-    
-    document.getElementById('lightbox-counter').textContent = `${currentPhotoIndex + 1} / ${photos.length}`;
-}
-
-function nextPhoto() {
-    currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
-    showPhoto();
-}
-
-function previousPhoto() {
-    currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
-    showPhoto();
-}
-
-// Keyboard navigation
-document.addEventListener('keydown', function(e) {
-    const lightbox = document.getElementById('lightbox');
-    if (!lightbox || lightbox.classList.contains('hidden')) return;
-    
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowRight') nextPhoto();
-    if (e.key === 'ArrowLeft') previousPhoto();
-});
-</script>
-@endpush
