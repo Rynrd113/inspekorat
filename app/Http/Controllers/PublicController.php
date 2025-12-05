@@ -447,16 +447,20 @@ startxref
     }
 
     /**
-     * Show gallery - now showing albums instead of individual photos
+     * Show gallery
+     */
+    /**
+     * Show gallery page with albums
      */
     public function galeri(Request $request): View
     {
-        // Get active albums with photo count
-        $albums = \App\Models\Album::active()
-            ->roots() // Only root albums
-            ->with(['children', 'photos'])
+        // Get active albums
+        $albums = \App\Models\Album::with(['photos' => function($query) {
+                $query->where('status', true)->latest()->take(1);
+            }])
+            ->active()
+            ->roots()
             ->orderBy('urutan')
-            ->orderBy('tanggal_kegiatan', 'desc')
             ->orderBy('nama_album')
             ->paginate(12);
 
@@ -464,40 +468,38 @@ startxref
     }
 
     /**
-     * Show photos in a specific album
+     * Show album detail with photos
      */
     public function album($slug): View
     {
         $album = \App\Models\Album::where('slug', $slug)
             ->where('status', true)
-            ->with(['children', 'photos' => function($query) {
-                $query->where('status', true)
-                    ->orderBy('tanggal_publikasi', 'desc');
-            }, 'parent'])
             ->firstOrFail();
 
-        // Get photos with pagination
-        $photos = $album->photos()->where('status', true)->paginate(24);
+        // Load relationships
+        $album->load(['parent', 'children' => function($query) {
+            $query->active()->orderBy('urutan')->orderBy('nama_album');
+        }]);
+
+        // Get photos in this album
+        $photos = $album->photos()
+            ->where('status', true)
+            ->orderBy('tanggal_publikasi', 'desc')
+            ->paginate(24);
 
         return view('public.album', compact('album', 'photos'));
     }
 
     /**
-     * Show specific gallery item (keep for backward compatibility)
+     * Show specific gallery item (legacy, untuk backward compatibility)
      */
     public function galeriShow($id): View
     {
         $galeri = Galeri::where('status', true)->findOrFail($id);
         
-        // Get related items from same album or category
+        // Get related items from same category
         $related = Galeri::where('status', true)
-            ->where(function($q) use ($galeri) {
-                if ($galeri->album_id) {
-                    $q->where('album_id', $galeri->album_id);
-                } else {
-                    $q->where('kategori', $galeri->kategori);
-                }
-            })
+            ->where('kategori', $galeri->kategori)
             ->where('id', '!=', $galeri->id)
             ->orderBy('tanggal_publikasi', 'desc')
             ->take(6)
