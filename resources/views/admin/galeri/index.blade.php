@@ -32,7 +32,7 @@
     <div class="bg-white rounded-lg shadow-md border border-gray-200 mb-6">
         <div class="p-6">
             <form method="GET" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <!-- Search Field -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Pencarian</label>
@@ -43,6 +43,21 @@
                             with-icon="true"
                             size="md"
                         />
+                    </div>
+
+                    <!-- Album Filter -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Album</label>
+                        <select name="album_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Semua Album</option>
+                            @if(isset($albums))
+                            @foreach($albums as $album)
+                            <option value="{{ $album->id }}" {{ request('album_id') == $album->id ? 'selected' : '' }}>
+                                {{ $album->nama_album }}
+                            </option>
+                            @endforeach
+                            @endif
+                        </select>
                     </div>
 
                     <!-- Filter Fields -->
