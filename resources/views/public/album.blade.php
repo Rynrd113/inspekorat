@@ -171,6 +171,7 @@
 @push('scripts')
 <script>
 const photos = @json($photos->items());
+const baseUrl = '{{ asset('storage') }}';
 let currentPhotoIndex = 0;
 
 function openLightbox(index) {
@@ -187,7 +188,7 @@ function closeLightbox() {
 
 function showPhoto() {
     const photo = photos[currentPhotoIndex];
-    document.getElementById('lightbox-image').src = '/storage/' + photo.file_path;
+    document.getElementById('lightbox-image').src = baseUrl + '/' + photo.file_path;
     document.getElementById('lightbox-title').textContent = photo.judul;
     document.getElementById('lightbox-date').textContent = new Date(photo.tanggal_publikasi).toLocaleDateString('id-ID', {
         day: 'numeric',

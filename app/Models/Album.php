@@ -93,17 +93,7 @@ class Album extends Model
     {
         // 1. Check if cover_image is set
         if ($this->cover_image) {
-            $paths = [
-                storage_path('app/public/' . $this->cover_image),
-                public_path('uploads/' . $this->cover_image),
-                public_path($this->cover_image),
-            ];
-
-            foreach ($paths as $path) {
-                if (file_exists($path)) {
-                    return asset('storage/' . $this->cover_image);
-                }
-            }
+            return asset('storage/' . $this->cover_image);
         }
 
         // 2. Get first photo from album
