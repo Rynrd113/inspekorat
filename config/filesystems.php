@@ -47,6 +47,16 @@ return [
             'report' => false,
         ],
 
+        // Disk for hosting where document root is public_html (not public_html/public)
+        'public_root' => [
+            'driver' => 'local',
+            'root' => base_path('storage'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
