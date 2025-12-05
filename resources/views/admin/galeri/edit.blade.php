@@ -42,17 +42,42 @@
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
+
+                    <div>
+                        <label for="album_id" class="block text-sm font-medium text-gray-700 mb-2">
+                            Album <span class="text-gray-500 text-xs">(Opsional)</span>
+                        </label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('album_id') border-red-500 @enderror" 
+                                id="album_id" 
+                                name="album_id">
+                            <option value="">-- Pilih Album --</option>
+                            @if(isset($albums))
+                            @foreach($albums as $album)
+                            <option value="{{ $album->id }}" {{ old('album_id', $galeri->album_id) == $album->id ? 'selected' : '' }}>
+                                {{ $album->nama_album }}
+                            </option>
+                            @endforeach
+                            @endif
+                        </select>
+                        @error('album_id')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                     
                     <div>
                         <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">
                             Kategori <span class="text-red-500">*</span>
                         </label>
-                        <input type="text" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('kategori') border-red-500 @enderror" 
-                               id="kategori" 
-                               name="kategori" 
-                               value="{{ old('kategori', $galeri->kategori) }}" 
-                               required>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('kategori') border-red-500 @enderror" 
+                                id="kategori" 
+                                name="kategori" 
+                                required>
+                            <option value="">Pilih Kategori</option>
+                            <option value="kegiatan" {{ old('kategori', $galeri->kategori) == 'kegiatan' ? 'selected' : '' }}>Kegiatan</option>
+                            <option value="acara" {{ old('kategori', $galeri->kategori) == 'acara' ? 'selected' : '' }}>Acara</option>
+                            <option value="fasilitas" {{ old('kategori', $galeri->kategori) == 'fasilitas' ? 'selected' : '' }}>Fasilitas</option>
+                            <option value="lainnya" {{ old('kategori', $galeri->kategori) == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                        </select>
                         @error('kategori')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror

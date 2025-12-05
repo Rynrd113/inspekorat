@@ -21,6 +21,10 @@
             <p class="text-gray-600 mt-1">Kelola foto dan video galeri</p>
         </div>
         <div class="flex items-center space-x-3">
+            <a href="{{ route('admin.albums.index') }}" 
+               class="inline-flex items-center px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 transition-colors">
+                <i class="fas fa-folder mr-2"></i>Kelola Album
+            </a>
             <a href="{{ route('admin.galeri.create') }}" 
                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
                 <i class="fas fa-plus mr-2"></i>Tambah Media
@@ -155,7 +159,23 @@
                     </div>
                     <div class="p-4">
                         <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ $galeri->judul }}</h3>
-                        <p class="text-sm text-gray-600 mb-3">{{ Str::limit($galeri->deskripsi, 100) }}</p>
+                        <p class="text-sm text-gray-600 mb-2">{{ Str::limit($galeri->deskripsi, 80) }}</p>
+                        
+                        <!-- Album Badge -->
+                        @if($galeri->album)
+                        <div class="mb-3">
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md bg-purple-100 text-purple-800">
+                                <i class="fas fa-folder mr-1"></i>{{ $galeri->album->nama_album }}
+                            </span>
+                        </div>
+                        @else
+                        <div class="mb-3">
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-md bg-gray-100 text-gray-600">
+                                <i class="fas fa-folder-open mr-1"></i>Tanpa Album
+                            </span>
+                        </div>
+                        @endif
+                        
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-gray-500">{{ $galeri->created_at->format('d M Y') }}</span>
                             <div class="flex space-x-2">

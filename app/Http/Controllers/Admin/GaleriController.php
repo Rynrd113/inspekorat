@@ -145,7 +145,8 @@ class GaleriController extends Controller
     public function edit($id)
     {
         $galeri = \App\Models\Galeri::findOrFail($id);
-        return view('admin.galeri.edit', compact('galeri'));
+        $albums = \App\Models\Album::orderBy('nama_album', 'asc')->get();
+        return view('admin.galeri.edit', compact('galeri', 'albums'));
     }
 
     /**
@@ -158,6 +159,7 @@ class GaleriController extends Controller
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'kategori' => 'required|string|max:255',
+            'album_id' => 'nullable|exists:albums,id',
             'tanggal_publikasi' => 'required|date',
             'file_galeri' => 'nullable|file|max:20480|mimes:jpeg,png,jpg,gif,mp4,avi,mov',
             'thumbnail' => 'nullable|file|max:5120|mimes:jpeg,png,jpg,gif',
