@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Storage;
 class GaleriController extends Controller
 {
     /**
+     * Get the storage disk to use based on environment
+     */
+    protected function getStorageDisk()
+    {
+        // Use public_root disk in production if document root is not in 'public' folder
+        return env('STORAGE_DISK', 'public');
+    }
+
+    /**
      * Display a listing of gallery items
      */
     public function index(Request $request)
@@ -87,7 +96,7 @@ class GaleriController extends Controller
         if ($request->hasFile('file_galeri')) {
             $file = $request->file('file_galeri');
             $folder = 'galeri';
-            $filePath = $file->store($folder, 'public');
+            $filePath = $file->store($folder, $this->getStorageDisk());
             
             $validated['file_path'] = $filePath;
             $validated['file_name'] = $file->getClientOriginalName();
@@ -107,7 +116,7 @@ class GaleriController extends Controller
         // Handle custom thumbnail upload (overrides auto-generated thumbnail)
         if ($request->hasFile('thumbnail')) {
             $thumbnailFile = $request->file('thumbnail');
-            $thumbnailPath = $thumbnailFile->store('galeri/thumbnails', 'public');
+            $thumbnailPath = $thumbnailFile->store('galeri/thumbnails', $this->getStorageDisk());
             $validated['thumbnail'] = $thumbnailPath;
         }
 
@@ -164,7 +173,7 @@ class GaleriController extends Controller
             
             $file = $request->file('file_galeri');
             $folder = 'galeri';
-            $filePath = $file->store($folder, 'public');
+            $filePath = $file->store($folder, $this->getStorageDisk());
             
             $validated['file_path'] = $filePath;
             $validated['file_name'] = $file->getClientOriginalName();
@@ -185,11 +194,11 @@ class GaleriController extends Controller
         if ($request->hasFile('thumbnail')) {
             // Delete old thumbnail if exists and it's different from main file
             if ($galeri->thumbnail && $galeri->thumbnail !== $galeri->file_path) {
-                \Storage::disk('public')->delete($galeri->thumbnail);
+                \Storage::disk($this->getStorageDisk())->delete($galeri->thumbnail);
             }
             
             $thumbnailFile = $request->file('thumbnail');
-            $thumbnailPath = $thumbnailFile->store('galeri/thumbnails', 'public');
+            $thumbnailPath = $thumbnailFile->store('galeri/thumbnails', $this->getStorageDisk());
             $validated['thumbnail'] = $thumbnailPath;
         }
 
