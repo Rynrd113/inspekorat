@@ -104,9 +104,12 @@
         <div>
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Foto</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                @foreach($photos as $index => $photo)
+                @foreach($photos as $photo)
+                @php
+                    $photoIndex = $loop->index;
+                @endphp
                 <div class="group relative aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
-                     onclick="openLightbox({{ $index }})">
+                     onclick="openLightbox({{ $photoIndex }})">
                     <img src="{{ asset('storage/' . $photo->file_path) }}" 
                          alt="{{ $photo->judul }}" 
                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
@@ -158,7 +161,8 @@
     </button>
 
     <div class="max-w-5xl max-h-screen p-4">
-        <img id="lightbox-image" src="" alt="" class="max-w-full max-h-screen object-contain">
+        <img id="lightbox-image" src="" alt="" class="max-w-full max-h-screen object-contain"
+             onerror="this.onerror=null; this.src='{{ asset('images/image-not-found.jpg') }}';">
         <div class="text-center mt-4">
             <h3 id="lightbox-title" class="text-white text-xl font-semibold"></h3>
             <p id="lightbox-date" class="text-gray-300 text-sm mt-2"></p>
