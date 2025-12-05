@@ -39,9 +39,10 @@ class PublicController extends Controller
                 ->get();
         });
 
-        // Get latest gallery items (photos only)
+        // Get latest gallery items (photos only) - ensure album_id exists
         $latestGallery = Cache::remember('public_latest_gallery', 600, function () {
             return Galeri::where('status', true)
+                ->whereNotNull('album_id')
                 ->whereIn('file_type', ['jpg', 'jpeg', 'png', 'gif', 'webp'])
                 ->orderBy('tanggal_publikasi', 'desc')
                 ->orderBy('created_at', 'desc')
