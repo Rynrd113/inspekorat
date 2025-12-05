@@ -115,7 +115,7 @@
                     <div class="relative">
                         @if($galeri->file_path && Storage::disk('public')->exists($galeri->file_path))
                             @if($galeri->is_image)
-                                <img src="{{ asset('uploads/' . $galeri->file_path) }}" class="w-full h-48 object-cover" alt="{{ $galeri->judul }}">
+                                <img src="{{ asset('storage/' . $galeri->file_path) }}" class="w-full h-48 object-cover" alt="{{ $galeri->judul }}">
                                 <div class="absolute bottom-2 left-2">
                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                                         <i class="fas fa-image mr-1"></i>Foto
