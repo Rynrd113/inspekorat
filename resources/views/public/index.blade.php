@@ -372,7 +372,7 @@
                             <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                                 <div class="relative h-64 bg-gray-200 overflow-hidden">
                                     @if($item->file_path)
-                                        <img src="{{ asset('uploads/' . $item->file_path) }}" 
+                                        <img src="{{ asset('storage/' . $item->file_path) }}" 
                                              alt="{{ $item->judul }}" 
                                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                              loading="lazy"
