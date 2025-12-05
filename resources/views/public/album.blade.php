@@ -112,15 +112,15 @@
                      data-photo-index="{{ $photoIndex }}">
                     <img src="{{ asset('storage/' . $photo->file_path) }}" 
                          alt="{{ $photo->judul }}" 
-                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 pointer-events-none">
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                     
                     <!-- Overlay on Hover -->
-                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center pointer-events-none">
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
                         <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity"></i>
                     </div>
 
                     <!-- Photo Title -->
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity">
                         <p class="text-white text-sm font-medium truncate">{{ $photo->judul }}</p>
                     </div>
                 </div>
