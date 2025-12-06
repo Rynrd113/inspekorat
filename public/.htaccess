@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # Redirect dari domain lama ke domain baru
+    RewriteCond %{HTTP_HOST} ^(www\.)?inspektoratpapuatengahprov\.id$ [NC]
+    RewriteRule ^(.*)$ https://inspektorat.papuatengahprov.go.id/$1 [R=301,L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
