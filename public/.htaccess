@@ -5,8 +5,13 @@
 
     RewriteEngine On
 
-    # Redirect dari domain lama ke domain baru
+    # Redirect dari domain lama ke domain baru (dengan HTTPS)
     RewriteCond %{HTTP_HOST} ^(www\.)?inspektoratpapuatengahprov\.id$ [NC]
+    RewriteRule ^(.*)$ https://inspektorat.papuatengahprov.go.id/$1 [R=301,L]
+
+    # Force HTTPS untuk domain .go.id
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP_HOST} ^(www\.)?inspektorat\.papuatengahprov\.go\.id$ [NC]
     RewriteRule ^(.*)$ https://inspektorat.papuatengahprov.go.id/$1 [R=301,L]
 
     # Handle Authorization Header
