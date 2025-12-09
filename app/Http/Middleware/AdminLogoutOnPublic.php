@@ -18,8 +18,19 @@ class AdminLogoutOnPublic
      */
     public function handle(Request $request, Closure $next)
     {
+        // Kecualikan route tertentu dari auto-logout
+        $excludedRoutes = [
+            'pengaduan',
+            'wbs',
+            'api/*'
+        ];
+        
         // Jika user sedang login dan mengakses halaman public (bukan admin)
-        if (Auth::check() && !$request->is('admin/*') && !$request->is('api/*')) {
+        // KECUALI route yang dikecualikan
+        if (Auth::check() && 
+            !$request->is('admin/*') && 
+            !$request->is($excludedRoutes)) {
+            
             $user = Auth::user();
             
             // Log automatic logout
@@ -27,7 +38,7 @@ class AdminLogoutOnPublic
                 try {
                     AuditLog::log('auto_logout_on_public', $user, null, [
                         'reason' => 'User accessed public page while logged in as admin',
-                        'url' => $request->fullUrl()
+                        'url' => substr($request->url(), 0, 255) // Limit URL length
                     ]);
                 } catch (\Exception $e) {
                     // Log error but don't break the process
