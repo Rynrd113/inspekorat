@@ -1,10 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Pengaduan Masyarakat - Portal Inspektorat Papua Tengah')
-@section('description', 'Sampaikan pengaduan, kritik, dan saran kepada Inspektorat                         <div class="flex items-start">
-                            <i class="fas fa-envelope text-gray-400 mt-0.5 mr-3"></i>
-                            <span class="text-gray-600">inspektorat@papuatengah.go.id</span>
-                        </div>insi Papua Tengah secara online.')
+@section('description', 'Sampaikan pengaduan, kritik, dan saran kepada Inspektorat Provinsi Papua Tengah secara online.')
 
 @section('content')
 
@@ -66,7 +63,7 @@
                         <p class="text-sm text-gray-600 mt-1">Isi formulir di bawah dengan lengkap dan jelas</p>
                     </x-slot:header>
 
-                    <form id="pengaduan-form" class="space-y-6">
+                    <form id="pengaduan-form" action="{{ route('public.pengaduan.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                         @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <x-input 
