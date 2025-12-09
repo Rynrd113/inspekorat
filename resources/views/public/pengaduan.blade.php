@@ -104,6 +104,21 @@
                                 id="subjek"
                             />
                         </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Kategori Pengaduan <span class="text-red-500">*</span>
+                            </label>
+                            <select name="kategori" id="kategori" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                <option value="">Pilih Kategori</option>
+                                <option value="pelayanan">Pelayanan Publik</option>
+                                <option value="keuangan">Keuangan Daerah</option>
+                                <option value="kepegawaian">Kepegawaian</option>
+                                <option value="pengadaan">Pengadaan Barang/Jasa</option>
+                                <option value="gratifikasi">Gratifikasi</option>
+                                <option value="lainnya">Lainnya</option>
+                            </select>
+                        </div>
                         
                         <x-input 
                             type="textarea" 
@@ -123,13 +138,14 @@
                                 <div class="space-y-1 text-center">
                                     <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-3"></i>
                                     <div class="flex text-sm text-gray-600">
-                                        <label for="attachment" class="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
+                                        <label for="bukti_files" class="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
                                             <span>Upload file</span>
-                                            <input id="attachment" name="attachment" type="file" class="sr-only" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
+                                            <input id="bukti_files" name="bukti_files[]" type="file" class="sr-only" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" multiple>
                                         </label>
                                         <p class="pl-1">atau drag and drop</p>
                                     </div>
-                                    <p class="text-xs text-gray-500">PNG, JPG, PDF, DOC hingga 5MB</p>
+                                    <p class="text-xs text-gray-500">PNG, JPG, PDF, DOC hingga 5MB (bisa pilih lebih dari 1 file)</p>
+                                    <div id="file-list" class="mt-2 text-left"></div>
                                 </div>
                             </div>
                         </div>
@@ -311,14 +327,30 @@ function resetForm() {
 }
 
 // File upload handler
-document.getElementById('attachment').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const fileSize = file.size / 1024 / 1024; // MB
-        if (fileSize > 5) {
-            showAlert('error', 'Ukuran file tidak boleh lebih dari 5MB');
-            this.value = '';
-        }
+document.getElementById('bukti_files').addEventListener('change', function(e) {
+    const files = e.target.files;
+    const fileList = document.getElementById('file-list');
+    fileList.innerHTML = '';
+    
+    if (files.length > 0) {
+        const ul = document.createElement('ul');
+        ul.className = 'text-xs space-y-1';
+        
+        Array.from(files).forEach((file, index) => {
+            const fileSize = file.size / 1024 / 1024; // MB
+            if (fileSize > 5) {
+                showAlert('error', `File "${file.name}" terlalu besar. Maksimal 5MB`);
+                this.value = '';
+                return;
+            }
+            
+            const li = document.createElement('li');
+            li.className = 'text-gray-600 flex items-center';
+            li.innerHTML = `<i class="fas fa-file text-green-500 mr-2"></i>${file.name} (${fileSize.toFixed(2)} MB)`;
+            ul.appendChild(li);
+        });
+        
+        fileList.appendChild(ul);
     }
 });
 </script>
