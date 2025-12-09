@@ -608,47 +608,84 @@ startxref
      */
     public function storePengaduan(Request $request)
     {
-        $validated = $request->validate([
-            'nama_pengadu' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'telepon' => 'nullable|string|max:20',
-            'subjek' => 'required|string|max:255',
-            'isi_pengaduan' => 'required|string',
-            'kategori' => 'required|string',
-            'is_anonymous' => 'boolean',
-            'bukti_files' => 'nullable|array',
-            'bukti_files.*' => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120'
-        ]);
-
-        // Handle anonymous submissions
-        if ($validated['is_anonymous'] ?? false) {
-            $validated['nama_pengadu'] = 'Anonim';
-            $validated['email'] = 'anonim@system.local';
-        }
-
-        // Handle file uploads
-        if ($request->hasFile('bukti_files')) {
-            $filePaths = [];
-            foreach ($request->file('bukti_files') as $file) {
-                $filePaths[] = $file->store('pengaduan-bukti', 'public');
-            }
-            $validated['bukti_files'] = $filePaths;
-        }
-
-        $validated['status'] = 'pending';
-        $validated['tanggal_pengaduan'] = now();
-
-        Pengaduan::create($validated);
-
-        // Check if AJAX request
-        if ($request->expectsJson() || $request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.'
+        try {
+            $validated = $request->validate([
+                'nama_pengadu' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'telepon' => 'nullable|string|max:20',
+                'subjek' => 'required|string|max:255',
+                'isi_pengaduan' => 'required|string',
+                'kategori' => 'required|string',
+                'is_anonymous' => 'nullable|boolean',
+                'bukti_files' => 'nullable|array',
+                'bukti_files.*' => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120'
             ]);
-        }
 
-        return redirect()->route('public.pengaduan')->with('success', 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.');
+            // Handle anonymous submissions
+            if ($request->has('is_anonymous') && $request->input('is_anonymous')) {
+                $validated['nama_pengadu'] = 'Anonim';
+                $validated['email'] = 'anonim@system.local';
+                $validated['is_anonymous'] = true;
+            } else {
+                $validated['is_anonymous'] = false;
+            }
+
+            // Handle file uploads
+            $filePaths = [];
+            if ($request->hasFile('bukti_files')) {
+                foreach ($request->file('bukti_files') as $file) {
+                    $path = $file->store('pengaduan-bukti', 'public');
+                    $filePaths[] = $path;
+                }
+            }
+            $validated['bukti_files'] = !empty($filePaths) ? $filePaths : null;
+
+            $validated['status'] = 'pending';
+            $validated['tanggal_pengaduan'] = now();
+
+            $pengaduan = Pengaduan::create($validated);
+
+            \Log::info('Pengaduan created successfully', ['id' => $pengaduan->id, 'subjek' => $pengaduan->subjek]);
+
+            // Check if AJAX request
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.',
+                    'data' => ['id' => $pengaduan->id]
+                ]);
+            }
+
+            return redirect()->route('public.pengaduan')->with('success', 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation error in storePengaduan', ['errors' => $e->errors()]);
+            
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal. Periksa kembali data Anda.',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+            
+            return back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Error in storePengaduan', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan server. Silakan coba lagi.',
+                    'error' => config('app.debug') ? $e->getMessage() : null
+                ], 500);
+            }
+            
+            return back()->with('error', 'Terjadi kesalahan. Silakan coba lagi.')->withInput();
+        }
     }
 
     /**

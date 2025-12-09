@@ -270,18 +270,36 @@ document.getElementById('pengaduan-form').addEventListener('submit', async funct
             body: formData
         });
         
-        const result = await response.json();
+        let result;
+        const contentType = response.headers.get('content-type');
         
-        if (response.ok || result.success) {
+        if (contentType && contentType.includes('application/json')) {
+            result = await response.json();
+        } else {
+            const text = await response.text();
+            console.error('Response is not JSON:', text);
+            throw new Error('Server error. Response: ' + text.substring(0, 100));
+        }
+        
+        if (response.ok && result.success) {
             // Success
-            showAlert('success', 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.');
+            showAlert('success', result.message || 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.');
             this.reset();
+            document.getElementById('file-list').innerHTML = '';
         } else {
             // Error with validation
-            const errorMsg = result.message || Object.values(result.errors || {}).flat().join(', ') || 'Terjadi kesalahan saat mengirim pengaduan';
+            let errorMsg = result.message || 'Terjadi kesalahan saat mengirim pengaduan';
+            
+            // Handle validation errors
+            if (result.errors) {
+                const errors = Object.values(result.errors).flat();
+                errorMsg = errors.join('<br>');
+            }
+            
             throw new Error(errorMsg);
         }
     } catch (error) {
+        console.error('Error:', error);
         showAlert('error', error.message);
     } finally {
         // Re-enable button
@@ -312,13 +330,17 @@ function showAlert(type, message) {
         </div>
     `;
     
-    // Insert alert at the top of main content
-    const mainContent = document.querySelector('.max-w-4xl');
-    const firstChild = mainContent.children[1]; // After header section
-    firstChild.insertAdjacentHTML('beforebegin', alertHtml);
+    // Remove existing alerts
+    const existingAlerts = document.querySelectorAll('.rounded-lg.border.p-4.mb-8');
+    existingAlerts.forEach(alert => alert.remove());
     
-    // Scroll to top to show alert
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Insert alert at the top of form container
+    const formCard = document.getElementById('pengaduan-form').closest('.lg\\:col-span-2');
+    formCard.insertAdjacentHTML('beforebegin', alertHtml);
+    
+    // Scroll to alert
+    const alert = formCard.previousElementSibling;
+    alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 // Reset form function
