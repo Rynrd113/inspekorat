@@ -82,7 +82,7 @@ class PortalOpdSeeder extends Seeder
             [
                 'nama_opd' => 'Inspektorat Papua Tengah',
                 'singkatan' => 'INSPEKTORAT',
-                'alamat' => 'Jl. Trikora No. 45 Nabire, Papua Tengah',
+                'alamat' => 'JGG4+65R, Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811',
                 'telepon' => '(0984) 21567',
                 'email' => 'inspektorat@papuatengah.go.id',
                 'website' => 'https://inspektorat.papuatengah.go.id',

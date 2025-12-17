@@ -20,7 +20,7 @@ class InfoKantorSeeder extends Seeder
         $infoKantorData = [
             [
                 'nama' => 'Inspektorat Daerah Provinsi Papua Tengah',
-                'alamat' => 'Jl. Trikora No. 45, Nabire, Papua Tengah 98816',
+                'alamat' => 'JGG4+65R, Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811',
                 'telepon' => '(0984) 21567',
                 'email' => 'inspektorat@papuatengah.go.id',
                 'website' => 'https://inspektorat.papuatengah.go.id',

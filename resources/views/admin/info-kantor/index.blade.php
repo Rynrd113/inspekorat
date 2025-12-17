@@ -52,7 +52,7 @@
                     <i class="fas fa-map-marker-alt text-gray-400 mt-1"></i>
                     <div>
                         <h3 class="font-medium text-gray-900">Alamat</h3>
-                        <p class="text-gray-600">{{ $info->alamat ?? 'Jl. Contoh No. 123, Nabire, Papua Tengah' }}</p>
+                        <p class="text-gray-600">{{ $info->alamat ?? 'JGG4+65R, Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811' }}</p>
                     </div>
                 </div>
                 

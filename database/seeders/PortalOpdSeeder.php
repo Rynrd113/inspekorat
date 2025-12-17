@@ -197,7 +197,7 @@ class PortalOpdSeeder extends Seeder
                 'nama_opd' => 'Inspektorat Daerah',
                 'singkatan' => 'INSPEKTORAT',
                 'deskripsi' => 'Inspektorat Daerah Papua Tengah adalah unsur pengawas penyelenggaraan pemerintahan daerah.',
-                'alamat' => 'Jl. Pengawasan No. 55, Nabire, Papua Tengah',
+                'alamat' => 'JGG4+65R, Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811',
                 'telepon' => '0984-21055',
                 'email' => 'inspektorat@papuatengah.go.id',
                 'website' => 'https://inspektorat.papuatengah.go.id',

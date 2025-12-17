@@ -61,7 +61,7 @@ class PublicController extends Controller
         // Info kantor statis
         $infoKantor = new \stdClass();
         $infoKantor->nama = 'Inspektorat Provinsi Papua Tengah';
-        $infoKantor->alamat = 'Jl. Raya Nabire No. 123, Nabire, Papua Tengah';
+        $infoKantor->alamat = 'JGG4+65R, Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811';
         $infoKantor->telepon = '(0984) 21234';
         $infoKantor->email = 'inspektorat@papuatengah.go.id';
         $infoKantor->jam_operasional = 'Senin - Jumat: 08:00 - 16:00 WIT';
@@ -568,7 +568,7 @@ startxref
     {
         $kontak = (object)[
             'nama' => 'Inspektorat Provinsi Papua Tengah',
-            'alamat' => 'Jl. Raya Nabire No. 123, Nabire, Papua Tengah',
+            'alamat' => 'JGG4+65R, Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811',
             'telepon' => '(0984) 21234',
             'email' => 'inspektorat@papuatengah.go.id',
             'jam_operasional' => 'Senin - Jumat: 08:00 - 16:00 WIT'

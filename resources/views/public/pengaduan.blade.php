@@ -207,7 +207,7 @@
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-map-marker-alt text-gray-400 mt-0.5 mr-3"></i>
-                            <span class="text-gray-600">Jl. Trans Papua, Merauke, Papua Tengah 99611</span>
+                            <span class="text-gray-600">JGG4+65R, Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811</span>
                         </div>
                     </div>
                 </x-card>
