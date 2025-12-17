@@ -26,8 +26,8 @@ class InfoKantorSeeder extends Seeder
                 'website' => 'https://inspektorat.papuatengah.go.id',
                 'deskripsi' => 'Inspektorat Daerah Provinsi Papua Tengah adalah unsur pengawas yang bertugas menyelenggarakan pengawasan internal di lingkungan Pemerintah Provinsi Papua Tengah.',
                 'jam_operasional' => 'Senin - Jumat: 08:00 - 16:00 WIT',
-                'latitude' => -3.3667,
-                'longitude' => 135.4833,
+                'latitude' => -3.3744146,
+                'longitude' => 135.5052575,
                 'status' => true,
             ],
             [

@@ -65,7 +65,7 @@ class PublicController extends Controller
         $infoKantor->telepon = '(0984) 21234';
         $infoKantor->email = 'inspektorat@papuatengah.go.id';
         $infoKantor->jam_operasional = 'Senin - Jumat: 08:00 - 16:00 WIT';
-        $infoKantor->koordinat = '-3.3683, 135.4956'; // Koordinat Nabire
+        $infoKantor->koordinat = '-3.3744146, 135.5052575'; // Koordinat Inspektorat Papua Tengah
         $infoKantor->website = 'https://inspektorat.papuatengah.go.id';
         $infoKantor->fax = '(0984) 21235';
 
