@@ -97,10 +97,8 @@
 @section('content')
 <div class="min-h-screen bg-white">
 
-    <!-- Hero Slider Section -->
-    <section id="beranda" class="relative overflow-hidden">
-        <div class="hero-slider relative h-[60vh] min-h-[500px] sm:h-[70vh] sm:min-h-[600px] lg:h-[85vh] max-h-[800px] w-full">
-            <!-- Slide 1 -->
+    <!-- Hero Slider Section - Dynamic from Database -->
+    <x-hero-slider :heroSliders="$heroSliders" />
             <div class="slide absolute inset-0 w-full h-full active">
                 <div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800"></div>
                 <div class="absolute inset-0 bg-black/10"></div>
