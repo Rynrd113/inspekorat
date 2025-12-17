@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\WbsController;
 use App\Http\Controllers\Api\PortalPapuaTengahController;
 use App\Http\Controllers\Api\WebPortalController;
 use App\Http\Controllers\Api\PengaduanController;
+use App\Http\Controllers\Api\HeroSliderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,9 +46,20 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         'update' => 'api.admin.pengaduan.update',
         'destroy' => 'api.admin.pengaduan.destroy'
     ]);
+    
+    // Hero Slider API routes
+    Route::apiResource('hero-sliders', HeroSliderController::class)->names([
+        'index' => 'api.admin.hero-sliders.index',
+        'store' => 'api.admin.hero-sliders.store',
+        'show' => 'api.admin.hero-sliders.show',
+        'update' => 'api.admin.hero-sliders.update',
+        'destroy' => 'api.admin.hero-sliders.destroy'
+    ]);
+    Route::post('hero-sliders/{heroSlider}/view', [HeroSliderController::class, 'incrementView'])->name('api.admin.hero-sliders.view');
 });
 
 // Public API Routes (accessible without authentication)
+Route::get('hero-sliders/public', [HeroSliderController::class, 'publicSliders'])->name('api.public.hero-sliders');
 Route::get('portal-papua-tengah/public', [PortalPapuaTengahController::class, 'publicIndex']);
 Route::get('info-kantor/public', [InfoKantorController::class, 'publicIndex']);
 Route::get('web-portal/public', [WebPortalController::class, 'index']);

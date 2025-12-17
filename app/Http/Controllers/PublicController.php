@@ -14,6 +14,7 @@ use App\Models\Galeri;
 use App\Models\Faq;
 use App\Models\WebPortal;
 use App\Models\Pengaduan;
+use App\Models\HeroSlider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -69,7 +70,14 @@ class PublicController extends Controller
         $infoKantor->website = 'https://inspektorat.papuatengah.go.id';
         $infoKantor->fax = '(0984) 21235';
 
-        return view('public.index', compact('portalPapuaTengah', 'latestGallery', 'infoKantor', 'stats'));
+        // Get hero sliders - cache for 1 hour
+        $heroSliders = Cache::remember('hero_sliders_homepage', 3600, function () {
+            return HeroSlider::forHomepage(5)
+                ->select(['id', 'judul', 'subjudul', 'deskripsi', 'gambar', 'link_url', 'link_text', 'prioritas', 'kategori'])
+                ->get();
+        });
+
+        return view('public.index', compact('portalPapuaTengah', 'latestGallery', 'infoKantor', 'stats', 'heroSliders'));
     }
 
     /**

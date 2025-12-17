@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\SystemConfigurationController as AdminSystemConfi
 use App\Http\Controllers\Admin\ContentApprovalController as AdminContentApprovalController;
 use App\Http\Controllers\Admin\PengaduanController as AdminPengaduanController;
 use App\Http\Controllers\Admin\WebPortalController as AdminWebPortalController;
+use App\Http\Controllers\Admin\HeroSliderController as AdminHeroSliderController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\PortalOpdController;
 
@@ -182,6 +183,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::resource('albums', AdminAlbumController::class);
             Route::post('albums/{album}/upload-photos', [AdminAlbumController::class, 'uploadPhotos'])->name('albums.upload-photos');
+        });
+        
+        // Hero Slider routes - accessible by content_admin, admin, super_admin
+        Route::middleware('role:content_admin,admin,super_admin')->group(function () {
+            Route::resource('hero-sliders', AdminHeroSliderController::class)->parameters([
+                'hero-sliders' => 'heroSlider'
+            ]);
         });
         
         // FAQ routes - accessible by content_admin, admin, super_admin

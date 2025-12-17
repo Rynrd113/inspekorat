@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             GaleriSeeder::class,
             FaqSeeder::class,
             PengaduanSeeder::class, // Tambahan seeder pengaduan
+            HeroSliderSeeder::class, // Hero slider homepage
             // Seeders untuk sistem
             SystemConfigurationSeeder::class,
             AuditLogSeeder::class,
