@@ -94,57 +94,7 @@
                     Informasi Kontak
                 </h3>
                 
-                <div class="space-y-4">
-                    <div class="flex items-start space-x-3">
-                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                            <i class="fas fa-map-marker-alt text-blue-600 text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-900">Alamat</p>
-                            <p class="text-gray-600">Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center">
-                            <i class="fab fa-instagram text-pink-600 text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-900">Instagram</p>
-                            <a href="https://www.instagram.com/inspektoratpapuatengah?igsh=MWN6aHpoeGRwNGhydg==" target="_blank" class="text-blue-600 hover:text-blue-800">@inspektoratpapuatengah</a>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-envelope text-red-600 text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-900">Email</p>
-                            <a href="mailto:inspektoratprovpt@gmail.com" class="text-blue-600 hover:text-blue-800">inspektoratprovpt@gmail.com</a>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-globe text-purple-600 text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-900">Website</p>
-                            <a href="https://inspektorat.papuatengahprov.go.id/" target="_blank" class="text-blue-600 hover:text-blue-800">inspektorat.papuatengahprov.go.id</a>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-clock text-yellow-600 text-sm"></i>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-900">Jam Operasional</p>
-                            <p class="text-gray-600">Senin - Jumat: 08:00 - 16:00 WIT</p>
-                        </div>
-                    </div>
-                </div>
+                <x-contact-info variant="list" />
             </div>
 
             <!-- Struktur Organisasi -->
