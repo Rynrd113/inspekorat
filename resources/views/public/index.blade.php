@@ -694,7 +694,7 @@
                         <i class="fas fa-map-marker-alt text-white text-2xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Alamat Kantor</h3>
-                    <div class="text-gray-600 text-lg leading-relaxed">{{ $infoKantor->alamat }}</div>
+                    <div class="text-gray-600 text-lg leading-relaxed">Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811</div>
                 </div>
                 
                 <!-- Instagram -->
@@ -704,7 +704,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Instagram</h3>
                     <div class="text-gray-600 text-lg">
-                        <a href="https://www.instagram.com/inspektoratpapuatengah" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors">
+                        <a href="https://www.instagram.com/inspektoratpapuatengah?igsh=MWN6aHpoeGRwNGhydg==" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors">
                             @inspektoratpapuatengah
                         </a>
                     </div>
@@ -717,8 +717,8 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Email</h3>
                     <div class="text-gray-600 text-lg">
-                        <a href="mailto:{{ $infoKantor->email }}" class="text-blue-600 hover:text-blue-800 transition-colors">
-                            {{ $infoKantor->email }}
+                        <a href="mailto:inspektoratprovpt@gmail.com" class="text-blue-600 hover:text-blue-800 transition-colors">
+                            inspektoratprovpt@gmail.com
                         </a>
                     </div>
                 </div>
@@ -729,7 +729,7 @@
                         <i class="fas fa-clock text-white text-2xl"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Jam Operasional</h3>
-                    <div class="text-gray-600 text-lg leading-relaxed">{{ $infoKantor->jam_operasional }}</div>
+                    <div class="text-gray-600 text-lg leading-relaxed">Senin - Jumat: 08:00 - 16:00 WIT</div>
                 </div>
                 
                 <!-- Website -->
