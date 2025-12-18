@@ -101,17 +101,17 @@
                         </div>
                         <div>
                             <p class="text-sm font-medium text-gray-900">Alamat</p>
-                            <p class="text-gray-600">Jl. Raya Nabire No. 123, Nabire, Papua Tengah</p>
+                            <p class="text-gray-600">Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811</p>
                         </div>
                     </div>
 
                     <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-phone text-green-600 text-sm"></i>
+                        <div class="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center">
+                            <i class="fab fa-instagram text-pink-600 text-sm"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-medium text-gray-900">Telepon</p>
-                            <p class="text-gray-600">(0984) 21234</p>
+                            <p class="text-sm font-medium text-gray-900">Instagram</p>
+                            <a href="https://www.instagram.com/inspektoratpapuatengah?igsh=MWN6aHpoeGRwNGhydg==" target="_blank" class="text-blue-600 hover:text-blue-800">@inspektoratpapuatengah</a>
                         </div>
                     </div>
 
@@ -121,7 +121,7 @@
                         </div>
                         <div>
                             <p class="text-sm font-medium text-gray-900">Email</p>
-                            <p class="text-gray-600">inspektorat@papuatengah.go.id</p>
+                            <a href="mailto:inspektoratprovpt@gmail.com" class="text-blue-600 hover:text-blue-800">inspektoratprovpt@gmail.com</a>
                         </div>
                     </div>
 
@@ -131,7 +131,7 @@
                         </div>
                         <div>
                             <p class="text-sm font-medium text-gray-900">Website</p>
-                            <p class="text-gray-600">https://inspektorat.papuatengah.go.id</p>
+                            <a href="https://inspektorat.papuatengahprov.go.id/" target="_blank" class="text-blue-600 hover:text-blue-800">inspektorat.papuatengahprov.go.id</a>
                         </div>
                     </div>
 
