@@ -697,17 +697,16 @@
                     <div class="text-gray-600 text-lg leading-relaxed">{{ $infoKantor->alamat }}</div>
                 </div>
                 
-                <!-- Telepon -->
+                <!-- Instagram -->
                 <div class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl mb-6">
-                        <i class="fas fa-phone text-white text-2xl"></i>
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl mb-6">
+                        <i class="fab fa-instagram text-white text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-4">Telepon</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Instagram</h3>
                     <div class="text-gray-600 text-lg">
-                        <p>{{ $infoKantor->telepon }}</p>
-                        @if($infoKantor->fax)
-                        <p class="text-sm mt-2">Fax: {{ $infoKantor->fax }}</p>
-                        @endif
+                        <a href="https://www.instagram.com/inspektoratpapuatengah" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors">
+                            @inspektoratpapuatengah
+                        </a>
                     </div>
                 </div>
                 
@@ -740,8 +739,8 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Website</h3>
                     <div class="text-gray-600 text-lg">
-                        <a href="{{ $infoKantor->website }}" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors">
-                            inspektorat.papuatengah.go.id
+                        <a href="https://inspektorat.papuatengahprov.go.id/" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors">
+                            inspektorat.papuatengahprov.go.id
                         </a>
                     </div>
                 </div>
@@ -753,7 +752,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Lokasi</h3>
                     <div class="text-gray-600 text-lg">
-                        <a href="https://www.google.com/maps/search/?api=1&query={{ $infoKantor->koordinat }}" 
+                        <a href="https://maps.app.goo.gl/ha136M9kSrxhZqQd6" 
                            target="_blank" 
                            class="text-blue-600 hover:text-blue-800 transition-colors">
                             <i class="fas fa-external-link-alt mr-2"></i>

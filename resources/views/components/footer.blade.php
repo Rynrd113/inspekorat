@@ -104,7 +104,8 @@
                            class="w-8 h-8 bg-gray-700 hover:bg-blue-400 rounded-full flex items-center justify-center transition-colors">
                             <i class="fab fa-twitter text-sm"></i>
                         </a>
-                        <a href="#" 
+                        <a href="https://www.instagram.com/inspektoratpapuatengah" 
+                           target="_blank"
                            class="w-8 h-8 bg-gray-700 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors">
                             <i class="fab fa-instagram text-sm"></i>
                         </a>
