@@ -3,9 +3,12 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Traits\HasValidationMessages;
 
 class StorePortalPapuaTengahRequest extends FormRequest
 {
+    use HasValidationMessages;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -38,15 +41,12 @@ class StorePortalPapuaTengahRequest extends FormRequest
      */
     public function messages(): array
     {
-        return [
-            'judul.required' => 'Judul berita harus diisi',
-            'konten.required' => 'Konten berita harus diisi',
-            'penulis.required' => 'Penulis harus diisi',
-            'kategori.required' => 'Kategori harus dipilih',
-            'kategori.in' => 'Kategori tidak valid',
-            'thumbnail.image' => 'Thumbnail harus berupa gambar',
-            'thumbnail.mimes' => 'Thumbnail harus berformat jpg, jpeg, png, atau webp',
-            'thumbnail.max' => 'Ukuran thumbnail maksimal 2MB',
-        ];
+        return $this->getAllMessages(
+            ['thumbnail' => ['type' => 'image', 'maxSizeMB' => 2]],
+            [
+                'penulis.required' => 'Penulis harus diisi',
+                'kategori.in' => 'Kategori tidak valid',
+            ]
+        );
     }
 }

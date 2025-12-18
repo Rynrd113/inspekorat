@@ -4,9 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Traits\HasValidationMessages;
 
 class StoreUserRequest extends FormRequest
 {
+    use HasValidationMessages;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -35,16 +38,10 @@ class StoreUserRequest extends FormRequest
      */
     public function messages(): array
     {
-        return [
+        return $this->getCommonMessages([
             'name.required' => 'Nama wajib diisi.',
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email sudah terdaftar.',
-            'password.required' => 'Password wajib diisi.',
-            'password.min' => 'Password minimal 8 karakter.',
-            'password.confirmed' => 'Konfirmasi password tidak cocok.',
             'role.required' => 'Role wajib dipilih.',
             'role.in' => 'Role tidak valid.',
-        ];
+        ]);
     }
 }

@@ -3,9 +3,12 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Traits\HasValidationMessages;
 
 class StorePelayananRequest extends FormRequest
 {
+    use HasValidationMessages;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -38,18 +41,18 @@ class StorePelayananRequest extends FormRequest
      */
     public function messages(): array
     {
-        return [
-            'nama_layanan.required' => 'Nama layanan wajib diisi.',
-            'nama_layanan.max' => 'Nama layanan maksimal 255 karakter.',
-            'deskripsi.required' => 'Deskripsi layanan wajib diisi.',
-            'kategori.required' => 'Kategori layanan wajib dipilih.',
-            'kategori.in' => 'Kategori layanan tidak valid.',
-            'file_formulir.file' => 'File formulir harus berupa file.',
-            'file_formulir.mimes' => 'File formulir harus berformat PDF, DOC, atau DOCX.',
-            'file_formulir.max' => 'Ukuran file formulir maksimal 2MB.',
-            'urutan.integer' => 'Urutan harus berupa angka.',
-            'urutan.min' => 'Urutan minimal 1.',
-        ];
+        return $this->getAllMessages(
+            ['file_formulir' => ['type' => 'document', 'maxSizeMB' => 2, 'formats' => ['pdf', 'doc', 'docx']]],
+            [
+                'nama_layanan.required' => 'Nama layanan wajib diisi.',
+                'nama_layanan.max' => 'Nama layanan maksimal 255 karakter.',
+                'deskripsi.required' => 'Deskripsi layanan wajib diisi.',
+                'kategori.required' => 'Kategori layanan wajib dipilih.',
+                'kategori.in' => 'Kategori layanan tidak valid.',
+                'urutan.integer' => 'Urutan harus berupa angka.',
+                'urutan.min' => 'Urutan minimal 1.',
+            ]
+        );
     }
 
     /**

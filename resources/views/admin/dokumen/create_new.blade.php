@@ -169,27 +169,18 @@
 </div>
 
 @push('scripts')
+<script src="{{ asset('js/file-validator.js') }}"></script>
 <script>
-document.getElementById('file_dokumen').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const fileSize = file.size / 1024 / 1024; // Convert to MB
-        if (fileSize > 10) {
-            alert('Ukuran file terlalu besar. Maksimal 10MB.');
-            e.target.value = '';
-        }
-    }
+// Validate file dokumen (max 10MB)
+FileValidator.attachToInput('#file_dokumen', {
+    maxSizeMB: 10,
+    allowedTypes: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']
 });
 
-document.getElementById('gambar_preview').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const fileSize = file.size / 1024 / 1024; // Convert to MB
-        if (fileSize > 2) {
-            alert('Ukuran gambar terlalu besar. Maksimal 2MB.');
-            e.target.value = '';
-        }
-    }
+// Validate gambar preview (max 2MB)
+FileValidator.attachToInput('#gambar_preview', {
+    maxSizeMB: 2,
+    allowedTypes: ['jpg', 'jpeg', 'png', 'gif', 'webp']
 });
 </script>
 @endpush

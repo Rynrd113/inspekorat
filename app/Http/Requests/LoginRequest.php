@@ -3,9 +3,12 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Traits\HasValidationMessages;
 
 class LoginRequest extends FormRequest
 {
+    use HasValidationMessages;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -32,11 +35,8 @@ class LoginRequest extends FormRequest
      */
     public function messages(): array
     {
-        return [
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'password.required' => 'Password wajib diisi.',
+        return $this->getCommonMessages([
             'password.min' => 'Password minimal 6 karakter.',
-        ];
+        ]);
     }
 }
