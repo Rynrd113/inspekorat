@@ -113,15 +113,15 @@
                             <i class="fas fa-map-marker-alt text-blue-600 mr-3 mt-1"></i>
                             <div>
                                 <h6 class="font-medium text-gray-900 mb-1">Alamat</h6>
-                                <p class="text-gray-600">{{ $kontak->alamat ?? 'JGG4+65R, Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811' }}</p>
+                                <p class="text-gray-600">{{ $kontak->alamat ?? config('contact.alamat') }}</p>
                             </div>
                         </div>
                         
                         <div class="flex items-start">
-                            <i class="fas fa-phone text-blue-600 mr-3 mt-1"></i>
+                            <i class="fab fa-instagram text-pink-600 mr-3 mt-1"></i>
                             <div>
-                                <h6 class="font-medium text-gray-900 mb-1">Telepon</h6>
-                                <p class="text-gray-600">{{ $kontak->telepon ?? '(0984) 21234' }}</p>
+                                <h6 class="font-medium text-gray-900 mb-1">Instagram</h6>
+                                <a href="{{ config('contact.instagram.url') }}" target="_blank" class="text-blue-600 hover:text-blue-800">{{ config('contact.instagram.handle') }}</a>
                             </div>
                         </div>
                         
@@ -129,7 +129,7 @@
                             <i class="fas fa-envelope text-blue-600 mr-3 mt-1"></i>
                             <div>
                                 <h6 class="font-medium text-gray-900 mb-1">Email</h6>
-                                <p class="text-gray-600">{{ $kontak->email ?? 'inspektorat@papuatengah.go.id' }}</p>
+                                <a href="mailto:{{ config('contact.email') }}" class="text-blue-600 hover:text-blue-800">{{ $kontak->email ?? config('contact.email') }}</a>
                             </div>
                         </div>
                         
@@ -137,7 +137,7 @@
                             <i class="fas fa-clock text-blue-600 mr-3 mt-1"></i>
                             <div>
                                 <h6 class="font-medium text-gray-900 mb-1">Jam Operasional</h6>
-                                <p class="text-gray-600">{{ $kontak->jam_operasional ?? 'Senin - Jumat: 08:00 - 16:00 WIT' }}</p>
+                                <p class="text-gray-600">{{ $kontak->jam_operasional ?? config('contact.jam_operasional') }}</p>
                             </div>
                         </div>
                     </div>

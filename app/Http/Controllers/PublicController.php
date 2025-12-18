@@ -59,16 +59,17 @@ class PublicController extends Controller
             'total_views' => $this->getTotalViews(),
         ];
 
-        // Info kantor statis
+        // Info kantor dari config
+        $contact = config('contact');
         $infoKantor = new \stdClass();
         $infoKantor->nama = 'Inspektorat Provinsi Papua Tengah';
-        $infoKantor->alamat = 'JGG4+65R, Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811';
-        $infoKantor->telepon = '(0984) 21234';
-        $infoKantor->email = 'inspektorat@papuatengah.go.id';
-        $infoKantor->jam_operasional = 'Senin - Jumat: 08:00 - 16:00 WIT';
-        $infoKantor->koordinat = '-3.3744146, 135.5052575'; // Koordinat Inspektorat Papua Tengah
-        $infoKantor->website = 'https://inspektorat.papuatengah.go.id';
-        $infoKantor->fax = '(0984) 21235';
+        $infoKantor->alamat = $contact['alamat'];
+        $infoKantor->instagram = $contact['instagram'];
+        $infoKantor->email = $contact['email'];
+        $infoKantor->jam_operasional = $contact['jam_operasional'];
+        $infoKantor->koordinat = '-3.3744146, 135.5052575';
+        $infoKantor->website = $contact['website']['url'];
+        $infoKantor->lokasi = $contact['lokasi'];
 
         // Get hero sliders - cache for 1 hour
         $heroSliders = Cache::remember('hero_sliders_homepage', 3600, function () {
@@ -576,10 +577,12 @@ startxref
     {
         $kontak = (object)[
             'nama' => 'Inspektorat Provinsi Papua Tengah',
-            'alamat' => 'JGG4+65R, Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811',
-            'telepon' => '(0984) 21234',
-            'email' => 'inspektorat@papuatengah.go.id',
-            'jam_operasional' => 'Senin - Jumat: 08:00 - 16:00 WIT'
+            'alamat' => config('contact.alamat'),
+            'instagram' => config('contact.instagram'),
+            'email' => config('contact.email'),
+            'jam_operasional' => config('contact.jam_operasional'),
+            'website' => config('contact.website'),
+            'lokasi' => config('contact.lokasi')
         ];
 
         return view('public.kontak', compact('kontak'));

@@ -156,7 +156,7 @@
                                 <i class="fas fa-clock text-blue-600"></i>
                             </div>
                             <h4 class="font-medium text-gray-900 mb-1">Jam Layanan</h4>
-                            <p class="text-sm text-gray-600">Senin - Jumat<br>08:00 - 16:00 WIT</p>
+                            <p class="text-sm text-gray-600">{{ config('contact.jam_operasional') }}</p>
                         </div>
                     </div>
                 </div>
