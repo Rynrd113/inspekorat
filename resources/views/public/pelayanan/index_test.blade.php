@@ -204,13 +204,8 @@
                 let visibleCount = 0;
                 serviceCards.forEach(function(card) {
                     const cardCategory = card.getAttribute('data-category');
-                    console.log('Comparing:', category, 'with', cardCategory);
                     
-                    // Case-insensitive comparison
-                    const categoryLower = category.toLowerCase();
-                    const cardCategoryLower = cardCategory ? cardCategory.toLowerCase() : '';
-                    
-                    if (category === 'all' || categoryLower === cardCategoryLower) {
+                    if (category === 'all' || cardCategory === category) {
                         visibleCount++;
                         card.style.display = 'block';
                         setTimeout(function() {
