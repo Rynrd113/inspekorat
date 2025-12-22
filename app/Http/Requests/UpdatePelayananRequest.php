@@ -50,8 +50,9 @@ class UpdatePelayananRequest extends FormRequest
                 'kategori.required' => 'Kategori layanan wajib dipilih.',
                 'kategori.in' => 'Kategori layanan tidak valid.',
                 'urutan.integer' => 'Urutan harus berupa angka.',
-            'urutan.min' => 'Urutan minimal 1.',
-        ];
+                'urutan.min' => 'Urutan minimal 1.',
+            ]
+        );
     }
 
     /**
