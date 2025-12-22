@@ -21,12 +21,12 @@ class PengaduanController extends Controller
         $query = Pengaduan::query();
 
         // Filter by status
-        if ($request->has('status')) {
+        if ($request->has('status') && $request->status != '') {
             $query->byStatus($request->status);
         }
 
         // Search
-        if ($request->has('search')) {
+        if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('nama_pengadu', 'like', "%{$search}%")
@@ -39,7 +39,13 @@ class PengaduanController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => PengaduanResource::collection($pengaduans)->response()->getData()
+            'data' => PengaduanResource::collection($pengaduans),
+            'meta' => [
+                'current_page' => $pengaduans->currentPage(),
+                'last_page' => $pengaduans->lastPage(),
+                'per_page' => $pengaduans->perPage(),
+                'total' => $pengaduans->total(),
+            ]
         ]);
     }
 

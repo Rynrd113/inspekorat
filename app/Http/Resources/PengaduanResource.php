@@ -21,13 +21,16 @@ class PengaduanResource extends JsonResource
             'telepon' => $this->telepon,
             'subjek' => $this->subjek,
             'isi_pengaduan' => $this->isi_pengaduan,
+            'kategori' => $this->kategori,
             'status' => $this->status,
-            'status_badge' => $this->status_badge,
             'tanggapan' => $this->tanggapan,
             'attachment' => $this->attachment,
-            'created_at' => $this->created_at?->format('d/m/Y H:i'),
-            'updated_at' => $this->updated_at?->format('d/m/Y H:i'),
-            'created_at_human' => $this->created_at?->diffForHumans(),
+            'bukti_files' => $this->bukti_files,
+            'is_anonymous' => $this->is_anonymous,
+            'created_at' => $this->created_at ? $this->created_at->toISOString() : null,
+            'updated_at' => $this->updated_at ? $this->updated_at->toISOString() : null,
+            'tanggal_pengaduan' => $this->tanggal_pengaduan ? $this->tanggal_pengaduan->format('Y-m-d H:i:s') : null,
+            'created_at_human' => $this->created_at ? $this->created_at->diffForHumans() : null,
         ];
     }
 }
