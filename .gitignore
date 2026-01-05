@@ -31,7 +31,7 @@ cookies.txt
 getMessage
 email
 role
-admin
+# admin
 *.tmp
 *.temp
 
