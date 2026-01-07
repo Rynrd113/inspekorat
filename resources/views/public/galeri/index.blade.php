@@ -51,8 +51,7 @@
                         <div class="gallery-item group" 
                              data-type="{{ $galeri->file_type ?? 'jpg' }}">
                             
-                            <a href="{{ in_array($galeri->file_type, ['jpg', 'jpeg', 'png', 'gif']) ? asset('uploads/' . $galeri->file_path) : '#' }}" 
-                               target="_blank" 
+                            <a href="{{ route('public.galeri.show', $galeri->id) }}" 
                                class="block bg-white rounded-xl shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 overflow-hidden">
                                 <!-- Image/Video Thumbnail -->
                                 <div class="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200">
