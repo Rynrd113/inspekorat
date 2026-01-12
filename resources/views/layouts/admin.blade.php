@@ -201,45 +201,47 @@
 <!-- Additional Scripts -->
 @push('scripts')
 <script>
-// Store admin token in localStorage for API calls
-@if(session('admin_token'))
-    localStorage.setItem('admin_token', '{{ session('admin_token') }}');
-    @if(config('app.debug'))
-        console.log('Admin token stored successfully');
-    @endif
-@endif
-
-// Check if token exists on page load
-document.addEventListener('DOMContentLoaded', function() {
-    const existingToken = localStorage.getItem('admin_token');
+(function() {
+    // Store admin token in localStorage for API calls
+    var adminToken = '{{ session('admin_token', '') }}';
+    var isDebug = {{ config('app.debug') ? 'true' : 'false' }};
     
-    if (!existingToken) {
-        // Try to get token from session if not in localStorage
-        @if(session('admin_token'))
-            localStorage.setItem('admin_token', '{{ session('admin_token') }}');
-            @if(config('app.debug'))
-                console.log('Token set from session');
-            @endif
-        @endif
-    }
-    
-    // Only log in debug mode
-    @if(config('app.debug'))
-        const currentToken = localStorage.getItem('admin_token');
-        if (currentToken) {
-            console.log('Admin token loaded successfully');
-        } else {
-            console.warn('No admin token found');
+    if (adminToken) {
+        localStorage.setItem('admin_token', adminToken);
+        if (isDebug) {
+            console.log('Admin token stored successfully');
         }
-    @endif
-});
+    }
 
-// Clear admin token on logout
-function clearAdminToken() {
-    localStorage.removeItem('admin_token');
-    @if(config('app.debug'))
-        console.log('Admin token cleared');
-    @endif
-}
+    // Check if token exists on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        var existingToken = localStorage.getItem('admin_token');
+        
+        if (!existingToken && adminToken) {
+            localStorage.setItem('admin_token', adminToken);
+            if (isDebug) {
+                console.log('Token set from session');
+            }
+        }
+        
+        // Only log in debug mode
+        if (isDebug) {
+            var currentToken = localStorage.getItem('admin_token');
+            if (currentToken) {
+                console.log('Admin token loaded successfully');
+            } else {
+                console.warn('No admin token found');
+            }
+        }
+    });
+
+    // Clear admin token on logout - expose globally
+    window.clearAdminToken = function() {
+        localStorage.removeItem('admin_token');
+        if (isDebug) {
+            console.log('Admin token cleared');
+        }
+    };
+})();
 </script>
 @endpush
