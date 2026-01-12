@@ -201,20 +201,26 @@
 
 @push('scripts')
 <script>
-document.getElementById('cover_image').addEventListener('change', function(e) {
-    const file = e.target.files[0];
+document.addEventListener('DOMContentLoaded', function() {
+    const coverInput = document.getElementById('cover_image');
     const preview = document.getElementById('image-preview');
     const previewImg = document.getElementById('preview-img');
     
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            previewImg.src = e.target.result;
-            preview.classList.remove('hidden');
-        }
-        reader.readAsDataURL(file);
-    } else {
-        preview.classList.add('hidden');
+    if (coverInput) {
+        coverInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewImg.src = event.target.result;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.classList.add('hidden');
+            }
+        });
     }
 });
 </script>

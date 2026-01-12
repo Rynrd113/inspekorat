@@ -179,32 +179,44 @@
 
 @push('scripts')
 <script>
-document.getElementById('cover_image').addEventListener('change', function(e) {
-    const file = e.target.files[0];
+document.addEventListener('DOMContentLoaded', function() {
+    // Image preview handler
+    const coverInput = document.getElementById('cover_image');
     const preview = document.getElementById('image-preview');
     const previewImg = document.getElementById('preview-img');
     
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            previewImg.src = e.target.result;
-            preview.classList.remove('hidden');
-        }
-        reader.readAsDataURL(file);
-    } else {
-        preview.classList.add('hidden');
+    if (coverInput) {
+        coverInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewImg.src = event.target.result;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.classList.add('hidden');
+            }
+        });
     }
-});
 
-// Auto generate slug from nama_album
-document.getElementById('nama_album').addEventListener('input', function(e) {
-    const slug = e.target.value
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .trim();
-    document.getElementById('slug').placeholder = slug || 'akan-di-generate-otomatis';
+    // Auto generate slug from nama_album
+    const namaAlbumInput = document.getElementById('nama_album');
+    const slugInput = document.getElementById('slug');
+    
+    if (namaAlbumInput && slugInput) {
+        namaAlbumInput.addEventListener('input', function(e) {
+            const slug = e.target.value
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim();
+            slugInput.placeholder = slug || 'akan-di-generate-otomatis';
+        });
+    }
 });
 </script>
 @endpush
