@@ -193,13 +193,9 @@
         </main>
     </div>
 </div>
-@endsection
 
-<!-- Admin JS -->
-<script src="{{ asset('js/admin.js') }}"></script>
-    
-<!-- Additional Scripts -->
 @push('scripts')
+<script src="{{ asset('js/admin.js') }}"></script>
 <script>
 (function() {
     // Store admin token in localStorage for API calls
@@ -245,3 +241,4 @@
 })();
 </script>
 @endpush
+@endsection
