@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\WbsController as AdminWbsController;
@@ -8,16 +9,6 @@ use App\Http\Controllers\Admin\PortalOpdController as AdminPortalOpdController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\ProfilController as AdminProfilController;
 use App\Http\Controllers\Admin\PelayananController as AdminPelayananController;
-
-// Test route for logo component
-Route::get('/test-logo', function () {
-    return view('test-logo');
-})->name('test.logo');
-
-// Test route for logo fix
-Route::get('/test-logo-fix', function () {
-    return view('test-logo-fix');
-})->name('test.logo.fix');
 use App\Http\Controllers\Admin\DokumenController as AdminDokumenController;
 use App\Http\Controllers\Admin\GaleriController as AdminGaleriController;
 use App\Http\Controllers\Admin\AlbumController as AdminAlbumController;
@@ -30,12 +21,6 @@ use App\Http\Controllers\Admin\WebPortalController as AdminWebPortalController;
 use App\Http\Controllers\Admin\HeroSliderController as AdminHeroSliderController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\PortalOpdController;
-
-// Test route untuk Tailwind CSS
-Route::get('/test-tailwind', function () {
-    return view('test-tailwind');
-});
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SitemapController;
 
 /*
@@ -47,6 +32,19 @@ use App\Http\Controllers\SitemapController;
 // Sitemap and Robots.txt
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
+
+// Test routes (development only)
+Route::get('/test-logo', function () {
+    return view('test-logo');
+})->name('test.logo');
+
+Route::get('/test-logo-fix', function () {
+    return view('test-logo-fix');
+})->name('test.logo.fix');
+
+Route::get('/test-tailwind', function () {
+    return view('test-tailwind');
+});
 
 // Public Routes with admin logout middleware
 Route::middleware('admin.logout.public')->group(function () {
@@ -103,7 +101,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('wbs/{wbs}', [AdminWbsController::class, 'destroy'])->name('wbs.destroy');
         });
         
-                // Portal Papua Tengah (News) routes - protected by role middleware
+        // Portal Papua Tengah (News) routes - protected by role middleware
         Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::get('portal-papua-tengah', [AdminPortalPapuaTengahController::class, 'index'])->name('portal-papua-tengah.index');
             Route::get('portal-papua-tengah/create', [AdminPortalPapuaTengahController::class, 'create'])->name('portal-papua-tengah.create');
@@ -126,7 +124,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'destroy'])->name('portal-opd.destroy');
         });
         
-        // Info Kantor routes - protected by role middleware (missing routes)
+        // Info Kantor routes - protected by role middleware
         Route::middleware('role:admin,super_admin')->group(function () {
             Route::get('info-kantor', [\App\Http\Controllers\Admin\InfoKantorController::class, 'index'])->name('info-kantor.index');
             Route::get('info-kantor/create', [\App\Http\Controllers\Admin\InfoKantorController::class, 'create'])->name('info-kantor.create');
@@ -274,5 +272,3 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
     });
 });
-
-// Route::get('/pelayanan', [App\Http\Controllers\PelayananController::class, 'index'])->name('public.pelayanan');
