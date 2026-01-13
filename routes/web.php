@@ -36,12 +36,17 @@ Route::get('/test-tailwind', function () {
     return view('test-tailwind');
 });
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SitemapController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 */
+
+// Sitemap and Robots.txt
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
 // Public Routes with admin logout middleware
 Route::middleware('admin.logout.public')->group(function () {
