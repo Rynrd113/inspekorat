@@ -24,10 +24,12 @@ class UpdatePortalPapuaTengahRequest extends FormRequest
     {
         return [
             'judul' => 'sometimes|required|string|max:255',
+            'slug' => 'nullable|string|max:255',
             'konten' => 'sometimes|required|string',
             'penulis' => 'sometimes|required|string|max:255',
             'kategori' => 'sometimes|required|in:berita,pengumuman,kegiatan,regulasi,layanan',
             'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'delete_thumbnail' => 'nullable|boolean',
             'is_featured' => 'boolean',
             'is_published' => 'boolean',
             'published_at' => 'nullable|date',

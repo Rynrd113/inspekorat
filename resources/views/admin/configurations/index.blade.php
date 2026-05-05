@@ -32,13 +32,13 @@
             <p class="text-gray-600 mt-1">Kelola konfigurasi sistem dan pengaturan aplikasi</p>
         </div>
         <div class="flex items-center space-x-3">
-            <button 
+            <button
                 onclick="initializeDefaults()"
                 class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors"
             >
                 <i class="fas fa-sync mr-2"></i>Initialize Defaults
             </button>
-            <button 
+            <button
                 onclick="openAddModal()"
                 class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors"
             >
@@ -60,7 +60,7 @@
                 </div>
             </div>
         </x-card>
-        
+
         <x-card class="hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -72,7 +72,7 @@
                 </div>
             </div>
         </x-card>
-        
+
         <x-card class="hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -91,25 +91,25 @@
         <x-slot:header>
             <h3 class="text-lg font-medium text-gray-900">Filter & Pencarian</h3>
         </x-slot:header>
-        
+
         <form method="GET" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                     <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari Konfigurasi</label>
-                    <input 
-                        type="text" 
-                        name="search" 
+                    <input
+                        type="text"
+                        name="search"
                         id="search"
                         value="{{ request('search') }}"
                         placeholder="Cari konfigurasi..."
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                 </div>
-                
+
                 <div>
                     <label for="group" class="block text-sm font-medium text-gray-700 mb-1">Group</label>
-                    <select 
-                        name="group" 
+                    <select
+                        name="group"
                         id="group"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
@@ -119,11 +119,11 @@
                         @endforeach
                     </select>
                 </div>
-                
+
                 <div>
                     <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                    <select 
-                        name="type" 
+                    <select
+                        name="type"
                         id="type"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
@@ -133,9 +133,9 @@
                         @endforeach
                     </select>
                 </div>
-                
+
                 <div class="flex items-end">
-                    <button 
+                    <button
                         type="submit"
                         class="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors"
                     >
@@ -151,7 +151,7 @@
         <x-slot:header>
             <h3 class="text-lg font-medium text-gray-900">Daftar Konfigurasi</h3>
         </x-slot:header>
-        
+
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -220,14 +220,14 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex items-center space-x-2">
-                                <button 
+                                <button
                                     onclick="editConfig(this)"
                                     class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-md text-yellow-600 hover:text-yellow-800 bg-yellow-50 hover:bg-yellow-100"
                                     title="Edit"
                                 >
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button 
+                                <button
                                     onclick="deleteConfig(this)"
                                     class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-md text-red-600 hover:text-red-800 bg-red-50 hover:bg-red-100"
                                     title="Delete"
@@ -241,6 +241,11 @@
                 </tbody>
             </table>
         </div>
+
+        {{-- Pagination --}}
+        <div class="mt-4">
+            {{ $configurations->appends(request()->query())->links() }}
+        </div>
     </x-card>
 
     {{-- Quick Actions --}}
@@ -248,21 +253,21 @@
         <x-slot:header>
             <h3 class="text-lg font-medium text-gray-900">Quick Actions</h3>
         </x-slot:header>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <button 
+            <button
                 onclick="alert('Fitur export belum tersedia')"
                 class="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors"
             >
                 <i class="fas fa-download mr-2"></i>Export Configurations
             </button>
-            <button 
+            <button
                 onclick="openImportModal()"
                 class="inline-flex items-center justify-center px-4 py-2 bg-yellow-600 text-white text-sm font-medium rounded-md hover:bg-yellow-700 transition-colors"
             >
                 <i class="fas fa-upload mr-2"></i>Import Configurations
             </button>
-            <button 
+            <button
                 onclick="clearCache()"
                 class="inline-flex items-center justify-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors"
             >
@@ -276,7 +281,7 @@
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            
+
             <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start">
@@ -296,15 +301,15 @@
                     </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button 
-                        type="button" 
+                    <button
+                        type="button"
                         onclick="confirmDelete()"
                         class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
                     >
                         Hapus
                     </button>
-                    <button 
-                        type="button" 
+                    <button
+                        type="button"
                         onclick="closeModal('deleteModal')"
                         class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                     >
@@ -321,7 +326,7 @@
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        
+
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="sm:flex sm:items-start">
@@ -338,21 +343,21 @@
                                 <div class="space-y-4">
                                     <div>
                                         <label for="key" class="block text-sm font-medium text-gray-700">Key</label>
-                                        <input 
-                                            type="text" 
-                                            name="key" 
+                                        <input
+                                            type="text"
+                                            name="key"
                                             id="key"
-                                            required 
+                                            required
                                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                         />
                                     </div>
-                                    
+
                                     <div>
                                         <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
-                                        <select 
-                                            name="type" 
+                                        <select
+                                            name="type"
                                             id="type"
-                                            required 
+                                            required
                                             onchange="handleTypeChange(this.value)"
                                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                         >
@@ -361,31 +366,31 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    
+
                                     <div id="valueField">
                                         <label for="value" class="block text-sm font-medium text-gray-700">Value</label>
-                                        <textarea 
-                                            name="value" 
+                                        <textarea
+                                            name="value"
                                             id="value"
                                             rows="3"
                                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                         ></textarea>
                                     </div>
-                                    
+
                                     <div id="fileField" style="display: none;">
                                         <label for="file" class="block text-sm font-medium text-gray-700">File</label>
-                                        <input 
-                                            type="file" 
-                                            name="file" 
+                                        <input
+                                            type="file"
+                                            name="file"
                                             id="file"
                                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                         />
                                     </div>
-                                    
+
                                     <div>
                                         <label for="group" class="block text-sm font-medium text-gray-700">Group</label>
-                                        <select 
-                                            name="group" 
+                                        <select
+                                            name="group"
                                             id="group"
                                             required
                                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -395,38 +400,38 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    
+
                                     <div>
                                         <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                                        <textarea 
-                                            name="description" 
+                                        <textarea
+                                            name="description"
                                             id="description"
                                             rows="2"
                                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                         ></textarea>
                                     </div>
-                                    
+
                                     <div class="flex items-center">
-                                        <input 
-                                            type="checkbox" 
-                                            id="is_public" 
-                                            name="is_public" 
-                                            value="1" 
+                                        <input
+                                            type="checkbox"
+                                            id="is_public"
+                                            name="is_public"
+                                            value="1"
                                             class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                                         >
                                         <label for="is_public" class="ml-2 block text-sm text-gray-900">Public Configuration</label>
                                     </div>
                                 </div>
-                                
+
                                 <div class="mt-6 flex justify-end space-x-3">
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         onclick="closeModal('addConfigModal')"
                                         class="inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
                                     >
                                         Cancel
                                     </button>
-                                    <button 
+                                    <button
                                         type="submit"
                                         class="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
                                     >
@@ -499,7 +504,7 @@ function openImportModal() {
 function handleTypeChange(type) {
     const valueField = document.getElementById('valueField');
     const fileField = document.getElementById('fileField');
-    
+
     if (type === 'file' || type === 'image') {
         valueField.style.display = 'none';
         fileField.style.display = 'block';
@@ -512,26 +517,15 @@ function handleTypeChange(type) {
 // Initialize defaults function
 function initializeDefaults() {
     if (confirm('This will initialize default system configurations. Are you sure?')) {
-        fetch('{{ route('admin.configurations.initialize') }}', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Default configurations initialized successfully!');
-                location.reload();
-            } else {
-                alert('Failed to initialize configurations');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while initializing configurations');
-        });
+        // Submit a POST form to initialize defaults so Laravel can perform a proper redirect/flash
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ route('admin.configurations.initialize') }}';
+        form.innerHTML = `
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        `;
+        document.body.appendChild(form);
+        form.submit();
     }
 }
 

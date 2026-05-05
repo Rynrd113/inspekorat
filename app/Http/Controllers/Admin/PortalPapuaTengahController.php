@@ -92,8 +92,18 @@ class PortalPapuaTengahController extends Controller
     {
         $data = $request->validated();
 
-        // Handle thumbnail upload
-        if ($request->hasFile('thumbnail')) {
+        // Remove delete_thumbnail from validated data as it's not a field
+        $data = array_diff_key($data, array_flip(['delete_thumbnail']));
+
+        // Handle delete thumbnail checkbox
+        if ($request->has('delete_thumbnail') && $request->delete_thumbnail) {
+            if ($portalPapuaTengah->thumbnail) {
+                Storage::disk('public')->delete($portalPapuaTengah->thumbnail);
+            }
+            $data['thumbnail'] = null;
+        }
+        // Handle new thumbnail upload
+        elseif ($request->hasFile('thumbnail')) {
             // Delete old thumbnail
             if ($portalPapuaTengah->thumbnail) {
                 Storage::disk('public')->delete($portalPapuaTengah->thumbnail);

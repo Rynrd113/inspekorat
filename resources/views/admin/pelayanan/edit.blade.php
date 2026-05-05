@@ -11,217 +11,218 @@
 @endsection
 
 @section('main-content')
-<div class="min-h-screen flex items-center justify-center bg-gray-50">
-    <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
-        <div class="mb-6">
-            <i class="fas fa-tools text-6xl text-yellow-500 mb-4"></i>
-        </div>
-        <h2 class="text-2xl font-bold text-gray-800 mb-3">
-            Dalam Tahap Pengembangan
-        </h2>
-        <p class="text-gray-600 mb-6">
-            Fitur edit pelayanan sedang dalam tahap pengembangan dan akan segera tersedia.
-        </p>
-        <a href="{{ route('admin.pelayanan.index') }}" 
-           class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-            <i class="fas fa-arrow-left mr-2"></i>
-            Kembali ke Daftar Pelayanan
-        </a>
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">Edit Pelayanan</h1>
+        <p class="text-gray-600 mt-1">Perbarui informasi layanan publik</p>
     </div>
-</div>
-@endsection
-        <form action="{{ route('admin.pelayanan.update', $pelayanan->id) }}" method="POST" enctype="multipart/form-data">
+
+    <!-- Form Card -->
+    <div class="bg-white rounded-lg shadow">
+        <div class="p-6 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">
+                <i class="fas fa-edit mr-2 text-blue-600"></i>
+                Form Edit Pelayanan
+            </h2>
+        </div>
+
+        <div class="p-6">
+            <form action="{{ route('admin.pelayanan.update', $pelayanan) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <x-input 
-                    label="Nama Pelayanan"
-                    name="nama_layanan"
-                    value="{{ old('nama_layanan', $pelayanan->nama_layanan ?? '') }}"
-                    required="true"
-                    error="{{ $errors->first('nama_layanan') }}"
-                />
-                
-                <div>
-                    <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">
-                        Kategori <span class="text-red-500">*</span>
+
+                <!-- Nama & Kategori -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">
+                            Nama Pelayanan <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text"
+                               name="nama"
+                               id="nama"
+                               value="{{ old('nama', $pelayanan->nama) }}"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('nama') border-red-500 @enderror"
+                               required>
+                        @error('nama')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">
+                            Kategori <span class="text-red-500">*</span>
+                        </label>
+                        <select name="kategori"
+                                id="kategori"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('kategori') border-red-500 @enderror"
+                                required>
+                            <option value="">Pilih Kategori</option>
+                            @foreach(\App\Models\Pelayanan::getKategoriOptions() as $key => $label)
+                                <option value="{{ $key }}" {{ old('kategori', $pelayanan->kategori) === $key ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        @error('kategori')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Deskripsi -->
+                <div class="mt-6">
+                    <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-2">
+                        Deskripsi <span class="text-red-500">*</span>
                     </label>
-                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('kategori') border-red-500 @enderror" 
-                            id="kategori" 
-                            name="kategori" 
-                            required>
-                        <option value="">Pilih Kategori</option>
-                        <option value="audit" {{ old('kategori', $pelayanan->kategori ?? '') == 'audit' ? 'selected' : '' }}>Audit</option>
-                        <option value="konsultasi" {{ old('kategori', $pelayanan->kategori ?? '') == 'konsultasi' ? 'selected' : '' }}>Konsultasi</option>
-                        <option value="pengaduan" {{ old('kategori', $pelayanan->kategori ?? '') == 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
-                        <option value="lainnya" {{ old('kategori', $pelayanan->kategori ?? '') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
-                    </select>
-                    @error('kategori')
+                    <textarea name="deskripsi"
+                              id="deskripsi"
+                              rows="4"
+                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('deskripsi') border-red-500 @enderror"
+                              required>{{ old('deskripsi', $pelayanan->deskripsi) }}</textarea>
+                    @error('deskripsi')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
-            </div>
 
-            <div class="mt-6">
-                <x-input 
-                    type="textarea"
-                    label="Deskripsi"
-                    name="deskripsi"
-                    required="true"
-                    error="{{ $errors->first('deskripsi') }}"
-                    rows="4"
-                >{{ old('deskripsi', $pelayanan->deskripsi ?? '') }}</x-input>
-            </div>
-
+                <!-- Syarat & Prosedur -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <div>
                         <label for="persyaratan" class="block text-sm font-medium text-gray-700 mb-2">
                             Syarat & Ketentuan
                         </label>
-                        @php
-                            $persyaratanText = old('persyaratan');
-                            if (!$persyaratanText && isset($pelayanan->persyaratan)) {
-                                if (is_array($pelayanan->persyaratan)) {
-                                    $persyaratanText = implode("\n", $pelayanan->persyaratan);
-                                } else {
-                                    $arr = json_decode($pelayanan->persyaratan, true);
-                                    $persyaratanText = is_array($arr) ? implode("\n", $arr) : $pelayanan->persyaratan;
-                                }
-                            }
-                        @endphp
-                        <textarea 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('persyaratan') border-red-500 @enderror" 
-                            id="persyaratan" 
-                            name="persyaratan" 
-                            rows="5"
-                            placeholder="Masukkan syarat, satu per baris">{{ $persyaratanText }}</textarea>
-                        <p class="mt-1 text-sm text-gray-500">Tulis setiap syarat di baris baru</p>
+                        <textarea name="persyaratan"
+                                  id="persyaratan"
+                                  rows="5"
+                                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('persyaratan') border-red-500 @enderror"
+                                  placeholder="Masukkan syarat, satu per baris">@php
+$persyaratan = old('persyaratan');
+if (!$persyaratan && $pelayanan->persyaratan) {
+    if (is_array($pelayanan->persyaratan)) {
+        $persyaratan = implode("\n", $pelayanan->persyaratan);
+    } else {
+        $persyaratan = $pelayanan->persyaratan;
+    }
+}
+echo $persyaratan;
+@endphp</textarea>
+                        <p class="mt-1 text-xs text-gray-500">💡 Tulis setiap syarat di baris baru</p>
                         @error('persyaratan')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                    
+
                     <div>
                         <label for="prosedur" class="block text-sm font-medium text-gray-700 mb-2">
                             Prosedur
                         </label>
-                        @php
-                            $prosedurText = old('prosedur');
-                            if (!$prosedurText && isset($pelayanan->prosedur)) {
-                                if (is_array($pelayanan->prosedur)) {
-                                    $prosedurText = implode("\n", $pelayanan->prosedur);
-                                } else {
-                                    $arr = json_decode($pelayanan->prosedur, true);
-                                    $prosedurText = is_array($arr) ? implode("\n", $arr) : $pelayanan->prosedur;
-                                }
-                            }
-                        @endphp
-                        <textarea 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('prosedur') border-red-500 @enderror" 
-                            id="prosedur" 
-                            name="prosedur" 
-                            rows="5"
-                            placeholder="Masukkan prosedur, satu per baris">{{ $prosedurText }}</textarea>
-                        <p class="mt-1 text-sm text-gray-500">Tulis setiap langkah di baris baru</p>
+                        <textarea name="prosedur"
+                                  id="prosedur"
+                                  rows="5"
+                                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('prosedur') border-red-500 @enderror"
+                                  placeholder="Masukkan prosedur, satu per baris">@php
+$prosedur = old('prosedur');
+if (!$prosedur && $pelayanan->prosedur) {
+    if (is_array($pelayanan->prosedur)) {
+        $prosedur = implode("\n", $pelayanan->prosedur);
+    } else {
+        $prosedur = $pelayanan->prosedur;
+    }
+}
+echo $prosedur;
+@endphp</textarea>
+                        <p class="mt-1 text-xs text-gray-500">💡 Tulis setiap langkah di baris baru</p>
                         @error('prosedur')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <x-input 
-                    label="Waktu Pelayanan"
-                    name="waktu_pelayanan"
-                    value="{{ old('waktu_pelayanan', $pelayanan->waktu_pelayanan ?? '') }}"
-                    placeholder="Contoh: 7 hari kerja"
-                    error="{{ $errors->first('waktu_pelayanan') }}"
-                />
-                
-                <x-input 
-                    label="Biaya"
-                    name="biaya"
-                    value="{{ old('biaya', $pelayanan->biaya ?? '') }}"
-                    placeholder="Contoh: Gratis atau Rp 50.000"
-                    error="{{ $errors->first('biaya') }}"
-                />
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <x-input 
-                    label="Kontak Penanggung Jawab"
-                    name="kontak_penanggung_jawab"
-                    value="{{ old('kontak_penanggung_jawab', $pelayanan->kontak_penanggung_jawab ?? '') }}"
-                    placeholder="Nomor telepon atau email"
-                    error="{{ $errors->first('kontak_penanggung_jawab') }}"
-                />
-                
-                <div>
-                    <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                        Status <span class="text-red-500">*</span>
-                    </label>
-                    <div class="flex items-center">
-                        <input type="checkbox" 
-                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded @error('status') border-red-500 @enderror" 
-                               id="status" 
-                               name="status" 
-                               value="1"
-                               {{ old('status', $pelayanan->status ?? false) ? 'checked' : '' }}>
-                        <label for="status" class="ml-2 block text-sm text-gray-900">
-                            Aktif
+                <!-- Waktu & Biaya -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <label for="waktu_penyelesaian" class="block text-sm font-medium text-gray-700 mb-2">
+                            Waktu Penyelesaian
                         </label>
+                        <input type="text"
+                               name="waktu_penyelesaian"
+                               id="waktu_penyelesaian"
+                               value="{{ old('waktu_penyelesaian', $pelayanan->waktu_penyelesaian) }}"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               placeholder="Contoh: 7 hari kerja">
+                        @error('waktu_penyelesaian')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
-                    <p class="mt-1 text-sm text-gray-500">Centang untuk mengaktifkan layanan</p>
-                    @error('status')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
 
-                <div class="mt-6">
-                    <label for="file_formulir" class="block text-sm font-medium text-gray-700 mb-2">
-                        File Formulir
-                    </label>
-                    @if(isset($pelayanan->file_formulir) && $pelayanan->file_formulir)
-                        <div class="mb-3">
-                            <a href="{{ asset('storage/' . $pelayanan->file_formulir) }}" 
-                               target="_blank" 
-                               class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm bg-gray-50 hover:bg-gray-100">
-                                <i class="fas fa-file-pdf mr-2 text-red-500"></i>
-                                Lihat File Saat Ini
-                            </a>
-                            <p class="text-sm text-gray-500 mt-1">File formulir saat ini</p>
-                        </div>
-                    @endif
-                    <input type="file" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('file_formulir') border-red-500 @enderror" 
-                           id="file_formulir" 
-                           name="file_formulir" 
-                           accept=".pdf,.doc,.docx">
-                    @error('file_formulir')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                    <p class="mt-1 text-sm text-gray-500">Format: PDF, DOC, DOCX. Maksimal 2MB. Kosongkan jika tidak ingin mengubah file.</p>
+                    <div>
+                        <label for="biaya" class="block text-sm font-medium text-gray-700 mb-2">
+                            Biaya
+                        </label>
+                        <input type="text"
+                               name="biaya"
+                               id="biaya"
+                               value="{{ old('biaya', $pelayanan->biaya) }}"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               placeholder="Contoh: Gratis atau Rp 50.000">
+                        @error('biaya')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
-                
-            <div class="mt-6">
-                <x-input 
-                    type="textarea"
-                    label="Dasar Hukum"
-                    name="dasar_hukum"
-                    placeholder="Masukkan dasar hukum pelayanan"
-                    error="{{ $errors->first('dasar_hukum') }}"
-                    rows="3"
-                >{{ old('dasar_hukum', $pelayanan->dasar_hukum ?? '') }}</x-input>
-            </div>
 
-            <x-admin.form-actions 
-                :back-url="route('admin.pelayanan.index')"
-                submit-label="Update"
-                submit-icon="fas fa-save"
-                :show-reset="true"
-            />
-        </form>
-    </x-admin.form-section>
+                <!-- PIC & Status -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <label for="kontak_pic" class="block text-sm font-medium text-gray-700 mb-2">
+                            Kontak Penanggung Jawab
+                        </label>
+                        <input type="text"
+                               name="kontak_pic"
+                               id="kontak_pic"
+                               value="{{ old('kontak_pic', $pelayanan->kontak_pic) }}"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               placeholder="Nama atau nomor telepon">
+                        @error('kontak_pic')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                            Status
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox"
+                                   name="status"
+                                   id="status"
+                                   value="1"
+                                   {{ old('status', $pelayanan->status) ? 'checked' : '' }}
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <span class="ml-2 text-sm text-gray-700">Aktif (tampilkan di portal)</span>
+                        </label>
+                        @error('status')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <hr class="my-6 border-gray-200">
+
+                <!-- Form Actions -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-between">
+                    <a href="{{ route('admin.pelayanan.index') }}"
+                       class="inline-flex items-center justify-center px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
+                        <i class="fas fa-times mr-2"></i>
+                        Batal
+                    </a>
+                    <button type="submit"
+                            class="inline-flex items-center justify-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-save mr-2"></i>
+                        Perbarui Pelayanan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection

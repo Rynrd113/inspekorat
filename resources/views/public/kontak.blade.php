@@ -50,16 +50,16 @@
                         <i class="fas fa-paper-plane text-blue-600 mr-3"></i>
                         Kirim Pesan
                     </h4>
-                    
+
                     <form method="POST" action="{{ route('kontak.kirim') }}">
                         @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
                                 <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
-                                <input type="text" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('nama') border-red-500 @enderror" 
-                                       id="nama" 
-                                       name="nama" 
+                                <input type="text"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('nama') border-red-500 @enderror"
+                                       id="nama"
+                                       name="nama"
                                        value="{{ old('nama') }}"
                                        required>
                                 @error('nama')
@@ -68,10 +68,10 @@
                             </div>
                             <div>
                                 <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email <span class="text-red-500">*</span></label>
-                                <input type="email" 
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('email') border-red-500 @enderror" 
-                                       id="email" 
-                                       name="email" 
+                                <input type="email"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('email') border-red-500 @enderror"
+                                       id="email"
+                                       name="email"
                                        value="{{ old('email') }}"
                                        required>
                                 @error('email')
@@ -81,10 +81,10 @@
                         </div>
                         <div class="mb-6">
                             <label for="pesan" class="block text-sm font-medium text-gray-700 mb-2">Pesan <span class="text-red-500">*</span></label>
-                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('pesan') border-red-500 @enderror" 
-                                      id="pesan" 
-                                      name="pesan" 
-                                      rows="6" 
+                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('pesan') border-red-500 @enderror"
+                                      id="pesan"
+                                      name="pesan"
+                                      rows="6"
                                       placeholder="Tuliskan pesan atau pertanyaan Anda di sini..."
                                       required>{{ old('pesan') }}</textarea>
                             @error('pesan')
@@ -99,7 +99,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="space-y-6">
             <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                 <div class="p-6">
@@ -107,7 +107,7 @@
                         <i class="fas fa-info-circle text-blue-600 mr-3"></i>
                         Informasi Kontak
                     </h4>
-                    
+
                     <div class="space-y-4">
                         <div class="flex items-start">
                             <i class="fas fa-map-marker-alt text-blue-600 mr-3 mt-1"></i>
@@ -116,23 +116,23 @@
                                 <p class="text-gray-600">{{ $kontak->alamat ?? config('contact.alamat') }}</p>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-start">
                             <i class="fab fa-instagram text-pink-600 mr-3 mt-1"></i>
                             <div>
                                 <h6 class="font-medium text-gray-900 mb-1">Instagram</h6>
-                                <a href="{{ config('contact.instagram.url') }}" target="_blank" class="text-blue-600 hover:text-blue-800">{{ config('contact.instagram.handle') }}</a>
+                                    <a href="{{ $kontak->instagram['url'] ?? config('contact.instagram.url') }}" target="_blank" class="text-blue-600 hover:text-blue-800">{{ $kontak->instagram['handle'] ?? config('contact.instagram.handle') }}</a>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-start">
                             <i class="fas fa-envelope text-blue-600 mr-3 mt-1"></i>
                             <div>
                                 <h6 class="font-medium text-gray-900 mb-1">Email</h6>
-                                <a href="mailto:{{ config('contact.email') }}" class="text-blue-600 hover:text-blue-800">{{ $kontak->email ?? config('contact.email') }}</a>
+                                <a href="mailto:{{ $kontak->email ?? config('contact.email') }}" class="text-blue-600 hover:text-blue-800">{{ $kontak->email ?? config('contact.email') }}</a>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-start">
                             <i class="fas fa-clock text-blue-600 mr-3 mt-1"></i>
                             <div>
@@ -143,7 +143,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Additional Info Card -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                 <div class="p-6">

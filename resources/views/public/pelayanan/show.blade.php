@@ -10,7 +10,7 @@
     <section class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center mb-6">
-                <a href="{{ route('public.pelayanan.index') }}" 
+                <a href="{{ route('public.pelayanan.index') }}"
                    class="inline-flex items-center text-blue-100 hover:text-white transition-colors">
                     <i class="fas fa-arrow-left mr-2"></i>
                     <span>Kembali ke Layanan</span>
@@ -47,7 +47,7 @@
                                 <i class="fas fa-concierge-bell text-blue-600 text-3xl"></i>
                             @endif
                         </div>
-                        
+
                         <div class="flex-1">
                             <div class="flex items-center gap-4 mb-4">
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
@@ -60,11 +60,11 @@
                                 </span>
                                 @endif
                             </div>
-                            
+
                             <h2 class="text-2xl font-bold text-gray-900 mb-3">
                                 {{ $pelayanan->nama_layanan }}
                             </h2>
-                            
+
                             <p class="text-gray-600 leading-relaxed">
                                 {{ $pelayanan->deskripsi }}
                             </p>
@@ -85,7 +85,7 @@
                                     <dd class="mt-1 text-sm text-gray-900">{{ $pelayanan->persyaratan }}</dd>
                                 </div>
                                 @endif
-                                
+
                                 @if($pelayanan->waktu_pelayanan)
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Waktu Pelayanan</dt>
@@ -95,7 +95,7 @@
                                     </dd>
                                 </div>
                                 @endif
-                                
+
                                 @if($pelayanan->biaya)
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Biaya</dt>
@@ -104,7 +104,7 @@
                                         @if($pelayanan->biaya === 'Gratis' || strtolower($pelayanan->biaya) === 'gratis')
                                             <span class="text-green-600 font-medium">Gratis</span>
                                         @elseif(is_numeric($pelayanan->biaya))
-                                            <span class="text-green-600 font-medium">Rp {{ number_format($pelayanan->biaya) }}</span>
+                                            <span class="text-green-600 font-medium">Rp {{ number_format((int)$pelayanan->biaya, 0, ',', '.') }}</span>
                                         @else
                                             <span class="text-green-600 font-medium">{{ $pelayanan->biaya }}</span>
                                         @endif
@@ -164,13 +164,13 @@
                 <!-- Action Buttons -->
                 <div class="p-8 bg-white border-t border-gray-200">
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a href="{{ route('public.wbs') }}" 
+                        <a href="{{ route('public.wbs') }}"
                            class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
                             <i class="fas fa-comments mr-2"></i>
                             Ajukan Keluhan/Saran
                         </a>
-                        
-                        <a href="{{ route('public.kontak') }}" 
+
+                        <a href="{{ route('public.kontak') }}"
                            class="inline-flex items-center justify-center px-6 py-3 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition-colors">
                             <i class="fas fa-phone mr-2"></i>
                             Hubungi Kami
@@ -210,16 +210,16 @@
                             <i class="fas fa-concierge-bell text-blue-600"></i>
                         @endif
                     </div>
-                    
+
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">
                         {{ $related->nama_layanan }}
                     </h3>
-                    
+
                     <p class="text-gray-600 text-sm mb-4 line-clamp-2">
                         {{ $related->deskripsi }}
                     </p>
-                    
-                    <a href="{{ route('public.pelayanan.show', $related->id) }}" 
+
+                    <a href="{{ route('public.pelayanan.show', $related->id) }}"
                        class="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium">
                         <span>Lihat Detail</span>
                         <i class="fas fa-arrow-right ml-1"></i>

@@ -26,17 +26,17 @@
             <form action="{{ route('admin.galeri.update', $galeri->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="judul" class="block text-sm font-medium text-gray-700 mb-2">
                             Judul <span class="text-red-500">*</span>
                         </label>
-                        <input type="text" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('judul') border-red-500 @enderror" 
-                               id="judul" 
-                               name="judul" 
-                               value="{{ old('judul', $galeri->judul ?? 'Kegiatan Audit Internal') }}" 
+                        <input type="text"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('judul') border-red-500 @enderror"
+                               id="judul"
+                               name="judul"
+                               value="{{ old('judul', $galeri->judul ?? 'Kegiatan Audit Internal') }}"
                                required>
                         @error('judul')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -47,8 +47,8 @@
                         <label for="album_id" class="block text-sm font-medium text-gray-700 mb-2">
                             Album <span class="text-gray-500 text-xs">(Opsional)</span>
                         </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('album_id') border-red-500 @enderror" 
-                                id="album_id" 
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('album_id') border-red-500 @enderror"
+                                id="album_id"
                                 name="album_id">
                             <option value="">-- Pilih Album --</option>
                             @if(isset($albums))
@@ -63,14 +63,14 @@
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                    
+
                     <div>
                         <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">
                             Kategori <span class="text-red-500">*</span>
                         </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('kategori') border-red-500 @enderror" 
-                                id="kategori" 
-                                name="kategori" 
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('kategori') border-red-500 @enderror"
+                                id="kategori"
+                                name="kategori"
                                 required>
                             <option value="">Pilih Kategori</option>
                             <option value="kegiatan" {{ old('kategori', $galeri->kategori) == 'kegiatan' ? 'selected' : '' }}>Kegiatan</option>
@@ -82,16 +82,16 @@
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                    
+
                     <div>
                         <label for="tanggal_publikasi" class="block text-sm font-medium text-gray-700 mb-2">
                             Tanggal Publikasi <span class="text-red-500">*</span>
                         </label>
-                        <input type="date" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tanggal_publikasi') border-red-500 @enderror" 
-                               id="tanggal_publikasi" 
-                               name="tanggal_publikasi" 
-                               value="{{ old('tanggal_publikasi', $galeri->tanggal_publikasi ? $galeri->tanggal_publikasi->format('Y-m-d') : '') }}" 
+                        <input type="date"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tanggal_publikasi') border-red-500 @enderror"
+                               id="tanggal_publikasi"
+                               name="tanggal_publikasi"
+                               value="{{ old('tanggal_publikasi', $galeri->tanggal_publikasi ? $galeri->tanggal_publikasi->format('Y-m-d') : '') }}"
                                required>
                         @error('tanggal_publikasi')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -103,10 +103,10 @@
                     <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-2">
                         Deskripsi
                     </label>
-                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('deskripsi') border-red-500 @enderror" 
-                              id="deskripsi" 
-                              name="deskripsi" 
-                              rows="4" 
+                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('deskripsi') border-red-500 @enderror"
+                              id="deskripsi"
+                              name="deskripsi"
+                              rows="4"
                               placeholder="Masukkan deskripsi galeri...">{{ old('deskripsi', $galeri->deskripsi) }}</textarea>
                     @error('deskripsi')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -118,25 +118,43 @@
                         <label for="file_galeri" class="block text-sm font-medium text-gray-700 mb-2">
                             File Media
                         </label>
-                        <input type="file" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('file_galeri') border-red-500 @enderror" 
-                               id="file_galeri" 
-                               name="file_galeri" 
-                               accept="image/*,video/*">
+                        <input type="file"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('file_galeri') border-red-500 @enderror"
+                               id="file_galeri"
+                               name="file_galeri"
+                               accept="image/*,video/*"
+                               onchange="previewMediaFile(this)">
                         @if($galeri->file_path)
-                            <p class="mt-1 text-sm text-gray-500">File saat ini: {{ $galeri->file_name }}</p>
+                            <div class="mt-3 p-3 border border-gray-300 rounded-md bg-gray-50">
+                                <p class="text-sm font-medium text-gray-700 mb-2">File saat ini:</p>
+                                @if($galeri->tipe == 'foto')
+                                    <img src="{{ asset('storage/' . $galeri->file_path) }}"
+                                         alt="Current Photo"
+                                         class="w-24 h-24 object-cover rounded border border-gray-300">
+                                @else
+                                    <div class="flex items-center text-gray-600">
+                                        <i class="fas fa-video mr-2"></i>{{ basename($galeri->file_path) }}
+                                    </div>
+                                @endif
+                                <label class="flex items-center text-sm mt-2">
+                                    <input type="checkbox" name="delete_file" value="1"
+                                           class="w-4 h-4 text-red-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-red-500">
+                                    <span class="ml-2 text-red-600 font-medium">Hapus File</span>
+                                </label>
+                            </div>
                         @endif
+                        <div id="mediaPreview" class="mt-2"></div>
                         @error('file_galeri')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
-                    
+
                     <div>
                         <label for="status" class="flex items-center">
-                            <input type="checkbox" 
-                                   class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" 
-                                   id="status" 
-                                   name="status" 
+                            <input type="checkbox"
+                                   class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                   id="status"
+                                   name="status"
                                    value="1"
                                    {{ old('status', $galeri->status) ? 'checked' : '' }}>
                             <span class="ml-2 text-sm font-medium text-gray-700">Status Aktif</span>
@@ -147,19 +165,6 @@
                     </div>
                 </div>
 
-                <div class="mt-6">
-                    <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-2">
-                        Deskripsi
-                    </label>
-                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('deskripsi') border-red-500 @enderror" 
-                              id="deskripsi" 
-                              name="deskripsi" 
-                              rows="3">{{ old('deskripsi', $galeri->deskripsi ?? 'Dokumentasi kegiatan audit internal tahun 2024') }}</textarea>
-                    @error('deskripsi')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 <!-- File Upload for Foto -->
                 <div id="fotoFields" style="display: none;">
                     <div class="mt-6">
@@ -168,16 +173,16 @@
                         </label>
                         @if(isset($galeri->file_path) && $galeri->tipe == 'foto')
                             <div class="mb-3">
-                                <img src="{{ asset('storage/' . $galeri->file_path) }}" 
-                                     alt="Current Photo" 
+                                <img src="{{ asset('storage/' . $galeri->file_path) }}"
+                                     alt="Current Photo"
                                      class="w-48 h-48 object-cover rounded-lg border border-gray-300">
                                 <p class="text-sm text-gray-500 mt-1">Foto saat ini</p>
                             </div>
                         @endif
-                        <input type="file" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('file_media') border-red-500 @enderror" 
-                               id="file_media" 
-                               name="file_media" 
+                        <input type="file"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('file_media') border-red-500 @enderror"
+                               id="file_media"
+                               name="file_media"
                                accept="image/*">
                         @error('file_media')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -203,10 +208,10 @@
                                     <p class="text-sm text-gray-500 mt-1">Video saat ini</p>
                                 </div>
                             @endif
-                            <input type="file" 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('file_media') border-red-500 @enderror" 
-                                   id="file_media" 
-                                   name="file_media" 
+                            <input type="file"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('file_media') border-red-500 @enderror"
+                                   id="file_media"
+                                   name="file_media"
                                    accept="video/*">
                             @error('file_media')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -217,11 +222,11 @@
                             <label for="url_video" class="block text-sm font-medium text-gray-700 mb-2">
                                 URL Video (YouTube/Vimeo)
                             </label>
-                            <input type="url" 
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('url_video') border-red-500 @enderror" 
-                                   id="url_video" 
-                                   name="url_video" 
-                                   value="{{ old('url_video', $galeri->url_video ?? '') }}" 
+                            <input type="url"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('url_video') border-red-500 @enderror"
+                                   id="url_video"
+                                   name="url_video"
+                                   value="{{ old('url_video', $galeri->url_video ?? '') }}"
                                    placeholder="https://www.youtube.com/watch?v=...">
                             @error('url_video')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -229,23 +234,23 @@
                             <p class="mt-1 text-sm text-gray-500">Opsional. Jika diisi, akan menggunakan URL ini daripada file upload.</p>
                         </div>
                     </div>
-                    
+
                     <div class="mt-6">
                         <label for="thumbnail" class="block text-sm font-medium text-gray-700 mb-2">
                             Thumbnail Video
                         </label>
                         @if(isset($galeri->thumbnail) && $galeri->thumbnail)
                             <div class="mb-3">
-                                <img src="{{ asset('storage/' . $galeri->thumbnail) }}" 
-                                     alt="Current Thumbnail" 
+                                <img src="{{ asset('storage/' . $galeri->thumbnail) }}"
+                                     alt="Current Thumbnail"
                                      class="w-48 h-48 object-cover rounded-lg border border-gray-300">
                                 <p class="text-sm text-gray-500 mt-1">Thumbnail saat ini</p>
                             </div>
                         @endif
-                        <input type="file" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('thumbnail') border-red-500 @enderror" 
-                               id="thumbnail" 
-                               name="thumbnail" 
+                        <input type="file"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('thumbnail') border-red-500 @enderror"
+                               id="thumbnail"
+                               name="thumbnail"
                                accept="image/*">
                         @error('thumbnail')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -260,26 +265,26 @@
                         <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
                             Tags
                         </label>
-                        <input type="text" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tags') border-red-500 @enderror" 
-                               id="tags" 
-                               name="tags" 
-                               value="{{ old('tags', $galeri->tags ?? '') }}" 
+                        <input type="text"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tags') border-red-500 @enderror"
+                               id="tags"
+                               name="tags"
+                               value="{{ old('tags', $galeri->tags ?? '') }}"
                                placeholder="Pisahkan dengan koma">
                         @error('tags')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                         <p class="mt-1 text-sm text-gray-500">Contoh: audit, kegiatan, 2024</p>
                     </div>
-                    
+
                     <div>
                         <label for="tanggal_ambil" class="block text-sm font-medium text-gray-700 mb-2">
                             Tanggal Pengambilan
                         </label>
-                        <input type="date" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tanggal_ambil') border-red-500 @enderror" 
-                               id="tanggal_ambil" 
-                               name="tanggal_ambil" 
+                        <input type="date"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('tanggal_ambil') border-red-500 @enderror"
+                               id="tanggal_ambil"
+                               name="tanggal_ambil"
                                value="{{ old('tanggal_ambil', $galeri->tanggal_ambil ?? '') }}">
                         @error('tanggal_ambil')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -307,7 +312,7 @@ function toggleMediaFields() {
     const fotoFields = document.getElementById('fotoFields');
     const videoFields = document.getElementById('videoFields');
     const fileFoto = document.getElementById('file_media');
-    
+
     if (tipe === 'foto') {
         fotoFields.style.display = 'block';
         videoFields.style.display = 'none';
@@ -320,63 +325,133 @@ function toggleMediaFields() {
     }
 }
 
-// Preview foto
-document.getElementById('file_media').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const preview = document.getElementById('fotoPreview');
-    
-    if (file && file.type.startsWith('image/')) {
-        const fileSize = file.size / 1024 / 1024; // Convert to MB
-        if (fileSize > 5) {
-            alert('Ukuran foto terlalu besar. Maksimal 5MB.');
-            e.target.value = '';
-            preview.innerHTML = '';
-            return;
+// Preview media file (foto atau video)
+function previewMediaFile(input) {
+    const previewContainer = document.getElementById('mediaPreview');
+    const deleteCheckbox = document.querySelector('input[name="delete_file"]');
+
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const fileSize = file.size / 1024 / 1024; // MB
+
+        if (file.type.startsWith('image/')) {
+            if (fileSize > 5) {
+                alert('Ukuran foto terlalu besar. Maksimal 5MB.');
+                input.value = '';
+                previewContainer.innerHTML = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewContainer.innerHTML = `
+                    <div class="mt-3 p-3 border border-blue-300 rounded-md bg-blue-50">
+                        <img src="${e.target.result}"
+                             alt="New Media Preview"
+                             class="h-24 w-32 object-cover rounded border border-blue-300">
+                        <p class="mt-2 text-sm text-blue-600">Preview foto baru</p>
+                    </div>
+                `;
+            };
+            reader.readAsDataURL(file);
+        } else if (file.type.startsWith('video/')) {
+            if (fileSize > 50) {
+                alert('Ukuran video terlalu besar. Maksimal 50MB.');
+                input.value = '';
+                previewContainer.innerHTML = '';
+                return;
+            }
+
+            previewContainer.innerHTML = `
+                <div class="mt-3 p-3 border border-blue-300 rounded-md bg-blue-50">
+                    <div class="flex items-center text-blue-600">
+                        <i class="fas fa-video mr-2"></i>
+                        <span class="text-sm">${file.name}</span>
+                    </div>
+                    <p class="mt-2 text-sm text-blue-600">Video siap di-upload</p>
+                </div>
+            `;
         }
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.innerHTML = `<img src="${e.target.result}" class="w-48 h-48 object-cover rounded-lg border border-gray-300 mt-2">`;
-        };
-        reader.readAsDataURL(file);
-    } else if (file && file.type.startsWith('video/')) {
-        const fileSize = file.size / 1024 / 1024; // Convert to MB
-        if (fileSize > 50) {
-            alert('Ukuran video terlalu besar. Maksimal 50MB.');
-            e.target.value = '';
+
+        if (deleteCheckbox) {
+            deleteCheckbox.checked = false;
         }
-        preview.innerHTML = '';
     } else {
-        preview.innerHTML = '';
+        previewContainer.innerHTML = '';
     }
-});
+}
+
+// Preview foto
+if (document.getElementById('file_media')) {
+    document.getElementById('file_media').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('fotoPreview');
+
+        if (file && file.type.startsWith('image/')) {
+            const fileSize = file.size / 1024 / 1024; // Convert to MB
+            if (fileSize > 5) {
+                alert('Ukuran foto terlalu besar. Maksimal 5MB.');
+                e.target.value = '';
+                preview.innerHTML = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = `<img src="${e.target.result}" class="w-48 h-48 object-cover rounded-lg border border-gray-300 mt-2">`;
+            };
+            reader.readAsDataURL(file);
+        } else if (file && file.type.startsWith('video/')) {
+            const fileSize = file.size / 1024 / 1024; // Convert to MB
+            if (fileSize > 50) {
+                alert('Ukuran video terlalu besar. Maksimal 50MB.');
+                e.target.value = '';
+            }
+            preview.innerHTML = '';
+        } else {
+            preview.innerHTML = '';
+        }
+    });
+}
 
 // Preview thumbnail
-document.getElementById('thumbnail').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const preview = document.getElementById('thumbnailPreview');
-    
-    if (file) {
-        const fileSize = file.size / 1024 / 1024; // Convert to MB
-        if (fileSize > 2) {
-            alert('Ukuran thumbnail terlalu besar. Maksimal 2MB.');
-            e.target.value = '';
-            preview.innerHTML = '';
-            return;
-        }
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.innerHTML = `<img src="${e.target.result}" class="w-48 h-48 object-cover rounded-lg border border-gray-300 mt-2">`;
-        };
-        reader.readAsDataURL(file);
-    } else {
-        preview.innerHTML = '';
-    }
-});
+if (document.getElementById('thumbnail')) {
+    document.getElementById('thumbnail').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('thumbnailPreview');
 
-// Set default values on page load
+        if (file) {
+            const fileSize = file.size / 1024 / 1024; // Convert to MB
+            if (fileSize > 2) {
+                alert('Ukuran thumbnail terlalu besar. Maksimal 2MB.');
+                e.target.value = '';
+                preview.innerHTML = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = `<img src="${e.target.result}" class="w-48 h-48 object-cover rounded-lg border border-gray-300 mt-2">`;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.innerHTML = '';
+        }
+    });
+}
+
+// Handle delete_file checkbox
 document.addEventListener('DOMContentLoaded', function() {
+    const deleteCheckbox = document.querySelector('input[name="delete_file"]');
+    if (deleteCheckbox) {
+        deleteCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('file_galeri').value = '';
+                document.getElementById('mediaPreview').innerHTML = '';
+            }
+        });
+    }
+
     const tipe = document.getElementById('tipe').value;
     if (tipe) {
         toggleMediaFields();

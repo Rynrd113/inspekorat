@@ -34,7 +34,7 @@ class GaleriController extends Controller
         if ($request->filled('kategori')) {
             $query->where('kategori', $request->kategori);
         }
-        
+
         // Filter by tipe
         if ($request->filled('tipe')) {
             if ($request->tipe === 'foto') {
@@ -97,16 +97,16 @@ class GaleriController extends Controller
             $file = $request->file('file_galeri');
             $folder = 'galeri';
             $filePath = $file->store($folder, $this->getStorageDisk());
-            
+
             $validated['file_path'] = $filePath;
             $validated['file_name'] = $file->getClientOriginalName();
             $validated['file_type'] = $file->getClientOriginalExtension();
             $validated['file_size'] = $file->getSize();
-            
+
             // Auto-generate thumbnail for images if no custom thumbnail is uploaded
             $fileExtension = strtolower($file->getClientOriginalExtension());
             $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-            
+
             if (in_array($fileExtension, $imageExtensions) && !$request->hasFile('thumbnail')) {
                 // For images, use the main image as thumbnail (copy the same file)
                 $validated['thumbnail'] = $filePath;
@@ -164,28 +164,43 @@ class GaleriController extends Controller
             'file_galeri' => 'nullable|file|max:20480|mimes:jpeg,png,jpg,gif,mp4,avi,mov',
             'thumbnail' => 'nullable|file|max:5120|mimes:jpeg,png,jpg,gif',
             'status' => 'nullable|boolean',
+            'delete_file' => 'nullable|boolean',
         ]);
 
+        // Handle delete file checkbox
+        if ($request->has('delete_file') && $request->delete_file) {
+            if ($galeri->file_path) {
+                \Storage::disk('public')->delete($galeri->file_path);
+            }
+            $validated['file_path'] = null;
+            $validated['file_name'] = null;
+            $validated['file_type'] = null;
+            $validated['file_size'] = null;
+            // Also delete thumbnail if it's same as file
+            if ($galeri->thumbnail === $galeri->file_path) {
+                $validated['thumbnail'] = null;
+            }
+        }
         // Handle file upload
-        if ($request->hasFile('file_galeri')) {
+        elseif ($request->hasFile('file_galeri')) {
             // Delete old file if exists
             if ($galeri->file_path) {
                 \Storage::disk('public')->delete($galeri->file_path);
             }
-            
+
             $file = $request->file('file_galeri');
             $folder = 'galeri';
             $filePath = $file->store($folder, $this->getStorageDisk());
-            
+
             $validated['file_path'] = $filePath;
             $validated['file_name'] = $file->getClientOriginalName();
             $validated['file_type'] = $file->getClientOriginalExtension();
             $validated['file_size'] = $file->getSize();
-            
+
             // Auto-generate thumbnail for images if no custom thumbnail is uploaded
             $fileExtension = strtolower($file->getClientOriginalExtension());
             $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-            
+
             if (in_array($fileExtension, $imageExtensions) && !$request->hasFile('thumbnail')) {
                 // For images, use the main image as thumbnail
                 $validated['thumbnail'] = $filePath;
@@ -198,7 +213,7 @@ class GaleriController extends Controller
             if ($galeri->thumbnail && $galeri->thumbnail !== $galeri->file_path) {
                 \Storage::disk($this->getStorageDisk())->delete($galeri->thumbnail);
             }
-            
+
             $thumbnailFile = $request->file('thumbnail');
             $thumbnailPath = $thumbnailFile->store('galeri/thumbnails', $this->getStorageDisk());
             $validated['thumbnail'] = $thumbnailPath;
@@ -221,7 +236,7 @@ class GaleriController extends Controller
     public function destroy($id)
     {
         $galeri = \App\Models\Galeri::findOrFail($id);
-        
+
         // Delete associated files
         if ($galeri->file_path) {
             \Storage::disk('public')->delete($galeri->file_path);

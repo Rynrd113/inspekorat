@@ -47,8 +47,8 @@
             <!-- Services Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="services-grid">
                 @forelse($pelayanans as $pelayanan)
-                <div class="service-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden" 
-                     data-category="{{ $pelayanan->kategori }}" 
+                <div class="service-card bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+                     data-category="{{ $pelayanan->kategori }}"
                      style="opacity: 1; transform: translateY(0); transition: all 0.3s ease;">
                     <div class="p-6">
                         <!-- Service Icon -->
@@ -70,7 +70,7 @@
                         <h3 class="text-xl font-semibold text-gray-900 mb-3">
                             {{ $pelayanan->nama }}
                         </h3>
-                        
+
                         <p class="text-gray-600 mb-4 line-clamp-3">
                             {{ $pelayanan->deskripsi }}
                         </p>
@@ -90,18 +90,18 @@
 
                         <!-- Action Button -->
                         <div class="flex items-center justify-between">
-                            <a href="{{ route('public.pelayanan.show', $pelayanan->id) }}" 
+                            <a href="{{ route('public.pelayanan.show', $pelayanan->id) }}"
                                class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors">
                                 <span>Lihat Detail</span>
                                 <i class="fas fa-arrow-right ml-2"></i>
                             </a>
-                            
+
                             @if($pelayanan->biaya)
                             <span class="text-sm font-medium text-green-600">
                                 @if($pelayanan->biaya === 'Gratis' || strtolower($pelayanan->biaya) === 'gratis')
                                     Gratis
                                 @elseif(is_numeric($pelayanan->biaya))
-                                    Rp {{ number_format($pelayanan->biaya) }}
+                                    Rp {{ number_format((int)$pelayanan->biaya, 0, ',', '.') }}
                                 @else
                                     {{ $pelayanan->biaya }}
                                 @endif
@@ -174,29 +174,29 @@
 // Filter services by category
 (function() {
     'use strict';
-    
+
     function initServiceFilter() {
         const filterButtons = document.querySelectorAll('.category-filter');
         const serviceCards = document.querySelectorAll('.service-card');
-        
+
         if (!filterButtons.length || !serviceCards.length) {
             console.log('No filters or cards found');
             return;
         }
-        
+
         filterButtons.forEach(function(button) {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
-                
+
                 const category = this.getAttribute('data-category');
                 console.log('Filter clicked:', category);
-                
+
                 // Update active button
                 filterButtons.forEach(function(btn) {
                     btn.classList.remove('active', 'bg-blue-600', 'text-white');
                     btn.classList.add('bg-white', 'text-gray-700', 'border', 'border-gray-300');
                 });
-                
+
                 this.classList.add('active', 'bg-blue-600', 'text-white');
                 this.classList.remove('bg-white', 'text-gray-700', 'border', 'border-gray-300');
 
@@ -204,7 +204,7 @@
                 let visibleCount = 0;
                 serviceCards.forEach(function(card) {
                     const cardCategory = card.getAttribute('data-category');
-                    
+
                     if (category === 'all' || cardCategory === category) {
                         visibleCount++;
                         card.style.display = 'block';
@@ -220,14 +220,14 @@
                         }, 300);
                     }
                 });
-                
+
                 console.log('Visible cards:', visibleCount);
             });
         });
-        
+
         console.log('Service filter initialized:', filterButtons.length, 'buttons,', serviceCards.length, 'cards');
     }
-    
+
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initServiceFilter);

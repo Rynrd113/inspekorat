@@ -23,12 +23,15 @@ class PortalOpd extends Model
         'email',
         'website',
         'kepala_opd',
+        'nip_kepala',
         'logo',
+        'banner',
         'visi',
         'misi',
         'tugas_fungsi',
         'status',
-        'urutan'
+        'urutan',
+        'updated_by'
     ];
 
     protected $casts = [
@@ -74,7 +77,7 @@ class PortalOpd extends Model
             // Check if file exists in storage, otherwise try uploads
             $storagePath = public_path('storage/' . $this->logo);
             $uploadsPath = public_path('uploads/' . $this->logo);
-            
+
             if (file_exists($storagePath)) {
                 return asset('storage/' . $this->logo);
             } elseif (file_exists($uploadsPath)) {
@@ -96,7 +99,7 @@ class PortalOpd extends Model
             // Check if file exists in storage, otherwise try uploads
             $storagePath = public_path('storage/' . $this->banner);
             $uploadsPath = public_path('uploads/' . $this->banner);
-            
+
             if (file_exists($storagePath)) {
                 return asset('storage/' . $this->banner);
             } elseif (file_exists($uploadsPath)) {

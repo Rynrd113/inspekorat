@@ -14,11 +14,16 @@ class PelayananFactory extends Factory
         return [
             'nama' => $this->faker->sentence(3),
             'deskripsi' => $this->faker->paragraph(3),
-            'persyaratan' => $this->faker->paragraph(2),
-            'waktu_pelayanan' => $this->faker->randomElement(['1 hari', '2 hari', '3 hari', '1 minggu']),
+            'prosedur' => json_encode([$this->faker->sentence(), $this->faker->sentence(), $this->faker->sentence()]),
+            'persyaratan' => json_encode([$this->faker->sentence(), $this->faker->sentence()]),
+            'waktu_penyelesaian' => $this->faker->randomElement(['1 hari', '2 hari', '3 hari', '1 minggu']),
             'biaya' => $this->faker->randomElement(['Gratis', 'Rp 50.000', 'Rp 100.000', 'Rp 200.000']),
-            'status' => $this->faker->randomElement(['aktif', 'nonaktif']),
-            'dokumen' => $this->faker->optional()->filePath(),
+            'kategori' => $this->faker->randomElement(['perizinan', 'administrasi', 'pengawasan', 'konsultasi', 'audit', 'lainnya']),
+            'status' => $this->faker->boolean(),
+            'urutan' => $this->faker->numberBetween(1, 100),
+            'kontak_pic' => $this->faker->name(),
+            'email_pic' => $this->faker->email(),
+            'telepon_pic' => $this->faker->phoneNumber(),
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -27,14 +32,14 @@ class PelayananFactory extends Factory
     public function active(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'aktif',
+            'status' => true,
         ]);
     }
 
     public function inactive(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'nonaktif',
+            'status' => false,
         ]);
     }
 }

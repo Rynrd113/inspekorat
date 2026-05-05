@@ -15,12 +15,21 @@
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
                     <i class="fas fa-shield-alt text-blue-600 text-2xl"></i>
                 </div>
-                <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
                     Whistleblower System (WBS)
                 </h1>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    Laporkan dugaan pelanggaran atau tindakan yang tidak sesuai dengan peraturan melalui sistem ini. Identitas Anda akan dijaga kerahasiaan.
-                </p>
+                <div class="max-w-3xl mx-auto text-gray-700 space-y-4 leading-relaxed">
+                    <p class="text-lg">
+                        Sistem Pelaporan ini merupakan <span class="font-semibold text-gray-900">sarana resmi untuk melaporkan dugaan pelanggaran</span> seperti korupsi, penyalahgunaan wewenang, dan kecurangan (fraud).
+                    </p>
+                    <p class="text-lg">
+                        Kami memastikan <span class="font-semibold text-gray-900">setiap laporan ditangani secara profesional, objektif, dan bertanggung jawab</span>. Identitas pelapor dijamin kerahasiaannya serta dilindungi sepenuhnya, dan Anda juga dapat memilih untuk melapor secara anonim.
+                    </p>
+                    <p class="text-lg text-blue-700 bg-blue-50 p-4 rounded-lg border-l-4 border-blue-600">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        <span class="font-medium">Untuk keluhan layanan atau penyampaian aspirasi umum, silakan menggunakan menu <a href="{{ route('public.pengaduan') }}" class="underline hover:text-blue-900">Pengaduan Masyarakat</a>.</span>
+                    </p>
+                </div>
             </div>
 
             <!-- Alert Messages -->
@@ -147,7 +156,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Add more files button -->
                                 <button
                                     type="button"
@@ -158,7 +167,7 @@
                                     Tambah File Lain
                                 </button>
                             </div>
-                            
+
                             <p class="mt-2 text-sm text-gray-500">
                                 Format yang didukung: PDF, DOC, DOCX, JPG, JPEG, PNG (Maksimal 10MB per file)
                             </p>
@@ -190,11 +199,11 @@
                 <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-8">
                     <div class="flex items-center">
                         <i class="fas fa-phone text-blue-600 mr-2"></i>
-                        <span class="text-gray-700">(0984) 321234</span>
+                        <span class="text-gray-700">{{ $contact['phone'] ?? config('contact.phone') }}</span>
                     </div>
                     <div class="flex items-center">
                         <i class="fas fa-envelope text-blue-600 mr-2"></i>
-                        <span class="text-gray-700">wbs@papuatengah.go.id</span>
+                        <span class="text-gray-700">{{ $contact['email'] ?? config('contact.email') }}</span>
                     </div>
                 </div>
             </div>
@@ -209,13 +218,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const namaField = document.getElementById('nama-field');
     const emailField = document.getElementById('email-field');
     const teleponField = document.getElementById('telepon-field');
-    
+
     function toggleAnonymous() {
         if (anonymousCheckbox.checked) {
             namaField.style.display = 'none';
             emailField.style.display = 'none';
             teleponField.style.display = 'none';
-            
+
             // Remove required attribute
             document.querySelector('input[name="nama_pelapor"]').removeAttribute('required');
             document.querySelector('input[name="email"]').removeAttribute('required');
@@ -223,29 +232,29 @@ document.addEventListener('DOMContentLoaded', function() {
             namaField.style.display = 'block';
             emailField.style.display = 'block';
             teleponField.style.display = 'block';
-            
+
             // Add required attribute
             document.querySelector('input[name="nama_pelapor"]').setAttribute('required', 'required');
             document.querySelector('input[name="email"]').setAttribute('required', 'required');
         }
     }
-    
+
     anonymousCheckbox.addEventListener('change', toggleAnonymous);
-    
+
     // File input management
     let fileInputCount = 1;
     const maxFiles = 5;
-    
+
     window.addFileInput = function() {
         if (fileInputCount >= maxFiles) {
             alert(`Maksimal ${maxFiles} file yang dapat dilampirkan.`);
             return;
         }
-        
+
         const container = document.getElementById('file-inputs-container');
         const newGroup = document.createElement('div');
         newGroup.className = 'file-input-group flex items-center space-x-2';
-        
+
         newGroup.innerHTML = `
             <input
                 type="file"
@@ -261,35 +270,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 <i class="fas fa-times"></i>
             </button>
         `;
-        
+
         container.appendChild(newGroup);
         fileInputCount++;
-        
+
         // Show remove buttons if more than one file input
         updateRemoveButtons();
-        
+
         // Add file size validation
         const newInput = newGroup.querySelector('input[type="file"]');
         newInput.addEventListener('change', validateFileSize);
     };
-    
+
     window.removeFileInput = function(button) {
         if (fileInputCount <= 1) {
             return;
         }
-        
+
         button.closest('.file-input-group').remove();
         fileInputCount--;
         updateRemoveButtons();
     };
-    
+
     function updateRemoveButtons() {
         const removeButtons = document.querySelectorAll('.file-input-group button');
         removeButtons.forEach(button => {
             button.style.display = fileInputCount > 1 ? 'block' : 'none';
         });
     }
-    
+
     function validateFileSize(event) {
         const file = event.target.files[0];
         if (file) {
@@ -300,64 +309,64 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
-    
+
     // Add file size validation to existing input
     document.querySelectorAll('input[type="file"]').forEach(input => {
         input.addEventListener('change', validateFileSize);
     });
-    
+
     // Handle form submission
     document.getElementById('wbs-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
         // Validate files
         const fileInputs = document.querySelectorAll('input[name="attachments[]"]');
         let totalSize = 0;
         let hasValidFiles = false;
-        
+
         fileInputs.forEach(input => {
             if (input.files[0]) {
                 hasValidFiles = true;
                 totalSize += input.files[0].size;
             }
         });
-        
+
         if (hasValidFiles && totalSize > 50 * 1024 * 1024) { // 50MB total limit
             alert('Total ukuran file terlalu besar. Maksimal 50MB untuk semua file.');
             return;
         }
-        
+
         // Show loading
         const submitButton = this.querySelector('button[type="submit"]');
         const originalText = submitButton.innerHTML;
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
         submitButton.disabled = true;
-        
+
         // For demo - replace with actual form submission
         setTimeout(() => {
             // Reset button
             submitButton.innerHTML = originalText;
             submitButton.disabled = false;
-            
+
             // Show success message
             alert('Laporan WBS berhasil dikirim! Terima kasih atas partisipasi Anda.');
-            
+
             // Reset form and file inputs
             this.reset();
             resetFileInputs();
             toggleAnonymous();
         }, 2000);
     });
-    
+
     function resetFileInputs() {
         const container = document.getElementById('file-inputs-container');
         const allGroups = container.querySelectorAll('.file-input-group');
-        
+
         // Remove all but first group
         for (let i = 1; i < allGroups.length; i++) {
             allGroups[i].remove();
         }
-        
+
         fileInputCount = 1;
         updateRemoveButtons();
     }

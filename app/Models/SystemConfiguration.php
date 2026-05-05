@@ -46,7 +46,7 @@ class SystemConfiguration extends Model
     public function getConvertedValue()
     {
         $value = $this->value;
-        
+
         switch ($this->type) {
             case 'boolean':
                 return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false;
@@ -104,6 +104,7 @@ class SystemConfiguration extends Model
             'general' => 'Umum',
             'site' => 'Situs',
             'branding' => 'Branding & Visual',
+            'contact' => 'Kontak',
             'email' => 'Email',
             'security' => 'Keamanan',
             'backup' => 'Backup',
@@ -177,7 +178,18 @@ class SystemConfiguration extends Model
             'site_phone' => [null, 'string', 'Telepon kantor', 'site', true],
             'site_email' => [null, 'email', 'Email kantor', 'site', true],
             'site_working_hours' => ['Senin - Jumat: 08:00 - 16:00', 'string', 'Jam kerja', 'site', true],
-            
+            // Contact configurations (also used in public contact page)
+            'contact_alamat' => ['Jl. Ahmad Yani, Karang Tumaritis, Distrik Nabire, Kabupaten Nabire, Papua Tengah 98811', 'text', 'Alamat kantor', 'contact', true],
+            'contact_phone' => ['(0984) 321234', 'string', 'Telepon kantor', 'contact', true],
+            'contact_email' => ['inspektoratprovpt@gmail.com', 'email', 'Email kantor', 'contact', true],
+            'contact_instagram_url' => ['https://www.instagram.com/inspektoratpapuatengah?igsh=MWN6aHpoeGRwNGhydg==', 'url', 'URL Instagram', 'contact', true],
+            'contact_instagram_handle' => ['@inspektoratpapuatengah', 'string', 'Handle Instagram', 'contact', true],
+            'contact_jam_operasional' => ['Senin - Jumat: 08:00 - 16:00 WIT', 'string', 'Jam operasional', 'contact', true],
+            'contact_website_url' => ['https://inspektorat.papuatengahprov.go.id/', 'url', 'Website URL', 'contact', true],
+            'contact_website_display' => ['inspektorat.papuatengahprov.go.id', 'string', 'Website display', 'contact', true],
+            'contact_lokasi_maps_url' => ['https://maps.app.goo.gl/ha136M9kSrxhZqQd6', 'url', 'Google Maps URL', 'contact', true],
+            'contact_lokasi_text' => ['Lihat di Google Maps', 'string', 'Teks lokasi', 'contact', true],
+
             // Branding & Visual configurations
             'brand_logo_header' => [null, 'image', 'Logo untuk header (ukuran: 200x60px)', 'branding', true],
             'brand_logo_footer' => [null, 'image', 'Logo untuk footer (ukuran: 120x40px)', 'branding', true],
@@ -189,7 +201,7 @@ class SystemConfiguration extends Model
             'brand_gradient_start' => ['#1e40af', 'string', 'Warna awal gradient (format: #hex)', 'branding', false],
             'brand_gradient_end' => ['#3730a3', 'string', 'Warna akhir gradient (format: #hex)', 'branding', false],
             'brand_theme_mode' => ['light', 'string', 'Mode tema default (light/dark)', 'branding', false],
-            
+
             // Social Media configurations
             'social_facebook_url' => [null, 'url', 'URL halaman Facebook resmi', 'social', true],
             'social_twitter_url' => [null, 'url', 'URL halaman Twitter resmi', 'social', true],
@@ -200,23 +212,23 @@ class SystemConfiguration extends Model
             'social_whatsapp_number' => [null, 'string', 'Nomor WhatsApp layanan (format: 628xxx)', 'social', true],
             'social_telegram_url' => [null, 'url', 'URL channel Telegram resmi', 'social', true],
             'social_share_enabled' => [true, 'boolean', 'Aktifkan tombol share sosial media', 'social', false],
-            
+
             // Security configurations
             'max_login_attempts' => [5, 'number', 'Maksimal percobaan login', 'security', false],
             'session_timeout' => [120, 'number', 'Timeout sesi (menit)', 'security', false],
             'password_min_length' => [8, 'number', 'Panjang minimal password', 'security', false],
             'require_email_verification' => [false, 'boolean', 'Verifikasi email diperlukan', 'security', false],
-            
+
             // Content configurations
             'content_approval_required' => [false, 'boolean', 'Persetujuan konten diperlukan', 'general', false],
             'auto_publish_news' => [true, 'boolean', 'Publikasi berita otomatis', 'general', false],
             'max_file_upload_size' => [10, 'number', 'Maksimal ukuran file upload (MB)', 'general', false],
             'allowed_file_types' => [['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png', 'gif'], 'array', 'Tipe file yang diizinkan', 'general', false],
-            
+
             // Performance configurations
             'cache_enabled' => [true, 'boolean', 'Cache diaktifkan', 'performance', false],
             'cache_duration' => [60, 'number', 'Durasi cache (menit)', 'performance', false],
-            
+
             // Maintenance
             'maintenance_mode' => [false, 'boolean', 'Mode pemeliharaan', 'maintenance', false],
             'maintenance_message' => ['Situs sedang dalam pemeliharaan. Silakan coba lagi nanti.', 'text', 'Pesan pemeliharaan', 'maintenance', false],

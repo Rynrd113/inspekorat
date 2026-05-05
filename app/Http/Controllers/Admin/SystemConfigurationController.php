@@ -14,7 +14,29 @@ class SystemConfigurationController extends Controller
      */
     public function index(Request $request)
     {
-        $configurations = SystemConfiguration::orderBy('key')->paginate(20);
+        $query = SystemConfiguration::query();
+
+        // Apply search filter
+        if ($request->has('search') && $request->search) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('key', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('value', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply group filter
+        if ($request->has('group') && $request->group) {
+            $query->where('group', $request->group);
+        }
+
+        // Apply type filter
+        if ($request->has('type') && $request->type) {
+            $query->where('type', $request->type);
+        }
+
+        $configurations = $query->orderBy('key')->paginate(20);
 
         return view('admin.configurations.index', compact('configurations'));
     }
@@ -41,30 +63,30 @@ class SystemConfigurationController extends Controller
         if ($request->type === 'file' || $request->type === 'image') {
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
-                
+
                 // Security validation
                 $maxSize = $request->type === 'image' ? 5120 : 10240; // KB
                 if ($file->getSize() > $maxSize * 1024) {
                     return redirect()->back()->with('error', 'Ukuran file terlalu besar.');
                 }
-                
+
                 // Validate file type
-                $allowedTypes = $request->type === 'image' 
+                $allowedTypes = $request->type === 'image'
                     ? ['jpeg', 'png', 'jpg', 'gif', 'webp']
                     : ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt'];
-                    
+
                 if (!in_array(strtolower($file->getClientOriginalExtension()), $allowedTypes)) {
                     return redirect()->back()->with('error', 'Tipe file tidak diizinkan.');
                 }
-                
+
                 // Delete old file if exists
                 if ($config->value && Storage::disk('public')->exists($config->value)) {
                     Storage::disk('public')->delete($config->value);
                 }
-                
+
                 // Generate secure filename
                 $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9\.]/', '', $file->getClientOriginalName());
-                
+
                 // Store new file
                 $path = $file->storeAs('configurations', $filename, 'public');
                 $value = $path;
@@ -72,19 +94,19 @@ class SystemConfigurationController extends Controller
                 $value = $config->value; // Keep existing value
             }
         }
-        
+
         // Handle boolean values
         if ($request->type === 'boolean') {
             $value = $request->has('value') && in_array(strtolower($request->value), ['true', '1', 'yes', 'on']) ? true : false;
         }
-        
+
         // Handle array values
         if ($request->type === 'array') {
             if (is_string($value)) {
                 $value = explode(',', $value);
             }
         }
-        
+
         // Handle JSON values
         if ($request->type === 'json') {
             if (is_string($value)) {
@@ -94,7 +116,7 @@ class SystemConfigurationController extends Controller
                 }
             }
         }
-        
+
         $config->update([
             'key' => $request->key,
             'value' => $value,
@@ -124,7 +146,7 @@ class SystemConfigurationController extends Controller
         ]);
 
         $value = $request->value;
-        
+
         // Handle file uploads
         if ($request->type === 'file' || $request->type === 'image') {
             if ($request->hasFile('file')) {
@@ -134,19 +156,19 @@ class SystemConfigurationController extends Controller
                 $value = null;
             }
         }
-        
+
         // Handle boolean values
         if ($request->type === 'boolean') {
             $value = $request->has('value') && in_array(strtolower($request->value), ['true', '1', 'yes', 'on']) ? true : false;
         }
-        
+
         // Handle array values
         if ($request->type === 'array') {
             if (is_string($value)) {
                 $value = explode(',', $value);
             }
         }
-        
+
         // Handle JSON values
         if ($request->type === 'json') {
             if (is_string($value)) {
@@ -177,8 +199,8 @@ class SystemConfigurationController extends Controller
     public function destroy(SystemConfiguration $configuration)
     {
         // Delete file if exists
-        if (($configuration->type === 'file' || $configuration->type === 'image') 
-            && $configuration->value 
+        if (($configuration->type === 'file' || $configuration->type === 'image')
+            && $configuration->value
             && Storage::disk('public')->exists($configuration->value)) {
             Storage::disk('public')->delete($configuration->value);
         }
@@ -194,7 +216,7 @@ class SystemConfigurationController extends Controller
     public function initialize()
     {
         SystemConfiguration::initializeDefaults();
-        
+
         return redirect()->route('admin.configurations.index')
             ->with('success', 'Konfigurasi default berhasil diinisialisasi.');
     }
@@ -205,9 +227,9 @@ class SystemConfigurationController extends Controller
     public function export()
     {
         $configurations = SystemConfiguration::all();
-        
+
         $filename = 'system_configurations_' . now()->format('Y-m-d_H-i-s') . '.json';
-        
+
         $data = $configurations->map(function($config) {
             return [
                 'key' => $config->key,

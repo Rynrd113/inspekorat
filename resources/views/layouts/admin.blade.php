@@ -10,105 +10,105 @@
                     <x-site-logo variant="header" size="sm" :show-text="true" class="text-white" />
                 </a>
             </div>
-            
+
             <div class="mt-8 flex-grow flex flex-col">
                 <nav class="flex-1 px-2 pb-4 space-y-1">
                     <a href="{{ route('admin.dashboard') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-blue-100 hover:bg-blue-700' }}" style="{{ request()->routeIs('admin.dashboard') ? 'background-color: var(--brand-primary, #1e40af);' : '' }}">
                         <i class="fas fa-tachometer-alt mr-3 h-5 w-5"></i>
                         Dashboard
                     </a>
-                    
+
                     @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
                     <a href="{{ route('admin.wbs.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.wbs.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-shield-alt mr-3 h-5 w-5"></i>
-                        WBS (Whistleblowing System)
+                        Sistem Pelaporan
                     </a>
                     @endif
-                                     
+
                     @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
                     <a href="{{ route('admin.pengaduan.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.pengaduan.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-comments mr-3 h-5 w-5"></i>
                         Pengaduan Masyarakat
                     </a>
                     @endif
-                    
+
                     @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.portal-papua-tengah.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.portal-papua-tengah.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-newspaper mr-3 h-5 w-5"></i>
                         Portal Berita
                     </a>
                     @endif
-                    
+
                     @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.portal-opd.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.portal-opd.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-building mr-3 h-5 w-5"></i>
                         Portal OPD
                     </a>
                     @endif
-                    
+
                     @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.faq.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.faq.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-question-circle mr-3 h-5 w-5"></i>
                         FAQ
                     </a>
                     @endif
-                    
+
                     @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
                     <a href="{{ route('admin.pelayanan.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.pelayanan.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-concierge-bell mr-3 h-5 w-5"></i>
                         Pelayanan
                     </a>
                     @endif
-                    
+
                     @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.dokumen.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.dokumen.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-file-alt mr-3 h-5 w-5"></i>
-                        Dokumen
+                        Dokumen Publik
                     </a>
                     @endif
-                    
+
                     @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.galeri.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.galeri.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-images mr-3 h-5 w-5"></i>
                         Galeri
                     </a>
                     @endif
-                    
+
                     @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.albums.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.albums.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-photo-video mr-3 h-5 w-5"></i>
                         Album Galeri
                     </a>
                     @endif
-                    
+
                     @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.hero-sliders.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.hero-sliders.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-sliders-h mr-3 h-5 w-5"></i>
                         Hero Slider
                     </a>
                     @endif
-                    
+
                     @if(auth()->user()->canApproveContent())
                     <a href="{{ route('admin.approvals.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.approvals.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-check-circle mr-3 h-5 w-5"></i>
                         Persetujuan
                     </a>
                     @endif
-                    
+
                     @if(auth()->user()->isSuperAdmin())
                     <a href="{{ route('admin.users.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.users.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-users mr-3 h-5 w-5"></i>
                         Manajemen User
                     </a>
                     @endif
-                    
+
                     @if(auth()->user()->isSuperAdmin())
                     <a href="{{ route('admin.configurations.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.configurations.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-cogs mr-3 h-5 w-5"></i>
                         Konfigurasi
                     </a>
                     @endif
-                    
+
                     @if(auth()->user()->isSuperAdmin())
                     <a href="{{ route('admin.audit-logs.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.audit-logs.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-history mr-3 h-5 w-5"></i>
@@ -117,7 +117,7 @@
                     @endif
                 </nav>
             </div>
-            
+
             <div class="flex-shrink-0 flex border-t border-blue-700 p-4">
                 <div class="flex items-center">
                     <div>
@@ -158,7 +158,7 @@
                             </nav>
                         @endif
                     </div>
-                    
+
                     <!-- Mobile menu button -->
                     <div class="md:hidden">
                         <button type="button" class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100">
@@ -178,13 +178,13 @@
                         {{ session('success') }}
                     </x-alert>
                 @endif
-                
+
                 @if(session('error'))
                     <x-alert type="error" class="mb-6" dismissible>
                         {{ session('error') }}
                     </x-alert>
                 @endif
-                
+
                 @if($errors->any())
                     <x-alert type="error" class="mb-6" dismissible>
                         <ul class="list-disc list-inside">
@@ -194,7 +194,7 @@
                         </ul>
                     </x-alert>
                 @endif
-                
+
                 @yield('main-content')
             </div>
         </main>
@@ -208,7 +208,7 @@
     // Store admin token in localStorage for API calls
     var adminToken = '{{ session('admin_token', '') }}';
     var isDebug = {{ config('app.debug') ? 'true' : 'false' }};
-    
+
     if (adminToken) {
         localStorage.setItem('admin_token', adminToken);
         if (isDebug) {
@@ -219,14 +219,14 @@
     // Check if token exists on page load
     document.addEventListener('DOMContentLoaded', function() {
         var existingToken = localStorage.getItem('admin_token');
-        
+
         if (!existingToken && adminToken) {
             localStorage.setItem('admin_token', adminToken);
             if (isDebug) {
                 console.log('Token set from session');
             }
         }
-        
+
         // Only log in debug mode
         if (isDebug) {
             var currentToken = localStorage.getItem('admin_token');

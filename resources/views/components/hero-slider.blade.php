@@ -1,6 +1,6 @@
 <!-- Hero Slider Section - Simple Photo Slider -->
 <section id="beranda" class="relative overflow-hidden">
-    <div class="hero-slider relative h-[50vh] min-h-[400px] sm:h-[60vh] sm:min-h-[500px] lg:h-[70vh] max-h-[700px] w-full">
+    <div class="hero-slider relative w-full" style="height: clamp(300px, 60vh, 800px);">
         @if($heroSliders->count() > 0)
             @foreach($heroSliders as $index => $slider)
             <!-- Slide {{ $index + 1 }} -->
@@ -8,8 +8,8 @@
                 @if($slider->gambar_url)
                     <!-- Background Image -->
                     <div class="absolute inset-0">
-                        <img src="{{ $slider->gambar_url }}" 
-                             alt="{{ $slider->judul ?? 'Slider ' . ($index + 1) }}" 
+                        <img src="{{ $slider->gambar_url }}"
+                             alt="{{ $slider->judul ?? 'Slider ' . ($index + 1) }}"
                              class="w-full h-full object-cover"
                              loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
                     </div>
@@ -17,7 +17,7 @@
                     <!-- Fallback Gradient -->
                     <div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800"></div>
                 @endif
-                
+
                 <!-- Optional: Title/Caption overlay (only if title exists) -->
                 @if($slider->judul)
                 <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 sm:p-6 lg:p-8">
@@ -40,19 +40,19 @@
             @if($heroSliders->count() > 1)
             <div class="absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 sm:space-x-3 z-20">
                 @foreach($heroSliders as $index => $slider)
-                <button class="slider-dot w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-white/50 hover:bg-white transition-all duration-300 shadow-lg {{ $index === 0 ? 'active bg-white' : '' }}" 
+                <button class="slider-dot w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-white/50 hover:bg-white transition-all duration-300 shadow-lg {{ $index === 0 ? 'active bg-white' : '' }}"
                         data-slide="{{ $index }}"
                         aria-label="Go to slide {{ $index + 1 }}"></button>
                 @endforeach
             </div>
 
             <!-- Slider Arrows -->
-            <button class="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/30 hover:bg-black/50 rounded-full flex items-center justify-center text-white transition-all duration-300 z-20" 
+            <button class="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/30 hover:bg-black/50 rounded-full flex items-center justify-center text-white transition-all duration-300 z-20"
                     id="prevSlide"
                     aria-label="Previous slide">
                 <i class="fas fa-chevron-left text-sm sm:text-base"></i>
             </button>
-            <button class="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/30 hover:bg-black/50 rounded-full flex items-center justify-center text-white transition-all duration-300 z-20" 
+            <button class="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/30 hover:bg-black/50 rounded-full flex items-center justify-center text-white transition-all duration-300 z-20"
                     id="nextSlide"
                     aria-label="Next slide">
                 <i class="fas fa-chevron-right text-sm sm:text-base"></i>
@@ -104,17 +104,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const dots = document.querySelectorAll('.slider-dot');
     const prevBtn = document.getElementById('prevSlide');
     const nextBtn = document.getElementById('nextSlide');
-    
+
     if (slides.length <= 1) return;
-    
+
     let currentSlide = 0;
     let autoSlideInterval;
-    
+
     function showSlide(index) {
         // Handle wrap around
         if (index >= slides.length) index = 0;
         if (index < 0) index = slides.length - 1;
-        
+
         // Update slides
         slides.forEach((slide, i) => {
             slide.classList.remove('active');
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 slide.classList.add('active');
             }
         });
-        
+
         // Update dots
         dots.forEach((dot, i) => {
             dot.classList.remove('active', 'bg-white');
@@ -132,26 +132,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 dot.classList.remove('bg-white/50');
             }
         });
-        
+
         currentSlide = index;
     }
-    
+
     function nextSlide() {
         showSlide(currentSlide + 1);
     }
-    
+
     function prevSlide() {
         showSlide(currentSlide - 1);
     }
-    
+
     function startAutoSlide() {
         autoSlideInterval = setInterval(nextSlide, 5000);
     }
-    
+
     function stopAutoSlide() {
         clearInterval(autoSlideInterval);
     }
-    
+
     // Event listeners
     if (nextBtn) {
         nextBtn.addEventListener('click', function() {
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
             startAutoSlide();
         });
     }
-    
+
     if (prevBtn) {
         prevBtn.addEventListener('click', function() {
             stopAutoSlide();
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
             startAutoSlide();
         });
     }
-    
+
     dots.forEach((dot, index) => {
         dot.addEventListener('click', function() {
             stopAutoSlide();
@@ -176,10 +176,10 @@ document.addEventListener('DOMContentLoaded', function() {
             startAutoSlide();
         });
     });
-    
+
     // Start auto slide
     startAutoSlide();
-    
+
     // Pause on hover
     const sliderContainer = document.querySelector('.hero-slider');
     if (sliderContainer) {

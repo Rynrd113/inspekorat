@@ -55,9 +55,9 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-search text-gray-400"></i>
                         </div>
-                        <input 
-                            type="text" 
-                            name="search" 
+                        <input
+                            type="text"
+                            name="search"
                             value="{{ request('search') }}"
                             placeholder="Cari berita, penulis, atau kata kunci..."
                             class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
@@ -98,7 +98,7 @@
         <!-- Results Info -->
         <div class="mb-6">
             <p class="text-gray-600">
-                Menampilkan {{ $beritaList->firstItem() ?? 0 }} - {{ $beritaList->lastItem() ?? 0 }} 
+                Menampilkan {{ $beritaList->firstItem() ?? 0 }} - {{ $beritaList->lastItem() ?? 0 }}
                 dari {{ $beritaList->total() }} berita
                 @if(request('search'))
                     untuk "<strong>{{ request('search') }}</strong>"
@@ -111,55 +111,56 @@
 
         <!-- News Grid -->
         @if($beritaList->count() > 0)
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-12">
                 @foreach($beritaList as $berita)
-                    <article class="bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden group">
-                        <!-- Image Placeholder -->
-                        <div class="h-48 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-colors">
-                            <i class="fas fa-image text-blue-400 text-3xl"></i>
+                    <article class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+                        <div class="relative h-48 bg-gray-200 overflow-hidden">
+                            @if(!empty($berita->gambar))
+                                <img src="{{ asset('storage/' . $berita->gambar) }}"
+                                     alt="{{ $berita->judul }}"
+                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                     loading="lazy">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-100">
+                                    <i class="fas fa-newspaper text-blue-300 text-4xl"></i>
+                                </div>
+                            @endif
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </div>
-                        
-                        <!-- Content -->
-                        <div class="p-6">
-                            <!-- Category -->
+
+                        <div class="p-4 sm:p-5">
                             <div class="mb-3">
-                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                     {{ strtoupper($berita->kategori) }}
                                 </span>
                             </div>
-                            
-                            <!-- Title -->
-                            <h3 class="text-lg font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+
+                            <h3 class="font-semibold text-gray-900 line-clamp-2 mb-2 group-hover:text-blue-600 transition-colors">
                                 <a href="{{ route('public.berita.show', $berita->id) }}" class="block">
                                     {{ $berita->judul }}
                                 </a>
                             </h3>
-                            
-                            <!-- Excerpt -->
-                            <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+
+                            <p class="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
                                 {{ Str::limit(strip_tags($berita->konten), 120) }}
                             </p>
-                            
-                            <!-- Meta Info -->
-                            <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
-                                <div class="flex items-center space-x-3">
-                                    <span class="flex items-center">
-                                        <i class="fas fa-user mr-1"></i>
-                                        {{ $berita->author }}
-                                    </span>
-                                    <span class="flex items-center">
-                                        <i class="fas fa-calendar mr-1"></i>
-                                        {{ $berita->tanggal_publikasi ? \Carbon\Carbon::parse($berita->tanggal_publikasi)->format('d M Y') : 'Tanggal tidak tersedia' }}
-                                    </span>
-                                </div>
-                                <span class="flex items-center">
+
+                            <div class="flex items-center justify-between text-xs text-gray-500 mb-4 gap-3">
+                                <span class="flex items-center min-w-0">
+                                    <i class="fas fa-user mr-1"></i>
+                                    <span class="truncate">{{ Str::limit($berita->author ?? 'Admin', 18) }}</span>
+                                </span>
+                                <span class="flex items-center whitespace-nowrap">
+                                    <i class="fas fa-calendar mr-1"></i>
+                                    {{ $berita->tanggal_publikasi ? \Carbon\Carbon::parse($berita->tanggal_publikasi)->format('d M Y') : 'Tanggal tidak tersedia' }}
+                                </span>
+                                <span class="flex items-center whitespace-nowrap">
                                     <i class="fas fa-eye mr-1"></i>
-                                    {{ number_format($berita->views) }}
+                                    {{ number_format($berita->views ?? 0) }}
                                 </span>
                             </div>
-                            
-                            <!-- Read More Button -->
-                            <a href="{{ route('public.berita.show', $berita->id) }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors group">
+
+                            <a href="{{ route('public.berita.show', $berita->id) }}" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800 group">
                                 <span>Baca Selengkapnya</span>
                                 <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                             </a>

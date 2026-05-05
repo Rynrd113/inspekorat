@@ -5,8 +5,11 @@ namespace App\Providers;
 use App\Events\PelayananCreated;
 use App\Events\PelayananUpdated;
 use App\Events\PelayananDeleted;
+use App\Events\PengaduanCreated;
 use App\Listeners\LogPelayananActivity;
 use App\Listeners\NotifyPelayananCreated;
+use App\Listeners\NotifyPengaduanCreated;
+use App\Listeners\LogPengaduanActivity;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -24,6 +27,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         PelayananDeleted::class => [
             LogPelayananActivity::class,
+        ],
+        PengaduanCreated::class => [
+            LogPengaduanActivity::class,
+            NotifyPengaduanCreated::class,
         ],
     ];
 

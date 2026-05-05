@@ -14,13 +14,21 @@ class PortalPapuaTengah extends Model
 
     protected $fillable = [
         'judul',
+        'slug',
         'konten',
         'kategori',
         'author',
+        'penulis',
         'tanggal_publikasi',
         'gambar',
+        'thumbnail',
         'status',
+        'is_published',
+        'is_featured',
+        'published_at',
         'views',
+        'tags',
+        'meta_description',
         'created_by',
         'updated_by'
     ];

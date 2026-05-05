@@ -4,7 +4,7 @@ namespace Tests\Unit\Services;
 
 use App\Models\Pelayanan;
 use App\Repositories\Contracts\PelayananRepositoryInterface;
-use App\Services\PelayananService;
+use App\Services\Implementation\PelayananService;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -22,7 +22,7 @@ class PelayananServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->pelayananRepository = Mockery::mock(PelayananRepositoryInterface::class);
         $this->pelayananService = new PelayananService($this->pelayananRepository);
     }
@@ -121,7 +121,7 @@ class PelayananServiceTest extends TestCase
     {
         // Arrange
         Storage::fake('public');
-        
+
         $file = UploadedFile::fake()->create('test.pdf', 100);
         $data = [
             'nama' => 'Test Pelayanan',
@@ -173,7 +173,7 @@ class PelayananServiceTest extends TestCase
     {
         // Arrange
         $query = 'test';
-        
+
         $this->pelayananRepository->shouldReceive('search')
             ->once()
             ->with($query)

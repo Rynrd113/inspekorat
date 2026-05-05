@@ -15,6 +15,7 @@ use App\Models\Faq;
 use App\Models\WebPortal;
 use App\Models\Pengaduan;
 use App\Models\HeroSlider;
+use App\Models\SystemConfiguration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -40,11 +41,9 @@ class PublicController extends Controller
                 ->get();
         });
 
-        // Get latest gallery items (photos only) - ensure album_id exists
+        // Get latest gallery items (photos only)
         $latestGallery = Cache::remember('public_latest_gallery', 600, function () {
             return Galeri::where('status', true)
-                ->whereNotNull('album_id')
-                ->whereIn('file_type', ['jpg', 'jpeg', 'png', 'gif', 'webp'])
                 ->orderBy('tanggal_publikasi', 'desc')
                 ->orderBy('created_at', 'desc')
                 ->take(8)
@@ -87,14 +86,14 @@ class PublicController extends Controller
     private function trackVisitor(): void
     {
         $cacheKey = 'visitor_' . request()->ip() . '_' . date('Ymd');
-        
+
         // Only count unique visitors per day
         if (!Cache::has($cacheKey)) {
             // Increment visitor count in system_configurations
             DB::table('system_configurations')
                 ->where('key', 'total_visitors')
                 ->increment('value');
-            
+
             // Cache for 24 hours
             Cache::put($cacheKey, true, now()->addDay());
         }
@@ -109,10 +108,10 @@ class PublicController extends Controller
         $totalVisitors = DB::table('system_configurations')
             ->where('key', 'total_visitors')
             ->value('value') ?? 0;
-        
+
         // Add views from portal_papua_tengahs
         $portalViews = DB::table('portal_papua_tengahs')->sum('views') ?? 0;
-        
+
         return (int)$totalVisitors + (int)$portalViews;
     }
 
@@ -121,7 +120,13 @@ class PublicController extends Controller
      */
     public function wbs(): View
     {
-        return view('public.wbs');
+        // Get contact info from database configuration
+        $contact = [
+            'phone' => SystemConfiguration::get('contact_phone', config('contact.phone')),
+            'email' => SystemConfiguration::get('contact_email', config('contact.email')),
+        ];
+
+        return view('public.wbs', compact('contact'));
     }
 
     /**
@@ -178,7 +183,7 @@ class PublicController extends Controller
     public function berita(Request $request): View
     {
         $query = PortalPapuaTengah::published();
-        
+
         // Search functionality
         if ($request->filled('search')) {
             $search = $request->search;
@@ -188,12 +193,12 @@ class PublicController extends Controller
                   ->orWhere('author', 'like', "%{$search}%");
             });
         }
-        
+
         // Category filter
         if ($request->filled('kategori')) {
             $query->where('kategori', $request->kategori);
         }
-        
+
         // Sort filter
         $sort = $request->get('sort', 'terbaru');
         if ($sort === 'terpopuler') {
@@ -201,17 +206,17 @@ class PublicController extends Controller
         } else {
             $query->orderBy('tanggal_publikasi', 'desc');
         }
-        
+
         // Pagination
         $beritaList = $query->paginate(12)->withQueryString();
-        
+
         // Get available categories
         $categories = PortalPapuaTengah::published()
             ->select('kategori')
             ->distinct()
             ->pluck('kategori')
             ->sort();
-        
+
         return view('public.berita-list', compact('beritaList', 'categories'));
     }
 
@@ -254,7 +259,7 @@ class PublicController extends Controller
     public function pelayananShow($id): View
     {
         $pelayanan = Pelayanan::where('status', true)->findOrFail($id);
-        
+
         // Get related services (same category, different id, limit 3)
         $relatedServices = Pelayanan::where('status', true)
             ->where('kategori', $pelayanan->kategori)
@@ -262,7 +267,7 @@ class PublicController extends Controller
             ->orderBy('urutan')
             ->limit(3)
             ->get();
-            
+
         return view('public.pelayanan.show', compact('pelayanan', 'relatedServices'));
     }
 
@@ -288,8 +293,8 @@ class PublicController extends Controller
         }
 
         $dokumens = Cache::remember(
-            'public_dokumens_' . md5($request->fullUrl()), 
-            600, 
+            'public_dokumens_' . md5($request->fullUrl()),
+            600,
             function () use ($query) {
                 return $query->orderBy('tanggal_publikasi', 'desc')->get();
             }
@@ -304,7 +309,7 @@ class PublicController extends Controller
     public function dokumenDownload($id)
     {
         $dokumen = Dokumen::where('status', true)->findOrFail($id);
-        
+
         // Increment download count
         $dokumen->increment('download_count');
 
@@ -312,14 +317,14 @@ class PublicController extends Controller
         if (isset($dokumen->file_path) && Storage::exists($dokumen->file_path)) {
             $pathInfo = pathinfo($dokumen->file_path);
             $fileName = $dokumen->file_name ?? ($dokumen->judul . '.' . ($pathInfo['extension'] ?? 'pdf'));
-            
+
             return Storage::download($dokumen->file_path, $fileName);
         }
 
         // Fallback: Generate a sample file if file not found
         $fileName = ($dokumen->file_name ?? ($dokumen->judul . '.pdf'));
         $sampleContent = $this->generateSamplePDF($dokumen->judul ?? 'Dokumen', $dokumen->deskripsi ?? '');
-        
+
         return response($sampleContent)
             ->header('Content-Type', 'application/pdf')
             ->header('Content-Disposition', 'attachment; filename="' . $fileName . '"');
@@ -331,12 +336,12 @@ class PublicController extends Controller
     public function dokumenPreview($id)
     {
         $dokumen = Dokumen::where('status', true)->findOrFail($id);
-        
+
         // Check if file exists
         if (isset($dokumen->file_path) && Storage::exists($dokumen->file_path)) {
             $pathInfo = pathinfo($dokumen->file_path);
             $extension = strtolower($pathInfo['extension'] ?? 'pdf');
-            
+
             // Handle different file types
             switch ($extension) {
                 case 'pdf':
@@ -344,7 +349,7 @@ class PublicController extends Controller
                         'Content-Type' => 'application/pdf',
                         'Content-Disposition' => 'inline; filename="preview.pdf"'
                     ]);
-                    
+
                 case 'jpg':
                 case 'jpeg':
                 case 'png':
@@ -353,7 +358,7 @@ class PublicController extends Controller
                         'Content-Type' => 'image/' . ($extension === 'jpg' ? 'jpeg' : $extension),
                         'Content-Disposition' => 'inline'
                     ]);
-                    
+
                 default:
                     // For other file types, force download
                     return $this->dokumenDownload($id);
@@ -362,7 +367,7 @@ class PublicController extends Controller
 
         // Fallback: Generate a sample PDF for preview
         $sampleContent = $this->generateSamplePDF($dokumen->judul ?? 'Dokumen', $dokumen->deskripsi ?? '');
-        
+
         return response($sampleContent)
             ->header('Content-Type', 'application/pdf')
             ->header('Content-Disposition', 'inline; filename="preview.pdf"');
@@ -375,7 +380,7 @@ class PublicController extends Controller
     {
         $date = now()->format('d F Y');
         $content = wordwrap($description, 80, "\n", true);
-        
+
         return "%PDF-1.4
 1 0 obj
 <<
@@ -439,13 +444,13 @@ endobj
 endobj
 xref
 0 7
-0000000000 65535 f 
-0000000009 00000 n 
-0000000058 00000 n 
-0000000115 00000 n 
-0000000280 00000 n 
-0000000580 00000 n 
-0000000650 00000 n 
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+0000000115 00000 n
+0000000280 00000 n
+0000000580 00000 n
+0000000650 00000 n
 trailer
 <<
 /Size 7
@@ -506,7 +511,7 @@ startxref
     public function galeriShow($id): View
     {
         $galeri = Galeri::where('status', true)->findOrFail($id);
-        
+
         // Get related items from same category
         $related = Galeri::where('status', true)
             ->where('kategori', $galeri->kategori)
@@ -540,8 +545,8 @@ startxref
         }
 
         $faqs = Cache::remember(
-            'public_faqs_' . md5($request->fullUrl()), 
-            600, 
+            'public_faqs_' . md5($request->fullUrl()),
+            600,
             function () use ($query) {
                 return $query->orderBy('is_popular', 'desc')
                            ->orderBy('urutan', 'asc')
@@ -575,14 +580,24 @@ startxref
      */
     public function kontak(): View
     {
+        // Prefer values from SystemConfiguration if present, fall back to config/contact.php
         $kontak = (object)[
             'nama' => 'Inspektorat Provinsi Papua Tengah',
-            'alamat' => config('contact.alamat'),
-            'instagram' => config('contact.instagram'),
-            'email' => config('contact.email'),
-            'jam_operasional' => config('contact.jam_operasional'),
-            'website' => config('contact.website'),
-            'lokasi' => config('contact.lokasi')
+            'alamat' => SystemConfiguration::get('contact_alamat', config('contact.alamat')),
+            'instagram' => [
+                'url' => SystemConfiguration::get('contact_instagram_url', config('contact.instagram.url')),
+                'handle' => SystemConfiguration::get('contact_instagram_handle', config('contact.instagram.handle')),
+            ],
+            'email' => SystemConfiguration::get('contact_email', config('contact.email')),
+            'jam_operasional' => SystemConfiguration::get('contact_jam_operasional', config('contact.jam_operasional')),
+            'website' => [
+                'url' => SystemConfiguration::get('contact_website_url', config('contact.website.url')),
+                'display' => SystemConfiguration::get('contact_website_display', config('contact.website.display')),
+            ],
+            'lokasi' => [
+                'maps_url' => SystemConfiguration::get('contact_lokasi_maps_url', config('contact.lokasi.maps_url')),
+                'text' => SystemConfiguration::get('contact_lokasi_text', config('contact.lokasi.text')),
+            ]
         ];
 
         return view('public.kontak', compact('kontak'));
@@ -601,7 +616,7 @@ startxref
 
         // Here you can add logic to save the contact message to database
         // or send an email to administrators
-        
+
         // For now, we'll just redirect back with a success message
         return redirect()->route('public.kontak')->with('success', 'Pesan Anda telah berhasil dikirim! Kami akan segera merespons.');
     }
@@ -670,7 +685,7 @@ startxref
             return redirect()->route('public.pengaduan')->with('success', 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             \Log::error('Validation error in storePengaduan', ['errors' => $e->errors()]);
-            
+
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -678,7 +693,7 @@ startxref
                     'errors' => $e->errors()
                 ], 422);
             }
-            
+
             return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             \Log::error('Error in storePengaduan', [
@@ -686,7 +701,7 @@ startxref
                 'file' => $e->getFile(),
                 'line' => $e->getLine()
             ]);
-            
+
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -694,7 +709,7 @@ startxref
                     'error' => config('app.debug') ? $e->getMessage() : null
                 ], 500);
             }
-            
+
             return back()->with('error', 'Terjadi kesalahan. Silakan coba lagi.')->withInput();
         }
     }

@@ -36,7 +36,7 @@
     <form method="POST" action="{{ route('admin.portal-papua-tengah.update', $portalPapuaTengah) }}" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @method('PUT')
-        
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Konten Utama -->
             <div class="lg:col-span-2 space-y-6">
@@ -45,64 +45,89 @@
                         <!-- Judul -->
                         <div>
                             <label for="judul" class="block text-sm font-medium text-gray-700">Judul Berita *</label>
-                            <input type="text" id="judul" name="judul" value="{{ old('judul', $portalPapuaTengah->judul) }}" required 
+                            <input type="text" id="judul" name="judul" value="{{ old('judul', $portalPapuaTengah->judul) }}" required
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('judul') border-red-500 @enderror">
                             @error('judul')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <!-- Slug -->
                         <div>
                             <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
-                            <input type="text" id="slug" name="slug" value="{{ old('slug', $portalPapuaTengah->slug) }}" 
+                            <input type="text" id="slug" name="slug" value="{{ old('slug', $portalPapuaTengah->slug) }}"
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('slug') border-red-500 @enderror">
                             <p class="mt-1 text-sm text-gray-500">URL-friendly version of the title.</p>
                             @error('slug')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <!-- Konten -->
                         <div>
                             <label for="konten" class="block text-sm font-medium text-gray-700">Konten *</label>
-                            <textarea id="konten" name="konten" rows="10" required 
+                            <textarea id="konten" name="konten" rows="10" required
                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('konten') border-red-500 @enderror">{{ old('konten', $portalPapuaTengah->konten) }}</textarea>
                             @error('konten')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <!-- Meta Description -->
                         <div>
                             <label for="meta_description" class="block text-sm font-medium text-gray-700">Meta Description</label>
-                            <textarea id="meta_description" name="meta_description" rows="3" maxlength="160" 
+                            <textarea id="meta_description" name="meta_description" rows="3" maxlength="160"
                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('meta_description') border-red-500 @enderror">{{ old('meta_description', $portalPapuaTengah->meta_description) }}</textarea>
                             <p class="mt-1 text-sm text-gray-500">Deskripsi singkat untuk SEO (max 160 karakter)</p>
                             @error('meta_description')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <!-- Tags -->
                         <div>
                             <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
-                            <input type="text" id="tags" name="tags" value="{{ old('tags', $portalPapuaTengah->tags) }}" 
+                            <input type="text" id="tags" name="tags" value="{{ old('tags', $portalPapuaTengah->tags) }}"
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('tags') border-red-500 @enderror">
                             <p class="mt-1 text-sm text-gray-500">Pisahkan dengan koma, contoh: berita, pengumuman, kegiatan</p>
                             @error('tags')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <!-- Thumbnail -->
                         <div>
                             <label for="thumbnail" class="block text-sm font-medium text-gray-700">Thumbnail</label>
-                            <input type="file" id="thumbnail" name="thumbnail" 
-                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+
+                            {{-- Current Thumbnail Preview --}}
                             @if($portalPapuaTengah->thumbnail)
-                                <p class="mt-2 text-sm text-gray-500">Thumbnail saat ini: <a href="{{ Storage::url($portalPapuaTengah->thumbnail) }}" target="_blank" class="text-blue-600 hover:underline">Lihat</a></p>
+                                <div class="mt-2 mb-4 p-4 border border-gray-300 rounded-md bg-gray-50">
+                                    <div class="flex items-start justify-between">
+                                        <div>
+                                            <img src="{{ asset('storage/' . $portalPapuaTengah->thumbnail) }}"
+                                                 alt="Current Thumbnail"
+                                                 id="currentPreview"
+                                                 class="h-32 w-48 object-cover rounded-md border border-gray-300"
+                                                 onerror="this.style.display='none'">
+                                            <p class="mt-2 text-sm text-gray-600">Thumbnail saat ini</p>
+                                        </div>
+                                        <label class="flex items-center text-sm">
+                                            <input type="checkbox" name="delete_thumbnail" value="1"
+                                                   class="w-4 h-4 text-red-600 bg-white border-gray-300 rounded focus:ring-2 focus:ring-red-500">
+                                            <span class="ml-2 text-red-600 font-medium">Hapus Thumbnail</span>
+                                        </label>
+                                    </div>
+                                </div>
                             @endif
+
+                            <input type="file" id="thumbnail" name="thumbnail" accept="image/*"
+                                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                   onchange="previewThumbnail(this)">
+                            <p class="mt-1 text-xs text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB</p>
+
+                            {{-- New File Preview --}}
+                            <div id="newPreviewContainer"></div>
+
                             @error('thumbnail')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -110,7 +135,7 @@
                     </div>
                 </x-card>
             </div>
-            
+
             <!-- Sidebar -->
             <div class="space-y-6">
                 <!-- Pengaturan Publikasi -->
@@ -120,7 +145,7 @@
                         <!-- Kategori -->
                         <div>
                             <label for="kategori" class="block text-sm font-medium text-gray-700">Kategori *</label>
-                            <select id="kategori" name="kategori" required 
+                            <select id="kategori" name="kategori" required
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('kategori') border-red-500 @enderror">
                                 <option value="">Pilih Kategori</option>
                                 <option value="berita" {{ old('kategori', $portalPapuaTengah->kategori) === 'berita' ? 'selected' : '' }}>Berita</option>
@@ -133,17 +158,17 @@
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <!-- Penulis -->
                         <div>
                             <label for="penulis" class="block text-sm font-medium text-gray-700">Penulis *</label>
-                            <input type="text" id="penulis" name="penulis" value="{{ old('penulis', $portalPapuaTengah->penulis) }}" required 
+                            <input type="text" id="penulis" name="penulis" value="{{ old('penulis', $portalPapuaTengah->penulis) }}" required
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('penulis') border-red-500 @enderror">
                             @error('penulis')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <!-- Status Publikasi -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Status</label>
@@ -161,17 +186,17 @@
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <!-- Tanggal Publikasi -->
                         <div>
                             <label for="published_at" class="block text-sm font-medium text-gray-700">Tanggal Publikasi</label>
-                            <input type="datetime-local" id="published_at" name="published_at" value="{{ old('published_at', $portalPapuaTengah->published_at ? $portalPapuaTengah->published_at->format('Y-m-d\TH:i') : '') }}" 
+                            <input type="datetime-local" id="published_at" name="published_at" value="{{ old('published_at', $portalPapuaTengah->published_at ? $portalPapuaTengah->published_at->format('Y-m-d\TH:i') : '') }}"
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('published_at') border-red-500 @enderror">
                             @error('published_at')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <!-- Featured -->
                         <div>
                             <label class="flex items-center">
@@ -179,11 +204,11 @@
                                 <span class="ml-2 text-sm text-gray-700">Berita Unggulan</span>
                             </label>
                         </div>
-                        
+
                         <!-- Views -->
                         <div>
                             <label for="views" class="block text-sm font-medium text-gray-700">Views</label>
-                            <input type="number" id="views" name="views" value="{{ old('views', $portalPapuaTengah->views) }}" min="0" 
+                            <input type="number" id="views" name="views" value="{{ old('views', $portalPapuaTengah->views) }}" min="0"
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('views') border-red-500 @enderror">
                             @error('views')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -191,7 +216,7 @@
                         </div>
                     </div>
                 </x-card>
-                
+
                 <!-- Informasi -->
                 <x-card>
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Informasi</h3>
@@ -210,7 +235,7 @@
                         </div>
                     </div>
                 </x-card>
-                
+
                 <!-- Tombol Aksi -->
                 <x-card>
                     <div class="space-y-3">
@@ -247,20 +272,81 @@ document.getElementById('meta_description').addEventListener('input', function()
     const maxLength = 160;
     const currentLength = this.value.length;
     const counter = document.getElementById('meta-counter');
-    
+
     if (!counter) {
         const counterElement = document.createElement('p');
         counterElement.id = 'meta-counter';
         counterElement.className = 'mt-1 text-sm text-gray-500';
         this.parentNode.appendChild(counterElement);
     }
-    
+
     document.getElementById('meta-counter').textContent = `${currentLength}/${maxLength} karakter`;
-    
+
     if (currentLength > maxLength) {
         document.getElementById('meta-counter').className = 'mt-1 text-sm text-red-600';
     } else {
         document.getElementById('meta-counter').className = 'mt-1 text-sm text-gray-500';
+    }
+});
+
+// Preview thumbnail image
+function previewThumbnail(input) {
+    const previewContainer = document.getElementById('newPreviewContainer');
+    const deleteCheckbox = document.querySelector('input[name="delete_thumbnail"]');
+
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+
+        // Check file type
+        if (!file.type.startsWith('image/')) {
+            alert('File harus berupa gambar (JPG, PNG, GIF).');
+            input.value = '';
+            previewContainer.innerHTML = '';
+            return;
+        }
+
+        // Check file size (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Ukuran file terlalu besar. Maksimal 2MB.');
+            input.value = '';
+            previewContainer.innerHTML = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewContainer.innerHTML = `
+                <div class="mt-3 p-3 border border-blue-300 rounded-md bg-blue-50">
+                    <img src="${e.target.result}"
+                         alt="New Thumbnail Preview"
+                         class="h-32 w-48 object-cover rounded-md border border-blue-300 mb-2">
+                    <p class="text-sm text-blue-600"><i class="fas fa-check-circle mr-1"></i>Preview file baru</p>
+                </div>
+            `;
+        };
+        reader.readAsDataURL(file);
+
+        // Uncheck delete checkbox if user select new file
+        if (deleteCheckbox) {
+            deleteCheckbox.checked = false;
+        }
+    } else {
+        previewContainer.innerHTML = '';
+    }
+}
+
+// Handle delete checkbox
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteCheckbox = document.querySelector('input[name="delete_thumbnail"]');
+    const thumbnailInput = document.getElementById('thumbnail');
+
+    if (deleteCheckbox) {
+        deleteCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                thumbnailInput.value = '';
+                document.getElementById('newPreviewContainer').innerHTML = '';
+            }
+        });
     }
 });
 </script>

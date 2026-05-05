@@ -5,6 +5,13 @@
 
 /* Mobile First Approach - Base styles for mobile */
 
+/* Ensure proper viewport setup */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 /* Typography Responsive */
 @media (max-width: 640px) {
     html {
@@ -21,6 +28,125 @@
 @media (min-width: 769px) {
     html {
         font-size: 16px;
+    }
+}
+
+/* ========== HERO SLIDER RESPONSIVE ========== */
+.hero-slider {
+    width: 100%;
+    height: clamp(300px, 60vh, 800px);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Extra small devices (320px - 374px) */
+@media (max-width: 374px) {
+    .hero-slider {
+        height: clamp(280px, 50vh, 350px);
+    }
+
+    .hero-slider .slide h2,
+    .hero-slider .slide h1 {
+        font-size: 1.1rem !important;
+    }
+
+    .hero-slider .slide p {
+        font-size: 0.85rem !important;
+    }
+}
+
+/* Small devices (375px - 567px) */
+@media (min-width: 375px) and (max-width: 567px) {
+    .hero-slider {
+        height: clamp(300px, 55vh, 400px);
+    }
+
+    .hero-slider .slide h2,
+    .hero-slider .slide h1 {
+        font-size: 1.25rem !important;
+    }
+
+    .hero-slider .slide p {
+        font-size: 0.9rem !important;
+    }
+}
+
+/* Medium devices (568px - 768px) */
+@media (min-width: 568px) and (max-width: 768px) {
+    .hero-slider {
+        height: clamp(380px, 60vh, 500px);
+    }
+
+    .hero-slider .slide h2,
+    .hero-slider .slide h1 {
+        font-size: 1.75rem !important;
+    }
+}
+
+/* Large devices (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .hero-slider {
+        height: clamp(450px, 65vh, 600px);
+    }
+
+    .hero-slider .slide h2,
+    .hero-slider .slide h1 {
+        font-size: 2rem !important;
+    }
+}
+
+/* Extra large devices (1025px+) */
+@media (min-width: 1025px) {
+    .hero-slider {
+        height: clamp(500px, 70vh, 800px);
+    }
+
+    .hero-slider .slide h2,
+    .hero-slider .slide h1 {
+        font-size: 2.5rem !important;
+    }
+}
+
+/* Landscape orientation fix */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero-slider {
+        height: 100vh !important;
+        min-height: 100vh !important;
+    }
+}
+
+/* Slider navigation arrows - responsive sizing */
+.hero-slider button {
+    width: clamp(2.5rem, 5vw, 3.5rem);
+    height: clamp(2.5rem, 5vw, 3.5rem);
+    font-size: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+@media (max-width: 374px) {
+    .hero-slider button {
+        width: 2rem !important;
+        height: 2rem !important;
+        font-size: 0.6rem !important;
+    }
+}
+
+/* Slider dots - responsive sizing */
+.slider-dot {
+    width: clamp(0.4rem, 1.5vw, 0.75rem);
+    height: clamp(0.4rem, 1.5vw, 0.75rem);
+}
+
+@media (max-width: 374px) {
+    .slider-dot {
+        width: 0.5rem !important;
+        height: 0.5rem !important;
+    }
+}
+
+@media (min-width: 375px) and (max-width: 567px) {
+    .slider-dot {
+        width: 0.625rem !important;
+        height: 0.625rem !important;
     }
 }
 
@@ -171,11 +297,18 @@
 
 /* Section Padding Responsive */
 .section-py {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 @media (min-width: 640px) {
+    .section-py {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+}
+
+@media (min-width: 768px) {
     .section-py {
         padding-top: 4rem;
         padding-bottom: 4rem;
@@ -189,16 +322,28 @@
     }
 }
 
-/* Mobile Menu Improvements */
+/* ========== MOBILE NAVIGATION ========== */
+/* Ensure header is properly sized */
+header {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+}
+
 @media (max-width: 768px) {
     #mobile-menu {
         max-height: calc(100vh - 4rem);
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
-    
+
     #mobile-menu a {
         padding: 0.875rem 1rem;
         font-size: 1rem;
+    }
+
+    /* Prevent scrolling when menu is open */
+    body.overflow-hidden {
+        overflow: hidden;
     }
 }
 
@@ -212,7 +357,7 @@
     .table-responsive table {
         font-size: 0.875rem;
     }
-    
+
     .table-responsive th,
     .table-responsive td {
         padding: 0.5rem;
@@ -229,6 +374,7 @@
     textarea,
     select {
         font-size: 16px !important; /* Prevent zoom on iOS */
+        min-height: 44px; /* Touch friendly */
     }
 }
 
@@ -236,11 +382,14 @@
 @media (max-width: 640px) {
     .modal {
         padding: 1rem;
+        margin: 1rem;
+        max-width: 100%;
     }
-    
+
     .modal-content {
         max-height: 85vh;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 }
 
@@ -251,20 +400,28 @@
         top: 0;
         z-index: 1000;
     }
+
+    header.sticky .shadow-sm {
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    }
 }
 
 /* Prevent horizontal scroll on mobile */
+html,
 body {
     overflow-x: hidden;
+    width: 100%;
 }
 
 /* Touch-friendly sizes */
 @media (max-width: 768px) {
     button,
     a.btn,
-    input[type="submit"] {
-        min-height: 44px; /* Apple's recommended touch target */
-        min-width: 44px;
+    input[type="submit"],
+    a[role="button"] {
+        min-height: 48px; /* Apple's recommended touch target (44px+) */
+        min-width: 48px;
+        padding: 0.75rem 1rem;
     }
 }
 
@@ -273,10 +430,18 @@ body {
     p {
         line-height: 1.6;
     }
-    
+
     .text-justify {
         text-align: left;
     }
+}
+
+/* Link click areas */
+a {
+    display: inline-block;
+    min-height: 44px;
+    min-width: 44px;
+    position: relative;
 }
 
 /* Back to top button responsive */
@@ -285,6 +450,7 @@ body {
     right: 1rem !important;
     width: 2.5rem !important;
     height: 2.5rem !important;
+    font-size: 0.875rem;
 }
 
 @media (min-width: 640px) {
@@ -293,6 +459,7 @@ body {
         right: 1.5rem !important;
         width: 3rem !important;
         height: 3rem !important;
+        font-size: 1rem;
     }
 }
 
@@ -300,15 +467,38 @@ body {
     .back-to-top {
         bottom: 2rem !important;
         right: 2rem !important;
+        width: 3.5rem !important;
+        height: 3.5rem !important;
     }
 }
 
 /* Footer Responsive */
+footer {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+}
+
 @media (max-width: 640px) {
     footer {
         text-align: center;
     }
-    
+
+    footer .grid {
+        gap: 1.5rem;
+    }
+
+    footer h5,
+    footer h6 {
+        text-align: left;
+    }
+}
+
+footer .grid {
+    display: grid;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
     footer .grid {
         gap: 2rem;
     }
@@ -347,28 +537,76 @@ body {
     }
 }
 
+.px-responsive {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+    .px-responsive {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .px-responsive {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
 /* Safe Area Insets for Notched Devices */
 @supports (padding: max(0px)) {
     body {
         padding-left: max(0px, env(safe-area-inset-left));
         padding-right: max(0px, env(safe-area-inset-right));
     }
-    
+
     header {
         padding-left: max(0px, env(safe-area-inset-left));
         padding-right: max(0px, env(safe-area-inset-right));
     }
+
+    footer {
+        padding-left: max(0px, env(safe-area-inset-left));
+        padding-right: max(0px, env(safe-area-inset-right));
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
 }
 
-/* Landscape Mode Adjustments for Mobile */
-@media (max-height: 500px) and (orientation: landscape) {
-    .hero-slider {
-        height: 100vh !important;
-        min-height: 100vh !important;
+/* Content Container Responsive */
+.max-w-7xl {
+    padding: 0 clamp(0.5rem, 2vw, 2rem);
+}
+
+/* Image optimization for responsive */
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Fix for very small widths */
+@media (max-width: 320px) {
+    body {
+        font-size: 13px;
     }
-    
-    .section-py {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+
+    .hero-slider {
+        height: 280px !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white;
+    }
+
+    header,
+    footer,
+    .no-print {
+        display: none;
     }
 }

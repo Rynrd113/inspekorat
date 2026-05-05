@@ -5,8 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Pelayanan;
 use App\Models\HeroSlider;
+use App\Models\Pengaduan;
 use App\Observers\PelayananObserver;
 use App\Observers\HeroSliderObserver;
+use App\Observers\PengaduanObserver;
 
 // Repository Contracts
 use App\Repositories\Contracts\UserRepositoryInterface;
@@ -57,5 +59,6 @@ class AppServiceProvider extends ServiceProvider
         // Register model observers
         Pelayanan::observe(PelayananObserver::class);
         HeroSlider::observe(HeroSliderObserver::class);
+        Pengaduan::observe(PengaduanObserver::class);
     }
 }

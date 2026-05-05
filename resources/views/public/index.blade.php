@@ -25,12 +25,12 @@
         transition: all 0.3s ease;
         box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
     }
-    
+
     .back-to-top:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.4);
     }
-    
+
     /* Slider styles - CRITICAL */
     .slide {
         opacity: 0;
@@ -39,35 +39,35 @@
         pointer-events: none;
         z-index: 1;
     }
-    
+
     .slide.active {
         opacity: 1 !important;
         visibility: visible !important;
         pointer-events: auto;
         z-index: 10;
     }
-    
+
     /* Slider dots */
     .slider-dot {
         cursor: pointer;
         background-color: rgba(255, 255, 255, 0.5);
     }
-    
+
     .slider-dot.active {
         background-color: rgba(255, 255, 255, 1);
         transform: scale(1.2);
     }
-    
+
     /* Slider buttons */
     #prevSlide, #nextSlide {
         cursor: pointer;
         user-select: none;
     }
-    
+
     #prevSlide:active, #nextSlide:active {
         transform: translateY(-50%) scale(0.95);
     }
-    
+
     /* Animation styles */
     @keyframes fadeIn {
         from {
@@ -79,11 +79,11 @@
             transform: translateY(0);
         }
     }
-    
+
     .animate-fade-in {
         animation: fadeIn 0.5s ease-out;
     }
-    
+
     /* Line clamp utility */
     .line-clamp-3 {
         display: -webkit-box;
@@ -162,14 +162,14 @@
                     </p>
                 </div>
             </div>
-            
+
             <!-- Statistics Numbers -->
             <div class="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl p-6 sm:p-8 lg:p-12">
                 <div class="text-center mb-8 sm:mb-12">
                     <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-4">Statistik Portal Provinsi Papua Tengah</h3>
                     <p class="text-gray-600 text-base sm:text-lg px-4">Data terkini layanan dan informasi yang tersedia di portal</p>
                 </div>
-                
+
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 xl:gap-12">
                     <div class="text-center">
                         <div class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-emerald-100 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 lg:mb-6">
@@ -178,7 +178,7 @@
                         <div class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 sm:mb-2" id="stat-opd">{{ number_format($stats['portal_opd'] ?? 0) }}</div>
                         <div class="text-xs sm:text-sm text-gray-600 font-medium px-2">OPD Terdaftar</div>
                     </div>
-                    
+
                     <div class="text-center">
                         <div class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-blue-100 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 lg:mb-6">
                             <i class="fas fa-newspaper text-blue-600 text-lg sm:text-xl lg:text-2xl"></i>
@@ -186,7 +186,7 @@
                         <div class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 sm:mb-2" id="stat-berita">{{ number_format($stats['berita'] ?? 0) }}</div>
                         <div class="text-xs sm:text-sm text-gray-600 font-medium px-2">Berita Aktif</div>
                     </div>
-                    
+
                     <div class="text-center">
                         <div class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-red-100 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 lg:mb-6">
                             <i class="fas fa-shield-alt text-red-600 text-lg sm:text-xl lg:text-2xl"></i>
@@ -194,7 +194,7 @@
                         <div class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 sm:mb-2" id="stat-wbs">{{ number_format($stats['wbs'] ?? 0) }}</div>
                         <div class="text-xs sm:text-sm text-gray-600 font-medium px-2">Laporan WBS</div>
                     </div>
-                    
+
                     <div class="text-center">
                         <div class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-purple-100 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 lg:mb-6">
                             <i class="fas fa-eye text-purple-600 text-lg sm:text-xl lg:text-2xl"></i>
@@ -203,6 +203,112 @@
                         <div class="text-xs sm:text-sm text-gray-600 font-medium px-2">Total Kunjungan</div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Berita Inspektorat Section -->
+    <section id="layanan" class="py-12 sm:py-16 lg:py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 sm:mb-16">
+                <div class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-blue-100 rounded-xl sm:rounded-2xl mb-4 sm:mb-6">
+                    <i class="fas fa-newspaper text-blue-600 text-xl sm:text-2xl"></i>
+                </div>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-4">
+                    Berita Inspektorat
+                </h2>
+                <p class="text-base sm:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-4">
+                    Dapatkan informasi terkini tentang kegiatan dan berita terbaru dari Inspektorat Provinsi Papua Tengah
+                </p>
+            </div>
+
+            <!-- Berita List -->
+            <div class="mb-12 sm:mb-16">
+                @if($portalPapuaTengah && $portalPapuaTengah->count() > 0)
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8" id="berita-list">
+                        @foreach($portalPapuaTengah as $berita)
+                            <article class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+                                <div class="relative h-48 bg-gray-200 overflow-hidden">
+                                    @if($berita->gambar)
+                                        <img src="{{ asset('storage/' . $berita->gambar) }}"
+                                             alt="{{ $berita->judul }}"
+                                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                             loading="lazy">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-100">
+                                            <i class="fas fa-newspaper text-blue-300 text-4xl"></i>
+                                        </div>
+                                    @endif
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                </div>
+
+                                <div class="p-4 sm:p-5">
+                                    <div class="mb-3">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            {{ strtoupper($berita->kategori) }}
+                                        </span>
+                                    </div>
+
+                                    <h3 class="font-semibold text-gray-900 line-clamp-2 mb-2 group-hover:text-blue-600 transition-colors">
+                                        {{ $berita->judul }}
+                                    </h3>
+
+                                    <p class="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
+                                        {{ Str::limit(strip_tags($berita->konten), 120) }}
+                                    </p>
+
+                                    <div class="flex items-center justify-between text-xs text-gray-500 mb-4 gap-3">
+                                        <span class="flex items-center min-w-0">
+                                            <i class="fas fa-user mr-1"></i>
+                                            <span class="truncate">{{ Str::limit($berita->author ?? 'Admin', 18) }}</span>
+                                        </span>
+                                        <span class="flex items-center whitespace-nowrap">
+                                            <i class="fas fa-calendar mr-1"></i>
+                                            {{ $berita->tanggal_publikasi ? $berita->tanggal_publikasi->format('d M Y') : 'Hari ini' }}
+                                        </span>
+                                        <span class="flex items-center whitespace-nowrap">
+                                            <i class="fas fa-eye mr-1"></i>
+                                            {{ number_format($berita->views ?? 0) }}
+                                        </span>
+                                    </div>
+
+                                    <a href="{{ route('public.berita.show', $berita->id) }}" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800 group">
+                                        <span>Baca Selengkapnya</span>
+                                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                                    </a>
+                                </div>
+                            </article>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-12 sm:py-16">
+                        <div class="max-w-md mx-auto px-4">
+                            <i class="fas fa-newspaper text-gray-300 text-5xl sm:text-6xl mb-4"></i>
+                            <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Belum ada berita tersedia</h3>
+                            <p class="text-sm sm:text-base text-gray-500 mb-6">Berita akan segera dipublikasikan.</p>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="flex flex-col items-center space-y-6 sm:space-y-8">
+                <div class="bg-white rounded-xl sm:rounded-2xl p-1.5 sm:p-2 shadow-lg flex gap-6">
+                    <button id="btn-terbaru" onclick="filterBerita('terbaru')" class="px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg sm:rounded-xl transition-all duration-200 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg">
+                        <i class="fas fa-clock mr-1 sm:mr-2"></i>TERBARU
+                    </button>
+                    <button id="btn-terpopuler" onclick="filterBerita('terpopuler')" class="px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg sm:rounded-xl transition-all duration-200">
+                        <i class="fas fa-fire mr-1 sm:mr-2"></i>TERPOPULER
+                    </button>
+                </div>
+
+                <!-- Lihat Semua Berita Button -->
+                <a href="{{ route('public.berita.index') }}" class="group inline-flex items-center px-6 sm:px-8 lg:px-10 py-3 sm:py-4 text-sm sm:text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl sm:rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                    <i class="fas fa-newspaper mr-2 sm:mr-3 text-base sm:text-lg"></i>
+                    Lihat Semua Berita
+                    <i class="fas fa-arrow-right ml-2 sm:ml-3 text-base sm:text-lg group-hover:translate-x-1 transition-transform duration-300"></i>
+                </a>
             </div>
         </div>
     </section>
@@ -234,164 +340,163 @@
                             <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                                 <div class="relative h-64 bg-gray-200 overflow-hidden">
                                     @if($item->file_path)
-                                        <img src="{{ asset('storage/' . $item->file_path) }}" 
-                                             alt="{{ $item->judul }}" 
+                                        <img src="{{ asset('storage/' . $item->file_path) }}"
+                                             alt="{{ $item->judul }}"
                                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                              loading="lazy"
                                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                        <div class="w-full h-full items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100 hidden">
-                                            <i class="fas fa-image text-pink-300 text-4xl"></i>
-                                        </div>
-                                    @else
-                                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100">
-                                            <i class="fas fa-image text-pink-300 text-4xl"></i>
-                                        </div>
-                                    @endif
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </div>
-                                <div class="p-4">
-                                    <h3 class="font-semibold text-gray-900 line-clamp-2 mb-2">{{ $item->judul }}</h3>
-                                    <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ $item->deskripsi }}</p>
-                                    <div class="flex items-center justify-between text-xs text-gray-500">
-                                        <span class="bg-pink-100 text-pink-700 px-2 py-1 rounded">{{ $item->kategori }}</span>
-                                        <span>{{ $item->tanggal_publikasi ? \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') : '' }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-                
-                <!-- Navigation Dots -->
-                <div class="flex justify-center items-center space-x-3 mt-8">
-                    @foreach($chunks as $index => $chunk)
-                    <button type="button" class="gallery-dot w-3 h-3 rounded-full transition-all duration-300 {{ $index === 0 ? 'active bg-pink-600' : 'bg-pink-300 hover:bg-pink-500' }}" data-slide="{{ $index }}"></button>
-                    @endforeach
-                </div>
-            </div>
+                                         <div class="w-full h-full items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100 hidden">
+                                             <i class="fas fa-image text-pink-300 text-4xl"></i>
+                                         </div>
+                                     @else
+                                         <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100">
+                                             <i class="fas fa-image text-pink-300 text-4xl"></i>
+                                         </div>
+                                     @endif
+                                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                 </div>
+                                 <div class="p-4">
+                                     <h3 class="font-semibold text-gray-900 line-clamp-2 mb-2">{{ $item->judul }}</h3>
+                                     <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ $item->deskripsi }}</p>
+                                     <div class="flex items-center justify-between text-xs text-gray-500">
+                                         <span class="bg-pink-100 text-pink-700 px-2 py-1 rounded">{{ $item->kategori }}</span>
+                                         <span>{{ $item->tanggal_publikasi ? \Carbon\Carbon::parse($item->tanggal_publikasi)->format('d M Y') : '' }}</span>
+                                     </div>
+                                 </div>
+                             </div>
+                             @endforeach
+                         </div>
+                     </div>
+                     @endforeach
+                 </div>
 
-            <!-- View All Button -->
-            <div class="text-center mt-12">
-                <a href="{{ route('public.galeri.index') }}" class="inline-flex items-center px-8 py-3 bg-pink-600 text-white rounded-xl hover:bg-pink-700 transition-colors font-semibold shadow-lg hover:shadow-xl">
-                    <i class="fas fa-images mr-2"></i>
-                    Lihat Semua Galeri
-                    <i class="fas fa-arrow-right ml-2"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-    @endif
+                 <!-- Navigation Dots -->
+                 <div class="flex justify-center items-center space-x-3 mt-8">
+                     @foreach($chunks as $index => $chunk)
+                     <button type="button" class="gallery-dot w-3 h-3 rounded-full transition-all duration-300 {{ $index === 0 ? 'active bg-pink-600' : 'bg-pink-300 hover:bg-pink-500' }}" data-slide="{{ $index }}"></button>
+                     @endforeach
+                 </div>
+             </div>
 
-    <!-- Berita Inspektorat Section -->
-    <section id="layanan" class="py-12 sm:py-16 lg:py-24 bg-gray-50">
+             <!-- View All Button -->
+             <div class="text-center mt-12">
+                 <a href="{{ route('public.galeri.index') }}" class="inline-flex items-center px-8 py-3 bg-pink-600 text-white rounded-xl hover:bg-pink-700 transition-colors font-semibold shadow-lg hover:shadow-xl">
+                     <i class="fas fa-images mr-2"></i>
+                     Lihat Semua Galeri
+                     <i class="fas fa-arrow-right ml-2"></i>
+                 </a>
+             </div>
+         </div>
+     </section>
+     @endif
+
+    <!-- Portal OPD Showcase Section -->
+    <section class="py-24 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12 sm:mb-16">
-                <div class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-blue-100 rounded-xl sm:rounded-2xl mb-4 sm:mb-6">
-                    <i class="fas fa-newspaper text-blue-600 text-xl sm:text-2xl"></i>
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-2xl mb-6">
+                    <i class="fas fa-building text-emerald-600 text-2xl"></i>
                 </div>
-                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-4">
-                    Berita Inspektorat
+                <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+                    Portal Organisasi Perangkat Daerah
                 </h2>
-                <p class="text-base sm:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-4">
-                    Dapatkan informasi terkini tentang kegiatan dan berita terbaru dari Inspektorat Provinsi Papua Tengah
+                <p class="text-xl text-gray-600 max-w-5xl mx-auto leading-relaxed">
+                    Jelajahi informasi lengkap tentang OPD di Papua Tengah. Akses profil, visi-misi, kontak, dan layanan dari setiap Organisasi Perangkat Daerah dengan mudah dan terpercaya.
                 </p>
             </div>
-            
-            <!-- Berita List -->
-            <div class="space-y-6 sm:space-y-8 mb-12 sm:mb-16" id="berita-list">
-                @if($portalPapuaTengah && $portalPapuaTengah->count() > 0)
-                    @foreach($portalPapuaTengah as $berita)
-                        <article class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
-                            <div class="md:flex">
-                                <!-- Image -->
-                                <div class="md:w-1/3">
-                                    <div class="h-48 sm:h-56 md:h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center group-hover:from-blue-200 group-hover:to-indigo-200 transition-colors">
-                                        @if($berita->gambar)
-                                            <img src="{{ asset('storage/' . $berita->gambar) }}" 
-                                                 alt="{{ $berita->judul }}" 
-                                                 class="w-full h-full object-cover">
-                                        @else
-                                            <i class="fas fa-image text-blue-400 text-2xl sm:text-3xl"></i>
-                                        @endif
-                                    </div>
-                                </div>
-                                
-                                <!-- Content -->
-                                <div class="md:w-2/3 p-4 sm:p-6 lg:p-8">
-                                    <!-- Category -->
-                                    <div class="mb-3 sm:mb-4">
-                                        <span class="inline-flex items-center px-2.5 py-1 sm:px-3 rounded-full text-xs sm:text-sm font-medium bg-blue-100 text-blue-800">
-                                            {{ strtoupper($berita->kategori) }}
-                                        </span>
-                                    </div>
-                                    
-                                    <!-- Title -->
-                                    <h3 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-3 sm:mb-4 group-hover:text-blue-600 transition-colors line-clamp-2">
-                                        {{ $berita->judul }}
-                                    </h3>
-                                    
-                                    <!-- Content -->
-                                    <p class="text-gray-600 mb-4 sm:mb-6 line-clamp-3 leading-relaxed text-sm sm:text-base">
-                                        {{ Str::limit(strip_tags($berita->konten), 200) }}
-                                    </p>
-                                    
-                                    <!-- Meta -->
-                                    <div class="flex flex-wrap items-center gap-3 sm:gap-4 lg:gap-6 text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6">
-                                        <div class="flex items-center">
-                                            <i class="fas fa-user mr-1.5 sm:mr-2"></i>
-                                            <span class="truncate">{{ Str::limit($berita->author ?? 'Admin', 20) }}</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <i class="fas fa-calendar mr-1.5 sm:mr-2"></i>
-                                            <span>{{ $berita->tanggal_publikasi ? $berita->tanggal_publikasi->format('d M Y') : 'Hari ini' }}</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <i class="fas fa-eye mr-1.5 sm:mr-2"></i>
-                                            <span>{{ number_format($berita->views ?? 0) }}</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <a href="{{ route('public.berita.show', $berita->id) }}" class="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base text-blue-600 hover:text-white border-2 border-blue-600 hover:bg-blue-600 rounded-lg sm:rounded-xl transition-all duration-300 font-semibold group">
-                                        <span>Baca Selengkapnya</span>
-                                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </article>
-                    @endforeach
-                @else
-                    <div class="text-center py-12 sm:py-16">
-                        <div class="max-w-md mx-auto px-4">
-                            <i class="fas fa-newspaper text-gray-300 text-5xl sm:text-6xl mb-4"></i>
-                            <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Belum ada berita tersedia</h3>
-                            <p class="text-sm sm:text-base text-gray-500 mb-6">Berita akan segera dipublikasikan.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-16">
+                <div>
+                    <div class="bg-white rounded-3xl p-8 shadow-xl">
+                        <div class="flex items-center justify-center w-20 h-20 bg-emerald-100 rounded-2xl mb-8">
+                            <i class="fas fa-building text-emerald-600 text-3xl"></i>
                         </div>
+                        <h3 class="text-3xl font-bold text-gray-900 mb-6">Informasi OPD Terlengkap</h3>
+                        <p class="text-gray-600 mb-8 text-lg leading-relaxed">
+                            Temukan profil lengkap setiap OPD mulai dari visi-misi, struktur organisasi, kepala OPD, hingga informasi kontak yang dapat dihubungi langsung.
+                        </p>
+                        <ul class="space-y-4 text-gray-600">
+                            <li class="flex items-center">
+                                <div class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-check text-emerald-600 text-sm"></i>
+                                </div>
+                                <span class="text-lg">Profil dan Visi-Misi OPD</span>
+                            </li>
+                            <li class="flex items-center">
+                                <div class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-check text-emerald-600 text-sm"></i>
+                                </div>
+                                <span class="text-lg">Informasi Kepala OPD</span>
+                            </li>
+                            <li class="flex items-center">
+                                <div class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-check text-emerald-600 text-sm"></i>
+                                </div>
+                                <span class="text-lg">Kontak dan Alamat Lengkap</span>
+                            </li>
+                            <li class="flex items-center">
+                                <div class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-check text-emerald-600 text-sm"></i>
+                                </div>
+                                <span class="text-lg">Website Resmi OPD</span>
+                            </li>
+                        </ul>
                     </div>
-                @endif
-            </div>
-            
-            <!-- Navigation Tabs -->
-            <div class="flex flex-col items-center space-y-6 sm:space-y-8">
-                <div class="bg-white rounded-xl sm:rounded-2xl p-1.5 sm:p-2 shadow-lg">
-                    <button id="btn-terbaru" onclick="filterBerita('terbaru')" class="px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg sm:rounded-xl transition-all duration-200 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg">
-                        <i class="fas fa-clock mr-1 sm:mr-2"></i>TERBARU
-                    </button>
-                    <button id="btn-terpopuler" onclick="filterBerita('terpopuler')" class="px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg sm:rounded-xl transition-all duration-200">
-                        <i class="fas fa-fire mr-1 sm:mr-2"></i>TERPOPULER
-                    </button>
                 </div>
-                
-                <!-- Lihat Semua Berita Button -->
-                <a href="{{ route('public.berita.index') }}" class="group inline-flex items-center px-6 sm:px-8 lg:px-10 py-3 sm:py-4 text-sm sm:text-base font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl sm:rounded-2xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
-                    <i class="fas fa-newspaper mr-2 sm:mr-3 text-base sm:text-lg"></i>
-                    Lihat Semua Berita
-                    <i class="fas fa-arrow-right ml-2 sm:ml-3 text-base sm:text-lg group-hover:translate-x-1 transition-transform duration-300"></i>
-                </a>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-2xl mb-6">
+                            <i class="fas fa-users text-blue-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-900 mb-3">Mudah Diakses</h4>
+                        <p class="text-gray-600 leading-relaxed">
+                            Interface yang user-friendly memudahkan masyarakat mengakses informasi OPD yang dibutuhkan.
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-2xl mb-6">
+                            <i class="fas fa-sync-alt text-purple-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-900 mb-3">Selalu Update</h4>
+                        <p class="text-gray-600 leading-relaxed">
+                            Informasi OPD selalu diperbaharui untuk memberikan data yang akurat dan terkini.
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="flex items-center justify-center w-16 h-16 bg-indigo-100 rounded-2xl mb-6">
+                            <i class="fas fa-search text-indigo-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-900 mb-3">Pencarian Cepat</h4>
+                        <p class="text-gray-600 leading-relaxed">
+                            Fitur pencarian membantu menemukan OPD yang dicari dengan cepat dan efisien.
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="flex items-center justify-center w-16 h-16 bg-rose-100 rounded-2xl mb-6">
+                            <i class="fas fa-phone text-rose-600 text-2xl"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-900 mb-3">Kontak Langsung</h4>
+                        <p class="text-gray-600 leading-relaxed">
+                            Informasi kontak lengkap memungkinkan komunikasi langsung dengan OPD terkait.
+                        </p>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+
+            <div class="text-center">
+                <a href="{{ route('public.portal-opd.index') }}"
+                   class="group inline-flex items-center px-10 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white text-lg font-semibold rounded-2xl hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                     <i class="fas fa-building mr-3 text-xl"></i>
+                     Jelajahi Portal OPD
+                     <i class="fas fa-arrow-right ml-3 text-xl group-hover:translate-x-1 transition-transform duration-300"></i>
+                 </a>
+             </div>
+         </div>
+     </section>
 
     <!-- Pintasan Layanan Section -->
     <section id="pintasan-layanan" class="py-12 sm:py-16 lg:py-24 bg-white">
@@ -407,7 +512,7 @@
                     Pintasan Layanan menyediakan akses cepat ke berbagai layanan penting yang tersedia di Inspektorat Provinsi Papua Tengah. Melalui menu ini, pengunjung dapat dengan mudah mengakses informasi, pengaduan, atau layanan lainnya tanpa perlu mencari lebih jauh.
                 </p>
             </div>
-            
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                 <!-- Profil Card -->
                 <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 group transform hover:-translate-y-2 border border-gray-100">
@@ -511,7 +616,7 @@
                             <i class="fas fa-shield-alt text-red-600 text-4xl"></i>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors">
-                            WBS
+                            Sistem Pelaporan
                         </h3>
                         <p class="text-gray-600 mb-6 leading-relaxed">
                             Laporkan dugaan pelanggaran atau korupsi melalui sistem pelaporan yang aman.
@@ -564,114 +669,6 @@
         </div>
     </section>
 
-    <!-- Portal OPD Showcase Section -->
-    <section class="py-24 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-2xl mb-6">
-                    <i class="fas fa-building text-emerald-600 text-2xl"></i>
-                </div>
-                <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-                    Portal Organisasi Perangkat Daerah
-                </h2>
-                <p class="text-xl text-gray-600 max-w-5xl mx-auto leading-relaxed">
-                    Jelajahi informasi lengkap tentang OPD di Papua Tengah. Akses profil, visi-misi, kontak, dan layanan dari setiap Organisasi Perangkat Daerah dengan mudah dan terpercaya.
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-16">
-                <div>
-                    <div class="bg-white rounded-3xl p-8 shadow-xl">
-                        <div class="flex items-center justify-center w-20 h-20 bg-emerald-100 rounded-2xl mb-8">
-                            <i class="fas fa-building text-emerald-600 text-3xl"></i>
-                        </div>
-                        <h3 class="text-3xl font-bold text-gray-900 mb-6">Informasi OPD Terlengkap</h3>
-                        <p class="text-gray-600 mb-8 text-lg leading-relaxed">
-                            Temukan profil lengkap setiap OPD mulai dari visi-misi, struktur organisasi, kepala OPD, hingga informasi kontak yang dapat dihubungi langsung.
-                        </p>
-                        <ul class="space-y-4 text-gray-600">
-                            <li class="flex items-center">
-                                <div class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
-                                    <i class="fas fa-check text-emerald-600 text-sm"></i>
-                                </div>
-                                <span class="text-lg">Profil dan Visi-Misi OPD</span>
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
-                                    <i class="fas fa-check text-emerald-600 text-sm"></i>
-                                </div>
-                                <span class="text-lg">Informasi Kepala OPD</span>
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
-                                    <i class="fas fa-check text-emerald-600 text-sm"></i>
-                                </div>
-                                <span class="text-lg">Kontak dan Alamat Lengkap</span>
-                            </li>
-                            <li class="flex items-center">
-                                <div class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
-                                    <i class="fas fa-check text-emerald-600 text-sm"></i>
-                                </div>
-                                <span class="text-lg">Website Resmi OPD</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-2xl mb-6">
-                            <i class="fas fa-users text-blue-600 text-2xl"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-gray-900 mb-3">Mudah Diakses</h4>
-                        <p class="text-gray-600 leading-relaxed">
-                            Interface yang user-friendly memudahkan masyarakat mengakses informasi OPD yang dibutuhkan.
-                        </p>
-                    </div>
-                    
-                    <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-2xl mb-6">
-                            <i class="fas fa-sync-alt text-purple-600 text-2xl"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-gray-900 mb-3">Selalu Update</h4>
-                        <p class="text-gray-600 leading-relaxed">
-                            Informasi OPD selalu diperbaharui untuk memberikan data yang akurat dan terkini.
-                        </p>
-                    </div>
-                    
-                    <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="flex items-center justify-center w-16 h-16 bg-indigo-100 rounded-2xl mb-6">
-                            <i class="fas fa-search text-indigo-600 text-2xl"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-gray-900 mb-3">Pencarian Cepat</h4>
-                        <p class="text-gray-600 leading-relaxed">
-                            Fitur pencarian membantu menemukan OPD yang dicari dengan cepat dan efisien.
-                        </p>
-                    </div>
-                    
-                    <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="flex items-center justify-center w-16 h-16 bg-rose-100 rounded-2xl mb-6">
-                            <i class="fas fa-phone text-rose-600 text-2xl"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-gray-900 mb-3">Kontak Langsung</h4>
-                        <p class="text-gray-600 leading-relaxed">
-                            Informasi kontak lengkap memungkinkan komunikasi langsung dengan OPD terkait.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center">
-                <a href="{{ route('public.portal-opd.index') }}" 
-                   class="group inline-flex items-center px-10 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white text-lg font-semibold rounded-2xl hover:from-emerald-700 hover:to-emerald-800 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
-                    <i class="fas fa-building mr-3 text-xl"></i>
-                    Jelajahi Portal OPD
-                    <i class="fas fa-arrow-right ml-3 text-xl group-hover:translate-x-1 transition-transform duration-300"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
     <!-- Info Kantor Section -->
     <section id="informasi" class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -686,7 +683,7 @@
                     Hubungi kami melalui berbagai saluran komunikasi yang tersedia
                 </p>
             </div>
-            
+
             <x-contact-info variant="card" />
         </div>
     </section>
@@ -703,13 +700,13 @@
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Initializing page components...');
-    
+
     // Initialize filter buttons with default active state
     updateFilterButtons('terbaru');
-    
+
     // Animate stats if visible
     animateStats();
-    
+
     console.log('All components initialized successfully!');
 });
 
@@ -727,13 +724,13 @@ function filterBerita(filter) {
 function updateFilterButtons(activeFilter) {
     const btnTerbaru = document.getElementById('btn-terbaru');
     const btnTerpopuler = document.getElementById('btn-terpopuler');
-    
+
     if (!btnTerbaru || !btnTerpopuler) return;
-    
+
     // Reset all buttons
     btnTerbaru.className = 'px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg sm:rounded-xl transition-all duration-200';
     btnTerpopuler.className = 'px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg sm:rounded-xl transition-all duration-200';
-    
+
     // Set active button
     if (activeFilter === 'terbaru') {
         btnTerbaru.className = 'px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg sm:rounded-xl transition-all duration-200 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg';
@@ -745,16 +742,16 @@ function updateFilterButtons(activeFilter) {
 // Animate stats counter
 function animateStats() {
     const stats = document.querySelectorAll('#stat-opd, #stat-berita, #stat-wbs, #stat-views');
-    
+
     if (stats.length === 0) return;
-    
+
     stats.forEach(stat => {
         const target = parseInt(stat.textContent.replace(/,/g, ''));
         if (isNaN(target)) return;
-        
+
         let current = 0;
         const increment = target / 100;
-        
+
         const timer = setInterval(() => {
             current += increment;
             if (current >= target) {
@@ -764,7 +761,7 @@ function animateStats() {
             stat.textContent = Math.floor(current).toLocaleString();
         }, 20);
     });
-    
+
     console.log('Stats animation initialized');
 }
 
@@ -786,25 +783,25 @@ function animateStats() {
             slide.style.display = 'none';
             slide.classList.remove('active');
         });
-        
+
         // Remove active from all dots
         galleryDots.forEach(dot => {
             dot.classList.remove('active', 'bg-pink-600');
             dot.classList.add('bg-pink-300');
         });
-        
+
         // Show current slide
         if (gallerySlides[index]) {
             gallerySlides[index].style.display = 'block';
             gallerySlides[index].classList.add('active');
         }
-        
+
         // Activate current dot
         if (galleryDots[index]) {
             galleryDots[index].classList.add('active', 'bg-pink-600');
             galleryDots[index].classList.remove('bg-pink-300');
         }
-        
+
         currentGallerySlide = index;
         console.log('Gallery slide changed to:', index);
     }
@@ -843,7 +840,7 @@ function animateStats() {
     // Initialize
     showGallerySlide(0);
     startGalleryAutoplay();
-    
+
     console.log('Gallery slider initialized with', gallerySlides.length, 'slides');
 })();
 </script>

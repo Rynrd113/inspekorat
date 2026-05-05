@@ -7,6 +7,7 @@ return [
         'handle' => '@inspektoratpapuatengah',
     ],
     'email' => 'inspektoratprovpt@gmail.com',
+    'phone' => '(0984) 321234',
     'jam_operasional' => 'Senin - Jumat: 08:00 - 16:00 WIT',
     'website' => [
         'url' => 'https://inspektorat.papuatengahprov.go.id/',
