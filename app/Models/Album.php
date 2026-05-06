@@ -115,13 +115,13 @@ class Album extends Model
         // 3. Get first active photo from child albums recursively
         foreach ($this->children()->where('status', true)->get() as $child) {
             $url = $child->cover_image_url;
-            if ($url && $url !== asset('images/logo.png')) {
+            if ($url && strpos($url, 'data:image') === 0) {
                 return $url;
             }
         }
 
-        // 4. Return placeholder (use logo as fallback)
-        return asset('images/logo.png');
+        // 4. Return a data URI gradient image as fallback
+        return 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Cdefs%3E%3ClinearGradient id=%22grad%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22%3E%3Cstop offset=%220%25%22 style=%22stop-color:%23dbeafe;stop-opacity:1%22 /%3E%3Cstop offset=%22100%25%22 style=%22stop-color:%23bfdbfe;stop-opacity:1%22 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22400%22 height=%22300%22 fill=%22url(%23grad)%22 /%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2224%22 fill=%22%234b5563%22 font-family=%22Arial%22%3E📷%3C/text%3E%3C/svg%3E';
     }
 
     /**
