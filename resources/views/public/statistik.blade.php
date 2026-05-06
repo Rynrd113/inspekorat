@@ -140,7 +140,7 @@
                     </div>
                 </div>
                 <p class="text-4xl font-bold text-teal-600 mb-2">{{ number_format($statistics['total_visitors']) }}</p>
-                <p class="text-sm text-gray-600">Total pengunjung unik sepanjang tahun</p>
+                <p class="text-sm text-gray-600">Pengunjung unik (dihitung per IP per hari)</p>
             </div>
 
             <!-- Total Views -->
@@ -152,7 +152,7 @@
                     </div>
                 </div>
                 <p class="text-4xl font-bold text-cyan-600 mb-2">{{ number_format($statistics['total_views']) }}</p>
-                <p class="text-sm text-gray-600">Total halaman yang dilihat</p>
+                <p class="text-sm text-gray-600">Total tampilan artikel berita</p>
             </div>
         </div>
 

@@ -52,10 +52,11 @@ class PublicController extends Controller
 
         // Get real-time statistics from database
         $stats = [
-            'portal_opd' => PortalOpd::active()->count(),
-            'berita' => PortalPapuaTengah::published()->count(),
-            'wbs' => Wbs::count(),
-            'total_views' => $this->getTotalViews(),
+            'portal_opd'      => PortalOpd::active()->count(),
+            'berita'          => PortalPapuaTengah::published()->count(),
+            'wbs'             => Wbs::count(),
+            'total_views'     => $this->getTotalViews(),
+            'total_visitors'  => (int) (DB::table('system_configurations')->where('key', 'total_visitors')->value('value') ?? 0),
         ];
 
         // Info kantor dari config
@@ -81,38 +82,27 @@ class PublicController extends Controller
     }
 
     /**
-     * Track website visitor
+     * Track unique daily visitor (per IP per day) across all public pages.
      */
     private function trackVisitor(): void
     {
         $cacheKey = 'visitor_' . request()->ip() . '_' . date('Ymd');
 
-        // Only count unique visitors per day
         if (!Cache::has($cacheKey)) {
-            // Increment visitor count in system_configurations
             DB::table('system_configurations')
                 ->where('key', 'total_visitors')
                 ->increment('value');
 
-            // Cache for 24 hours
             Cache::put($cacheKey, true, now()->addDay());
         }
     }
 
     /**
-     * Get total views from all sources
+     * Total article page views (sum of views across all berita).
      */
     private function getTotalViews(): int
     {
-        // Get visitor count from system_configurations
-        $totalVisitors = DB::table('system_configurations')
-            ->where('key', 'total_visitors')
-            ->value('value') ?? 0;
-
-        // Add views from portal_papua_tengahs
-        $portalViews = DB::table('portal_papua_tengahs')->sum('views') ?? 0;
-
-        return (int)$totalVisitors + (int)$portalViews;
+        return (int) (DB::table('portal_papua_tengahs')->sum('views') ?? 0);
     }
 
     /**
@@ -182,6 +172,7 @@ class PublicController extends Controller
      */
     public function berita(Request $request): View
     {
+        $this->trackVisitor();
         $query = PortalPapuaTengah::published();
 
         // Search functionality
@@ -225,7 +216,7 @@ class PublicController extends Controller
      */
     public function profil(): View
     {
-        // Get organization profile data
+        $this->trackVisitor();
         $profil = [
             'nama_organisasi' => 'Inspektorat Provinsi Papua Tengah',
             'visi' => 'Terwujudnya Aparatur dan Hasil Pengawasan Internal yang Profesional dan Berkualitas demi Pelayanan Publik vang Prima',
@@ -466,6 +457,7 @@ startxref
      */
     public function galeri(Request $request): View
     {
+        $this->trackVisitor();
         // Get active albums
         $albums = \App\Models\Album::with(['photos' => function($query) {
                 $query->where('status', true)->orderBy('tanggal_publikasi', 'desc')->limit(1);
@@ -584,7 +576,7 @@ startxref
      */
     public function kontak(): View
     {
-        // Prefer values from SystemConfiguration if present, fall back to config/contact.php
+        $this->trackVisitor();
         $kontak = (object)[
             'nama' => 'Inspektorat Provinsi Papua Tengah',
             'alamat' => SystemConfiguration::get('contact_alamat', config('contact.alamat')),

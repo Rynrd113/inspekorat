@@ -284,6 +284,42 @@
      </section>
      @endif
 
+    {{-- Statistics Counter Section --}}
+    <section class="py-14 bg-white border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="p-6">
+                    <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-xl mb-3">
+                        <i class="fas fa-building text-blue-600 text-xl"></i>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-900">{{ number_format($stats['portal_opd']) }}</p>
+                    <p class="text-sm text-gray-500 mt-1">Portal OPD</p>
+                </div>
+                <div class="p-6">
+                    <div class="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-xl mb-3">
+                        <i class="fas fa-newspaper text-green-600 text-xl"></i>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-900">{{ number_format($stats['berita']) }}</p>
+                    <p class="text-sm text-gray-500 mt-1">Artikel Berita</p>
+                </div>
+                <div class="p-6">
+                    <div class="inline-flex items-center justify-center w-12 h-12 bg-purple-100 rounded-xl mb-3">
+                        <i class="fas fa-eye text-purple-600 text-xl"></i>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-900">{{ number_format($stats['total_views']) }}</p>
+                    <p class="text-sm text-gray-500 mt-1">Total Tampilan</p>
+                </div>
+                <div class="p-6">
+                    <div class="inline-flex items-center justify-center w-12 h-12 bg-orange-100 rounded-xl mb-3">
+                        <i class="fas fa-users text-orange-600 text-xl"></i>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-900">{{ number_format($stats['total_visitors']) }}</p>
+                    <p class="text-sm text-gray-500 mt-1">Total Pengunjung</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Portal OPD Showcase Section -->
     <section class="py-24 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
