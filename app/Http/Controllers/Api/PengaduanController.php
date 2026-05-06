@@ -39,7 +39,8 @@ class PengaduanController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => PengaduanResource::collection($pengaduans),
+            'message' => 'Success',
+            'data' => PengaduanResource::collection($pengaduans->getCollection()),
             'meta' => [
                 'current_page' => $pengaduans->currentPage(),
                 'last_page' => $pengaduans->lastPage(),
