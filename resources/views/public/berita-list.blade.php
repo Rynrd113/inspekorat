@@ -147,19 +147,21 @@
                                 {{ Str::limit(strip_tags($berita->konten), 120) }}
                             </p>
 
-                            <div class="flex items-center justify-between text-xs text-gray-500 mb-4 gap-3">
-                                <span class="flex items-center min-w-0">
-                                    <i class="fas fa-user mr-1"></i>
-                                    <span class="truncate">{{ Str::limit($berita->author ?? 'Admin', 18) }}</span>
-                                </span>
-                                <span class="flex items-center whitespace-nowrap">
-                                    <i class="fas fa-calendar mr-1"></i>
-                                    {{ $berita->tanggal_publikasi ? \Carbon\Carbon::parse($berita->tanggal_publikasi)->format('d M Y') : 'Tanggal tidak tersedia' }}
-                                </span>
-                                <span class="flex items-center whitespace-nowrap">
-                                    <i class="fas fa-eye mr-1"></i>
-                                    {{ number_format($berita->views ?? 0) }}
-                                </span>
+                            <div class="text-xs text-gray-500 mb-4 space-y-1.5">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-user text-gray-400"></i>
+                                    <span class="truncate">{{ Str::limit($berita->author ?? $berita->penulis ?? 'Admin', 30) }}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="flex items-center gap-1">
+                                        <i class="fas fa-calendar text-gray-400"></i>
+                                        {{ $berita->tanggal_publikasi ? \Carbon\Carbon::parse($berita->tanggal_publikasi)->format('d M Y') : '-' }}
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <i class="fas fa-eye text-gray-400"></i>
+                                        {{ number_format($berita->views ?? 0) }} views
+                                    </span>
+                                </div>
                             </div>
 
                             <a href="{{ route('public.berita.show', $berita->id) }}" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800 group">

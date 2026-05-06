@@ -63,6 +63,12 @@ class PortalPapuaTengahController extends Controller
             $data['thumbnail'] = $request->file('thumbnail')->store('portal-thumbnails', 'public');
         }
 
+        // Sync status and tanggal_publikasi from form fields
+        $data['status'] = !empty($data['is_published']);
+        if (!empty($data['published_at'])) {
+            $data['tanggal_publikasi'] = $data['published_at'];
+        }
+
         PortalPapuaTengah::create($data);
 
         return redirect()->route('admin.portal-papua-tengah.index')
@@ -109,6 +115,12 @@ class PortalPapuaTengahController extends Controller
                 Storage::disk('public')->delete($portalPapuaTengah->thumbnail);
             }
             $data['thumbnail'] = $request->file('thumbnail')->store('portal-thumbnails', 'public');
+        }
+
+        // Sync status and tanggal_publikasi from form fields
+        $data['status'] = !empty($data['is_published']);
+        if (!empty($data['published_at'])) {
+            $data['tanggal_publikasi'] = $data['published_at'];
         }
 
         $portalPapuaTengah->update($data);

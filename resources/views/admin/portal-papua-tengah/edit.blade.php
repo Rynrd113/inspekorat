@@ -162,7 +162,7 @@
                         <!-- Penulis -->
                         <div>
                             <label for="penulis" class="block text-sm font-medium text-gray-700">Penulis *</label>
-                            <input type="text" id="penulis" name="penulis" value="{{ old('penulis', $portalPapuaTengah->penulis) }}" required
+                            <input type="text" id="penulis" name="penulis" value="{{ old('penulis', $portalPapuaTengah->penulis ?? $portalPapuaTengah->author) }}" required
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('penulis') border-red-500 @enderror">
                             @error('penulis')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
