@@ -51,6 +51,10 @@
                    class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('public.faq') ? 'text-blue-600 bg-blue-50' : '' }}">
                     FAQ
                 </a>
+                <a href="{{ route('public.statistik') }}"
+                   class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('public.statistik') ? 'text-blue-600 bg-blue-50' : '' }}">
+                    Statistik
+                </a>
                 <a href="{{ route('public.kontak') }}"
                    class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('public.kontak') ? 'text-blue-600 bg-blue-50' : '' }}">
                     Kontak
@@ -112,16 +116,20 @@
                 <i class="fas fa-list-check mr-2"></i>Sistem Pelaporan
              </a>
 
-            <!-- Other -->
-            <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Bantuan</div>
-            <a href="{{ route('public.faq') }}"
-               class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.faq') ? 'text-blue-600 bg-blue-50' : '' }}">
-               <i class="fas fa-question-circle mr-2"></i>FAQ
-            </a>
-            <a href="{{ route('public.kontak') }}"
-               class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.kontak') ? 'text-blue-600 bg-blue-50' : '' }}">
-               <i class="fas fa-headset mr-2"></i>Kontak
-            </a>
+             <!-- Other -->
+             <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Bantuan</div>
+             <a href="{{ route('public.faq') }}"
+                class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.faq') ? 'text-blue-600 bg-blue-50' : '' }}">
+                <i class="fas fa-question-circle mr-2"></i>FAQ
+             </a>
+             <a href="{{ route('public.statistik') }}"
+                class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.statistik') ? 'text-blue-600 bg-blue-50' : '' }}">
+                <i class="fas fa-chart-bar mr-2"></i>Statistik
+             </a>
+             <a href="{{ route('public.kontak') }}"
+                class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.kontak') ? 'text-blue-600 bg-blue-50' : '' }}">
+                <i class="fas fa-headset mr-2"></i>Kontak
+             </a>
         </div>
     </div>
 </header>

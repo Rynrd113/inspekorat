@@ -734,4 +734,84 @@ startxref
 
         return view('public.web-portal', compact('webPortals'));
     }
+
+    /**
+     * Show statistics page (BPK - Badan Pengawasan Keuangan)
+     */
+    public function statistik(): View
+    {
+        // Get comprehensive statistics
+        $statistics = [
+            // Portal Statistics
+            'portal_opd_count' => PortalOpd::active()->count(),
+            'berita_count' => PortalPapuaTengah::published()->count(),
+            'dokumen_count' => Dokumen::where('status', true)->where('is_public', true)->count(),
+            'galeri_count' => Galeri::where('status', true)->count(),
+            'faq_count' => Faq::where('status', true)->count(),
+
+            // Service Statistics
+            'pelayanan_count' => Pelayanan::where('status', true)->count(),
+            'wbs_count' => Wbs::count(),
+            'pengaduan_count' => Pengaduan::count(),
+
+            // User Engagement
+            'total_visitors' => (int)SystemConfiguration::get('total_visitors', 0),
+            'total_views' => $this->getTotalViews(),
+
+            // Monthly Data
+            'monthly_pengaduan' => Pengaduan::selectRaw('MONTH(created_at) as bulan, COUNT(*) as total')
+                ->whereYear('created_at', now()->year)
+                ->groupBy('bulan')
+                ->orderBy('bulan')
+                ->pluck('total', 'bulan')
+                ->toArray(),
+
+            'monthly_wbs' => Wbs::selectRaw('MONTH(created_at) as bulan, COUNT(*) as total')
+                ->whereYear('created_at', now()->year)
+                ->groupBy('bulan')
+                ->orderBy('bulan')
+                ->pluck('total', 'bulan')
+                ->toArray(),
+        ];
+
+        // Get kategori distribution
+        $kategoriBerita = PortalPapuaTengah::published()
+            ->selectRaw('kategori, COUNT(*) as total')
+            ->groupBy('kategori')
+            ->pluck('total', 'kategori')
+            ->toArray();
+
+        $kategoriDokumen = Dokumen::where('status', true)
+            ->where('is_public', true)
+            ->selectRaw('kategori, COUNT(*) as total')
+            ->groupBy('kategori')
+            ->pluck('total', 'kategori')
+            ->toArray();
+
+        // Get kategori pengaduan
+        $kategoriPengaduan = Pengaduan::selectRaw('kategori, COUNT(*) as total')
+            ->groupBy('kategori')
+            ->pluck('total', 'kategori')
+            ->toArray();
+
+        // Get top statistik
+        $topBerita = PortalPapuaTengah::published()
+            ->orderBy('views', 'desc')
+            ->take(5)
+            ->get();
+
+        $topGaleri = Galeri::where('status', true)
+            ->orderBy('created_at', 'desc')
+            ->take(8)
+            ->get();
+
+        return view('public.statistik', compact(
+            'statistics',
+            'kategoriBerita',
+            'kategoriDokumen',
+            'kategoriPengaduan',
+            'topBerita',
+            'topGaleri'
+        ));
+    }
 }

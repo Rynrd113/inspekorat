@@ -67,10 +67,11 @@ Route::middleware('admin.logout.public')->group(function () {
     Route::post('/kontak', [PublicController::class, 'kontakKirim'])->name('kontak.kirim');
     Route::get('/pengaduan', [PublicController::class, 'pengaduan'])->name('public.pengaduan');
     Route::post('/pengaduan', [PublicController::class, 'storePengaduan'])->name('public.pengaduan.store');
-    
+    Route::get('/statistik', [PublicController::class, 'statistik'])->name('public.statistik');
+
     // Web Portal Public Routes
     Route::get('/web-portal', [PublicController::class, 'webPortal'])->name('public.web-portal.index');
-    
+
     // Portal OPD Public Routes
     Route::get('/portal-opd', [PortalOpdController::class, 'index'])->name('public.portal-opd.index');
     Route::get('/portal-opd/{portalOpd}', [PortalOpdController::class, 'show'])->name('public.portal-opd.show');
@@ -83,13 +84,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
         Route::post('login', [AdminAuthController::class, 'login'])->name('login.submit');
     });
-    
+
     // Authenticated admin routes
     Route::middleware('auth')->group(function () {
         Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::post('extend-session', [AdminAuthController::class, 'extendSession'])->name('extend-session');
         Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-        
+
         // WBS routes - protected by role middleware
         Route::middleware('role:admin,super_admin')->group(function () {
             Route::get('wbs', [AdminWbsController::class, 'index'])->name('wbs.index');
@@ -100,7 +101,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('wbs/{wbs}', [AdminWbsController::class, 'update'])->name('wbs.update');
             Route::delete('wbs/{wbs}', [AdminWbsController::class, 'destroy'])->name('wbs.destroy');
         });
-        
+
         // Portal Papua Tengah (News) routes - protected by role middleware
         Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::get('portal-papua-tengah', [AdminPortalPapuaTengahController::class, 'index'])->name('portal-papua-tengah.index');
@@ -111,7 +112,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('portal-papua-tengah/{portalPapuaTengah}', [AdminPortalPapuaTengahController::class, 'update'])->name('portal-papua-tengah.update');
             Route::delete('portal-papua-tengah/{portalPapuaTengah}', [AdminPortalPapuaTengahController::class, 'destroy'])->name('portal-papua-tengah.destroy');
         });
-        
+
         // Portal OPD routes - protected by role middleware
         Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::get('portal-opd', [AdminPortalOpdController::class, 'index'])->name('portal-opd.index');
@@ -123,7 +124,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'update'])->name('portal-opd.update');
             Route::delete('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'destroy'])->name('portal-opd.destroy');
         });
-        
+
         // Info Kantor routes - protected by role middleware
         Route::middleware('role:admin,super_admin')->group(function () {
             Route::get('info-kantor', [\App\Http\Controllers\Admin\InfoKantorController::class, 'index'])->name('info-kantor.index');
@@ -134,7 +135,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('info-kantor/{infoKantor}', [\App\Http\Controllers\Admin\InfoKantorController::class, 'update'])->name('info-kantor.update');
             Route::delete('info-kantor/{infoKantor}', [\App\Http\Controllers\Admin\InfoKantorController::class, 'destroy'])->name('info-kantor.destroy');
         });
-        
+
         // Profil routes - protected by role middleware
         Route::middleware('role:admin,super_admin')->group(function () {
             Route::get('profil', [AdminProfilController::class, 'index'])->name('profil.index');
@@ -145,7 +146,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('profil/{profil}', [AdminProfilController::class, 'update'])->name('profil.update');
             Route::delete('profil/{profil}', [AdminProfilController::class, 'destroy'])->name('profil.destroy');
         });
-        
+
         // Pelayanan routes - protected by role middleware
         Route::middleware('role:admin,super_admin')->group(function () {
             Route::get('pelayanan', [AdminPelayananController::class, 'index'])->name('pelayanan.index');
@@ -156,7 +157,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('pelayanan/{pelayanan}', [AdminPelayananController::class, 'update'])->name('pelayanan.update');
             Route::delete('pelayanan/{pelayanan}', [AdminPelayananController::class, 'destroy'])->name('pelayanan.destroy');
         });
-        
+
         // Dokumen routes - protected by role middleware
         Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::get('dokumen', [AdminDokumenController::class, 'index'])->name('dokumen.index');
@@ -168,7 +169,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('dokumen/{dokumen}', [AdminDokumenController::class, 'destroy'])->name('dokumen.destroy');
             Route::get('dokumen/{dokumen}/download', [AdminDokumenController::class, 'download'])->name('dokumen.download');
         });
-        
+
         // Galeri routes - protected by role middleware
         Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::get('galeri', [AdminGaleriController::class, 'index'])->name('galeri.index');
@@ -187,14 +188,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::resource('albums', AdminAlbumController::class);
             Route::post('albums/{album}/upload-photos', [AdminAlbumController::class, 'uploadPhotos'])->name('albums.upload-photos');
         });
-        
+
         // Hero Slider routes - accessible by content_admin, admin, super_admin
         Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::resource('hero-sliders', AdminHeroSliderController::class)->parameters([
                 'hero-sliders' => 'heroSlider'
             ]);
         });
-        
+
         // FAQ routes - accessible by content_admin, admin, super_admin
         Route::middleware('role:content_admin,admin,super_admin')->group(function () {
             Route::get('faq', [AdminFaqController::class, 'index'])->name('faq.index');
@@ -209,7 +210,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::patch('faq/{faq}/move-down', [AdminFaqController::class, 'moveDown'])->name('faq.move-down');
             Route::post('faq/reorder', [AdminFaqController::class, 'reorder'])->name('faq.reorder');
         });
-        
+
         // Content Approval routes - accessible by content_manager, admin, super_admin
         Route::middleware('role:content_manager,admin,super_admin')->group(function () {
             Route::get('approvals', [AdminContentApprovalController::class, 'index'])->name('approvals.index');
@@ -219,7 +220,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('approvals/bulk-action', [AdminContentApprovalController::class, 'bulkAction'])->name('approvals.bulk-action');
             Route::get('approvals/stats', [AdminContentApprovalController::class, 'stats'])->name('approvals.stats');
         });
-        
+
         // System Configuration routes - only for super_admin
         Route::middleware('role:super_admin')->group(function () {
             // User Management routes
@@ -230,7 +231,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
             Route::put('users/{user}', [AdminUserController::class, 'update'])->name('users.update');
             Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
-            
+
             // System Configuration routes
             Route::get('configurations', [AdminSystemConfigurationController::class, 'index'])->name('configurations.index');
             Route::post('configurations', [AdminSystemConfigurationController::class, 'update'])->name('configurations.update');
@@ -240,7 +241,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('configurations/export', [AdminSystemConfigurationController::class, 'export'])->name('configurations.export');
             Route::post('configurations/import', [AdminSystemConfigurationController::class, 'import'])->name('configurations.import');
         });
-        
+
         // Audit Log routes - only for super_admin
         Route::middleware('role:super_admin')->group(function () {
             Route::get('audit-logs', [AdminAuditLogController::class, 'index'])->name('audit-logs.index');
