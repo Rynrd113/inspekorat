@@ -132,6 +132,14 @@ class User extends Authenticatable
     {
         return $this->hasAnyRole(['super_admin', 'admin']);
     }
+
+    /**
+     * Check if user can reject content
+     */
+    public function canRejectContent(): bool
+    {
+        return $this->hasAnyRole(['super_admin', 'admin']);
+    }
     
     /**
      * Get modules accessible by user
