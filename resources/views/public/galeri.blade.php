@@ -136,66 +136,67 @@
                 <i class="fas fa-folder mr-2 text-indigo-600"></i>Album Galeri
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @foreach($albums as $album)
-            <a href="{{ route('public.album', $album->slug) }}"
-               class="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
-                <!-- Album Cover -->
-                <div class="relative h-64 bg-gray-200 overflow-hidden">
-                    <img src="{{ $album->cover_image_url }}" alt="{{ $album->nama_album }}"
-                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                         loading="lazy">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                @foreach($albums as $album)
+                <a href="{{ route('public.album', $album->slug) }}"
+                   class="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+                    <!-- Album Cover -->
+                    <div class="relative h-64 bg-gray-200 overflow-hidden">
+                        <img src="{{ $album->cover_image_url }}" alt="{{ $album->nama_album }}"
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                             loading="lazy">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
-                    <!-- Photo Count Badge -->
-                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-                        <span class="text-sm font-semibold text-gray-900">
-                            <i class="fas fa-images mr-1"></i>
-                            {{ $album->getPhotoCount() }} Foto
-                        </span>
+                        <!-- Photo Count Badge -->
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                            <span class="text-sm font-semibold text-gray-900">
+                                <i class="fas fa-images mr-1"></i>
+                                {{ $album->getPhotoCount() }} Foto
+                            </span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Album Info -->
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                        {{ $album->nama_album }}
-                    </h3>
+                    <!-- Album Info -->
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                            {{ $album->nama_album }}
+                        </h3>
 
-                    @if($album->deskripsi)
-                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ $album->deskripsi }}</p>
-                    @endif
-
-                    <div class="flex items-center text-sm text-gray-500">
-                        @if($album->tanggal_kegiatan)
-                        <span>
-                            <i class="fas fa-calendar mr-1"></i>
-                            {{ $album->tanggal_kegiatan->format('d F Y') }}
-                        </span>
+                        @if($album->deskripsi)
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ $album->deskripsi }}</p>
                         @endif
 
-                        @php
-                            $activeChildCount = $album->children()
-                                ->where('status', true)
-                                ->count();
-                        @endphp
+                        <div class="flex items-center text-sm text-gray-500">
+                            @if($album->tanggal_kegiatan)
+                            <span>
+                                <i class="fas fa-calendar mr-1"></i>
+                                {{ $album->tanggal_kegiatan->format('d F Y') }}
+                            </span>
+                            @endif
 
-                        @if($activeChildCount > 0)
-                        <span class="mx-2">•</span>
-                        <span>
-                            <i class="fas fa-folder mr-1"></i>
-                            {{ $activeChildCount }} Sub Album
-                        </span>
-                        @endif
-                    </div>
+                            @php
+                                $activeChildCount = $album->children()
+                                    ->where('status', true)
+                                    ->count();
+                            @endphp
 
-                    <!-- View Album Button -->
-                    <div class="mt-4 pt-4 border-t">
-                        <span class="text-blue-600 font-medium group-hover:text-blue-800">
-                            Lihat Album <i class="fas fa-arrow-right ml-1 group-hover:translate-x-1 transition-transform"></i>
-                        </span>
+                            @if($activeChildCount > 0)
+                            <span class="mx-2">•</span>
+                            <span>
+                                <i class="fas fa-folder mr-1"></i>
+                                {{ $activeChildCount }} Sub Album
+                            </span>
+                            @endif
+                        </div>
+
+                        <!-- View Album Button -->
+                        <div class="mt-4 pt-4 border-t">
+                            <span class="text-blue-600 font-medium group-hover:text-blue-800">
+                                Lihat Album <i class="fas fa-arrow-right ml-1 group-hover:translate-x-1 transition-transform"></i>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                </div>
+                </a>
+                @endforeach
             </div>
 
             <!-- Pagination -->
