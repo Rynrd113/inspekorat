@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
 use App\Models\Galeri;
+use App\Http\Requests\StoreAlbumRequest;
+use App\Http\Requests\UpdateAlbumRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -78,23 +80,14 @@ class AlbumController extends Controller
     /**
      * Store a newly created album
      */
-    public function store(Request $request)
+    public function store(StoreAlbumRequest $request)
     {
-        $validated = $request->validate([
-            'nama_album' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:albums,slug',
-            'deskripsi' => 'nullable|string',
-            'parent_id' => 'nullable|exists:albums,id',
-            'tanggal_kegiatan' => 'nullable|date',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-            'status' => 'nullable|boolean',
-            'urutan' => 'nullable|integer|min:0',
-        ]);
+        $validated = $request->validated();
 
         // Generate slug if not provided
         if (empty($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['nama_album']);
-            
+
             // Ensure slug is unique
             $originalSlug = $validated['slug'];
             $counter = 1;
@@ -152,18 +145,9 @@ class AlbumController extends Controller
     /**
      * Update the specified album
      */
-    public function update(Request $request, Album $album)
+    public function update(UpdateAlbumRequest $request, Album $album)
     {
-        $validated = $request->validate([
-            'nama_album' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:albums,slug,' . $album->id,
-            'deskripsi' => 'nullable|string',
-            'parent_id' => 'nullable|exists:albums,id',
-            'tanggal_kegiatan' => 'nullable|date',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-            'status' => 'nullable|boolean',
-            'urutan' => 'nullable|integer|min:0',
-        ]);
+        $validated = $request->validated();
 
         // Prevent setting self as parent
         if (isset($validated['parent_id']) && $validated['parent_id'] == $album->id) {
@@ -173,7 +157,7 @@ class AlbumController extends Controller
         // Generate slug if name changed and slug is empty
         if (empty($validated['slug']) && $album->nama_album !== $validated['nama_album']) {
             $validated['slug'] = Str::slug($validated['nama_album']);
-            
+
             // Ensure slug is unique
             $originalSlug = $validated['slug'];
             $counter = 1;
@@ -189,7 +173,7 @@ class AlbumController extends Controller
             if ($album->cover_image) {
                 Storage::disk($this->getStorageDisk())->delete($album->cover_image);
             }
-            
+
             $file = $request->file('cover_image');
             $filePath = $file->store('albums/covers', $this->getStorageDisk());
             $validated['cover_image'] = $filePath;
@@ -254,7 +238,7 @@ class AlbumController extends Controller
 
         foreach ($request->file('photos') as $photo) {
             $filePath = $photo->store('galeri', $this->getStorageDisk());
-            
+
             Galeri::create([
                 'album_id' => $album->id,
                 'judul' => pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME),

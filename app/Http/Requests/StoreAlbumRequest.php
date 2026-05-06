@@ -25,9 +25,9 @@ class StoreAlbumRequest extends FormRequest
             'slug' => 'nullable|string|max:255|unique:albums,slug',
             'parent_id' => 'nullable|exists:albums,id',
             'deskripsi' => 'nullable|string',
-            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'tanggal_kegiatan' => 'nullable|date',
-            'status' => 'boolean',
+            'status' => 'nullable|boolean',
             'urutan' => 'nullable|integer|min:0',
         ];
     }
@@ -42,6 +42,25 @@ class StoreAlbumRequest extends FormRequest
             'parent_id' => 'album induk',
             'cover_image' => 'gambar cover',
             'tanggal_kegiatan' => 'tanggal kegiatan',
+        ];
+    }
+
+    /**
+     * Get custom error messages
+     */
+    public function messages(): array
+    {
+        return [
+            'nama_album.required' => 'Nama album harus diisi.',
+            'nama_album.max' => 'Nama album maksimal 255 karakter.',
+            'slug.unique' => 'Slug sudah digunakan, silakan gunakan slug yang berbeda.',
+            'parent_id.exists' => 'Album induk yang dipilih tidak valid.',
+            'cover_image.image' => 'File cover harus berupa gambar.',
+            'cover_image.mimes' => 'Format gambar harus JPEG, PNG, JPG, GIF, atau WEBP.',
+            'cover_image.max' => 'Ukuran gambar maksimal 5MB.',
+            'tanggal_kegiatan.date' => 'Format tanggal kegiatan tidak valid.',
+            'urutan.integer' => 'Urutan harus berupa angka.',
+            'urutan.min' => 'Urutan minimal 0.',
         ];
     }
 }
