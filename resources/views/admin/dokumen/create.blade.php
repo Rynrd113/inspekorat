@@ -24,7 +24,7 @@
         <div class="p-6">
             <form action="{{ route('admin.dokumen.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <x-input
@@ -37,14 +37,14 @@
                             :error="$errors->first('judul')"
                         />
                     </div>
-                    
+
                     <div>
                         <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">
                             Kategori <span class="text-red-500">*</span>
                         </label>
-                        <select class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors @error('kategori') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror" 
-                                id="kategori" 
-                                name="kategori" 
+                        <select class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors @error('kategori') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
+                                id="kategori"
+                                name="kategori"
                                 required>
                             <option value="">Pilih Kategori</option>
                             <option value="peraturan" {{ old('kategori') == 'peraturan' ? 'selected' : '' }}>Peraturan</option>
@@ -73,6 +73,20 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <div>
                         <x-input
+                            label="Tahun"
+                            name="tahun"
+                            id="tahun"
+                            type="number"
+                            value="{{ old('tahun', date('Y')) }}"
+                            min="2020"
+                            max="{{ date('Y') + 1 }}"
+                            :error="$errors->first('tahun')"
+                            required="true"
+                        />
+                    </div>
+
+                    <div>
+                        <x-input
                             label="Nomor Dokumen"
                             name="nomor_dokumen"
                             id="nomor_dokumen"
@@ -82,65 +96,91 @@
                             :error="$errors->first('nomor_dokumen')"
                         />
                     </div>
-                    
-                    <div>
-                        <x-input
-                            label="Tanggal Dokumen"
-                            name="tanggal_dokumen"
-                            id="tanggal_dokumen"
-                            type="date"
-                            value="{{ old('tanggal_dokumen') }}"
-                            :error="$errors->first('tanggal_dokumen')"
-                        />
-                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <div>
-                        <label for="file_dokumen" class="block text-sm font-medium text-gray-700 mb-2">
-                            File Dokumen <span class="text-red-500">*</span>
-                        </label>
-                        <input type="file" 
-                               class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors @error('file_dokumen') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror" 
-                               id="file_dokumen" 
-                               name="file_dokumen" 
-                               accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" 
-                               required>
-                        @error('file_dokumen')
+                        <x-input
+                            label="Tanggal Terbit"
+                            name="tanggal_terbit"
+                            id="tanggal_terbit"
+                            type="date"
+                            value="{{ old('tanggal_terbit', date('Y-m-d')) }}"
+                            :error="$errors->first('tanggal_terbit')"
+                            required="true"
+                        />
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label for="file_dokumen" class="block text-sm font-medium text-gray-700 mb-2">
+                        File Dokumen <span class="text-red-500">*</span>
+                    </label>
+                    <input type="file"
+                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors @error('file_dokumen') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
+                           id="file_dokumen"
+                           name="file_dokumen"
+                           accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+                           required>
+                    @error('file_dokumen')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                    <p class="mt-1 text-sm text-gray-500">Format: PDF, DOC, DOCX, XLS, XLSX. Maksimal 10MB.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <div class="flex items-start">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox"
+                                       id="status"
+                                       name="status"
+                                       value="1"
+                                       {{ old('status', '1') ? 'checked' : '' }}
+                                       class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="ml-2 text-sm font-medium text-gray-700">
+                                    Dokumen Aktif
+                                </span>
+                            </label>
+                        </div>
+                        @error('status')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
-                        <p class="mt-1 text-sm text-gray-500">Format: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX. Maksimal 10MB.</p>
                     </div>
-                    
+
                     <div>
-                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                            Status
-                        </label>
-                        <select class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors @error('status') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror" 
-                                id="status" 
-                                name="status">
-                            <option value="1" {{ old('status', '1') == '1' ? 'selected' : '' }}>Aktif</option>
-                            <option value="0" {{ old('status', '1') == '0' ? 'selected' : '' }}>Non-aktif</option>
-                        </select>
-                        @error('status')
+                        <div class="flex items-start h-full">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox"
+                                       id="is_public"
+                                       name="is_public"
+                                       value="1"
+                                       {{ old('is_public') ? 'checked' : '' }}
+                                       class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="ml-2 text-sm font-medium text-gray-700">
+                                    Dokumen Publik
+                                </span>
+                            </label>
+                        </div>
+                        @error('is_public')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
 
                 <div class="mt-6">
-                    <label for="gambar_preview" class="block text-sm font-medium text-gray-700 mb-2">
-                        Gambar Preview (Opsional)
+                    <label for="file_cover" class="block text-sm font-medium text-gray-700 mb-2">
+                        Gambar Cover (Opsional)
                     </label>
-                    <input type="file" 
-                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors @error('gambar_preview') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror" 
-                           id="gambar_preview" 
-                           name="gambar_preview" 
+                    <input type="file"
+                           class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors @error('file_cover') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
+                           id="file_cover"
+                           name="file_cover"
                            accept="image/*">
-                    @error('gambar_preview')
+                    @error('file_cover')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
-                    <p class="mt-1 text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB. Untuk preview dokumen di halaman publik.</p>
+                    <p class="mt-1 text-sm text-gray-500">Format: JPG, PNG, GIF. Maksimal 2MB. Untuk cover dokumen di halaman publik.</p>
                 </div>
 
                 <div class="flex justify-between items-center mt-6 pt-6 border-t border-gray-200">
@@ -164,8 +204,8 @@ FileValidator.attachToInput('#file_dokumen', {
     allowedTypes: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']
 });
 
-// Validate gambar preview (max 2MB)
-FileValidator.attachToInput('#gambar_preview', {
+// Validate file cover (max 2MB)
+FileValidator.attachToInput('#file_cover', {
     maxSizeMB: 2,
     allowedTypes: ['jpg', 'jpeg', 'png', 'gif', 'webp']
 });
