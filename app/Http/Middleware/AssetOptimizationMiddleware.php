@@ -52,12 +52,31 @@ class AssetOptimizationMiddleware
     private function optimizeHtml(string $content): string
     {
         if (config('app.env') === 'production') {
-            // Remove unnecessary whitespace and comments
+            // Extract <script> and <style> blocks before touching whitespace so
+            // that JS single-line comments (//) and indentation are preserved.
+            $placeholders = [];
+            $index = 0;
+
+            $content = preg_replace_callback(
+                '/<(script|style)(\s[^>]*)?>.*?<\/\1>/si',
+                function ($m) use (&$placeholders, &$index) {
+                    $key = "%%BLOCK_{$index}%%";
+                    $placeholders[$key] = $m[0];
+                    $index++;
+                    return $key;
+                },
+                $content
+            );
+
+            // Remove HTML comments and collapse whitespace only outside blocks
             $content = preg_replace('/<!--.*?-->/s', '', $content);
             $content = preg_replace('/\s+/', ' ', $content);
             $content = preg_replace('/>\s+</', '><', $content);
+
+            // Restore script/style blocks
+            $content = strtr($content, $placeholders);
         }
-        
+
         return $content;
     }
 
