@@ -112,7 +112,7 @@ class PengaduanController extends Controller
             'subjek' => 'required|string|max:255',
             'isi_pengaduan' => 'required|string',
             'kategori' => 'required|string',
-            'status' => 'required|string|in:pending,in_progress,resolved,closed',
+            'status' => 'required|string|in:pending,proses,selesai',
             'tanggapan' => 'nullable|string',
         ]);
 
