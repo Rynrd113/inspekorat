@@ -462,16 +462,13 @@ startxref
     }
 
     /**
-     * Show gallery
-     */
-    /**
      * Show gallery page with albums
      */
     public function galeri(Request $request): View
     {
         // Get active albums
         $albums = \App\Models\Album::with(['photos' => function($query) {
-                $query->where('status', true)->latest()->take(1);
+                $query->where('status', true)->orderBy('tanggal_publikasi', 'desc')->limit(1);
             }])
             ->active()
             ->roots()
@@ -483,7 +480,7 @@ startxref
         $unassignedGallery = \App\Models\Galeri::where('status', true)
             ->whereNull('album_id')
             ->orderBy('tanggal_publikasi', 'desc')
-            ->take(100)
+            ->limit(100)
             ->get();
 
         return view('public.galeri', compact('albums', 'unassignedGallery'));
