@@ -71,6 +71,16 @@ class Album extends Model
     }
 
     /**
+     * Get active photos relation
+     */
+    public function activePhotos()
+    {
+        return $this->hasMany(Galeri::class, 'album_id')
+            ->where('status', true)
+            ->orderBy('tanggal_publikasi', 'desc');
+    }
+
+    /**
      * Scope: Active albums only
      */
     public function scopeActive($query)
@@ -91,27 +101,36 @@ class Album extends Model
      */
     public function getCoverImageUrlAttribute()
     {
-        // 1. Check if cover_image is set
-        if ($this->cover_image) {
+        // 1. Check if cover_image is set and exists
+        if ($this->cover_image && $this->isFileValid($this->cover_image)) {
             return asset('storage/' . $this->cover_image);
         }
 
-        // 2. Get first photo from album
-        $firstPhoto = $this->photos()->first();
-        if ($firstPhoto && $firstPhoto->file_path) {
+        // 2. Get first active photo from album
+        $firstPhoto = $this->activePhotos()->first();
+        if ($firstPhoto && $firstPhoto->file_path && $this->isFileValid($firstPhoto->file_path)) {
             return asset('storage/' . $firstPhoto->file_path);
         }
 
-        // 3. Get first photo from child albums
-        foreach ($this->children as $child) {
-            $childPhoto = $child->photos()->first();
-            if ($childPhoto && $childPhoto->file_path) {
-                return asset('storage/' . $childPhoto->file_path);
+        // 3. Get first active photo from child albums recursively
+        foreach ($this->children()->where('status', true)->get() as $child) {
+            $url = $child->cover_image_url;
+            if ($url && $url !== asset('images/logo.png')) {
+                return $url;
             }
         }
 
-        // 4. Default image
-        return asset('images/default-album-cover.jpg');
+        // 4. Return placeholder (use logo as fallback)
+        return asset('images/logo.png');
+    }
+
+    /**
+     * Check if file path is valid
+     */
+    protected function isFileValid($path)
+    {
+        return file_exists(public_path('storage/' . $path)) ||
+               \Illuminate\Support\Facades\Storage::disk('public')->exists($path);
     }
 
     /**
@@ -119,10 +138,10 @@ class Album extends Model
      */
     public function getPhotoCount()
     {
-        $count = $this->photos()->count();
+        $count = $this->photos()->where('status', true)->count();
 
         // Add photos from child albums
-        foreach ($this->children as $child) {
+        foreach ($this->children()->where('status', true)->get() as $child) {
             $count += $child->getPhotoCount();
         }
 
@@ -150,6 +169,6 @@ class Album extends Model
      */
     public function hasPhotos()
     {
-        return $this->getPhotoCount() > 0;
+        return $this->activePhotos()->exists();
     }
 }

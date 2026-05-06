@@ -38,14 +38,14 @@
         @if($albums->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($albums as $album)
-            <a href="{{ route('public.album', $album->slug) }}" 
+            <a href="{{ route('public.album', $album->slug) }}"
                class="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
                 <!-- Album Cover -->
                 <div class="relative h-64 bg-gray-200 overflow-hidden">
-                    <img src="{{ $album->cover_image_url }}" alt="{{ $album->nama_album }}" 
+                    <img src="{{ $album->cover_image_url }}" alt="{{ $album->nama_album }}"
                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    
+
                     <!-- Photo Count Badge -->
                     <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
                         <span class="text-sm font-semibold text-gray-900">
@@ -60,7 +60,7 @@
                     <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
                         {{ $album->nama_album }}
                     </h3>
-                    
+
                     @if($album->deskripsi)
                     <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ $album->deskripsi }}</p>
                     @endif
@@ -72,12 +72,18 @@
                             {{ $album->tanggal_kegiatan->format('d F Y') }}
                         </span>
                         @endif
-                        
-                        @if($album->children->count() > 0)
+
+                        @php
+                            $activeChildCount = $album->children()
+                                ->where('status', true)
+                                ->count();
+                        @endphp
+
+                        @if($activeChildCount > 0)
                         <span class="mx-2">•</span>
                         <span>
                             <i class="fas fa-folder mr-1"></i>
-                            {{ $album->children->count() }} Sub Album
+                            {{ $activeChildCount }} Sub Album
                         </span>
                         @endif
                     </div>
