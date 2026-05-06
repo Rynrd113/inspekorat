@@ -1,35 +1,34 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-
-    # First explicitly allow access to storage directory and public storage symlink
-    RewriteRule ^(storage|public/storage)(/.*)?$ - [L]
-
     # Allow direct access to actual files and directories
-    RewriteCond %{REQUEST_FILENAME} -f [L]
-    RewriteCond %{REQUEST_FILENAME} -d [L]
-
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
     # Handle X-XSRF-Token Header
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
-
+    # Rewrite /storage/ to storage/app/public/ (for Hostinger deployment with symlink)
+    RewriteCond %{REQUEST_URI} ^/storage/(.*)$
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^storage/(.*)$ storage/app/public/ [L]
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
-
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
-
-# Prevent access to .env
-<FilesMatch "\.env$">
+# Prevent access to .env files
+<FilesMatch "\.env">
     Order allow,deny
     Deny from all
 </FilesMatch>
-
+# Prevent access to sensitive directories
+<DirectoryMatch "^/(node_modules|\.git|\.github|tests|database)">
+    Deny from all
+</DirectoryMatch>
