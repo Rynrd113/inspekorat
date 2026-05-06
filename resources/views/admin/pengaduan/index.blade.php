@@ -158,10 +158,16 @@ function loadPengaduan(page = 1) {
     .then(response => response.json())
     .then(data => {
         document.getElementById('loading').classList.add('hidden');
-        
-        if (data.data && data.data.length > 0) {
-            displayPengaduan(data.data);
-            updatePagination(data.meta || data);
+
+        // ResourceCollection wraps paginated results: { data: { data: [...] } }
+        // Plain array response: { data: [...] }
+        const items = Array.isArray(data.data) ? data.data
+                    : (data.data && Array.isArray(data.data.data) ? data.data.data : []);
+        const meta  = data.meta || (data.data && data.data.meta) || {};
+
+        if (items.length > 0) {
+            displayPengaduan(items);
+            updatePagination(meta);
         } else {
             document.getElementById('empty-state').classList.remove('hidden');
         }
@@ -225,6 +231,11 @@ function getStatusText(status) {
     return texts[status] || status;
 }
 
+function updatePagination(meta) {
+    totalPages = meta.last_page || 1;
+    currentPage = meta.current_page || 1;
+}
+
 function filterPengaduan() {
     currentPage = 1;
     loadPengaduan(currentPage);
@@ -232,10 +243,7 @@ function filterPengaduan() {
 
 function showDetail(id) {
     fetch(`/api/pengaduan/${id}`, {
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('admin_token')}`,
-            'Accept': 'application/json'
-        }
+        headers: AdminPanel.getHeaders()
     })
     .then(response => response.json())
     .then(data => {
@@ -319,9 +327,8 @@ document.getElementById('status-form').addEventListener('submit', function(e) {
     fetch(`/api/pengaduan/${id}`, {
         method: 'PUT',
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('admin_token')}`,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            ...AdminPanel.getHeaders(),
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             status: status,
@@ -348,10 +355,7 @@ function deletePengaduan(id) {
     if (confirm('Apakah Anda yakin ingin menghapus pengaduan ini?')) {
         fetch(`/api/pengaduan/${id}`, {
             method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('admin_token')}`,
-                'Accept': 'application/json'
-            }
+            headers: AdminPanel.getHeaders()
         })
         .then(response => response.json())
         .then(data => {

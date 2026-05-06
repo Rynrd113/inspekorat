@@ -222,3 +222,19 @@ if (document.readyState === 'loading') {
 window.openModal = Admin.Modal.open;
 window.closeModal = Admin.Modal.close;
 window.showNotification = Admin.Notification.show;
+
+// AdminPanel compatibility object used by pengaduan and web-portal views
+window.AdminPanel = {
+    getHeaders: function() {
+        var token = localStorage.getItem('admin_token');
+        var csrfToken = document.querySelector('meta[name="csrf-token"]');
+        return {
+            'Authorization': token ? 'Bearer ' + token : '',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': csrfToken ? csrfToken.content : ''
+        };
+    },
+    showAlert: function(message, type) {
+        Admin.Notification.show(message, type || 'info');
+    }
+};

@@ -23,17 +23,18 @@ window.AdminPanel = {
     // Common AJAX headers
     getHeaders: function() {
         const token = this.getToken();
-        if (!token) {
-            console.error('No admin token available for API request');
-            throw new Error('Authentication token required');
-        }
-        
-        return {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+        const headers = {
             'Accept': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            'X-CSRF-TOKEN': csrfToken
         };
+
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        return headers;
     },
 
     // Show alert notification

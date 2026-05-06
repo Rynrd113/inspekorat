@@ -50,6 +50,7 @@ return Application::configure(basePath: dirname(__DIR__))
         
         // API middleware group with rate limiting and performance monitoring
         $middleware->group('api', [
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \App\Http\Middleware\HandleApiErrors::class,
             \App\Http\Middleware\FormatApiResponse::class,
             \App\Http\Middleware\ApiRateLimitMiddleware::class . ':120,1', // 120 requests per minute
