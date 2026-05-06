@@ -479,7 +479,14 @@ startxref
             ->orderBy('nama_album')
             ->paginate(12);
 
-        return view('public.galeri', compact('albums'));
+        // Get unassigned gallery items (legacy items without album_id)
+        $unassignedGallery = \App\Models\Galeri::where('status', true)
+            ->whereNull('album_id')
+            ->orderBy('tanggal_publikasi', 'desc')
+            ->take(100)
+            ->get();
+
+        return view('public.galeri', compact('albums', 'unassignedGallery'));
     }
 
     /**
