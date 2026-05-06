@@ -499,3 +499,36 @@ window.formatDate = formatDate;
 window.limitText = limitText;
 window.openLightbox = openLightbox;
 window.closeLightbox = closeLightbox;
+
+// Global variables
+let currentFilter = 'terbaru';
+
+// Filter berita function
+function filterBerita(filter) {
+    updateFilterButtons(filter);
+    currentFilter = filter;
+    console.log('Filter changed to:', filter);
+}
+
+// Update filter buttons
+function updateFilterButtons(activeFilter) {
+    const btnTerbaru = document.getElementById('btn-terbaru');
+    const btnTerpopuler = document.getElementById('btn-terpopuler');
+
+    if (!btnTerbaru || !btnTerpopuler) return;
+
+    // Reset all buttons
+    btnTerbaru.className = 'px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg sm:rounded-xl transition-all duration-200';
+    btnTerpopuler.className = 'px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg sm:rounded-xl transition-all duration-200';
+
+    // Set active button
+    if (activeFilter === 'terbaru') {
+        btnTerbaru.className = 'px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg sm:rounded-xl transition-all duration-200 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg';
+    } else if (activeFilter === 'terpopuler') {
+        btnTerpopuler.className = 'px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg sm:rounded-xl transition-all duration-200 hover:from-blue-700 hover:to-blue-800 shadow-md hover:shadow-lg';
+    }
+}
+
+// Export functions globally for onclick handlers
+window.filterBerita = filterBerita;
+window.updateFilterButtons = updateFilterButtons;
