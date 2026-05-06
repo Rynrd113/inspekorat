@@ -13,7 +13,7 @@
     # Rewrite /storage/ to storage/app/public/ (for Hostinger deployment with symlink)
     RewriteCond %{REQUEST_URI} ^/storage/(.*)$
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^storage/(.*)$ storage/app/public/ [L]
+    RewriteRule ^storage/(.*)$ storage/app/public/$1 [L]
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
