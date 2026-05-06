@@ -64,7 +64,7 @@ class PortalPapuaTengahController extends Controller
         }
 
         // Sync status and tanggal_publikasi from form fields
-        $data['status'] = !empty($data['is_published']);
+        $data['status'] = isset($data['is_published']) ? !empty($data['is_published']) : false;
         if (!empty($data['published_at'])) {
             $data['tanggal_publikasi'] = $data['published_at'];
         }
@@ -117,8 +117,10 @@ class PortalPapuaTengahController extends Controller
             $data['thumbnail'] = $request->file('thumbnail')->store('portal-thumbnails', 'public');
         }
 
-        // Sync status and tanggal_publikasi from form fields
-        $data['status'] = !empty($data['is_published']);
+        // Sync status only if is_published was explicitly submitted
+        if (isset($data['is_published'])) {
+            $data['status'] = !empty($data['is_published']);
+        }
         if (!empty($data['published_at'])) {
             $data['tanggal_publikasi'] = $data['published_at'];
         }

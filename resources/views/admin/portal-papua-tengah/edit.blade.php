@@ -172,13 +172,16 @@
                         <!-- Status Publikasi -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Status</label>
+                            @php
+                                $pubVal = old('is_published', $portalPapuaTengah->is_published ?? ($portalPapuaTengah->status ? 1 : 0));
+                            @endphp
                             <div class="mt-2 space-y-2">
                                 <label class="flex items-center">
-                                    <input type="radio" name="is_published" value="0" {{ old('is_published', $portalPapuaTengah->is_published) == '0' ? 'checked' : '' }} class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                    <input type="radio" name="is_published" value="0" {{ $pubVal == '0' || $pubVal === false || $pubVal === 0 ? 'checked' : '' }} class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
                                     <span class="ml-2 text-sm text-gray-700">Simpan sebagai Draft</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="radio" name="is_published" value="1" {{ old('is_published', $portalPapuaTengah->is_published) == '1' ? 'checked' : '' }} class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                    <input type="radio" name="is_published" value="1" {{ $pubVal == '1' || $pubVal === true || $pubVal === 1 ? 'checked' : '' }} class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
                                     <span class="ml-2 text-sm text-gray-700">Publikasikan</span>
                                 </label>
                             </div>
