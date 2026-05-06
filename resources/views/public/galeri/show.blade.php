@@ -46,7 +46,7 @@
                             @php
                                 $imagePath = $galeri->file_path;
                                 $imageUrl = null;
-                                
+
                                 // Try different paths
                                 if (Storage::disk('public')->exists($imagePath)) {
                                     $imageUrl = asset('storage/' . $imagePath);
@@ -56,11 +56,12 @@
                                     $imageUrl = asset('storage/uploads/' . $imagePath);
                                 }
                             @endphp
-                            
+
                             @if($imageUrl)
-                                <img src="{{ $imageUrl }}" 
-                                     alt="{{ $galeri->judul }}" 
-                                     class="w-full max-h-[600px] object-contain mx-auto">
+                                <img src="{{ $imageUrl }}"
+                                     alt="{{ $galeri->judul }}"
+                                     class="w-full max-h-[600px] object-contain mx-auto"
+                                     loading="lazy">
                             @else
                                 <div class="w-full h-96 flex items-center justify-center">
                                     <div class="text-center text-gray-400">
@@ -87,7 +88,7 @@
                     <!-- Content Details -->
                     <div class="p-6">
                         <h1 class="text-2xl font-bold text-gray-900 mb-4">{{ $galeri->judul }}</h1>
-                        
+
                         <div class="flex flex-wrap items-center gap-4 mb-6 text-sm text-gray-500">
                             <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
                                 <i class="fas fa-folder mr-1"></i>{{ $galeri->kategori }}
@@ -122,16 +123,16 @@
                                     $downloadUrl = asset('uploads/' . $galeri->file_path);
                                 }
                             @endphp
-                            
+
                             @if($downloadUrl)
-                            <a href="{{ $downloadUrl }}" 
+                            <a href="{{ $downloadUrl }}"
                                download="{{ $galeri->file_name }}"
                                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                                 <i class="fas fa-download mr-2"></i>Download
                             </a>
                             @endif
-                            
-                            <a href="{{ route('public.galeri.index') }}" 
+
+                            <a href="{{ route('public.galeri.index') }}"
                                class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
                                 <i class="fas fa-arrow-left mr-2"></i>Kembali ke Galeri
                             </a>
@@ -146,11 +147,11 @@
                     <h3 class="text-lg font-bold text-gray-900 mb-4">
                         <i class="fas fa-images text-blue-500 mr-2"></i>Galeri Terkait
                     </h3>
-                    
+
                     @if($related && $related->count() > 0)
                         <div class="space-y-4">
                             @foreach($related as $item)
-                                <a href="{{ route('public.galeri.show', $item->id) }}" 
+                                <a href="{{ route('public.galeri.show', $item->id) }}"
                                    class="block group">
                                     <div class="flex gap-4">
                                         <div class="w-20 h-20 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
@@ -164,11 +165,12 @@
                                                     $thumbUrl = asset('uploads/' . $item->file_path);
                                                 }
                                             @endphp
-                                            
+
                                             @if($thumbUrl && in_array($item->file_type, ['jpg', 'jpeg', 'png', 'gif', 'webp']))
-                                                <img src="{{ $thumbUrl }}" 
-                                                     alt="{{ $item->judul }}" 
-                                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform">
+                                                <img src="{{ $thumbUrl }}"
+                                                     alt="{{ $item->judul }}"
+                                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                                                     loading="lazy">
                                             @elseif(in_array($item->file_type, ['mp4', 'avi', 'mov', 'wmv', 'webm']))
                                                 <div class="w-full h-full flex items-center justify-center bg-gray-800">
                                                     <i class="fas fa-play text-white"></i>
@@ -197,7 +199,7 @@
 
                     <!-- View All Link -->
                     <div class="mt-6 pt-4 border-t">
-                        <a href="{{ route('public.galeri.index') }}" 
+                        <a href="{{ route('public.galeri.index') }}"
                            class="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center">
                             Lihat Semua Galeri
                             <i class="fas fa-arrow-right ml-2"></i>
