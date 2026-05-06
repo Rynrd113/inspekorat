@@ -4,155 +4,151 @@
 @section('description', Str::limit(strip_tags($berita->konten), 160))
 
 @section('content')
-
 <div class="min-h-screen bg-gray-50">
 
-    <!-- Breadcrumb -->
-    <div class="bg-white border-b">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <nav class="flex" aria-label="Breadcrumb">
-                <ol class="flex items-center space-x-4">
-                    <li>
-                        <div>
-                            <a href="{{ route('public.index') }}" class="text-gray-400 hover:text-gray-500">
-                                <i class="fas fa-home"></i>
-                                <span class="sr-only">Home</span>
-                            </a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="flex items-center">
-                            <i class="fas fa-chevron-right text-gray-400 mx-3"></i>
-                            <a href="{{ route('public.berita.index') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">Berita</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="flex items-center">
-                            <i class="fas fa-chevron-right text-gray-400 mx-3"></i>
-                            <span class="text-sm font-medium text-gray-900 truncate max-w-xs">{{ Str::limit($berita->judul, 50) }}</span>
-                        </div>
-                    </li>
-                </ol>
-            </nav>
+    {{-- Breadcrumb --}}
+    <div class="bg-white border-b border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <ol class="flex items-center flex-wrap gap-1 text-sm text-gray-500">
+                <li>
+                    <a href="{{ route('public.index') }}" class="hover:text-blue-600 transition-colors">
+                        <i class="fas fa-home"></i> Beranda
+                    </a>
+                </li>
+                <li><i class="fas fa-chevron-right text-gray-300 mx-1 text-xs"></i></li>
+                <li>
+                    <a href="{{ route('public.berita.index') }}" class="hover:text-blue-600 transition-colors">Berita</a>
+                </li>
+                <li><i class="fas fa-chevron-right text-gray-300 mx-1 text-xs"></i></li>
+                <li class="text-gray-800 font-medium truncate max-w-xs">{{ Str::limit($berita->judul, 50) }}</li>
+            </ol>
         </div>
     </div>
 
-    <!-- Article Content -->
-    <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Article Header -->
-        <header class="mb-8">
-            <div class="mb-4">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                    {{ strtoupper($berita->kategori) }}
-                </span>
-            </div>
-            
-            <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight">
-                {{ $berita->judul }}
-            </h1>
-            
-            <div class="flex flex-wrap items-center text-sm text-gray-500 space-x-6 mb-6">
-                <div class="flex items-center">
-                    <i class="fas fa-user mr-2"></i>
-                    <span>{{ $berita->author }}</span>
-                </div>
-                <div class="flex items-center">
-                    <i class="fas fa-calendar mr-2"></i>
-                    <span>{{ $berita->tanggal_publikasi ? \Carbon\Carbon::parse($berita->tanggal_publikasi)->format('d F Y') : 'Tanggal tidak tersedia' }}</span>
-                </div>
-                <div class="flex items-center">
-                    <i class="fas fa-clock mr-2"></i>
-                    <span>{{ $berita->tanggal_publikasi ? \Carbon\Carbon::parse($berita->tanggal_publikasi)->format('H:i') : '--:--' }} WIT</span>
-                </div>
-                <div class="flex items-center">
-                    <i class="fas fa-eye mr-2"></i>
-                    <span>{{ number_format($berita->views) }} views</span>
-                </div>
-            </div>
-        </header>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-        <!-- Article Body -->
-        <div class="prose prose-lg max-w-none">
-            <div class="bg-white rounded-lg shadow-sm p-8">
-                <!-- Featured Image Placeholder -->
-                <div class="mb-8">
-                    <div class="w-full h-64 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-image text-blue-400 text-6xl"></i>
+        {{-- Main Article Card --}}
+        <article class="bg-white rounded-2xl shadow-sm overflow-hidden">
+
+            {{-- Featured Image --}}
+            @if($berita->gambar)
+                @php
+                    $imgUrl = filter_var($berita->gambar, FILTER_VALIDATE_URL)
+                        ? $berita->gambar
+                        : asset('storage/' . $berita->gambar);
+                @endphp
+                <div class="w-full aspect-video overflow-hidden bg-gray-100">
+                    <img src="{{ $imgUrl }}"
+                         alt="{{ $berita->judul }}"
+                         class="w-full h-full object-cover"
+                         onerror="this.parentElement.innerHTML='<div class=\'w-full h-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center\'><i class=\'fas fa-newspaper text-white text-6xl opacity-30\'></i></div>'">
+                </div>
+            @else
+                <div class="w-full h-56 sm:h-72 bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
+                    <i class="fas fa-newspaper text-white text-6xl opacity-30"></i>
+                </div>
+            @endif
+
+            <div class="p-6 sm:p-10">
+
+                {{-- Category Badge --}}
+                <div class="mb-4">
+                    <span class="inline-block bg-blue-100 text-blue-700 text-xs font-semibold uppercase tracking-wide px-3 py-1 rounded-full">
+                        {{ $berita->kategori }}
+                    </span>
+                </div>
+
+                {{-- Title --}}
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight mb-6">
+                    {{ $berita->judul }}
+                </h1>
+
+                {{-- Meta --}}
+                <div class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-500 pb-6 border-b border-gray-100">
+                    <span class="flex items-center gap-1.5">
+                        <i class="fas fa-user-circle text-gray-400"></i>
+                        {{ $berita->author ?? 'Redaksi' }}
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                        <i class="fas fa-calendar-alt text-gray-400"></i>
+                        {{ $berita->tanggal_publikasi
+                            ? \Carbon\Carbon::parse($berita->tanggal_publikasi)->translatedFormat('d F Y')
+                            : 'Tanggal tidak tersedia' }}
+                    </span>
+                    <span class="flex items-center gap-1.5">
+                        <i class="fas fa-eye text-gray-400"></i>
+                        {{ number_format($berita->views) }} dilihat
+                    </span>
+                </div>
+
+                {{-- Article Body --}}
+                <div class="mt-6 text-gray-700 text-base sm:text-lg leading-relaxed space-y-4">
+                    @foreach(array_filter(explode("\n", $berita->konten)) as $paragraph)
+                        <p>{{ trim($paragraph) }}</p>
+                    @endforeach
+                </div>
+
+                {{-- Share --}}
+                <div class="mt-10 pt-6 border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <span class="text-sm font-medium text-gray-600">Bagikan:</span>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}"
+                           target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+                            <i class="fab fa-facebook-f"></i> Facebook
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url={{ urlencode(request()->fullUrl()) }}&text={{ urlencode($berita->judul) }}"
+                           target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-white bg-sky-500 hover:bg-sky-600 transition-colors">
+                            <i class="fab fa-twitter"></i> Twitter
+                        </a>
+                        <a href="https://wa.me/?text={{ urlencode($berita->judul . ' ' . request()->fullUrl()) }}"
+                           target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition-colors">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
                     </div>
-                </div>
-                
-                <!-- Article Content -->
-                <div class="text-gray-700 leading-relaxed">
-                    {!! nl2br(e($berita->konten)) !!}
+                    <a href="{{ route('public.berita.index') }}"
+                       class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-arrow-left"></i> Kembali
+                    </a>
                 </div>
             </div>
-        </div>
+        </article>
 
-        <!-- Share & Actions -->
-        <div class="mt-8 pt-8 border-t border-gray-200">
-            <div class="flex flex-wrap items-center justify-between">
-                <div class="flex items-center space-x-4 mb-4 sm:mb-0">
-                    <span class="text-sm font-medium text-gray-900">Bagikan:</span>
-                    <div class="flex space-x-2">
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}" target="_blank" class="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors">
-                            <i class="fab fa-facebook-f mr-2"></i>
-                            Facebook
-                        </a>
-                        <a href="https://twitter.com/intent/tweet?url={{ urlencode(request()->fullUrl()) }}&text={{ urlencode($berita->judul) }}" target="_blank" class="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium text-white bg-sky-500 hover:bg-sky-600 transition-colors">
-                            <i class="fab fa-twitter mr-2"></i>
-                            Twitter
-                        </a>
-                        <a href="https://wa.me/?text={{ urlencode($berita->judul . ' - ' . request()->fullUrl()) }}" target="_blank" class="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition-colors">
-                            <i class="fab fa-whatsapp mr-2"></i>
-                            WhatsApp
-                        </a>
-                    </div>
-                </div>
-                
-                <a href="{{ route('public.berita.index') }}" class="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    Kembali ke Daftar Berita
-                </a>
-            </div>
-        </div>
-    </article>
-
-    <!-- Related Articles -->
-    @if($relatedBerita->count() > 0)
-    <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="border-t border-gray-200 pt-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Berita Terkait</h2>
-            
-            <div class="grid md:grid-cols-3 gap-6">
+        {{-- Related Articles --}}
+        @if($relatedBerita->count() > 0)
+        <section class="mt-10">
+            <h2 class="text-xl font-bold text-gray-900 mb-5">Berita Terkait</h2>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
                 @foreach($relatedBerita as $related)
-                <article class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-                    <div class="p-6">
-                        <div class="mb-3">
-                            <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-800">
-                                {{ strtoupper($related->kategori) }}
-                            </span>
-                        </div>
-                        
-                        <h3 class="text-lg font-semibold text-gray-900 mb-3 hover:text-blue-600 transition-colors">
-                            <a href="{{ route('public.berita.show', $related->id) }}">
-                                {{ Str::limit($related->judul, 60) }}
-                            </a>
-                        </h3>
-                        
-                        <p class="text-gray-600 text-sm mb-4">
-                            {{ Str::limit(strip_tags($related->konten), 100) }}
-                        </p>
-                        
-                        <div class="flex items-center justify-between text-xs text-gray-500">
-                            <span>{{ \Carbon\Carbon::parse($related->tanggal_publikasi)->format('d M Y') }}</span>
-                            <span>{{ number_format($related->views) }} views</span>
-                        </div>
+                <a href="{{ route('public.berita.show', $related->id) }}"
+                   class="group bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
+                    <div class="h-36 bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center flex-shrink-0">
+                        @if($related->gambar)
+                            <img src="{{ filter_var($related->gambar, FILTER_VALIDATE_URL) ? $related->gambar : asset('storage/' . $related->gambar) }}"
+                                 alt="{{ $related->judul }}"
+                                 class="w-full h-full object-cover"
+                                 onerror="this.style.display='none'">
+                        @else
+                            <i class="fas fa-newspaper text-blue-300 text-3xl"></i>
+                        @endif
                     </div>
-                </article>
+                    <div class="p-4 flex flex-col flex-1">
+                        <span class="text-xs font-semibold text-blue-600 uppercase mb-1">{{ $related->kategori }}</span>
+                        <h3 class="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors leading-snug mb-2">
+                            {{ Str::limit($related->judul, 65) }}
+                        </h3>
+                        <p class="text-xs text-gray-500 mt-auto">
+                            {{ \Carbon\Carbon::parse($related->tanggal_publikasi)->translatedFormat('d F Y') }}
+                        </p>
+                    </div>
+                </a>
                 @endforeach
             </div>
-        </div>
-    </section>
-    @endif
+        </section>
+        @endif
+
+    </div>
 </div>
 @endsection
