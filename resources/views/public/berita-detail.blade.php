@@ -38,11 +38,14 @@
                         ? $imgRaw
                         : asset('storage/' . $imgRaw);
                 @endphp
-                <div class="w-full aspect-video overflow-hidden bg-gray-100">
+                <div class="w-full aspect-video overflow-hidden bg-gray-100 relative">
                     <img src="{{ $imgUrl }}"
                          alt="{{ $berita->judul }}"
                          class="w-full h-full object-cover"
-                         onerror="this.parentElement.innerHTML='<div class=\'w-full h-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center\'><i class=\'fas fa-newspaper text-white text-6xl opacity-30\'></i></div>'">
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="hidden w-full h-full absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-700 items-center justify-center">
+                        <i class="fas fa-newspaper text-white text-6xl opacity-30"></i>
+                    </div>
                 </div>
             @else
                 <div class="w-full h-56 sm:h-72 bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">

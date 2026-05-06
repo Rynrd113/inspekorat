@@ -121,7 +121,7 @@ class GaleriController extends Controller
         }
 
         // Set status (default true if not provided)
-        $validated['status'] = $request->has('status') ? true : ($request->input('status') !== null ? (bool)$request->input('status') : true);
+        $validated['status'] = (bool) $request->has('status');
         $validated['created_by'] = auth()->id();
 
         \App\Models\Galeri::create($validated);
@@ -220,7 +220,7 @@ class GaleriController extends Controller
         }
 
         // Set status (default true if not provided)
-        $validated['status'] = $request->has('status') ? true : ($request->input('status') !== null ? (bool)$request->input('status') : true);
+        $validated['status'] = (bool) $request->has('status');
         $validated['updated_by'] = auth()->id();
 
         // Update gallery item
