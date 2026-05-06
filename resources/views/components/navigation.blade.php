@@ -27,6 +27,7 @@
                             <a href="{{ route('public.profil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Profil</a>
                             <a href="{{ route('public.berita.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Berita</a>
                             <a href="{{ route('public.galeri.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Galeri</a>
+                            <a href="{{ route('public.portal-opd.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Portal OPD</a>
                         </div>
                     </div>
                 </div>
@@ -82,20 +83,24 @@
                <i class="fas fa-home mr-2"></i>Beranda
             </a>
 
-            <!-- Informasi Section -->
-            <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Informasi</div>
-            <a href="{{ route('public.profil') }}"
-               class="block px-6 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.profil') ? 'text-blue-600 bg-blue-50' : '' }}">
-               <i class="fas fa-user mr-2"></i>Profil
-            </a>
-            <a href="{{ route('public.berita.index') }}"
-               class="block px-6 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.berita.*') ? 'text-blue-600 bg-blue-50' : '' }}">
-               <i class="fas fa-newspaper mr-2"></i>Berita
-            </a>
-            <a href="{{ route('public.galeri.index') }}"
-               class="block px-6 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.galeri.*') ? 'text-blue-600 bg-blue-50' : '' }}">
-               <i class="fas fa-images mr-2"></i>Galeri
-            </a>
+             <!-- Informasi Section -->
+             <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Informasi</div>
+             <a href="{{ route('public.profil') }}"
+                class="block px-6 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.profil') ? 'text-blue-600 bg-blue-50' : '' }}">
+                <i class="fas fa-user mr-2"></i>Profil
+             </a>
+             <a href="{{ route('public.berita.index') }}"
+                class="block px-6 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.berita.*') ? 'text-blue-600 bg-blue-50' : '' }}">
+                <i class="fas fa-newspaper mr-2"></i>Berita
+             </a>
+             <a href="{{ route('public.galeri.index') }}"
+                class="block px-6 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.galeri.*') ? 'text-blue-600 bg-blue-50' : '' }}">
+                <i class="fas fa-images mr-2"></i>Galeri
+             </a>
+             <a href="{{ route('public.portal-opd.index') }}"
+                class="block px-6 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.portal-opd.*') ? 'text-blue-600 bg-blue-50' : '' }}">
+                <i class="fas fa-building mr-2"></i>Portal OPD
+             </a>
 
              <!-- Layanan Section -->
              <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Layanan</div>
