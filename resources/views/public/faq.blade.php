@@ -7,7 +7,7 @@
 <div class="min-h-screen bg-gray-50">
 
     <!-- Hero Section -->
-    <x-hero-section 
+    <x-hero-section
         title="Frequently Asked Questions"
         description="Temukan jawaban atas pertanyaan yang sering diajukan tentang Inspektorat Papua Tengah"
         icon="fas fa-question-circle"
@@ -21,8 +21,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Search Box -->
             <div class="mb-6">
-                <x-search-input 
-                    id="searchFaq" 
+                <x-search-input
+                    id="searchFaq"
                     placeholder="Cari pertanyaan..."
                     container-class="max-w-md mx-auto"
                     with-icon="true"
@@ -32,42 +32,42 @@
 
             <!-- Filter Buttons -->
             <div class="flex flex-wrap justify-center gap-3">
-                <x-filter-button 
-                    filter="" 
-                    active="true" 
-                    icon="fas fa-th-large" 
+                <x-filter-button
+                    filter=""
+                    active="true"
+                    icon="fas fa-th-large"
                     class="filter-btn"
                     data-category=""
                 >
                     Semua
                 </x-filter-button>
-                <x-filter-button 
-                    filter="umum" 
-                    icon="fas fa-info-circle" 
+                <x-filter-button
+                    filter="umum"
+                    icon="fas fa-info-circle"
                     class="filter-btn"
                     data-category="umum"
                 >
                     Umum
                 </x-filter-button>
-                <x-filter-button 
-                    filter="layanan" 
-                    icon="fas fa-hands-helping" 
+                <x-filter-button
+                    filter="layanan"
+                    icon="fas fa-hands-helping"
                     class="filter-btn"
                     data-category="layanan"
                 >
                     Layanan
                 </x-filter-button>
-                <x-filter-button 
-                    filter="pengaduan" 
-                    icon="fas fa-exclamation-triangle" 
+                <x-filter-button
+                    filter="pengaduan"
+                    icon="fas fa-exclamation-triangle"
                     class="filter-btn"
                     data-category="pengaduan"
                 >
                     Pengaduan
                 </x-filter-button>
-                <x-filter-button 
-                    filter="audit" 
-                    icon="fas fa-search" 
+                <x-filter-button
+                    filter="audit"
+                    icon="fas fa-search"
                     class="filter-btn"
                     data-category="audit"
                 >
@@ -84,7 +84,7 @@
                 @if(isset($faqs) && $faqs->count() > 0)
                     @foreach($faqs as $faq)
                     <div class="faq-item bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" data-category="{{ strtolower($faq->kategori ?? 'umum') }}">
-                        <button 
+                        <button
                             class="w-full px-6 py-4 text-left focus:outline-none focus:bg-gray-50 hover:bg-gray-50 transition-colors"
                             onclick="toggleFaq(this)"
                         >
@@ -112,7 +112,7 @@
                 @else
                     <!-- Default FAQ Items -->
                     <div class="faq-item bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" data-category="pengaduan">
-                        <button 
+                        <button
                             class="w-full px-6 py-4 text-left focus:outline-none focus:bg-gray-50 hover:bg-gray-50 transition-colors"
                             onclick="toggleFaq(this)"
                         >
@@ -143,7 +143,7 @@
                     </div>
 
                     <div class="faq-item bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" data-category="layanan">
-                        <button 
+                        <button
                             class="w-full px-6 py-4 text-left focus:outline-none focus:bg-gray-50 hover:bg-gray-50 transition-colors"
                             onclick="toggleFaq(this)"
                         >
@@ -175,7 +175,7 @@
                     </div>
 
                     <div class="faq-item bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" data-category="audit">
-                        <button 
+                        <button
                             class="w-full px-6 py-4 text-left focus:outline-none focus:bg-gray-50 hover:bg-gray-50 transition-colors"
                             onclick="toggleFaq(this)"
                         >
@@ -206,7 +206,7 @@
                     </div>
 
                     <div class="faq-item bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" data-category="umum">
-                        <button 
+                        <button
                             class="w-full px-6 py-4 text-left focus:outline-none focus:bg-gray-50 hover:bg-gray-50 transition-colors"
                             onclick="toggleFaq(this)"
                         >
@@ -248,9 +248,9 @@
     </section>
 
     <!-- Back to Top -->
-    <x-button 
-        id="backToTop" 
-        variant="primary" 
+    <x-button
+        id="backToTop"
+        variant="primary"
         class="hidden fixed bottom-6 right-6 p-3 rounded-full shadow-lg"
     >
         <i class="fas fa-arrow-up"></i>
@@ -259,30 +259,92 @@
 
 <script>
 // Simple FAQ functionality with Tailwind
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchFaq');
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const faqItems = document.querySelectorAll('.faq-item');
-    const noResults = document.getElementById('no-results');
-    const backToTop = document.getElementById('backToTop');
+// Define global variables and functions
+let faqItems, noResults, backToTop, searchInput, filterButtons;
 
-    // Toggle FAQ
-    window.toggleFaq = function(button) {
-        const answer = button.parentElement.querySelector('.faq-answer');
-        const icon = button.querySelector('i');
-        
-        if (answer.classList.contains('hidden')) {
-            answer.classList.remove('hidden');
+// Toggle FAQ - defined globally to be available immediately
+window.toggleFaq = function(button) {
+    if (!button || !button.parentElement) return;
+
+    const answer = button.closest('.faq-item')?.querySelector('.faq-answer');
+    const icon = button.querySelector('i');
+
+    if (!answer) return;
+
+    if (answer.classList.contains('hidden')) {
+        answer.classList.remove('hidden');
+        if (icon) {
             icon.style.transform = 'rotate(180deg)';
-        } else {
-            answer.classList.add('hidden');
+        }
+    } else {
+        answer.classList.add('hidden');
+        if (icon) {
             icon.style.transform = 'rotate(0deg)';
         }
-    };
+    }
+};
+
+// Clear search - defined globally
+window.clearSearch = function() {
+    if (searchInput) {
+        searchInput.value = '';
+    }
+    const defaultFilter = document.querySelector('.filter-btn[data-category=""]');
+    if (defaultFilter) {
+        defaultFilter.click();
+    }
+    if (typeof filterFAQs === 'function') {
+        filterFAQs();
+    }
+};
+
+// Filter function
+window.filterFAQs = function() {
+    const searchTerm = (searchInput?.value || '').toLowerCase().trim();
+    const activeCategory = document.querySelector('.filter-btn.bg-blue-600')?.dataset.category || '';
+    let visibleCount = 0;
+
+    faqItems.forEach(item => {
+        const questionElement = item.querySelector('h3');
+        const answerElement = item.querySelector('.faq-answer');
+        const question = (questionElement?.textContent || '').toLowerCase();
+        const answer = (answerElement?.textContent || '').toLowerCase();
+        const category = item.dataset.category || '';
+
+        const matchesSearch = !searchTerm || question.includes(searchTerm) || answer.includes(searchTerm);
+        const matchesCategory = !activeCategory || category === activeCategory;
+
+        if (matchesSearch && matchesCategory) {
+            item.classList.remove('hidden');
+            item.style.display = 'block';
+            visibleCount++;
+        } else {
+            item.classList.add('hidden');
+            item.style.display = 'none';
+        }
+    });
+
+    // Show/hide no results
+    if (noResults) {
+        if (visibleCount === 0) {
+            noResults.classList.remove('hidden');
+        } else {
+            noResults.classList.add('hidden');
+        }
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Get DOM elements
+    searchInput = document.getElementById('searchFaq');
+    filterButtons = document.querySelectorAll('.filter-btn');
+    faqItems = document.querySelectorAll('.faq-item');
+    noResults = document.getElementById('no-results');
+    backToTop = document.getElementById('backToTop');
 
     // Search functionality
     if (searchInput) {
-        searchInput.addEventListener('input', filterFAQs);
+        searchInput.addEventListener('input', window.filterFAQs);
     }
 
     // Filter buttons
@@ -293,57 +355,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 btn.classList.remove('bg-blue-600', 'text-white');
                 btn.classList.add('bg-gray-100', 'text-gray-700');
             });
-            
+
             this.classList.remove('bg-gray-100', 'text-gray-700');
             this.classList.add('bg-blue-600', 'text-white');
-            
-            filterFAQs();
+
+            window.filterFAQs();
         });
     });
 
-    // Filter function
-    function filterFAQs() {
-        const searchTerm = (searchInput?.value || '').toLowerCase().trim();
-        const activeCategory = document.querySelector('.filter-btn.bg-blue-600')?.dataset.category || '';
-        let visibleCount = 0;
-
-        faqItems.forEach(item => {
-            const question = (item.querySelector('h3')?.textContent || '').toLowerCase();
-            const answer = (item.querySelector('.faq-answer')?.textContent || '').toLowerCase();
-            const category = item.dataset.category || '';
-
-            const matchesSearch = !searchTerm || question.includes(searchTerm) || answer.includes(searchTerm);
-            const matchesCategory = !activeCategory || category === activeCategory;
-
-            if (matchesSearch && matchesCategory) {
-                item.classList.remove('hidden');
-                visibleCount++;
-            } else {
-                item.classList.add('hidden');
-            }
-        });
-
-        // Show/hide no results
-        if (noResults) {
-            if (visibleCount === 0) {
-                noResults.classList.remove('hidden');
-            } else {
-                noResults.classList.add('hidden');
-            }
-        }
-    }
-
-    // Clear search
-    window.clearSearch = function() {
-        if (searchInput) {
-            searchInput.value = '';
-        }
-        const defaultFilter = document.querySelector('.filter-btn[data-category=""]');
-        if (defaultFilter) {
-            defaultFilter.click();
-        }
-        filterFAQs();
-    };
+    // Initial filter call to show FAQs properly on page load
+    window.filterFAQs();
 
     // Back to top
     window.addEventListener('scroll', function() {
