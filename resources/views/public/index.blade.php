@@ -100,112 +100,6 @@
     <!-- Hero Slider Section - Dynamic from Database -->
     <x-hero-slider :heroSliders="$heroSliders" />
 
-    <!-- Stats Section -->
-    <section class="py-12 sm:py-16 lg:py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Values Section -->
-            <div class="text-center mb-12 sm:mb-16">
-                <div class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-blue-100 rounded-xl sm:rounded-2xl mb-4 sm:mb-6">
-                    <i class="fas fa-award text-blue-600 text-xl sm:text-2xl"></i>
-                </div>
-                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-4">
-                    Nilai & Komitmen Kami
-                </h2>
-                <p class="text-base sm:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-4">
-                    Tiga pilar utama yang menjadi fondasi dalam menjalankan tugas pengawasan dan pelayanan publik
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12 mb-12 sm:mb-16 lg:mb-20">
-                <div class="text-center group px-4">
-                    <div class="relative inline-block mb-6 sm:mb-8">
-                        <div class="w-20 h-20 sm:w-22 sm:h-22 lg:w-24 lg:h-24 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl sm:rounded-2xl flex items-center justify-center group-hover:from-blue-600 group-hover:to-blue-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
-                            <i class="fas fa-shield-alt text-white text-2xl sm:text-3xl"></i>
-                        </div>
-                        <div class="absolute -top-1 sm:-top-2 -right-1 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-check text-blue-600 text-xs"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Pengawasan</h3>
-                    <p class="text-gray-600 leading-relaxed text-base sm:text-lg">
-                        Sistem pengawasan internal yang kredibel dan objektif untuk mewujudkan tata kelola yang akuntabel
-                    </p>
-                </div>
-
-                <div class="text-center group px-4">
-                    <div class="relative inline-block mb-6 sm:mb-8">
-                        <div class="w-20 h-20 sm:w-22 sm:h-22 lg:w-24 lg:h-24 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl sm:rounded-2xl flex items-center justify-center group-hover:from-indigo-600 group-hover:to-indigo-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
-                            <i class="fas fa-users text-white text-2xl sm:text-3xl"></i>
-                        </div>
-                        <div class="absolute -top-1 sm:-top-2 -right-1 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-indigo-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-check text-indigo-600 text-xs"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Pelayanan</h3>
-                    <p class="text-gray-600 leading-relaxed text-base sm:text-lg">
-                        Memberikan pelayanan publik yang profesional, transparan, dan bertanggung jawab
-                    </p>
-                </div>
-
-                <div class="text-center group px-4 sm:col-span-2 lg:col-span-1">
-                    <div class="relative inline-block mb-6 sm:mb-8">
-                        <div class="w-20 h-20 sm:w-22 sm:h-22 lg:w-24 lg:h-24 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl sm:rounded-2xl flex items-center justify-center group-hover:from-purple-600 group-hover:to-purple-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
-                            <i class="fas fa-chart-line text-white text-2xl sm:text-3xl"></i>
-                        </div>
-                        <div class="absolute -top-1 sm:-top-2 -right-1 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                            <i class="fas fa-check text-purple-600 text-xs"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Transparansi</h3>
-                    <p class="text-gray-600 leading-relaxed text-base sm:text-lg">
-                        Keterbukaan informasi untuk meningkatkan akuntabilitas dan kepercayaan publik
-                    </p>
-                </div>
-            </div>
-
-            <!-- Statistics Numbers -->
-            <div class="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl p-6 sm:p-8 lg:p-12">
-                <div class="text-center mb-8 sm:mb-12">
-                    <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 px-4">Statistik Portal Provinsi Papua Tengah</h3>
-                    <p class="text-gray-600 text-base sm:text-lg px-4">Data terkini layanan dan informasi yang tersedia di portal</p>
-                </div>
-
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 xl:gap-12">
-                    <div class="text-center">
-                        <div class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-emerald-100 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 lg:mb-6">
-                            <i class="fas fa-building text-emerald-600 text-lg sm:text-xl lg:text-2xl"></i>
-                        </div>
-                        <div class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 sm:mb-2" id="stat-opd">{{ number_format($stats['portal_opd'] ?? 0) }}</div>
-                        <div class="text-xs sm:text-sm text-gray-600 font-medium px-2">OPD Terdaftar</div>
-                    </div>
-
-                    <div class="text-center">
-                        <div class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-blue-100 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 lg:mb-6">
-                            <i class="fas fa-newspaper text-blue-600 text-lg sm:text-xl lg:text-2xl"></i>
-                        </div>
-                        <div class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 sm:mb-2" id="stat-berita">{{ number_format($stats['berita'] ?? 0) }}</div>
-                        <div class="text-xs sm:text-sm text-gray-600 font-medium px-2">Berita Aktif</div>
-                    </div>
-
-                    <div class="text-center">
-                        <div class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-red-100 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 lg:mb-6">
-                            <i class="fas fa-shield-alt text-red-600 text-lg sm:text-xl lg:text-2xl"></i>
-                        </div>
-                        <div class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 sm:mb-2" id="stat-wbs">{{ number_format($stats['wbs'] ?? 0) }}</div>
-                        <div class="text-xs sm:text-sm text-gray-600 font-medium px-2">Laporan WBS</div>
-                    </div>
-
-                    <div class="text-center">
-                        <div class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-purple-100 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 lg:mb-6">
-                            <i class="fas fa-eye text-purple-600 text-lg sm:text-xl lg:text-2xl"></i>
-                        </div>
-                        <div class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 sm:mb-2" id="stat-views">{{ number_format($stats['total_views'] ?? 0) }}</div>
-                        <div class="text-xs sm:text-sm text-gray-600 font-medium px-2">Total Kunjungan</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
 
     <!-- Berita Inspektorat Section -->
@@ -704,8 +598,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize filter buttons with default active state
     updateFilterButtons('terbaru');
 
-    // Animate stats if visible
-    animateStats();
 
     console.log('All components initialized successfully!');
 });
@@ -739,31 +631,6 @@ function updateFilterButtons(activeFilter) {
     }
 }
 
-// Animate stats counter
-function animateStats() {
-    const stats = document.querySelectorAll('#stat-opd, #stat-berita, #stat-wbs, #stat-views');
-
-    if (stats.length === 0) return;
-
-    stats.forEach(stat => {
-        const target = parseInt(stat.textContent.replace(/,/g, ''));
-        if (isNaN(target)) return;
-
-        let current = 0;
-        const increment = target / 100;
-
-        const timer = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-                current = target;
-                clearInterval(timer);
-            }
-            stat.textContent = Math.floor(current).toLocaleString();
-        }, 20);
-    });
-
-    console.log('Stats animation initialized');
-}
 
 // Gallery Slider (simplified with display toggle)
 (function() {
