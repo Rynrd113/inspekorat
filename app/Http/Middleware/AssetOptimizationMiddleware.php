@@ -22,7 +22,7 @@ class AssetOptimizationMiddleware
             // Apply optimizations
             $content = $this->optimizeHtml($content);
             $content = $this->addResourceHints($content);
-            $content = $this->optimizeImages($content);
+            // optimizeImages() disabled — regex breaks onerror attributes
             $content = $this->addCriticalCss($content);
             
             $response->setContent($content);
