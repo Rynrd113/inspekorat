@@ -115,11 +115,13 @@
                 @foreach($beritaList as $berita)
                     <article class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
                         <div class="relative h-48 bg-gray-200 overflow-hidden">
-                            @if(!empty($berita->gambar))
-                                <img src="{{ asset('storage/' . $berita->gambar) }}"
+                            @php $imgSrc = $berita->thumbnail ?? $berita->gambar; @endphp
+                            @if(!empty($imgSrc))
+                                <img src="{{ filter_var($imgSrc, FILTER_VALIDATE_URL) ? $imgSrc : asset('storage/' . $imgSrc) }}"
                                      alt="{{ $berita->judul }}"
                                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                     loading="lazy">
+                                     loading="lazy"
+                                     onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-100\'><i class=\'fas fa-newspaper text-blue-300 text-4xl\'></i></div>'">
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-100">
                                     <i class="fas fa-newspaper text-blue-300 text-4xl"></i>

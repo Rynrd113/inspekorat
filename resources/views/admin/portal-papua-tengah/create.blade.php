@@ -81,10 +81,23 @@
                         <!-- Tags -->
                         <div>
                             <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
-                            <input type="text" id="tags" name="tags" value="{{ old('tags') }}" 
+                            <input type="text" id="tags" name="tags" value="{{ old('tags') }}"
                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('tags') border-red-500 @enderror">
                             <p class="mt-1 text-sm text-gray-500">Pisahkan dengan koma, contoh: berita, pengumuman, kegiatan</p>
                             @error('tags')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Thumbnail -->
+                        <div>
+                            <label for="thumbnail" class="block text-sm font-medium text-gray-700">Thumbnail / Gambar</label>
+                            <input type="file" id="thumbnail" name="thumbnail" accept="image/*"
+                                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                   onchange="previewThumbnail(this)">
+                            <p class="mt-1 text-xs text-gray-500">Format: JPG, PNG, WebP. Maksimal 2MB</p>
+                            <div id="newPreviewContainer"></div>
+                            @error('thumbnail')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
@@ -180,6 +193,26 @@
 </div>
 
 <script>
+function previewThumbnail(input) {
+    const previewContainer = document.getElementById('newPreviewContainer');
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Ukuran file terlalu besar. Maksimal 2MB.');
+            input.value = '';
+            previewContainer.innerHTML = '';
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewContainer.innerHTML = `<div class="mt-3 p-3 border border-blue-300 rounded-md bg-blue-50"><img src="${e.target.result}" class="h-32 w-48 object-cover rounded-md border border-blue-300 mb-2"><p class="text-sm text-blue-600"><i class="fas fa-check-circle mr-1"></i>Preview gambar</p></div>`;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        previewContainer.innerHTML = '';
+    }
+}
+
 // Auto-generate slug from title
 document.getElementById('judul').addEventListener('input', function() {
     const title = this.value;

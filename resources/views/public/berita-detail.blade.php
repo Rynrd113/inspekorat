@@ -31,11 +31,12 @@
         <article class="bg-white rounded-2xl shadow-sm overflow-hidden">
 
             {{-- Featured Image --}}
-            @if($berita->gambar)
+            @php $imgRaw = $berita->thumbnail ?? $berita->gambar; @endphp
+            @if($imgRaw)
                 @php
-                    $imgUrl = filter_var($berita->gambar, FILTER_VALIDATE_URL)
-                        ? $berita->gambar
-                        : asset('storage/' . $berita->gambar);
+                    $imgUrl = filter_var($imgRaw, FILTER_VALIDATE_URL)
+                        ? $imgRaw
+                        : asset('storage/' . $imgRaw);
                 @endphp
                 <div class="w-full aspect-video overflow-hidden bg-gray-100">
                     <img src="{{ $imgUrl }}"
@@ -125,8 +126,9 @@
                 <a href="{{ route('public.berita.show', $related->id) }}"
                    class="group bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
                     <div class="h-36 bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center flex-shrink-0">
-                        @if($related->gambar)
-                            <img src="{{ filter_var($related->gambar, FILTER_VALIDATE_URL) ? $related->gambar : asset('storage/' . $related->gambar) }}"
+                        @php $relImg = $related->thumbnail ?? $related->gambar; @endphp
+                        @if($relImg)
+                            <img src="{{ filter_var($relImg, FILTER_VALIDATE_URL) ? $relImg : asset('storage/' . $relImg) }}"
                                  alt="{{ $related->judul }}"
                                  class="w-full h-full object-cover"
                                  onerror="this.style.display='none'">
