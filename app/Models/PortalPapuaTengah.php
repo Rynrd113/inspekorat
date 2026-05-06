@@ -36,6 +36,9 @@ class PortalPapuaTengah extends Model
     protected $casts = [
         'status' => 'boolean',
         'tanggal_publikasi' => 'date',
+        'published_at' => 'datetime',
+        'is_published' => 'boolean',
+        'is_featured' => 'boolean',
         'views' => 'integer'
     ];
 
