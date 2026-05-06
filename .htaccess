@@ -1,31 +1,37 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Allow direct access to actual files and directories
+    # 1) If the requested path exists in repository root, serve it directly
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    # Explicitly route /build/ assets to /public/build/
+    # 2) If the requested path exists under the `public/` directory, rewrite to public/
+    #    This allows DocumentRoot to be the project root while still serving public assets
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -d
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # 3) Explicit handling for build assets (redundant fallback)
     RewriteRule ^build/(.*)$ public/build/$1 [L]
 
-    # Handle Authorization Header
+    # 4) Preserve Authorization and XSRF headers for the application
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-    # Handle X-XSRF-Token Header
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
-    # Rewrite /storage/ to storage/app/public/ (for Hostinger deployment with symlink)
+    # 5) Preserve storage symlink behavior (serve /storage from public/storage)
+    RewriteCond %{DOCUMENT_ROOT}/public/storage%{REQUEST_URI} -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/public/storage%{REQUEST_URI} -d
     RewriteRule ^storage/(.*)$ public/storage/$1 [L]
 
-    # Redirect Trailing Slashes If Not A Folder...
+    # 6) Redirect trailing slashes if not a folder
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # 7) Fallback: send requests to front controller
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]

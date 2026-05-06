@@ -3,7 +3,7 @@
 @section('title', 'Galeri Foto - Portal Inspektorat Papua Tengah')
 
 @push('styles')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/css/glightbox.min.css" integrity="sha512-T+KUFi2oYYbNrKDwKe2Vs+qpXM1DlP3t26Xf7QFoJxFKm7peqfnNqKKQwFyoFJ50PBBv19lzIrVa40SSQiUkBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/css/glightbox.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 
 @section('content')
@@ -222,7 +222,7 @@
 </div>
 
 @push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/glightbox.min.js" integrity="sha512-ZyKVzuKi8I8eeVsy5W01aL85R5EW/BL7VF3UZFJ9u8ktfVbp0W0n+kiKG3HhpYN0FjL0Hp0wH2gkfbfh3nFvnA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/js/glightbox.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize GLightbox for gallery preview
