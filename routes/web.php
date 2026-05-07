@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\SystemConfigurationController as AdminSystemConfi
 use App\Http\Controllers\Admin\ContentApprovalController as AdminContentApprovalController;
 use App\Http\Controllers\Admin\PengaduanController as AdminPengaduanController;
 use App\Http\Controllers\Admin\PesanKontakController as AdminPesanKontakController;
+use App\Http\Controllers\Admin\ReviewOpdController as AdminReviewOpdController;
 use App\Http\Controllers\Admin\WebPortalController as AdminWebPortalController;
 use App\Http\Controllers\Admin\HeroSliderController as AdminHeroSliderController;
 use App\Http\Controllers\PublicController;
@@ -124,6 +125,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('portal-opd/{portalOpd}/edit', [AdminPortalOpdController::class, 'edit'])->name('portal-opd.edit');
             Route::put('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'update'])->name('portal-opd.update');
             Route::delete('portal-opd/{portalOpd}', [AdminPortalOpdController::class, 'destroy'])->name('portal-opd.destroy');
+        });
+
+        // Review OPD routes
+        Route::middleware('role:admin,super_admin')->group(function () {
+            Route::get('review-opd', [AdminReviewOpdController::class, 'index'])->name('review-opd.index');
+            Route::get('review-opd/create', [AdminReviewOpdController::class, 'create'])->name('review-opd.create');
+            Route::post('review-opd', [AdminReviewOpdController::class, 'store'])->name('review-opd.store');
+            Route::get('review-opd/{reviewOpd}/edit', [AdminReviewOpdController::class, 'edit'])->name('review-opd.edit');
+            Route::put('review-opd/{reviewOpd}', [AdminReviewOpdController::class, 'update'])->name('review-opd.update');
+            Route::delete('review-opd/{reviewOpd}', [AdminReviewOpdController::class, 'destroy'])->name('review-opd.destroy');
         });
 
         // Info Kantor routes - protected by role middleware
