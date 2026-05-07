@@ -28,6 +28,7 @@
                             <a href="{{ route('public.berita.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Berita</a>
                             <a href="{{ route('public.galeri.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Galeri</a>
                             <a href="{{ route('public.portal-opd.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Portal OPD</a>
+                            <a href="{{ route('public.review-opd') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Daftar Review OPD</a>
                         </div>
                     </div>
                 </div>
@@ -100,6 +101,10 @@
              <a href="{{ route('public.portal-opd.index') }}"
                 class="block px-6 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.portal-opd.*') ? 'text-blue-600 bg-blue-50' : '' }}">
                 <i class="fas fa-building mr-2"></i>Portal OPD
+             </a>
+             <a href="{{ route('public.review-opd') }}"
+                class="block px-6 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->routeIs('public.review-opd') ? 'text-blue-600 bg-blue-50' : '' }}">
+                <i class="fas fa-clipboard-check mr-2"></i>Daftar Review OPD
              </a>
 
              <!-- Layanan Section -->
