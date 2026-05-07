@@ -10,14 +10,18 @@ class ReviewOpd extends Model
 
     protected $fillable = [
         'nama_opd',
+        'tahun_anggaran',
         'tanggal_review',
+        'tanggal_selesai',
         'status_review',
         'hasil_review',
         'keterangan',
+        'dokumen_path',
     ];
 
     protected $casts = [
-        'tanggal_review' => 'date',
+        'tanggal_review'  => 'date',
+        'tanggal_selesai' => 'date',
     ];
 
     public static array $statusLabels = [

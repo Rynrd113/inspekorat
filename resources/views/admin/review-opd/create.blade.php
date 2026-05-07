@@ -19,19 +19,40 @@
     @endif
 
     <div class="bg-white rounded-lg shadow p-6" style="max-width:700px">
-        <form method="POST" action="{{ route('admin.review-opd.store') }}">
+        <form method="POST" action="{{ route('admin.review-opd.store') }}" enctype="multipart/form-data">
             @csrf
             <div style="display:grid;gap:16px">
-                <div>
-                    <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px">Nama OPD <span style="color:#dc2626">*</span></label>
-                    <input type="text" name="nama_opd" value="{{ old('nama_opd') }}" required
-                           style="width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;box-sizing:border-box">
+
+                <div style="display:grid;grid-template-columns:1fr 160px;gap:12px">
+                    <div>
+                        <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px">Nama OPD <span style="color:#dc2626">*</span></label>
+                        <input type="text" name="nama_opd" value="{{ old('nama_opd') }}" required
+                               style="width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;box-sizing:border-box">
+                    </div>
+                    <div>
+                        <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px">Tahun Anggaran <span style="color:#dc2626">*</span></label>
+                        <select name="tahun_anggaran" required
+                                style="width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;box-sizing:border-box">
+                            @for($y = date('Y') + 1; $y >= 2020; $y--)
+                            <option value="{{ $y }}" {{ old('tahun_anggaran', date('Y'))==$y ? 'selected':'' }}>{{ $y }}</option>
+                            @endfor
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px">Tanggal Review <span style="color:#dc2626">*</span></label>
-                    <input type="date" name="tanggal_review" value="{{ old('tanggal_review') }}" required
-                           style="width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;box-sizing:border-box">
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div>
+                        <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px">Tanggal Mulai Review <span style="color:#dc2626">*</span></label>
+                        <input type="date" name="tanggal_review" value="{{ old('tanggal_review') }}" required
+                               style="width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;box-sizing:border-box">
+                    </div>
+                    <div>
+                        <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px">Tanggal Selesai</label>
+                        <input type="date" name="tanggal_selesai" value="{{ old('tanggal_selesai') }}"
+                               style="width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;box-sizing:border-box">
+                    </div>
                 </div>
+
                 <div>
                     <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px">Status Review <span style="color:#dc2626">*</span></label>
                     <select name="status_review" required
@@ -42,17 +63,28 @@
                         <option value="selesai"         {{ old('status_review')=='selesai'         ? 'selected':'' }}>Selesai</option>
                     </select>
                 </div>
+
                 <div>
                     <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px">Hasil Review</label>
                     <input type="text" name="hasil_review" value="{{ old('hasil_review') }}"
                            placeholder="Contoh: Baik, Cukup, Perlu Perbaikan..."
                            style="width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;box-sizing:border-box">
                 </div>
+
                 <div>
                     <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px">Keterangan</label>
                     <textarea name="keterangan" rows="4"
                               style="width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;box-sizing:border-box;resize:vertical">{{ old('keterangan') }}</textarea>
                 </div>
+
+                <div>
+                    <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px">
+                        Dokumen Hasil Review <span style="color:#6b7280;font-weight:400">(PDF, maks. 10 MB)</span>
+                    </label>
+                    <input type="file" name="dokumen" accept=".pdf"
+                           style="width:100%;padding:6px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;box-sizing:border-box">
+                </div>
+
             </div>
             <div style="margin-top:20px;display:flex;gap:8px">
                 <button type="submit"

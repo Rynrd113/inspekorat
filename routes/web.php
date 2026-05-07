@@ -78,6 +78,7 @@ Route::middleware('admin.logout.public')->group(function () {
     Route::get('/portal-opd', [PortalOpdController::class, 'index'])->name('public.portal-opd.index');
     Route::get('/portal-opd/{portalOpd}', [PortalOpdController::class, 'show'])->name('public.portal-opd.show');
     Route::get('/review-opd', [PublicController::class, 'reviewOpd'])->name('public.review-opd');
+    Route::get('/review-opd/{reviewOpd}', [PublicController::class, 'reviewOpdShow'])->name('public.review-opd.show');
 });
 
 // Admin Authentication Routes

@@ -735,14 +735,26 @@ startxref
         if ($request->filled('search')) {
             $query->where('nama_opd', 'like', '%' . $request->search . '%');
         }
-
         if ($request->filled('status')) {
             $query->where('status_review', $request->status);
         }
+        if ($request->filled('tahun')) {
+            $query->where('tahun_anggaran', $request->tahun);
+        }
 
-        $reviews = $query->paginate(15)->withQueryString();
+        $reviews   = $query->paginate(15)->withQueryString();
+        $tahunList = ReviewOpd::selectRaw('DISTINCT tahun_anggaran')
+            ->orderByDesc('tahun_anggaran')->pluck('tahun_anggaran');
 
-        return view('public.review-opd', compact('reviews'));
+        return view('public.review-opd', compact('reviews', 'tahunList'));
+    }
+
+    /**
+     * Show detail review OPD public page
+     */
+    public function reviewOpdShow(ReviewOpd $reviewOpd): View
+    {
+        return view('public.review-opd-show', compact('reviewOpd'));
     }
 
     /**
