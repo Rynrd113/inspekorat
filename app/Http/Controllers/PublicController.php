@@ -13,6 +13,7 @@ use App\Models\Dokumen;
 use App\Models\Galeri;
 use App\Models\Faq;
 use App\Models\WebPortal;
+use App\Models\PesanKontak;
 use App\Models\Pengaduan;
 use App\Models\HeroSlider;
 use App\Models\SystemConfiguration;
@@ -604,16 +605,15 @@ startxref
      */
     public function kontakKirim(Request $request)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'pesan' => 'required|string|max:2000'
+        $validated = $request->validate([
+            'nama'   => 'required|string|max:255',
+            'email'  => 'required|email|max:255',
+            'subjek' => 'nullable|string|max:255',
+            'pesan'  => 'required|string|max:2000',
         ]);
 
-        // Here you can add logic to save the contact message to database
-        // or send an email to administrators
+        PesanKontak::create($validated);
 
-        // For now, we'll just redirect back with a success message
         return redirect()->route('public.kontak')->with('success', 'Pesan Anda telah berhasil dikirim! Kami akan segera merespons.');
     }
 

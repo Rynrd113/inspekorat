@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\AuditLogController as AdminAuditLogController;
 use App\Http\Controllers\Admin\SystemConfigurationController as AdminSystemConfigurationController;
 use App\Http\Controllers\Admin\ContentApprovalController as AdminContentApprovalController;
 use App\Http\Controllers\Admin\PengaduanController as AdminPengaduanController;
+use App\Http\Controllers\Admin\PesanKontakController as AdminPesanKontakController;
 use App\Http\Controllers\Admin\WebPortalController as AdminWebPortalController;
 use App\Http\Controllers\Admin\HeroSliderController as AdminHeroSliderController;
 use App\Http\Controllers\PublicController;
@@ -209,6 +210,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::patch('faq/{faq}/move-up', [AdminFaqController::class, 'moveUp'])->name('faq.move-up');
             Route::patch('faq/{faq}/move-down', [AdminFaqController::class, 'moveDown'])->name('faq.move-down');
             Route::post('faq/reorder', [AdminFaqController::class, 'reorder'])->name('faq.reorder');
+        });
+
+        // Pesan Kontak routes
+        Route::middleware('role:admin,super_admin')->group(function () {
+            Route::get('pesan-kontak', [AdminPesanKontakController::class, 'index'])->name('pesan-kontak.index');
+            Route::get('pesan-kontak/{pesanKontak}', [AdminPesanKontakController::class, 'show'])->name('pesan-kontak.show');
+            Route::delete('pesan-kontak/{pesanKontak}', [AdminPesanKontakController::class, 'destroy'])->name('pesan-kontak.destroy');
         });
 
         // Content Approval routes - accessible by content_manager, admin, super_admin
