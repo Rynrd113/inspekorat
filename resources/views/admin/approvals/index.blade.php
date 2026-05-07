@@ -35,10 +35,10 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $approval->id }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            {{ $approval->model_type ? class_basename($approval->model_type) : 'Unknown' }}
+                            {{ $approval->approvable_type ? class_basename($approval->approvable_type) : 'Unknown' }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $approval->model ? Str::limit($approval->model->title ?? $approval->model->nama ?? 'No title', 50) : 'N/A' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $approval->approvable ? Str::limit($approval->approvable->judul ?? $approval->approvable->nama ?? $approval->approvable->title ?? 'Tanpa judul', 50) : 'N/A' }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         @if($approval->status == 'pending')
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePortalPapuaTengahRequest;
 use App\Http\Requests\UpdatePortalPapuaTengahRequest;
 use App\Models\PortalPapuaTengah;
+use App\Models\ContentApproval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -69,7 +70,28 @@ class PortalPapuaTengahController extends Controller
             $data['tanggal_publikasi'] = $data['published_at'];
         }
 
-        PortalPapuaTengah::create($data);
+        $isContentAdmin = auth()->user()->hasRole('content_admin');
+
+        // content_admin tidak bisa langsung publish — selalu draft
+        if ($isContentAdmin) {
+            $data['status'] = false;
+        }
+
+        $berita = PortalPapuaTengah::create($data);
+
+        // Buat approval request jika content_admin
+        if ($isContentAdmin) {
+            ContentApproval::create([
+                'approvable_type' => PortalPapuaTengah::class,
+                'approvable_id'   => $berita->id,
+                'submitted_by'    => auth()->id(),
+                'status'          => ContentApproval::STATUS_PENDING,
+                'submitted_at'    => now(),
+            ]);
+
+            return redirect()->route('admin.portal-papua-tengah.index')
+                ->with('success', 'Berita berhasil dikirim dan menunggu persetujuan admin.');
+        }
 
         return redirect()->route('admin.portal-papua-tengah.index')
             ->with('success', 'Berita berhasil ditambahkan');
@@ -125,7 +147,33 @@ class PortalPapuaTengahController extends Controller
             $data['tanggal_publikasi'] = $data['published_at'];
         }
 
+        $isContentAdmin = auth()->user()->hasRole('content_admin');
+
+        // content_admin tidak bisa publish langsung
+        if ($isContentAdmin) {
+            $data['status'] = false;
+        }
+
         $portalPapuaTengah->update($data);
+
+        // Buat/perbarui approval request jika content_admin
+        if ($isContentAdmin) {
+            ContentApproval::updateOrCreate(
+                [
+                    'approvable_type' => PortalPapuaTengah::class,
+                    'approvable_id'   => $portalPapuaTengah->id,
+                    'status'          => ContentApproval::STATUS_PENDING,
+                ],
+                [
+                    'submitted_by' => auth()->id(),
+                    'submitted_at' => now(),
+                    'notes'        => null,
+                ]
+            );
+
+            return redirect()->route('admin.portal-papua-tengah.index')
+                ->with('success', 'Berita berhasil diperbarui dan menunggu persetujuan admin.');
+        }
 
         return redirect()->route('admin.portal-papua-tengah.index')
             ->with('success', 'Berita berhasil diupdate');

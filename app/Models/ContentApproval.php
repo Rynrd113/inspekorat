@@ -33,9 +33,14 @@ class ContentApproval extends Model
     /**
      * Get the model that needs approval
      */
-    public function model()
+    public function approvable()
     {
         return $this->morphTo();
+    }
+
+    public function model()
+    {
+        return $this->approvable();
     }
 
     /**
@@ -92,34 +97,29 @@ class ContentApproval extends Model
     public function submitForApproval($notes = null)
     {
         $this->update([
-            'status' => self::STATUS_PENDING,
-            'submission_notes' => $notes,
+            'status'       => self::STATUS_PENDING,
+            'notes'        => $notes,
             'submitted_at' => now(),
-            'submitted_by' => auth()->id()
-        ]);
-
-        AuditLog::log('submitted_for_approval', $this->model, null, [
-            'notes' => $notes,
-            'submitted_by' => auth()->user()->name
+            'submitted_by' => auth()->id(),
         ]);
     }
 
     /**
-     * Approve content
+     * Approve content and publish it
      */
     public function approve($notes = null)
     {
         $this->update([
-            'status' => self::STATUS_APPROVED,
-            'approval_notes' => $notes,
-            'approved_at' => now(),
-            'approved_by' => auth()->id()
+            'status'      => self::STATUS_APPROVED,
+            'notes'       => $notes,
+            'reviewed_at' => now(),
+            'approved_by' => auth()->id(),
         ]);
 
-        AuditLog::log('approved', $this->model, null, [
-            'notes' => $notes,
-            'approved_by' => auth()->user()->name
-        ]);
+        // Publish the associated content
+        if ($this->approvable) {
+            $this->approvable->update(['status' => true]);
+        }
     }
 
     /**
@@ -128,15 +128,9 @@ class ContentApproval extends Model
     public function reject($notes = null)
     {
         $this->update([
-            'status' => self::STATUS_REJECTED,
-            'rejection_notes' => $notes,
-            'rejected_at' => now(),
-            'rejected_by' => auth()->id()
-        ]);
-
-        AuditLog::log('rejected', $this->model, null, [
-            'notes' => $notes,
-            'rejected_by' => auth()->user()->name
+            'status'      => self::STATUS_REJECTED,
+            'notes'       => $notes,
+            'reviewed_at' => now(),
         ]);
     }
 
