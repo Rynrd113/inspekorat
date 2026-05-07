@@ -150,6 +150,6 @@ class ContentApprovalController extends Controller
                 ->first()->avg_hours ?? 0
         ];
 
-        return response()->json($stats);
+        return view('admin.approvals.stats', compact('stats'));
     }
 }
