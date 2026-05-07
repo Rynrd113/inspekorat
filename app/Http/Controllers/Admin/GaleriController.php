@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ContentApproval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -120,11 +121,26 @@ class GaleriController extends Controller
             $validated['thumbnail'] = $thumbnailPath;
         }
 
-        // Set status (default true if not provided)
-        $validated['status'] = (bool) $request->has('status');
+        $isContentAdmin = auth()->user()->hasRole('content_admin');
+
+        // content_admin tidak bisa langsung publish
+        $validated['status'] = $isContentAdmin ? false : (bool) $request->has('status');
         $validated['created_by'] = auth()->id();
 
-        \App\Models\Galeri::create($validated);
+        $galeri = \App\Models\Galeri::create($validated);
+
+        if ($isContentAdmin) {
+            ContentApproval::create([
+                'approvable_type' => \App\Models\Galeri::class,
+                'approvable_id'   => $galeri->id,
+                'submitted_by'    => auth()->id(),
+                'status'          => ContentApproval::STATUS_PENDING,
+                'submitted_at'    => now(),
+            ]);
+
+            return redirect()->route('admin.galeri.index')
+                ->with('success', 'Item galeri berhasil dikirim dan menunggu persetujuan admin.');
+        }
 
         return redirect()->route('admin.galeri.index')
             ->with('success', 'Item galeri berhasil ditambahkan');
@@ -219,12 +235,31 @@ class GaleriController extends Controller
             $validated['thumbnail'] = $thumbnailPath;
         }
 
-        // Set status (default true if not provided)
-        $validated['status'] = (bool) $request->has('status');
+        $isContentAdmin = auth()->user()->hasRole('content_admin');
+
+        // content_admin tidak bisa langsung publish
+        $validated['status'] = $isContentAdmin ? false : (bool) $request->has('status');
         $validated['updated_by'] = auth()->id();
 
-        // Update gallery item
         $galeri->update($validated);
+
+        if ($isContentAdmin) {
+            ContentApproval::updateOrCreate(
+                [
+                    'approvable_type' => \App\Models\Galeri::class,
+                    'approvable_id'   => $galeri->id,
+                    'status'          => ContentApproval::STATUS_PENDING,
+                ],
+                [
+                    'submitted_by' => auth()->id(),
+                    'submitted_at' => now(),
+                    'notes'        => null,
+                ]
+            );
+
+            return redirect()->route('admin.galeri.index')
+                ->with('success', 'Item galeri berhasil diperbarui dan menunggu persetujuan admin.');
+        }
 
         return redirect()->route('admin.galeri.index')
             ->with('success', 'Item galeri berhasil diperbarui');
