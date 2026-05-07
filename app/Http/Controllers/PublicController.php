@@ -15,6 +15,7 @@ use App\Models\Faq;
 use App\Models\WebPortal;
 use App\Models\PesanKontak;
 use App\Models\Pengaduan;
+use App\Models\ReviewOpd;
 use App\Models\HeroSlider;
 use App\Models\SystemConfiguration;
 use Illuminate\Http\Request;
@@ -722,6 +723,26 @@ startxref
         });
 
         return view('public.web-portal', compact('webPortals'));
+    }
+
+    /**
+     * Show review OPD public page
+     */
+    public function reviewOpd(Request $request): View
+    {
+        $query = ReviewOpd::latest('tanggal_review');
+
+        if ($request->filled('search')) {
+            $query->where('nama_opd', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status_review', $request->status);
+        }
+
+        $reviews = $query->paginate(15)->withQueryString();
+
+        return view('public.review-opd', compact('reviews'));
     }
 
     /**
