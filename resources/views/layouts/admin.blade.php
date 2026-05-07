@@ -99,6 +99,13 @@
                     </a>
                     @endif
 
+                    @if(auth()->user()->canApproveContent())
+                    <a href="{{ route('admin.approvals.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.approvals.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
+                        <i class="fas fa-check-circle mr-3 h-5 w-5"></i>
+                        Persetujuan
+                    </a>
+                    @endif
+
                     @if(auth()->user()->isSuperAdmin())
                     <a href="{{ route('admin.users.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.users.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-users mr-3 h-5 w-5"></i>
