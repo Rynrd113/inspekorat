@@ -222,11 +222,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Content Approval routes - accessible by content_manager, admin, super_admin
         Route::middleware('role:content_manager,admin,super_admin')->group(function () {
             Route::get('approvals', [AdminContentApprovalController::class, 'index'])->name('approvals.index');
+            Route::get('approvals/stats', [AdminContentApprovalController::class, 'stats'])->name('approvals.stats');
+            Route::post('approvals/bulk-action', [AdminContentApprovalController::class, 'bulkAction'])->name('approvals.bulk-action');
             Route::get('approvals/{approval}', [AdminContentApprovalController::class, 'show'])->name('approvals.show');
             Route::post('approvals/{approval}/approve', [AdminContentApprovalController::class, 'approve'])->name('approvals.approve');
             Route::post('approvals/{approval}/reject', [AdminContentApprovalController::class, 'reject'])->name('approvals.reject');
-            Route::post('approvals/bulk-action', [AdminContentApprovalController::class, 'bulkAction'])->name('approvals.bulk-action');
-            Route::get('approvals/stats', [AdminContentApprovalController::class, 'stats'])->name('approvals.stats');
         });
 
         // System Configuration routes - only for super_admin
