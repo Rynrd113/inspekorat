@@ -317,45 +317,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle form submission
     document.getElementById('wbs-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        // Validate files
+        // Validate files before submitting
         const fileInputs = document.querySelectorAll('input[name="attachments[]"]');
         let totalSize = 0;
-        let hasValidFiles = false;
 
         fileInputs.forEach(input => {
             if (input.files[0]) {
-                hasValidFiles = true;
                 totalSize += input.files[0].size;
             }
         });
 
-        if (hasValidFiles && totalSize > 50 * 1024 * 1024) { // 50MB total limit
+        if (totalSize > 50 * 1024 * 1024) { // 50MB total limit
+            e.preventDefault();
             alert('Total ukuran file terlalu besar. Maksimal 50MB untuk semua file.');
             return;
         }
 
-        // Show loading
+        // Show loading state
         const submitButton = this.querySelector('button[type="submit"]');
-        const originalText = submitButton.innerHTML;
         submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Mengirim...';
         submitButton.disabled = true;
-
-        // For demo - replace with actual form submission
-        setTimeout(() => {
-            // Reset button
-            submitButton.innerHTML = originalText;
-            submitButton.disabled = false;
-
-            // Show success message
-            alert('Laporan WBS berhasil dikirim! Terima kasih atas partisipasi Anda.');
-
-            // Reset form and file inputs
-            this.reset();
-            resetFileInputs();
-            toggleAnonymous();
-        }, 2000);
     });
 
     function resetFileInputs() {

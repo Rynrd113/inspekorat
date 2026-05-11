@@ -120,12 +120,11 @@
                            class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors @error('file_dokumen') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
                            id="file_dokumen"
                            name="file_dokumen"
-                           accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
                            required>
                     @error('file_dokumen')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
-                    <p class="mt-1 text-sm text-gray-500">Format: PDF, DOC, DOCX, XLS, XLSX. Maksimal 10MB.</p>
+                    <p class="mt-1 text-sm text-gray-500">Semua format file diizinkan (PDF, Word, Excel, PowerPoint, dll). Maksimal 10MB.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -200,8 +199,7 @@
 <script>
 // Validate file dokumen (max 10MB)
 FileValidator.attachToInput('#file_dokumen', {
-    maxSizeMB: 10,
-    allowedTypes: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx']
+    maxSizeMB: 10
 });
 
 // Validate file cover (max 2MB)

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Traits\HasFileUpload;
-use App\Rules\FileUploadValidation;
 
 class DokumenController extends Controller
 {
@@ -58,7 +57,7 @@ class DokumenController extends Controller
             'tahun' => 'required|integer|min:2020|max:' . (date('Y') + 1),
             'nomor_dokumen' => 'nullable|string|max:100',
             'tanggal_terbit' => 'required|date',
-            'file_dokumen' => ['required', new FileUploadValidation(10240, ['pdf', 'doc', 'docx', 'xls', 'xlsx'])],
+            'file_dokumen' => 'required|file|max:10240',
             'file_cover' => ['nullable', new FileUploadValidation(2048, ['jpeg', 'png', 'jpg', 'gif'])],
             'status' => 'boolean',
             'is_public' => 'boolean',
@@ -119,7 +118,7 @@ class DokumenController extends Controller
             'tahun' => 'required|integer|min:2020|max:' . (date('Y') + 1),
             'nomor_dokumen' => 'nullable|string|max:100',
             'tanggal_terbit' => 'required|date',
-            'file_dokumen' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx|max:10240',
+            'file_dokumen' => 'nullable|file|max:10240',
             'file_cover' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'boolean',
             'is_public' => 'boolean',
@@ -188,17 +187,6 @@ class DokumenController extends Controller
         // Check if file is public or user has permission
         if (!$dokumen->is_public && !auth()->check()) {
             abort(403, 'Akses ditolak');
-        }
-
-        // Validate file type for security
-        $allowedMimes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-        $filePath = storage_path('app/public/' . $dokumen->file_dokumen);
-        
-        if (file_exists($filePath)) {
-            $mimeType = mime_content_type($filePath);
-            if (!in_array($mimeType, $allowedMimes)) {
-                abort(403, 'Tipe file tidak diizinkan');
-            }
         }
 
         // Increment download counter

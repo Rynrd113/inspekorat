@@ -42,14 +42,14 @@
                     @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
                     <a href="{{ route('admin.portal-opd.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.portal-opd.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-building mr-3 h-5 w-5"></i>
-                        Portal OPD
+                        Kelola Portal OPD
                     </a>
                     @endif
 
                     @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
                     <a href="{{ route('admin.review-opd.index') }}" class="group flex items-center px-2 py-2 text-sm font-medium rounded-md {{ request()->routeIs('admin.review-opd.*') ? 'bg-blue-900 text-white' : 'text-blue-100 hover:bg-blue-700' }}">
                         <i class="fas fa-clipboard-check mr-3 h-5 w-5"></i>
-                        Daftar Review OPD
+                        Kelola Review OPD
                     </a>
                     @endif
 
