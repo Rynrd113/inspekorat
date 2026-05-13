@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasAuditLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Galeri extends Model
 {
-    use HasFactory;
+    use HasFactory, HasAuditLog;
 
     protected $table = 'galeris';
     protected $primaryKey = 'id';

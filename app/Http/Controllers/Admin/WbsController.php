@@ -35,6 +35,17 @@ class WbsController extends Controller
 
         $wbsReports = $query->latest()->paginate(10);
 
+        if (!auth()->user()->hasRole('super_admin')) {
+            $wbsReports->getCollection()->transform(function ($item) {
+                if ($item->is_anonymous) {
+                    $item->nama_pelapor = '[Anonim]';
+                    $item->email       = '[tersembunyi]';
+                    $item->no_telepon  = '[tersembunyi]';
+                }
+                return $item;
+            });
+        }
+
         return view('admin.wbs.index', compact('wbsReports'));
     }
 
@@ -78,14 +89,21 @@ class WbsController extends Controller
      */
     public function show(Wbs $wbs)
     {
+        if ($wbs->is_anonymous && !auth()->user()->hasRole('super_admin')) {
+            $wbs->nama_pelapor = '[Anonim]';
+            $wbs->email        = '[tersembunyi]';
+            $wbs->no_telepon   = '[tersembunyi]';
+        }
         return view('admin.wbs.show', compact('wbs'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Wbs $wbs)
     {
+        if ($wbs->is_anonymous && !auth()->user()->hasRole('super_admin')) {
+            $wbs->nama_pelapor = '[Anonim]';
+            $wbs->email        = '[tersembunyi]';
+            $wbs->no_telepon   = '[tersembunyi]';
+        }
         return view('admin.wbs.edit', compact('wbs'));
     }
 

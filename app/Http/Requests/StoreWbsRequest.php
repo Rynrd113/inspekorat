@@ -30,7 +30,7 @@ class StoreWbsRequest extends FormRequest
             'pihak_terlibat' => 'nullable|string',
             'kronologi' => 'nullable|string',
             'attachments' => 'nullable|array|max:5',
-            'attachments.*' => 'file|mimes:pdf,doc,docx,jpg,jpeg,png|max:10240',
+            'attachments.*' => 'file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,txt,jpg,jpeg,png|max:10240',
             'is_anonymous' => 'boolean',
         ];
     }
@@ -48,7 +48,7 @@ class StoreWbsRequest extends FormRequest
             'deskripsi.required' => 'Deskripsi harus diisi',
             'attachments.max' => 'Maksimal 5 file yang dapat dilampirkan',
             'attachments.*.file' => 'File tidak valid',
-            'attachments.*.mimes' => 'File harus berformat pdf, doc, docx, jpg, jpeg, atau png',
+            'attachments.*.mimes' => 'File harus berformat pdf, doc, docx, xls, xlsx, ppt, pptx, zip, rar, txt, jpg, atau png',
             'attachments.*.max' => 'Ukuran file maksimal 10MB',
         ];
     }

@@ -6,20 +6,34 @@ use App\Models\AuditLog;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class ActivityLogMiddleware
 {
-    /**
-     * Handle an incoming request.
-     */
+    protected static array $tableMap = [
+        'wbs'                  => 'wbs',
+        'review-opd'           => 'review_opd',
+        'pengaduan'            => 'pengaduans',
+        'pelayanan'            => 'pelayanans',
+        'system-configuration' => 'system_configurations',
+        'dokumen'              => 'dokumens',
+        'galeri'               => 'galeris',
+        'portal-papua-tengah'  => 'portal_papua_tengahs',
+        'portal-opd'           => 'portal_opds',
+    ];
+
     public function handle(Request $request, Closure $next): Response
     {
+        $oldValues = [];
+        if (Auth::check() && $this->shouldLog($request) && in_array($request->method(), ['PUT', 'PATCH', 'DELETE'])) {
+            $oldValues = $this->fetchOldValues($request);
+        }
+
         $response = $next($request);
 
-        // Log activity for authenticated users
         if (Auth::check() && $this->shouldLog($request)) {
-            $this->logActivity($request, $response);
+            $this->logActivity($request, $response, $oldValues);
         }
 
         return $response;
@@ -50,27 +64,36 @@ class ActivityLogMiddleware
         return in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE']);
     }
 
-    /**
-     * Log the activity.
-     */
-    protected function logActivity(Request $request, Response $response): void
+    protected function logActivity(Request $request, Response $response, array $oldValues = []): void
     {
         try {
             AuditLog::create([
-                'user_id' => Auth::id(),
-                'action' => $request->method() . ' ' . $request->path(),
+                'user_id'    => Auth::id(),
+                'action'     => $request->method() . ' ' . $request->path(),
                 'table_name' => $this->extractTableName($request),
-                'record_id' => $this->extractRecordId($request),
-                'old_values' => json_encode($this->getOldValues($request)),
+                'record_id'  => $this->extractRecordId($request),
+                'old_values' => json_encode($oldValues),
                 'new_values' => json_encode($this->getNewValues($request)),
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
                 'created_at' => now(),
             ]);
         } catch (\Exception $e) {
-            // Log error but don't break the request
             logger()->error('Failed to log activity: ' . $e->getMessage());
         }
+    }
+
+    protected function fetchOldValues(Request $request): array
+    {
+        $segment  = $this->extractTableName($request);
+        $recordId = $this->extractRecordId($request);
+
+        if (!$segment || !$recordId || !isset(self::$tableMap[$segment])) {
+            return [];
+        }
+
+        $record = DB::table(self::$tableMap[$segment])->find($recordId);
+        return $record ? (array) $record : [];
     }
 
     /**
@@ -101,16 +124,6 @@ class ActivityLogMiddleware
         }
 
         return null;
-    }
-
-    /**
-     * Get old values from request.
-     */
-    protected function getOldValues(Request $request): array
-    {
-        // For update operations, we would need to fetch the old values
-        // This is a simplified implementation
-        return [];
     }
 
     /**

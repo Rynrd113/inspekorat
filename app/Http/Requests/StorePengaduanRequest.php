@@ -27,7 +27,7 @@ class StorePengaduanRequest extends FormRequest
             'telepon' => 'nullable|string|max:20',
             'subjek' => 'required|string|max:255',
             'isi_pengaduan' => 'required|string|min:10',
-            'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120' // 5MB
+            'attachment' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,txt,jpg,jpeg,png|max:5120'
         ];
     }
 
@@ -43,7 +43,7 @@ class StorePengaduanRequest extends FormRequest
             'subjek.required' => 'Subjek pengaduan wajib diisi.',
             'isi_pengaduan.required' => 'Isi pengaduan wajib diisi.',
             'isi_pengaduan.min' => 'Isi pengaduan minimal 10 karakter.',
-            'attachment.mimes' => 'File harus berformat: jpg, jpeg, png, pdf, doc, docx.',
+            'attachment.mimes' => 'File harus berformat: pdf, doc, docx, xls, xlsx, ppt, pptx, zip, rar, txt, jpg, jpeg, png.',
             'attachment.max' => 'Ukuran file maksimal 5MB.',
         ];
     }

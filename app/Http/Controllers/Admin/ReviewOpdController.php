@@ -45,7 +45,7 @@ class ReviewOpdController extends Controller
             'status_review'   => 'required|in:dijadwalkan,sedang_berjalan,selesai',
             'hasil_review'    => 'nullable|string|max:255',
             'keterangan'      => 'nullable|string',
-            'dokumen'         => 'nullable|file|mimes:pdf|max:10240',
+            'dokumen'         => 'required_if:status_review,selesai|nullable|file|mimes:pdf|max:10240',
         ]);
 
         $data = $request->only(['nama_opd', 'tahun_anggaran', 'tanggal_review', 'tanggal_selesai',
@@ -69,6 +69,11 @@ class ReviewOpdController extends Controller
 
     public function update(Request $request, ReviewOpd $reviewOpd)
     {
+        $newStatus = $request->input('status_review');
+        $hasExistingDoc = (bool) $reviewOpd->dokumen_path;
+        $uploadingDoc = $request->hasFile('dokumen');
+        $deletingDoc = $request->boolean('hapus_dokumen');
+
         $request->validate([
             'nama_opd'        => 'required|string|max:255',
             'tahun_anggaran'  => 'required|integer|min:2000|max:2100',
@@ -80,10 +85,18 @@ class ReviewOpdController extends Controller
             'dokumen'         => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
+        if ($newStatus === 'selesai' && !$uploadingDoc && !$hasExistingDoc) {
+            return back()->withErrors(['dokumen' => 'Dokumen wajib diunggah sebelum status dapat diubah ke Selesai.'])->withInput();
+        }
+
+        if ($deletingDoc && $newStatus === 'selesai') {
+            return back()->withErrors(['hapus_dokumen' => 'Dokumen tidak dapat dihapus saat status Selesai.'])->withInput();
+        }
+
         $data = $request->only(['nama_opd', 'tahun_anggaran', 'tanggal_review', 'tanggal_selesai',
                                  'status_review', 'hasil_review', 'keterangan']);
 
-        if ($request->hasFile('dokumen')) {
+        if ($uploadingDoc) {
             if ($reviewOpd->dokumen_path) {
                 Storage::disk('public')->delete($reviewOpd->dokumen_path);
             }
@@ -91,7 +104,7 @@ class ReviewOpdController extends Controller
                 ->store('review-opd-dokumen', 'public');
         }
 
-        if ($request->boolean('hapus_dokumen') && $reviewOpd->dokumen_path) {
+        if ($deletingDoc && $hasExistingDoc) {
             Storage::disk('public')->delete($reviewOpd->dokumen_path);
             $data['dokumen_path'] = null;
         }
@@ -104,6 +117,10 @@ class ReviewOpdController extends Controller
 
     public function destroy(ReviewOpd $reviewOpd)
     {
+        if ($reviewOpd->status_review === 'sedang_berjalan') {
+            return back()->withErrors(['destroy' => 'Data review yang sedang berjalan tidak dapat dihapus.']);
+        }
+
         if ($reviewOpd->dokumen_path) {
             Storage::disk('public')->delete($reviewOpd->dokumen_path);
         }

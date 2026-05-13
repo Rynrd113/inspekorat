@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\HasAuditLog;
 use App\Traits\HasSearch;
 use App\Traits\HasPagination;
 
 class PortalOpd extends Model
 {
-    use HasFactory, SoftDeletes, HasSearch, HasPagination;
+    use HasFactory, SoftDeletes, HasAuditLog, HasSearch, HasPagination;
 
     protected $table = 'portal_opds';
 

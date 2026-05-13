@@ -20,7 +20,7 @@ class UpdateWbsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'required|in:pending,in_progress,resolved,rejected',
+            'status' => 'required|in:pending,diterima,proses,selesai,ditolak',
             'response' => 'nullable|string',
         ];
     }
@@ -32,7 +32,7 @@ class UpdateWbsRequest extends FormRequest
     {
         return [
             'status.required' => 'Status harus diisi',
-            'status.in' => 'Status tidak valid',
+            'status.in' => 'Status tidak valid. Pilihan: pending, diterima, proses, selesai, ditolak',
         ];
     }
 }

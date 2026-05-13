@@ -39,6 +39,17 @@ class PengaduanController extends Controller
 
         $pengaduans = $query->latest()->paginate(10);
 
+        if (!auth()->user()->hasRole('super_admin')) {
+            $pengaduans->getCollection()->transform(function ($item) {
+                if ($item->is_anonymous) {
+                    $item->nama_pengadu = '[Anonim]';
+                    $item->email        = '[tersembunyi]';
+                    $item->telepon      = '[tersembunyi]';
+                }
+                return $item;
+            });
+        }
+
         return view('admin.pengaduan.index', compact('pengaduans'));
     }
 
@@ -89,6 +100,11 @@ class PengaduanController extends Controller
      */
     public function show(Pengaduan $pengaduan)
     {
+        if ($pengaduan->is_anonymous && !auth()->user()->hasRole('super_admin')) {
+            $pengaduan->nama_pengadu = '[Anonim]';
+            $pengaduan->email        = '[tersembunyi]';
+            $pengaduan->telepon      = '[tersembunyi]';
+        }
         return view('admin.pengaduan.show', compact('pengaduan'));
     }
 

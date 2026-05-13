@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasAuditLog;
 use App\Traits\HasSearch;
 use App\Traits\HasPagination;
 
 class Pelayanan extends Model
 {
-    use HasFactory, HasSearch, HasPagination;
+    use HasFactory, HasAuditLog, HasSearch, HasPagination;
 
     protected $table = 'pelayanans';
 

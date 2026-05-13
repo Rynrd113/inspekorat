@@ -31,7 +31,7 @@ class UpdatePelayananRequest extends FormRequest
             'kategori' => 'required|string|in:audit,konsultasi,reviu,evaluasi,pengawasan,lainnya',
             'status' => 'boolean',
             'kontak_penanggung_jawab' => 'nullable|string',
-            'file_formulir' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'file_formulir' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,txt|max:2048',
             'urutan' => 'nullable|integer|min:1',
         ];
     }

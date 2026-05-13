@@ -116,9 +116,9 @@ class ContentApproval extends Model
             'approved_by' => auth()->id(),
         ]);
 
-        // Publish the associated content
         if ($this->approvable) {
-            $this->approvable->update(['status' => true]);
+            $publishField = array_key_exists('is_published', $this->approvable->getAttributes()) ? 'is_published' : 'status';
+            $this->approvable->update([$publishField => true]);
         }
     }
 

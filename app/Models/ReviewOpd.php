@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\HasAuditLog;
 use Illuminate\Database\Eloquent\Model;
 
 class ReviewOpd extends Model
 {
+    use HasAuditLog;
     protected $table = 'review_opd';
 
     protected $fillable = [
