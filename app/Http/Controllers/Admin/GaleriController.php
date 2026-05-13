@@ -96,28 +96,29 @@ class GaleriController extends Controller
         // Handle file upload
         if ($request->hasFile('file_galeri')) {
             $file = $request->file('file_galeri');
-            $folder = 'galeri';
-            $filePath = $file->store($folder, $this->getStorageDisk());
+            $ext  = strtolower($file->getClientOriginalExtension());
 
-            $validated['file_path'] = $filePath;
-            $validated['file_name'] = $file->getClientOriginalName();
-            $validated['file_type'] = $file->getClientOriginalExtension();
-            $validated['file_size'] = $file->getSize();
-
-            // Auto-generate thumbnail for images if no custom thumbnail is uploaded
-            $fileExtension = strtolower($file->getClientOriginalExtension());
-            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-
-            if (in_array($fileExtension, $imageExtensions) && !$request->hasFile('thumbnail')) {
-                // For images, use the main image as thumbnail (copy the same file)
-                $validated['thumbnail'] = $filePath;
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                $optimized = (new \App\Services\ImageOptimizationService())->processGalleryImage($file);
+                $validated['file_path'] = $optimized['file_path'];
+                $validated['file_name'] = $optimized['file_name'];
+                $validated['file_type'] = $optimized['file_type'];
+                $validated['file_size'] = $file->getSize();
+                if (!$request->hasFile('thumbnail')) {
+                    $validated['thumbnail'] = $optimized['thumbnail'];
+                }
+            } else {
+                $filePath = $file->store('galeri', $this->getStorageDisk());
+                $validated['file_path'] = $filePath;
+                $validated['file_name'] = $file->getClientOriginalName();
+                $validated['file_type'] = $ext;
+                $validated['file_size'] = $file->getSize();
             }
         }
 
         // Handle custom thumbnail upload (overrides auto-generated thumbnail)
         if ($request->hasFile('thumbnail')) {
-            $thumbnailFile = $request->file('thumbnail');
-            $thumbnailPath = $thumbnailFile->store('galeri/thumbnails', $this->getStorageDisk());
+            $thumbnailPath = $request->file('thumbnail')->store('galeri/thumbnails', $this->getStorageDisk());
             $validated['thumbnail'] = $thumbnailPath;
         }
 
@@ -199,27 +200,28 @@ class GaleriController extends Controller
         }
         // Handle file upload
         elseif ($request->hasFile('file_galeri')) {
-            // Delete old file if exists
             if ($galeri->file_path) {
                 \Storage::disk('public')->delete($galeri->file_path);
             }
 
             $file = $request->file('file_galeri');
-            $folder = 'galeri';
-            $filePath = $file->store($folder, $this->getStorageDisk());
+            $ext  = strtolower($file->getClientOriginalExtension());
 
-            $validated['file_path'] = $filePath;
-            $validated['file_name'] = $file->getClientOriginalName();
-            $validated['file_type'] = $file->getClientOriginalExtension();
-            $validated['file_size'] = $file->getSize();
-
-            // Auto-generate thumbnail for images if no custom thumbnail is uploaded
-            $fileExtension = strtolower($file->getClientOriginalExtension());
-            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-
-            if (in_array($fileExtension, $imageExtensions) && !$request->hasFile('thumbnail')) {
-                // For images, use the main image as thumbnail
-                $validated['thumbnail'] = $filePath;
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                $optimized = (new \App\Services\ImageOptimizationService())->processGalleryImage($file);
+                $validated['file_path'] = $optimized['file_path'];
+                $validated['file_name'] = $optimized['file_name'];
+                $validated['file_type'] = $optimized['file_type'];
+                $validated['file_size'] = $file->getSize();
+                if (!$request->hasFile('thumbnail')) {
+                    $validated['thumbnail'] = $optimized['thumbnail'];
+                }
+            } else {
+                $filePath = $file->store('galeri', $this->getStorageDisk());
+                $validated['file_path'] = $filePath;
+                $validated['file_name'] = $file->getClientOriginalName();
+                $validated['file_type'] = $ext;
+                $validated['file_size'] = $file->getSize();
             }
         }
 

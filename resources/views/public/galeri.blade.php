@@ -62,16 +62,22 @@
                 @endphp
 
                 @if($isImage && $imageUrl)
+                @php
+                    $thumbUrl = $item->thumbnail ? asset('storage/' . $item->thumbnail) : $imageUrl;
+                @endphp
                 <a href="{{ $imageUrl }}"
                    class="glightbox group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
                    data-gallery="galeri-kegiatan"
                    data-title="{{ $item->judul }}"
                    data-description="@if($item->deskripsi){{ $item->deskripsi }}@endif">
                     <div class="relative h-48 bg-gray-200 overflow-hidden">
-                        <img src="{{ $imageUrl }}"
-                             alt="{{ $item->judul }}"
+                        <img src="{{ $thumbUrl }}"
+                             srcset="{{ $thumbUrl }} 480w, {{ $imageUrl }} 1280w"
+                             sizes="(max-width: 768px) 480px, 1280px"
+                             alt="{{ $item->judul }} - Kegiatan Inspektorat Papua Tengah"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                             loading="lazy">
+                             loading="lazy"
+                             decoding="async">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                             <div class="bg-white/90 rounded-full p-3">
@@ -99,9 +105,10 @@
                     <div class="relative h-48 bg-gray-200 overflow-hidden">
                         @if($imageUrl)
                             <img src="{{ $imageUrl }}"
-                                 alt="{{ $item->judul }}"
+                                 alt="{{ $item->judul }} - Inspektorat Papua Tengah"
                                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                 loading="lazy">
+                                 loading="lazy"
+                                 decoding="async">
                         @else
                             <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
                                 <i class="fas fa-image text-gray-400 text-4xl"></i>
@@ -141,9 +148,11 @@
                    class="group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
                     <!-- Album Cover -->
                     <div class="relative h-64 bg-gray-200 overflow-hidden">
-                        <img src="{{ $album->cover_image_url }}" alt="{{ $album->nama_album }}"
+                        <img src="{{ $album->cover_image_url }}"
+                             alt="{{ $album->nama_album }} - Album Galeri Inspektorat Papua Tengah"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                             loading="lazy">
+                             loading="lazy"
+                             decoding="async">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
 
                         <!-- Photo Count Badge -->

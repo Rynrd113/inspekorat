@@ -101,15 +101,24 @@ class AssetHelper
     public static function resourceHints(): string
     {
         $hints = [];
-        
+
         // DNS prefetch for external domains
         $hints[] = '<link rel="dns-prefetch" href="//fonts.googleapis.com">';
         $hints[] = '<link rel="dns-prefetch" href="//fonts.gstatic.com">';
-        
+
         // Preconnect for critical external resources
         $hints[] = '<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>';
         $hints[] = '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
-        
+
+        // Preconnect for cloud storage domain (S3/R2/etc.) if configured
+        $storageUrl = config('filesystems.disks.s3.url') ?? config('filesystems.disks.r2.url');
+        if ($storageUrl) {
+            $scheme = parse_url($storageUrl, PHP_URL_SCHEME) . '://';
+            $host   = parse_url($storageUrl, PHP_URL_HOST);
+            $hints[] = '<link rel="dns-prefetch" href="//' . $host . '">';
+            $hints[] = '<link rel="preconnect" href="' . $scheme . $host . '" crossorigin>';
+        }
+
         return implode("\n", $hints);
     }
 
