@@ -63,8 +63,7 @@
                                                     <i class="fas fa-file text-blue-600 mr-2"></i>
                                                     <span class="text-gray-900">{{ basename($wbs->bukti_file) }}</span>
                                                 </div>
-                                                <a href="{{ Storage::url($wbs->bukti_file) }}" 
-                                                   target="_blank"
+                                                <a href="{{ route('admin.wbs.download-file', [$wbs->id, 0]) }}"
                                                    class="text-blue-600 hover:text-blue-800">
                                                     <i class="fas fa-download mr-1"></i>
                                                     Download
@@ -81,8 +80,7 @@
                                                         <i class="fas fa-file text-blue-600 mr-2"></i>
                                                         <span class="text-gray-900">File {{ $index + 1 }}: {{ basename($filePath) }}</span>
                                                     </div>
-                                                    <a href="{{ Storage::url($filePath) }}" 
-                                                       target="_blank"
+                                                    <a href="{{ route('admin.wbs.download-file', [$wbs->id, $index]) }}"
                                                        class="text-blue-600 hover:text-blue-800">
                                                         <i class="fas fa-download mr-1"></i>
                                                         Download

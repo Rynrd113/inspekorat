@@ -113,6 +113,11 @@ class PengaduanController extends Controller
      */
     public function edit(Pengaduan $pengaduan)
     {
+        if ($pengaduan->is_anonymous && !auth()->user()->hasRole('super_admin')) {
+            $pengaduan->nama_pengadu = '[Anonim]';
+            $pengaduan->email        = '[tersembunyi]';
+            $pengaduan->telepon      = '[tersembunyi]';
+        }
         return view('admin.pengaduan.edit', compact('pengaduan'));
     }
 

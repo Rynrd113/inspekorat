@@ -464,6 +464,8 @@ startxref
         $albums = \App\Models\Album::with(['photos' => function($query) {
                 $query->where('status', true)->orderBy('tanggal_publikasi', 'desc')->limit(1);
             }])
+            ->withCount(['photos as active_photos_count' => fn($q) => $q->where('status', true)])
+            ->withCount(['children as active_children_count' => fn($q) => $q->where('status', true)])
             ->active()
             ->roots()
             ->orderBy('urutan')

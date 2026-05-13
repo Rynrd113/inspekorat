@@ -17,10 +17,18 @@ class ActivityLogMiddleware
         'pengaduan'            => 'pengaduans',
         'pelayanan'            => 'pelayanans',
         'system-configuration' => 'system_configurations',
+        'configurations'       => 'system_configurations',
         'dokumen'              => 'dokumens',
         'galeri'               => 'galeris',
         'portal-papua-tengah'  => 'portal_papua_tengahs',
         'portal-opd'           => 'portal_opds',
+        'users'                => 'users',
+        'albums'               => 'albums',
+        'hero-sliders'         => 'hero_sliders',
+        'faq'                  => 'faqs',
+        'profil'               => 'profils',
+        'web-portal'           => 'web_portals',
+        'info-kantor'          => 'info_kantors',
     ];
 
     public function handle(Request $request, Closure $next): Response

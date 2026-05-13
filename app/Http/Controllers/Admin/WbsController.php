@@ -125,6 +125,24 @@ class WbsController extends Controller
             ->with('success', 'Status laporan WBS berhasil diupdate');
     }
 
+    public function downloadFile(Wbs $wbs, int $index = 0)
+    {
+        $files = $wbs->bukti_files ?? [];
+        if ($index === 0 && $wbs->bukti_file) {
+            $path = $wbs->bukti_file;
+        } elseif (isset($files[$index])) {
+            $path = $files[$index];
+        } else {
+            abort(404);
+        }
+
+        if (!\Storage::disk('public')->exists($path)) {
+            abort(404);
+        }
+
+        return \Storage::disk('public')->download($path, basename($path));
+    }
+
     /**
      * Remove the specified resource from storage.
      */

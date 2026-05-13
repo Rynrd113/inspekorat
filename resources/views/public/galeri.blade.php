@@ -159,7 +159,7 @@
                         <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
                             <span class="text-sm font-semibold text-gray-900">
                                 <i class="fas fa-images mr-1"></i>
-                                {{ $album->getPhotoCount() }} Foto
+                                {{ $album->active_photos_count ?? 0 }} Foto
                             </span>
                         </div>
                     </div>
@@ -183,9 +183,7 @@
                             @endif
 
                             @php
-                                $activeChildCount = $album->children()
-                                    ->where('status', true)
-                                    ->count();
+                                $activeChildCount = $album->active_children_count ?? 0;
                             @endphp
 
                             @if($activeChildCount > 0)

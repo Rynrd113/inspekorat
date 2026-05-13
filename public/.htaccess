@@ -35,6 +35,12 @@
     Deny from all
 </Files>
 
+# Block direct public access to sensitive WBS and Pengaduan evidence files
+<IfModule mod_rewrite.c>
+    RewriteRule ^storage/wbs-attachments/ - [F,L]
+    RewriteRule ^storage/pengaduan/ - [F,L]
+</IfModule>
+
 # Set correct MIME types
 <IfModule mod_mime.c>
     AddType text/css .css

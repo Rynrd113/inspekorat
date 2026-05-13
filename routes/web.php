@@ -35,19 +35,6 @@ use App\Http\Controllers\SitemapController;
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
-// Test routes (development only)
-Route::get('/test-logo', function () {
-    return view('test-logo');
-})->name('test.logo');
-
-Route::get('/test-logo-fix', function () {
-    return view('test-logo-fix');
-})->name('test.logo.fix');
-
-Route::get('/test-tailwind', function () {
-    return view('test-tailwind');
-});
-
 // Public Routes with admin logout middleware
 Route::middleware('admin.logout.public')->group(function () {
     Route::get('/', [PublicController::class, 'index'])->name('public.index');
@@ -101,6 +88,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('wbs/create', [AdminWbsController::class, 'create'])->name('wbs.create');
             Route::post('wbs', [AdminWbsController::class, 'store'])->name('wbs.store');
             Route::get('wbs/{wbs}', [AdminWbsController::class, 'show'])->name('wbs.show');
+            Route::get('wbs/{wbs}/file/{index}', [AdminWbsController::class, 'downloadFile'])->name('wbs.download-file');
             Route::get('wbs/{wbs}/edit', [AdminWbsController::class, 'edit'])->name('wbs.edit');
             Route::put('wbs/{wbs}', [AdminWbsController::class, 'update'])->name('wbs.update');
             Route::delete('wbs/{wbs}', [AdminWbsController::class, 'destroy'])->name('wbs.destroy');

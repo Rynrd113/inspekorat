@@ -106,8 +106,10 @@ class Album extends Model
             return asset('storage/' . $this->cover_image);
         }
 
-        // 2. Get first active photo from album
-        $firstPhoto = $this->activePhotos()->first();
+        // 2. Get first active photo — use eager-loaded relation to avoid N+1
+        $firstPhoto = $this->relationLoaded('photos')
+            ? $this->photos->first()
+            : $this->activePhotos()->first();
         if ($firstPhoto && $firstPhoto->file_path && $this->isFileValid($firstPhoto->file_path)) {
             return asset('storage/' . $firstPhoto->file_path);
         }
