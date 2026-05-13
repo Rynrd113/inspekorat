@@ -241,7 +241,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('users/{user}', [AdminUserController::class, 'update'])->name('users.update');
             Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
 
-            // System Configuration routes
+        });
+
+        // System Configuration routes - admin & super_admin (grup mail/technical dibatasi di controller)
+        Route::middleware('role:admin,super_admin')->group(function () {
             Route::get('configurations', [AdminSystemConfigurationController::class, 'index'])->name('configurations.index');
             Route::post('configurations', [AdminSystemConfigurationController::class, 'update'])->name('configurations.update');
             Route::post('configurations/store', [AdminSystemConfigurationController::class, 'store'])->name('configurations.store');
