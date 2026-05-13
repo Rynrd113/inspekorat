@@ -14,7 +14,7 @@
                 <div>
                     <h1 class="text-lg font-bold leading-tight">Daftar Review OPD</h1>
                     <nav class="text-xs text-blue-300 mt-0.5">
-                        <a href="{{ route('home') }}" class="hover:text-white transition-colors">Beranda</a>
+                        <a href="{{ route('public.index') }}" class="hover:text-white transition-colors">Beranda</a>
                         <span class="mx-1">/</span>
                         <span>Informasi</span>
                         <span class="mx-1">/</span>
