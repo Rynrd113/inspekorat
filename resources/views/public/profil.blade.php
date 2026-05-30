@@ -86,37 +86,34 @@
         </div>
 
         <!-- Contact Information -->
-        <div class="grid md:grid-cols-2 gap-8">
-            <!-- Contact Details -->
-            <div class="bg-white rounded-lg shadow-lg p-8">
-                <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                    <i class="fas fa-address-book text-blue-600 mr-3"></i>
-                    Informasi Kontak
-                </h3>
-                
-                <x-contact-info variant="list" />
-            </div>
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <i class="fas fa-address-book text-blue-600 mr-3"></i>
+                Informasi Kontak
+            </h3>
+            <x-contact-info variant="list" />
+        </div>
 
-            <!-- Struktur Organisasi -->
-            <div class="bg-white rounded-lg shadow-lg p-8">
-                <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                    <i class="fas fa-sitemap text-blue-600 mr-3"></i>
-                    Struktur Organisasi
-                </h3>
-                
-                <div class="text-center">
-                    <div class="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
-                        <div class="text-center">
-                            <i class="fas fa-sitemap text-gray-400 text-4xl mb-3"></i>
-                            <p class="text-gray-500">Struktur Organisasi</p>
-                            <p class="text-gray-400 text-sm">Inspektorat Provinsi Papua Tengah</p>
-                        </div>
-                    </div>
-                    <button class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
-                        <i class="fas fa-download mr-2"></i>
-                        Download Struktur Organisasi
-                    </button>
-                </div>
+        <!-- Struktur Organisasi -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <i class="fas fa-sitemap text-blue-600 mr-3"></i>
+                Struktur Organisasi
+            </h3>
+
+            <div class="text-center">
+                <a href="{{ asset('images/struktur-organisasi-2026.jpg') }}" target="_blank" title="Lihat ukuran penuh">
+                    <img src="{{ asset('images/struktur-organisasi-2026.jpg') }}"
+                         alt="Struktur Organisasi Inspektorat Papua Tengah Tahun 2026"
+                         class="w-full rounded-lg border border-gray-200 hover:opacity-90 transition-opacity cursor-zoom-in">
+                </a>
+                <p class="text-xs text-gray-400 mt-2 mb-4">Berdasarkan SK Inspektur Nomor: SK.700/001/INSP/2026 — klik untuk perbesar</p>
+                <a href="{{ asset('images/struktur-organisasi-2026.jpg') }}"
+                   download="Struktur-Organisasi-Inspektorat-Papua-Tengah-2026.jpg"
+                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-download mr-2"></i>
+                    Download Struktur Organisasi
+                </a>
             </div>
         </div>
 
