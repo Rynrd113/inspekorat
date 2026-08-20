@@ -50,7 +50,7 @@ class DashboardController extends Controller
             
             // User stats
             $totalUsers = User::count();
-            $adminUsers = User::where('role', 'LIKE', '%admin%')->count();
+            $adminUsers = User::whereIn('role', ['super_admin', 'admin'])->count();
 
             // Pengaduan stats
             $pengaduanStats = DB::table('pengaduans')
@@ -106,10 +106,9 @@ class DashboardController extends Controller
             ];
         });
 
-        // Recent WBS dengan Eager Loading
-        $recentWbs = Wbs::latest()
+        $recentWbs = Wbs::with([])->latest()
             ->take(5)
-            ->get(['id', 'nama_pelapor', 'subjek', 'status', 'created_at']);
+            ->get(['id', 'nama_pelapor', 'is_anonymous', 'subjek', 'status', 'created_at']);
 
         return view('admin.dashboard', compact('stats', 'recentWbs'));
     }

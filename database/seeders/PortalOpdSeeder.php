@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\PortalOpd;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class PortalOpdSeeder extends Seeder
@@ -18,11 +17,7 @@ class PortalOpdSeeder extends Seeder
             return;
         }
 
-        $admin = User::select(['id', 'name', 'email', 'role'])
-            ->where('role', 'super_admin')
-            ->first();
-        
-                $opds = [
+        $opds = [
             [
                 'nama_opd' => 'Sekretariat Daerah Papua Tengah',
                 'singkatan' => 'SETDA',

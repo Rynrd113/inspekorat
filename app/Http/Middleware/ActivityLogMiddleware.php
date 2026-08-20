@@ -29,6 +29,10 @@ class ActivityLogMiddleware
         'profil'               => 'profils',
         'web-portal'           => 'web_portals',
         'info-kantor'          => 'info_kantors',
+        'audit-log'            => 'audit_logs',
+        'performance-log'      => 'performance_logs',
+        'pesan-kontak'         => 'pesan_kontak',
+        'content-approval'     => 'content_approvals',
     ];
 
     public function handle(Request $request, Closure $next): Response
@@ -84,7 +88,6 @@ class ActivityLogMiddleware
                 'new_values' => json_encode($this->getNewValues($request)),
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
-                'created_at' => now(),
             ]);
         } catch (\Exception $e) {
             logger()->error('Failed to log activity: ' . $e->getMessage());

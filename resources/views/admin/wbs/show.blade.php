@@ -193,19 +193,22 @@
                         </x-slot:header>
 
                         <div class="space-y-3">
+                            @php
+                                $canSeeIdentity = Auth::check() && Auth::user()->role === 'super_admin';
+                            @endphp
                             <div>
                                 <strong class="text-sm text-gray-600">Nama:</strong>
-                                <p class="text-gray-900">{{ $wbs->nama_pelapor ?: 'Anonymous' }}</p>
+                                <p class="text-gray-900">{{ ($wbs->is_anonymous && !$canSeeIdentity) ? '[Anonim]' : ($wbs->nama_pelapor ?: 'Anonymous') }}</p>
                             </div>
 
                             <div>
                                 <strong class="text-sm text-gray-600">Email:</strong>
-                                <p class="text-gray-900">{{ $wbs->email ?: 'Tidak disediakan' }}</p>
+                                <p class="text-gray-900">{{ ($wbs->is_anonymous && !$canSeeIdentity) ? '[tersembunyi]' : ($wbs->email ?: 'Tidak disediakan') }}</p>
                             </div>
 
                             <div>
                                 <strong class="text-sm text-gray-600">Nomor Telepon:</strong>
-                                <p class="text-gray-900">{{ $wbs->nomor_telepon ?: 'Tidak disediakan' }}</p>
+                                <p class="text-gray-900">{{ ($wbs->is_anonymous && !$canSeeIdentity) ? '[tersembunyi]' : ($wbs->nomor_telepon ?: 'Tidak disediakan') }}</p>
                             </div>
 
                             <div>

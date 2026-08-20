@@ -105,6 +105,8 @@
                 <a href="{{ asset('images/struktur-organisasi-2026.jpg') }}" target="_blank" title="Lihat ukuran penuh">
                     <img src="{{ asset('images/struktur-organisasi-2026.jpg') }}"
                          alt="Struktur Organisasi Inspektorat Papua Tengah Tahun 2026"
+                         width="1200" height="900"
+                         loading="lazy" decoding="async" fetchpriority="low"
                          class="w-full rounded-lg border border-gray-200 hover:opacity-90 transition-opacity cursor-zoom-in">
                 </a>
                 <p class="text-xs text-gray-400 mt-2 mb-4">Berdasarkan SK Inspektur Nomor: SK.700/001/INSP/2026 — klik untuk perbesar</p>

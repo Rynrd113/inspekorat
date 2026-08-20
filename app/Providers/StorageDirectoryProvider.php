@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
 class StorageDirectoryProvider extends ServiceProvider
@@ -31,34 +31,26 @@ class StorageDirectoryProvider extends ServiceProvider
         $basePath = storage_path('app/public');
 
         $directories = [
-            // Document uploads
             'dokumen/files',
             'dokumen/covers',
-
-            // Gallery uploads
             'galeri',
-
-            // Profile uploads
             'profile',
             'profile/avatar',
-
-            // Temporary uploads
             'temp',
             'temp/images',
             'temp/documents',
-
-            // Berita/News uploads
             'berita/thumbnail',
             'berita/content',
-
-            // Settings
             'settings',
+            'pengaduan/bukti',
+            'pengaduan-attachments',
+            'wbs-attachments',
         ];
 
         foreach ($directories as $directory) {
             $fullPath = $basePath . DIRECTORY_SEPARATOR . $directory;
             if (!is_dir($fullPath)) {
-                @mkdir($fullPath, 0775, true);
+                File::makeDirectory($fullPath, 0775, true, true);
             }
         }
     }

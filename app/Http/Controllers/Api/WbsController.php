@@ -9,6 +9,7 @@ use App\Http\Resources\WbsResource;
 use App\Models\Wbs;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,9 +39,21 @@ class WbsController extends Controller
 
         $wbsReports = $query->latest()->paginate(15);
 
+        $resource = WbsResource::collection($wbsReports)->response()->getData();
+
+        if (!Auth::user() || Auth::user()->role !== 'super_admin') {
+            $data = collect($resource->data ?? $resource);
+            $data->each(function ($item) {
+                $item->nama_pelapor = ($item->is_anonymous ?? false) ? '[Anonim]' : $item->nama_pelapor;
+                $item->email = ($item->is_anonymous ?? false) ? '[tersembunyi]' : $item->email;
+                $item->nomor_telepon = ($item->is_anonymous ?? false) ? '[tersembunyi]' : $item->nomor_telepon;
+            });
+            $resource->data = $data->all();
+        }
+
         return response()->json([
             'success' => true,
-            'data' => WbsResource::collection($wbsReports)->response()->getData()
+            'data' => $resource
         ]);
     }
 
@@ -79,9 +92,18 @@ class WbsController extends Controller
      */
     public function show(Wbs $wbs): JsonResponse
     {
+        $resource = new WbsResource($wbs);
+        $data = $resource->resolve(request());
+
+        if (!Auth::user() || Auth::user()->role !== 'super_admin') {
+            $data['nama_pelapor'] = ($wbs->is_anonymous ?? false) ? '[Anonim]' : $data['nama_pelapor'];
+            $data['email'] = ($wbs->is_anonymous ?? false) ? '[tersembunyi]' : $data['email'];
+            $data['nomor_telepon'] = ($wbs->is_anonymous ?? false) ? '[tersembunyi]' : $data['nomor_telepon'];
+        }
+
         return response()->json([
             'success' => true,
-            'data' => new WbsResource($wbs)
+            'data' => $data
         ]);
     }
 

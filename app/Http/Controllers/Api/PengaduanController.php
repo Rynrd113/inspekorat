@@ -9,6 +9,7 @@ use App\Http\Resources\PengaduanResource;
 use App\Models\Pengaduan;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PengaduanController extends Controller
@@ -37,10 +38,22 @@ class PengaduanController extends Controller
 
         $pengaduans = $query->latest()->paginate(15);
 
+        $collection = PengaduanResource::collection($pengaduans->getCollection());
+
+        if (!Auth::user() || Auth::user()->role !== 'super_admin') {
+            $collection->each(function ($resource) {
+                $resource->when(true, function ($resource) {
+                    $resource->nama_pengadu = $resource->resource->is_anonymous ? '[Anonim]' : $resource->resource->nama_pengadu;
+                    $resource->email = $resource->resource->is_anonymous ? '[tersembunyi]' : $resource->resource->email;
+                    $resource->telepon = $resource->resource->is_anonymous ? '[tersembunyi]' : $resource->resource->telepon;
+                });
+            });
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Success',
-            'data' => PengaduanResource::collection($pengaduans->getCollection()),
+            'data' => $collection,
             'meta' => [
                 'current_page' => $pengaduans->currentPage(),
                 'last_page' => $pengaduans->lastPage(),
@@ -76,9 +89,19 @@ class PengaduanController extends Controller
      */
     public function show(Pengaduan $pengaduan): JsonResponse
     {
+        $resource = new PengaduanResource($pengaduan);
+
+        if (!Auth::user() || Auth::user()->role !== 'super_admin') {
+            $resource->when(true, function ($resource) {
+                $resource->nama_pengadu = $resource->resource->is_anonymous ? '[Anonim]' : $resource->resource->nama_pengadu;
+                $resource->email = $resource->resource->is_anonymous ? '[tersembunyi]' : $resource->resource->email;
+                $resource->telepon = $resource->resource->is_anonymous ? '[tersembunyi]' : $resource->resource->telepon;
+            });
+        }
+
         return response()->json([
             'success' => true,
-            'data' => new PengaduanResource($pengaduan)
+            'data' => $resource
         ]);
     }
 
