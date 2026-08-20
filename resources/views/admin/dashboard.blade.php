@@ -34,9 +34,9 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Laporan WBS</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ \App\Models\Wbs::count() }}</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $stats['wbs']['total'] ?? 0 }}</p>
                     <p class="text-xs text-gray-500">
-                        <span class="text-yellow-600">{{ \App\Models\Wbs::where('status', 'pending')->count() }} pending</span>
+                        <span class="text-yellow-600">{{ $stats['wbs']['pending'] ?? 0 }} pending</span>
                     </p>
                 </div>
             </div>
@@ -51,9 +51,9 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Pengaduan Masyarakat</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ \App\Models\Pengaduan::count() }}</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $stats['pengaduan']['total'] ?? 0 }}</p>
                     <p class="text-xs text-gray-500">
-                        <span class="text-yellow-600">{{ \App\Models\Pengaduan::where('status', 'pending')->count() }} pending</span>
+                        <span class="text-yellow-600">{{ $stats['pengaduan']['pending'] ?? 0 }} pending</span>
                     </p>
                 </div>
             </div>
@@ -68,9 +68,9 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Berita</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ \App\Models\PortalPapuaTengah::count() }}</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $stats['portal_papua_tengah']['total'] ?? 0 }}</p>
                     <p class="text-xs text-gray-500">
-                        <span class="text-green-600">{{ \App\Models\PortalPapuaTengah::where('status', true)->count() }} published</span>
+                        <span class="text-green-600">{{ $stats['portal_papua_tengah']['active'] ?? 0 }} published</span>
                     </p>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Portal OPD</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ \App\Models\PortalOpd::count() }}</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $stats['portal_opd']['total'] ?? 0 }}</p>
                     <p class="text-xs text-gray-500">Organisasi Perangkat Daerah</p>
                 </div>
             </div>
@@ -100,9 +100,9 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Total Users</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ \App\Models\User::count() }}</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $stats['users']['total'] ?? 0 }}</p>
                     <p class="text-xs text-gray-500">
-                        <span class="text-blue-600">{{ \App\Models\User::where('created_at', '>=', now()->subDays(30))->count() }} bulan ini</span>
+                        <span class="text-blue-600">{{ $stats['users']['admin'] ?? 0 }} admin</span>
                     </p>
                 </div>
             </div>
@@ -282,14 +282,6 @@
         
         <div class="space-y-4">
             @if(auth()->user()->hasAnyRole(['admin', 'super_admin']))
-            @php
-                $recentWbs = \App\Models\Wbs::with(['creator:id,name,email', 'updater:id,name,email'])
-                    ->select(['id', 'nama_pelapor', 'subjek', 'status', 'created_at', 'created_by', 'updated_by'])
-                    ->whereNotNull('created_by')
-                    ->latest()
-                    ->limit(3)
-                    ->get();
-            @endphp
             @if($recentWbs->count() > 0)
                 <div>
                     <h4 class="text-sm font-medium text-gray-900 mb-2">Laporan WBS Terbaru</h4>
@@ -301,7 +293,7 @@
                                     <i class="fas fa-shield-alt text-blue-600 text-xs"></i>
                                 </div>
                                 <div class="ml-3">
-                                    <p class="text-sm font-medium text-gray-900">{{ \Illuminate\Support\Str::limit($wbs->judul, 30) }}</p>
+                                    <p class="text-sm font-medium text-gray-900">{{ \Illuminate\Support\Str::limit($wbs->subjek, 30) }}</p>
                                     <p class="text-xs text-gray-500">{{ $wbs->created_at->format('d M Y') }}</p>
                                 </div>
                             </div>

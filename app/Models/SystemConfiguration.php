@@ -244,9 +244,10 @@ class SystemConfiguration extends Model
                     'description' => $description,
                     'group' => $group,
                     'is_public' => $isPublic,
-                    'updated_by' => 1 // Assuming super admin has ID 1
+                    'updated_by' => 1,
                 ]
             );
+            Cache::forget('sys_config_' . $key);
         }
     }
 }

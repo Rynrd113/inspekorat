@@ -1,6 +1,6 @@
 {
-  "_vendor.BPTwnBaP.js": {
-    "file": "assets/js/vendor.BPTwnBaP.js",
+  "_vendor.DAHK9udN.js": {
+    "file": "assets/js/vendor.DAHK9udN.js",
     "name": "vendor"
   },
   "resources/css/admin.css": {
@@ -20,12 +20,12 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/js/app.D2VXhb79.js",
+    "file": "assets/js/app.BsDy0eSj.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_vendor.BPTwnBaP.js"
+      "_vendor.DAHK9udN.js"
     ]
   },
   "resources/js/public.js": {
