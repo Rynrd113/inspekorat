@@ -66,9 +66,7 @@ class PortalPapuaTengahController extends Controller
 
         // Sync status and tanggal_publikasi from form fields
         $data['status'] = isset($data['is_published']) ? !empty($data['is_published']) : false;
-        if (!empty($data['published_at'])) {
-            $data['tanggal_publikasi'] = $data['published_at'];
-        }
+        $data['tanggal_publikasi'] = !empty($data['published_at']) ? $data['published_at'] : now();
 
         $isContentAdmin = auth()->user()->hasRole('content_admin');
 

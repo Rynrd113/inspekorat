@@ -33,6 +33,26 @@ class PelayananServiceTest extends TestCase
         parent::tearDown();
     }
 
+    protected function mockStoreRequest(array $data, bool $hasFile = false)
+    {
+        $request = Mockery::mock(\App\Http\Requests\StorePelayananRequest::class);
+        $request->shouldReceive('validated')->once()->andReturn($data);
+        $request->shouldReceive('has')->once()->with('status')->andReturn(false);
+        $request->shouldReceive('hasFile')->with('file_formulir')->andReturn($hasFile);
+
+        return $request;
+    }
+
+    protected function mockUpdateRequest(array $data, bool $hasFile = false)
+    {
+        $request = Mockery::mock(\App\Http\Requests\UpdatePelayananRequest::class);
+        $request->shouldReceive('validated')->once()->andReturn($data);
+        $request->shouldReceive('has')->once()->with('status')->andReturn(false);
+        $request->shouldReceive('hasFile')->with('file_formulir')->andReturn($hasFile);
+
+        return $request;
+    }
+
     /** @test */
     public function it_can_create_pelayanan()
     {
@@ -41,28 +61,28 @@ class PelayananServiceTest extends TestCase
             'nama' => 'Test Pelayanan',
             'deskripsi' => 'Test deskripsi',
             'persyaratan' => 'Test persyaratan',
-            'waktu_pelayanan' => '2 hari',
+            'waktu_penyelesaian' => '2 hari',
             'biaya' => 'Gratis',
-            'status' => 'aktif',
         ];
 
-        $pelayanan = new Pelayanan($data);
+        $expectedData = array_merge($data, ['created_by' => null, 'status' => false]);
+
+        $pelayanan = new Pelayanan($expectedData);
         $pelayanan->id = 1;
 
         $this->pelayananRepository->shouldReceive('create')
             ->once()
-            ->with($data)
+            ->with($expectedData)
             ->andReturn($pelayanan);
 
-        Event::fake();
+        $request = $this->mockStoreRequest($data);
 
         // Act
-        $result = $this->pelayananService->create($data);
+        $result = $this->pelayananService->createPelayanan($request);
 
         // Assert
         $this->assertInstanceOf(Pelayanan::class, $result);
         $this->assertEquals('Test Pelayanan', $result->nama);
-        Event::assertDispatched(\App\Events\PelayananCreated::class);
     }
 
     /** @test */
@@ -80,40 +100,50 @@ class PelayananServiceTest extends TestCase
             'deskripsi' => 'Updated deskripsi',
         ];
 
-        $this->pelayananRepository->shouldReceive('update')
+        $expectedData = array_merge($data, ['updated_by' => null, 'status' => false]);
+
+        $this->pelayananRepository->shouldReceive('findById')
             ->once()
-            ->with($pelayanan, $data)
+            ->with(1)
             ->andReturn($pelayanan);
 
-        Event::fake();
+        $this->pelayananRepository->shouldReceive('update')
+            ->once()
+            ->with(1, $expectedData)
+            ->andReturn(true);
+
+        $request = $this->mockUpdateRequest($data);
 
         // Act
-        $result = $this->pelayananService->update($pelayanan, $data);
+        $result = $this->pelayananService->updatePelayanan(1, $request);
 
         // Assert
-        $this->assertInstanceOf(Pelayanan::class, $result);
-        Event::assertDispatched(\App\Events\PelayananUpdated::class);
+        $this->assertTrue($result);
     }
 
     /** @test */
     public function it_can_delete_pelayanan()
     {
         // Arrange
+        Event::fake();
+
         $pelayanan = new Pelayanan(['id' => 1, 'nama' => 'Test']);
+
+        $this->pelayananRepository->shouldReceive('findById')
+            ->once()
+            ->with(1)
+            ->andReturn($pelayanan);
 
         $this->pelayananRepository->shouldReceive('delete')
             ->once()
-            ->with($pelayanan)
+            ->with(1)
             ->andReturn(true);
 
-        Event::fake();
-
         // Act
-        $result = $this->pelayananService->delete($pelayanan);
+        $result = $this->pelayananService->deletePelayanan(1);
 
         // Assert
         $this->assertTrue($result);
-        Event::assertDispatched(\App\Events\PelayananDeleted::class);
     }
 
     /** @test */
@@ -126,46 +156,60 @@ class PelayananServiceTest extends TestCase
         $data = [
             'nama' => 'Test Pelayanan',
             'deskripsi' => 'Test deskripsi',
-            'dokumen' => $file,
         ];
 
-        $expectedData = $data;
-        $expectedData['dokumen'] = 'pelayanan/test.pdf';
-
-        $pelayanan = new Pelayanan($expectedData);
+        $pelayanan = new Pelayanan([
+            'nama' => 'Test Pelayanan',
+            'deskripsi' => 'Test deskripsi',
+            'file_formulir' => 'pelayanan/formulir/' . $file->hashName(),
+            'created_by' => null,
+            'status' => false,
+        ]);
         $pelayanan->id = 1;
 
         $this->pelayananRepository->shouldReceive('create')
             ->once()
             ->with(Mockery::on(function ($arg) {
-                return isset($arg['dokumen']) && str_contains($arg['dokumen'], 'pelayanan/');
+                return isset($arg['file_formulir']) && str_contains($arg['file_formulir'], 'pelayanan/formulir/');
             }))
             ->andReturn($pelayanan);
 
-        Event::fake();
+        $request = Mockery::mock(\App\Http\Requests\StorePelayananRequest::class);
+        $request->shouldReceive('validated')->once()->andReturn($data);
+        $request->shouldReceive('has')->once()->with('status')->andReturn(false);
+        $request->shouldReceive('hasFile')->with('file_formulir')->andReturn(true);
+        $request->shouldReceive('file')->once()->with('file_formulir')->andReturn($file);
 
         // Act
-        $result = $this->pelayananService->create($data);
+        $result = $this->pelayananService->createPelayanan($request);
 
         // Assert
         $this->assertInstanceOf(Pelayanan::class, $result);
-        Storage::disk('public')->assertExists('pelayanan/' . $file->hashName());
+        Storage::disk('public')->assertExists('pelayanan/formulir/' . $file->hashName());
     }
 
     /** @test */
     public function it_can_get_paginated_pelayanan()
     {
         // Arrange
-        $this->pelayananRepository->shouldReceive('paginate')
+        $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
+            collect(),
+            0,
+            10,
+            1,
+            ['path' => url('test')]
+        );
+
+        $this->pelayananRepository->shouldReceive('getPaginated')
             ->once()
-            ->with(10)
-            ->andReturn(collect());
+            ->with(10, [])
+            ->andReturn($paginator);
 
         // Act
-        $result = $this->pelayananService->getPaginated(10);
+        $result = $this->pelayananService->getAllPaginated([], 10);
 
         // Assert
-        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $result);
+        $this->assertInstanceOf(\Illuminate\Contracts\Pagination\LengthAwarePaginator::class, $result);
     }
 
     /** @test */
@@ -174,15 +218,57 @@ class PelayananServiceTest extends TestCase
         // Arrange
         $query = 'test';
 
-        $this->pelayananRepository->shouldReceive('search')
+        $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
+            collect([new Pelayanan(['nama' => 'Test'])]),
+            1,
+            100,
+            1,
+            ['path' => url('test')]
+        );
+
+        $this->pelayananRepository->shouldReceive('getPaginated')
             ->once()
-            ->with($query)
-            ->andReturn(collect());
+            ->with(100, ['search' => $query])
+            ->andReturn($paginator);
 
         // Act
-        $result = $this->pelayananService->search($query);
+        $result = $this->pelayananService->searchPelayanan($query);
 
         // Assert
         $this->assertInstanceOf(\Illuminate\Support\Collection::class, $result);
+    }
+
+    /** @test */
+    public function it_returns_false_when_pelayanan_not_found_on_update()
+    {
+        // Arrange
+        $this->pelayananRepository->shouldReceive('findById')
+            ->once()
+            ->with(999)
+            ->andReturn(null);
+
+        $request = Mockery::mock(\App\Http\Requests\UpdatePelayananRequest::class);
+
+        // Act
+        $result = $this->pelayananService->updatePelayanan(999, $request);
+
+        // Assert
+        $this->assertFalse($result);
+    }
+
+    /** @test */
+    public function it_returns_false_when_pelayanan_not_found_on_delete()
+    {
+        // Arrange
+        $this->pelayananRepository->shouldReceive('findById')
+            ->once()
+            ->with(999)
+            ->andReturn(null);
+
+        // Act
+        $result = $this->pelayananService->deletePelayanan(999);
+
+        // Assert
+        $this->assertFalse($result);
     }
 }

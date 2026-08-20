@@ -7,6 +7,7 @@ use App\Http\Requests\StorePelayananRequest;
 use App\Http\Requests\UpdatePelayananRequest;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 
 interface PelayananServiceInterface
 {
@@ -15,5 +16,5 @@ interface PelayananServiceInterface
     public function updatePelayanan(int $id, UpdatePelayananRequest $request): bool;
     public function deletePelayanan(int $id): bool;
     public function getPublicPelayanan(): Collection;
-    public function searchPelayanan(string $search): Collection;
+    public function searchPelayanan(string $search): SupportCollection;
 }

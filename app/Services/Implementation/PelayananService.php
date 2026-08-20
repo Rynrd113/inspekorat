@@ -12,6 +12,7 @@ use App\Events\PelayananUpdated;
 use App\Events\PelayananDeleted;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -34,6 +35,17 @@ class PelayananService implements PelayananServiceInterface
         return DB::transaction(function () use ($request) {
             $data = $request->validated();
             
+            // Map form field names to model column names
+            if (isset($data['nama_layanan'])) {
+                $data['nama'] = $data['nama_layanan'];
+                unset($data['nama_layanan']);
+            }
+
+            if (isset($data['waktu_pelayanan'])) {
+                $data['waktu_penyelesaian'] = $data['waktu_pelayanan'];
+                unset($data['waktu_pelayanan']);
+            }
+
             // Handle file upload
             if ($request->hasFile('file_formulir')) {
                 $data['file_formulir'] = $request->file('file_formulir')
@@ -44,9 +56,6 @@ class PelayananService implements PelayananServiceInterface
             $data['status'] = $request->has('status');
 
             $pelayanan = $this->pelayananRepository->create($data);
-
-            // Event will be handled by Observer (faster)
-            // event(new PelayananCreated($pelayanan));
 
             return $pelayanan;
         });
@@ -63,6 +72,17 @@ class PelayananService implements PelayananServiceInterface
 
             $data = $request->validated();
 
+            // Map form field names to model column names
+            if (isset($data['nama_layanan'])) {
+                $data['nama'] = $data['nama_layanan'];
+                unset($data['nama_layanan']);
+            }
+
+            if (isset($data['waktu_pelayanan'])) {
+                $data['waktu_penyelesaian'] = $data['waktu_pelayanan'];
+                unset($data['waktu_pelayanan']);
+            }
+
             // Handle file upload
             if ($request->hasFile('file_formulir')) {
                 // Delete old file if exists
@@ -78,9 +98,6 @@ class PelayananService implements PelayananServiceInterface
             $data['status'] = $request->has('status');
 
             $result = $this->pelayananRepository->update($id, $data);
-
-            // Event will be handled by Observer (faster)
-            // event(new PelayananUpdated($pelayanan->fresh()));
 
             return $result;
         });
@@ -114,7 +131,7 @@ class PelayananService implements PelayananServiceInterface
         return $this->pelayananRepository->getActive();
     }
 
-    public function searchPelayanan(string $search): Collection
+    public function searchPelayanan(string $search): SupportCollection
     {
         return $this->pelayananRepository->getPaginated(100, ['search' => $search])
                                         ->getCollection();

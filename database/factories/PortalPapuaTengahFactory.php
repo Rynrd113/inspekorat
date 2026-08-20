@@ -19,6 +19,7 @@ class PortalPapuaTengahFactory extends Factory
             'gambar' => $this->faker->imageUrl(640, 480, 'news'),
             'tanggal_publikasi' => $this->faker->dateTimeBetween('-1 month', 'now'),
             'author' => $this->faker->name,
+            'penulis' => $this->faker->name,
             'views' => 0,
         ];
     }
