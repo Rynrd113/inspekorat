@@ -27,7 +27,7 @@
                         <i class="fas fa-search text-gray-400"></i>
                     </div>
                     <button type="submit" class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                        <span class="bg-blue-600 text-white px-4 py-1 rounded-md text-sm hover:bg-blue-700">
+                        <span class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors">
                             Cari
                         </span>
                     </button>

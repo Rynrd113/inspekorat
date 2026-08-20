@@ -211,14 +211,14 @@
                     </h3>
                     <div class="space-y-3">
                         <a href="{{ route('public.portal-opd.index') }}" 
-                           class="w-full inline-flex items-center justify-center px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 transition-colors">
+                           class="w-full inline-flex items-center justify-center px-5 py-3 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors">
                             <i class="fas fa-arrow-left mr-2"></i>
                             Kembali ke Portal OPD
                         </a>
                         
                         @if($portalOpd->website)
                         <a href="{{ $portalOpd->website }}" target="_blank"
-                           class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                           class="w-full inline-flex items-center justify-center px-5 py-3 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
                             <i class="fas fa-external-link-alt mr-2"></i>
                             Kunjungi Website
                         </a>
@@ -226,7 +226,7 @@
 
                         @if($portalOpd->email)
                         <a href="mailto:{{ $portalOpd->email }}"
-                           class="w-full inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors">
+                           class="w-full inline-flex items-center justify-center px-5 py-3 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors">
                             <i class="fas fa-envelope mr-2"></i>
                             Kirim Email
                         </a>
@@ -237,7 +237,7 @@
                         <a href="https://wa.me/62{{ ltrim($opdWaBtn, '0') }}"
                            target="_blank"
                            rel="noopener noreferrer"
-                           class="w-full inline-flex items-center justify-center px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md hover:bg-green-600 transition-colors">
+                           class="w-full inline-flex items-center justify-center px-5 py-3 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-colors">
                             <i class="fab fa-whatsapp mr-2"></i>
                             Hubungi WhatsApp
                         </a>

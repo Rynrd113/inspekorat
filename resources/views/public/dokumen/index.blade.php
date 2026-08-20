@@ -30,14 +30,14 @@
                         <input type="text" 
                                id="search-docs" 
                                placeholder="Cari dokumen..." 
-                               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
                         <i class="fas fa-search absolute left-3 top-4 text-gray-400"></i>
                     </div>
                 </div>
 
                 <!-- Category Filter -->
                 <div class="md:w-64">
-                    <select id="category-filter" class="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                    <select id="category-filter" class="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
                         <option value="">Semua Kategori</option>
                         <option value="peraturan">Peraturan</option>
                         <option value="sop">SOP</option>

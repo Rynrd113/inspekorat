@@ -106,7 +106,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Kategori Pengaduan <span class="text-red-500">*</span>
                             </label>
-                            <select name="kategori" id="kategori" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <select name="kategori" id="kategori" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent shadow-sm">
                                 <option value="">Pilih Kategori</option>
                                 <option value="pelayanan">Pelayanan Publik</option>
                                 <option value="keuangan">Keuangan Daerah</option>

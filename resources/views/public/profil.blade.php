@@ -115,7 +115,7 @@
                 <p class="text-xs text-gray-400 mt-2 mb-4">Berdasarkan SK Inspektur Nomor: SK.700/001/INSP/2026 — klik untuk perbesar</p>
                 <a href="{{ asset('images/struktur-organisasi-2026.jpg') }}"
                    download="Struktur-Organisasi-Inspektorat-Papua-Tengah-2026.jpg"
-                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
                     <i class="fas fa-download mr-2"></i>
                     Download Struktur Organisasi
                 </a>

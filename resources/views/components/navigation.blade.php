@@ -16,35 +16,39 @@
                     Beranda
                 </a>
 
-                <!-- Informasi Dropdown -->
-                <div class="relative group">
-                    <button class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium flex items-center rounded-md transition-colors">
+                <!-- Informasi Dropdown (Click Toggle) -->
+                <div class="relative" data-dropdown>
+                    <button data-dropdown-toggle
+                            class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium flex items-center rounded-md transition-colors">
                         Informasi
-                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        <i class="fas fa-chevron-down ml-1 text-xs transition-transform duration-200"></i>
                     </button>
-                    <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <div class="py-1">
-                            <a href="{{ route('public.profil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Profil</a>
-                            <a href="{{ route('public.berita.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Berita</a>
-                            <a href="{{ route('public.galeri.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Galeri</a>
-                            <a href="{{ route('public.portal-opd.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Portal OPD</a>
-                            <a href="{{ route('public.review-opd') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Daftar Review OPD</a>
+                    <div data-dropdown-menu
+                         class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 opacity-0 invisible scale-95 transform transition-all duration-200 z-50">
+                        <div class="py-2">
+                            <a href="{{ route('public.profil') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Profil</a>
+                            <a href="{{ route('public.berita.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Berita</a>
+                            <a href="{{ route('public.galeri.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Galeri</a>
+                            <a href="{{ route('public.portal-opd.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Portal OPD</a>
+                            <a href="{{ route('public.review-opd') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Daftar Review OPD</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Layanan Dropdown -->
-                <div class="relative group">
-                    <button class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium flex items-center rounded-md transition-colors">
+                <!-- Layanan Dropdown (Click Toggle) -->
+                <div class="relative" data-dropdown>
+                    <button data-dropdown-toggle
+                            class="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium flex items-center rounded-md transition-colors">
                         Layanan
-                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        <i class="fas fa-chevron-down ml-1 text-xs transition-transform duration-200"></i>
                     </button>
-                    <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <div class="py-1">
-                            <a href="{{ route('public.pelayanan.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Pelayanan</a>
-                            <a href="{{ route('public.dokumen.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Dokumen Publik</a>
-                            <a href="{{ route('public.pengaduan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Pengaduan Masyarakat</a>
-                            <a href="{{ route('public.wbs') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Sistem Pelaporan</a>
+                    <div data-dropdown-menu
+                         class="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 opacity-0 invisible scale-95 transform transition-all duration-200 z-50">
+                        <div class="py-2">
+                            <a href="{{ route('public.pelayanan.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Pelayanan</a>
+                            <a href="{{ route('public.dokumen.index') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Dokumen Publik</a>
+                            <a href="{{ route('public.pengaduan') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Pengaduan Masyarakat</a>
+                            <a href="{{ route('public.wbs') }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">Sistem Pelaporan</a>
                         </div>
                     </div>
                 </div>
@@ -143,3 +147,89 @@
         </div>
     </div>
 </header>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Desktop Dropdown Toggle
+    document.querySelectorAll('[data-dropdown]').forEach(function(dropdown) {
+        const toggle = dropdown.querySelector('[data-dropdown-toggle]');
+        const menu = dropdown.querySelector('[data-dropdown-menu]');
+        const chevron = toggle.querySelector('i.fa-chevron-down');
+        let isOpen = false;
+
+        function openDropdown() {
+            isOpen = true;
+            menu.classList.remove('opacity-0', 'invisible', 'scale-95');
+            menu.classList.add('opacity-100', 'visible', 'scale-100');
+            if (chevron) chevron.style.transform = 'rotate(180deg)';
+        }
+
+        function closeDropdown() {
+            isOpen = false;
+            menu.classList.remove('opacity-100', 'visible', 'scale-100');
+            menu.classList.add('opacity-0', 'invisible', 'scale-95');
+            if (chevron) chevron.style.transform = 'rotate(0deg)';
+        }
+
+        toggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (isOpen) {
+                closeDropdown();
+            } else {
+                // Close all other dropdowns first
+                document.querySelectorAll('[data-dropdown]').forEach(function(other) {
+                    if (other !== dropdown) {
+                        const otherMenu = other.querySelector('[data-dropdown-menu]');
+                        const otherChevron = other.querySelector('i.fa-chevron-down');
+                        otherMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+                        otherMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+                        if (otherChevron) otherChevron.style.transform = 'rotate(0deg)';
+                    }
+                });
+                openDropdown();
+            }
+        });
+
+        // Keep open when hovering over menu
+        menu.addEventListener('mouseenter', function() {
+            if (!isOpen) openDropdown();
+        });
+
+        // Close when leaving both toggle and menu
+        let leaveTimeout;
+        dropdown.addEventListener('mouseleave', function() {
+            leaveTimeout = setTimeout(closeDropdown, 150);
+        });
+
+        dropdown.addEventListener('mouseenter', function() {
+            clearTimeout(leaveTimeout);
+        });
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('[data-dropdown]')) {
+            document.querySelectorAll('[data-dropdown]').forEach(function(dropdown) {
+                const menu = dropdown.querySelector('[data-dropdown-menu]');
+                const chevron = dropdown.querySelector('i.fa-chevron-down');
+                menu.classList.remove('opacity-100', 'visible', 'scale-100');
+                menu.classList.add('opacity-0', 'invisible', 'scale-95');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            });
+        }
+    });
+
+    // Close dropdowns on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('[data-dropdown]').forEach(function(dropdown) {
+                const menu = dropdown.querySelector('[data-dropdown-menu]');
+                const chevron = dropdown.querySelector('i.fa-chevron-down');
+                menu.classList.remove('opacity-100', 'visible', 'scale-100');
+                menu.classList.add('opacity-0', 'invisible', 'scale-95');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            });
+        }
+    });
+});
+</script>
