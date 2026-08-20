@@ -196,6 +196,15 @@
                         <h4 class="font-semibold text-gray-900">Kontak Langsung</h4>
                     </x-slot:header>
                     
+                    @php $wbsWa = get_config('wbs_wa_contact', '082345557656'); @endphp
+                    <a href="https://wa.me/62{{ ltrim($wbsWa, '0') }}?text=Halo%2C%20saya%20ingin%20menyampaikan%20pengaduan"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="flex items-center justify-center w-full px-4 py-3 mb-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg shadow-md transition-colors duration-200 text-sm">
+                        <i class="fab fa-whatsapp text-lg mr-2"></i>
+                        WhatsApp: {{ $wbsWa }}
+                    </a>
+
                     <div class="space-y-3 text-sm">
                         <div class="flex items-center">
                             <i class="fas fa-phone text-gray-400 mr-3"></i>

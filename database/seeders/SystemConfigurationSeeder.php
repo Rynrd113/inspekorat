@@ -107,6 +107,14 @@ class SystemConfigurationSeeder extends Seeder
                 'is_public'     => true,
             ],
             [
+                'key'           => 'wbs_wa_contact',
+                'default_value' => '082345557656',
+                'type'          => 'string',
+                'group'         => 'contact',
+                'description'   => 'Nomor WhatsApp khusus layanan WBS & Pengaduan — format lokal tanpa spasi (contoh: 082345557656)',
+                'is_public'     => true,
+            ],
+            [
                 'key'           => 'map_embed_code',
                 'default_value' => null,
                 'type'          => 'text',
