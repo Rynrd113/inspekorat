@@ -522,8 +522,6 @@ body {
 }
 
 .slider-dot {
-    width: 16px;
-    height: 16px;
     border-radius: var(--radius-full);
     background: rgba(255, 255, 255, 0.5);
     border: none;

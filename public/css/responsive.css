@@ -130,26 +130,6 @@
     }
 }
 
-/* Slider dots - responsive sizing */
-.slider-dot {
-    width: clamp(0.4rem, 1.5vw, 0.75rem);
-    height: clamp(0.4rem, 1.5vw, 0.75rem);
-}
-
-@media (max-width: 374px) {
-    .slider-dot {
-        width: 0.5rem !important;
-        height: 0.5rem !important;
-    }
-}
-
-@media (min-width: 375px) and (max-width: 567px) {
-    .slider-dot {
-        width: 0.625rem !important;
-        height: 0.625rem !important;
-    }
-}
-
 /* Container Padding */
 .container-responsive {
     padding-left: 1rem;

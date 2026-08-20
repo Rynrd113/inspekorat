@@ -20,7 +20,7 @@
 
                 <!-- Optional: Title/Caption overlay (only if title exists) -->
                 @if($slider->judul)
-                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 sm:p-6 lg:p-8">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 sm:p-6 lg:p-8 z-20">
                     <div class="max-w-7xl mx-auto">
                         <h2 class="text-white text-lg sm:text-xl lg:text-2xl font-semibold">
                             {{ $slider->judul }}
@@ -38,21 +38,21 @@
 
             <!-- Slider Navigation Dots -->
             @if($heroSliders->count() > 1)
-            <div class="absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 sm:space-x-3 z-20">
+            <div class="absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 sm:space-x-3 z-30">
                 @foreach($heroSliders as $index => $slider)
-                <button class="slider-dot w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-white/50 hover:bg-white transition-all duration-300 shadow-lg {{ $index === 0 ? 'active bg-white' : '' }}"
+                <button class="slider-dot !w-2.5 !h-2.5 sm:!w-3 sm:!h-2.5 rounded-full bg-white/50 hover:bg-white transition-all duration-300 shadow-lg {{ $index === 0 ? 'active !bg-white' : '' }}"
                         data-slide="{{ $index }}"
                         aria-label="Go to slide {{ $index + 1 }}"></button>
                 @endforeach
             </div>
 
             <!-- Slider Arrows -->
-            <button class="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/30 hover:bg-black/50 rounded-full flex items-center justify-center text-white transition-all duration-300 z-20"
+            <button class="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/30 hover:bg-black/50 rounded-full flex items-center justify-center text-white transition-all duration-300 z-30"
                     id="prevSlide"
                     aria-label="Previous slide">
                 <i class="fas fa-chevron-left text-sm sm:text-base"></i>
             </button>
-            <button class="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/30 hover:bg-black/50 rounded-full flex items-center justify-center text-white transition-all duration-300 z-20"
+            <button class="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-black/30 hover:bg-black/50 rounded-full flex items-center justify-center text-white transition-all duration-300 z-30"
                     id="nextSlide"
                     aria-label="Next slide">
                 <i class="fas fa-chevron-right text-sm sm:text-base"></i>
@@ -185,6 +185,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (sliderContainer) {
         sliderContainer.addEventListener('mouseenter', stopAutoSlide);
         sliderContainer.addEventListener('mouseleave', startAutoSlide);
+    }
+
+    // Touch gesture support
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    if (sliderContainer) {
+        sliderContainer.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, false);
+
+        sliderContainer.addEventListener('touchend', function(e) {
+            const touchEndX = e.changedTouches[0].screenX;
+            const touchEndY = e.changedTouches[0].screenY;
+            const horizontalDiff = touchStartX - touchEndX;
+            const verticalDiff = Math.abs(touchStartY - touchEndY);
+
+            if (Math.abs(horizontalDiff) > verticalDiff && Math.abs(horizontalDiff) > 50) {
+                stopAutoSlide();
+                if (horizontalDiff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+                startAutoSlide();
+            }
+        }, false);
     }
 });
 </script>
