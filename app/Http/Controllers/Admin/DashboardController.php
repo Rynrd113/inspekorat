@@ -105,6 +105,10 @@ class DashboardController extends Controller
             ->take(5)
             ->get(['id', 'nama_pelapor', 'is_anonymous', 'subjek', 'status', 'created_at']);
 
-        return view('admin.dashboard', compact('stats', 'recentWbs'));
+        $recentNews = PortalPapuaTengah::latest()
+            ->take(3)
+            ->get(['id', 'judul', 'is_published', 'created_at']);
+
+        return view('admin.dashboard', compact('stats', 'recentWbs', 'recentNews'));
     }
 }

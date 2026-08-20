@@ -20,16 +20,13 @@ class GaleriFactory extends Factory
         return [
             'judul' => fake()->sentence(4),
             'deskripsi' => fake()->paragraph(3),
-            'gambar' => json_encode([
-                'image1.jpg',
-                'image2.jpg',
-                'image3.jpg'
-            ]),
-            'status' => 'published',
-            'tanggal_upload' => fake()->dateTimeBetween('-6 months', 'now'),
-            'created_by' => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
+            'kategori' => collect(['Kegiatan', 'Infrastruktur', 'Pelayanan', 'Pengawasan'])->random(),
+            'file_path' => 'galeri/' . fake()->uuid() . '.jpg',
+            'file_name' => fake()->uuid() . '.jpg',
+            'file_type' => 'image/jpeg',
+            'file_size' => fake()->numberBetween(50000, 5000000),
+            'status' => true,
+            'tanggal_publikasi' => fake()->dateTimeBetween('-6 months', 'now'),
         ];
     }
 
@@ -39,7 +36,7 @@ class GaleriFactory extends Factory
     public function draft(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'draft',
+            'status' => false,
         ]);
     }
 
@@ -49,7 +46,7 @@ class GaleriFactory extends Factory
     public function published(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'published',
+            'status' => true,
         ]);
     }
 
@@ -58,13 +55,9 @@ class GaleriFactory extends Factory
      */
     public function withImages(int $count = 5): static
     {
-        $images = [];
-        for ($i = 1; $i <= $count; $i++) {
-            $images[] = "gallery_image_{$i}.jpg";
-        }
-
         return $this->state(fn (array $attributes) => [
-            'gambar' => json_encode($images),
+            'file_path' => 'galeri/' . fake()->uuid() . '.jpg',
+            'file_name' => fake()->uuid() . '.jpg',
         ]);
     }
 
@@ -84,9 +77,7 @@ class GaleriFactory extends Factory
     public function recent(): static
     {
         return $this->state(fn (array $attributes) => [
-            'tanggal_upload' => fake()->dateTimeBetween('-1 week', 'now'),
-            'created_at' => fake()->dateTimeBetween('-1 week', 'now'),
-            'updated_at' => now(),
+            'tanggal_publikasi' => fake()->dateTimeBetween('-1 week', 'now'),
         ]);
     }
 }

@@ -310,10 +310,7 @@
             @endif
 
             @if(auth()->user()->hasAnyRole(['content_admin', 'admin', 'super_admin']))
-            @php
-                $recentNews = \App\Models\PortalPapuaTengah::latest()->limit(3)->get();
-            @endphp
-            @if($recentNews->count() > 0)
+            @if(isset($recentNews) && $recentNews->count() > 0)
                 <div>
                     <h4 class="text-sm font-medium text-gray-900 mb-2">Berita Terbaru</h4>
                     <div class="space-y-2">

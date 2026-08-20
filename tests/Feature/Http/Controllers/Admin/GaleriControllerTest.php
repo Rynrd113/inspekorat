@@ -26,8 +26,6 @@ class GaleriControllerTest extends TestCase
         $this->admin = User::factory()->create([
             'email' => 'admin@test.com',
             'role' => 'admin',
-            'created_by' => 1,
-            'updated_by' => 1,
         ]);
 
         // Create album

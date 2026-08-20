@@ -15,24 +15,25 @@ class PortalPapuaTengahFactory extends Factory
             'judul' => $this->faker->sentence,
             'konten' => $this->faker->paragraphs(3, true),
             'kategori' => $this->faker->randomElement(['berita', 'pengumuman', 'kegiatan']),
-            'status' => $this->faker->randomElement(['draft', 'published']),
+            'status' => true,
             'gambar' => $this->faker->imageUrl(640, 480, 'news'),
-            'created_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
-            'updated_at' => now(),
+            'tanggal_publikasi' => $this->faker->dateTimeBetween('-1 month', 'now'),
+            'author' => $this->faker->name,
+            'views' => 0,
         ];
     }
 
     public function published(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'published',
+            'status' => true,
         ]);
     }
 
     public function draft(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 'draft',
+            'status' => false,
         ]);
     }
 

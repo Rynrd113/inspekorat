@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Http\Request;
 use App\Models\Pelayanan;
 use App\Models\HeroSlider;
 use App\Models\Pengaduan;
@@ -56,9 +58,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Register model observers
         Pelayanan::observe(PelayananObserver::class);
         HeroSlider::observe(HeroSliderObserver::class);
         Pengaduan::observe(PengaduanObserver::class);
+
+        RateLimiter::for('public-submissions', function (Request $request) {
+            return \Illuminate\Support\Limit::perMinute(10)->by(
+                $request->ip()
+            );
+        });
     }
 }

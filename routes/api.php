@@ -8,7 +8,9 @@ use App\Http\Controllers\Api\PortalPapuaTengahController;
 use App\Http\Controllers\Api\WebPortalController;
 use App\Http\Controllers\Api\PengaduanController;
 use App\Http\Controllers\Api\HeroSliderController;
+use App\Http\Controllers\Api\HealthCheckController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\RateLimiter;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,13 +60,20 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('hero-sliders/{heroSlider}/view', [HeroSliderController::class, 'incrementView'])->name('api.admin.hero-sliders.view');
 });
 
+// Health check (no auth, no rate limit)
+Route::get('health', HealthCheckController::class)->name('api.health');
+
 // Public API Routes (accessible without authentication)
 Route::get('hero-sliders/public', [HeroSliderController::class, 'publicSliders'])->name('api.public.hero-sliders');
 Route::get('portal-papua-tengah/public', [PortalPapuaTengahController::class, 'publicIndex']);
 Route::get('info-kantor/public', [InfoKantorController::class, 'publicIndex']);
 Route::get('web-portal/public', [WebPortalController::class, 'index']);
-Route::post('wbs/public', [WbsController::class, 'publicStore']);
-Route::post('pengaduan/public', [PengaduanController::class, 'store']); // Public pengaduan submission
+
+// Rate-limited public submission routes
+Route::middleware('throttle:public-submissions')->group(function () {
+    Route::post('wbs/public', [WbsController::class, 'publicStore']);
+    Route::post('pengaduan/public', [PengaduanController::class, 'store']);
+});
 
 // Public berita endpoint for homepage
 Route::get('berita', [PortalPapuaTengahController::class, 'publicBerita']);

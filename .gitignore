@@ -55,3 +55,11 @@ testing/tmp/
 
 # Development config (optional)
 .dev-config/
+
+# AI tooling
+.codegraph/
+.claudeignore
+.clauderules
+compress-image.php
+check-image.php
+resize-image.php
