@@ -140,6 +140,14 @@
                                 <p class="text-gray-600">{{ $kontak->jam_operasional ?? config('contact.jam_operasional') }}</p>
                             </div>
                         </div>
+
+                        <div class="flex items-start">
+                            <i class="fab fa-whatsapp text-green-600 mr-3 mt-1"></i>
+                            <div>
+                                <h6 class="font-medium text-gray-900 mb-1">WhatsApp</h6>
+                                <a href="https://wa.me/6282345557656" target="_blank" class="text-green-600 hover:text-green-800 font-medium">082345557656</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

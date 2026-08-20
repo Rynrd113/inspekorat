@@ -116,6 +116,16 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- WhatsApp -->
+                <div class="mt-4">
+                    <a href="https://wa.me/6282345557656"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-xs sm:text-sm font-medium rounded-lg transition-colors">
+                        <i class="fab fa-whatsapp mr-2"></i>Hubungi WhatsApp
+                    </a>
+                </div>
             </div>
         </div>
 

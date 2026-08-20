@@ -182,6 +182,24 @@
                             </div>
                         </div>
                         @endif
+
+                        @php $opdWa = get_config('opd_wa_contact', '082345557656'); @endphp
+                        @if($opdWa)
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fab fa-whatsapp text-green-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">WhatsApp</p>
+                                <p class="text-gray-900 font-medium">
+                                    <a href="https://wa.me/62{{ ltrim($opdWa, '0') }}" target="_blank" class="hover:text-green-600">
+                                        {{ $opdWa }}
+                                        <i class="fas fa-external-link-alt text-xs ml-1"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
 
@@ -211,6 +229,17 @@
                            class="w-full inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors">
                             <i class="fas fa-envelope mr-2"></i>
                             Kirim Email
+                        </a>
+                        @endif
+
+                        @php $opdWaBtn = get_config('opd_wa_contact', '082345557656'); @endphp
+                        @if($opdWaBtn)
+                        <a href="https://wa.me/62{{ ltrim($opdWaBtn, '0') }}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="w-full inline-flex items-center justify-center px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md hover:bg-green-600 transition-colors">
+                            <i class="fab fa-whatsapp mr-2"></i>
+                            Hubungi WhatsApp
                         </a>
                         @endif
                     </div>

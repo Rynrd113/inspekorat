@@ -115,6 +115,14 @@ class SystemConfigurationSeeder extends Seeder
                 'is_public'     => true,
             ],
             [
+                'key'           => 'opd_wa_contact',
+                'default_value' => '082345557656',
+                'type'          => 'string',
+                'group'         => 'contact',
+                'description'   => 'Nomor WhatsApp kontak OPD — ditampilkan di halaman detail Portal OPD',
+                'is_public'     => true,
+            ],
+            [
                 'key'           => 'map_embed_code',
                 'default_value' => null,
                 'type'          => 'text',
