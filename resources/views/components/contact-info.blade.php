@@ -34,6 +34,14 @@
             'type' => 'text'
         ],
         [
+            'icon' => 'fab fa-whatsapp',
+            'color' => 'green',
+            'title' => 'WhatsApp',
+            'content' => '082345557656',
+            'url' => 'https://wa.me/6282345557656',
+            'type' => 'link'
+        ],
+        [
             'icon' => 'fas fa-globe',
             'color' => 'teal',
             'title' => 'Website',
