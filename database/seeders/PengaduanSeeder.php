@@ -19,7 +19,7 @@ class PengaduanSeeder extends Seeder
                 'telepon' => '081234567890',
                 'subjek' => 'Pelayanan publik yang kurang baik',
                 'isi_pengaduan' => 'Saya ingin mengadukan pelayanan di kantor yang sangat lambat dan tidak profesional.',
-                'status' => 'pending'
+                'status' => 'diterima'
             ],
             [
                 'nama_pengadu' => 'Siti Rahayu',
@@ -44,7 +44,7 @@ class PengaduanSeeder extends Seeder
                 'telepon' => '084567890123',
                 'subjek' => 'Keluhan umum fasilitas',
                 'isi_pengaduan' => 'Fasilitas umum di kantor perlu diperbaiki, terutama toilet dan tempat parkir.',
-                'status' => 'pending'
+                'status' => 'diterima'
             ],
             [
                 'nama_pengadu' => 'Robert Chen',

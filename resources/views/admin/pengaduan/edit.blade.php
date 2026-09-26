@@ -57,9 +57,10 @@
                 <div>
                     <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px">Status</label>
                     <select name="status" style="width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-size:14px;box-sizing:border-box">
-                        <option value="pending"  {{ old('status', $pengaduan->status) == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="diterima" {{ old('status', $pengaduan->status) == 'diterima' ? 'selected' : '' }}>Diterima</option>
                         <option value="proses"   {{ old('status', $pengaduan->status) == 'proses'  ? 'selected' : '' }}>Proses</option>
                         <option value="selesai"  {{ old('status', $pengaduan->status) == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                        <option value="ditolak"  {{ old('status', $pengaduan->status) == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
                     </select>
                 </div>
                 <div>

@@ -30,7 +30,7 @@ $testData = [
     'subjek' => 'Test Pengaduan - ' . date('H:i:s'),
     'isi_pengaduan' => 'Ini adalah pengaduan test untuk memastikan sistem notifikasi bekerja dengan baik.',
     'kategori' => 'pelayanan',
-    'status' => 'pending',
+    'status' => 'diterima',
     'tanggal_pengaduan' => now(),
     'is_anonymous' => false
 ];

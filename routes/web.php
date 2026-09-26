@@ -56,6 +56,8 @@ Route::middleware('admin.logout.public')->group(function () {
     Route::post('/kontak', [PublicController::class, 'kontakKirim'])->name('kontak.kirim');
     Route::get('/pengaduan', [PublicController::class, 'pengaduan'])->name('public.pengaduan');
     Route::post('/pengaduan', [PublicController::class, 'storePengaduan'])->name('public.pengaduan.store');
+    Route::get('/pengaduan/cek-status', [PublicController::class, 'cekStatusPengaduan'])->name('public.pengaduan.cek-status');
+    Route::post('/pengaduan/cek-status', [PublicController::class, 'cekStatusPengaduanPost'])->name('public.pengaduan.cek-status.post');
     Route::get('/statistik', [PublicController::class, 'statistik'])->name('public.statistik');
 
     // Web Portal Public Routes

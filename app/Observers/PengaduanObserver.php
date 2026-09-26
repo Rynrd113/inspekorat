@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Events\PengaduanCreated;
+use App\Events\PengaduanUpdated;
 use App\Models\Pengaduan;
 use Illuminate\Support\Facades\Log;
 
@@ -34,10 +35,28 @@ class PengaduanObserver
      */
     public function updated(Pengaduan $pengaduan): void
     {
+        // Check if status or other important fields changed
+        $changedFields = $pengaduan->getChanges();
+        
         Log::info('Pengaduan updated', [
             'pengaduan_id' => $pengaduan->id,
-            'status' => $pengaduan->status
+            'status' => $pengaduan->status,
+            'changed_fields' => array_keys($changedFields)
         ]);
+
+        // Dispatch PengaduanUpdated event if status or tanggapan changed
+        if (isset($changedFields['status']) || isset($changedFields['tanggapan'])) {
+            $oldStatus = $pengaduan->getOriginal('status');
+            
+            try {
+                event(new PengaduanUpdated($pengaduan, $oldStatus, array_keys($changedFields)));
+            } catch (\Exception $e) {
+                Log::error('Error dispatching PengaduanUpdated event', [
+                    'pengaduan_id' => $pengaduan->id,
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
     }
 
     /**

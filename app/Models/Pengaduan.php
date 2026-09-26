@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\PengaduanObserver;
 use App\Traits\HasAuditLog;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,6 +36,15 @@ class Pengaduan extends Model
     ];
 
     /**
+     * Boot the model and register observer
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        static::observe(PengaduanObserver::class);
+    }
+
+    /**
      * Scope untuk filter berdasarkan status
      */
     public function scopeByStatus(Builder $query, ?string $status): Builder
@@ -47,11 +57,19 @@ class Pengaduan extends Model
     }
 
     /**
-     * Scope untuk pengaduan pending
+     * Scope untuk pengaduan diterima
      */
-    public function scopePending(Builder $query): Builder
+    public function scopeDiterima(Builder $query): Builder
     {
-        return $query->where('status', 'pending');
+        return $query->where('status', 'diterima');
+    }
+
+    /**
+     * Scope untuk pengaduan proses
+     */
+    public function scopeProses(Builder $query): Builder
+    {
+        return $query->where('status', 'proses');
     }
 
     /**
@@ -63,16 +81,48 @@ class Pengaduan extends Model
     }
 
     /**
+     * Scope untuk pengaduan ditolak
+     */
+    public function scopeDitolak(Builder $query): Builder
+    {
+        return $query->where('status', 'ditolak');
+    }
+
+    /**
      * Get status badge color
      */
     public function getStatusBadgeAttribute(): string
     {
         $badges = [
-            'pending' => 'bg-yellow-100 text-yellow-800',
+            'diterima' => 'bg-yellow-100 text-yellow-800',
             'proses' => 'bg-blue-100 text-blue-800', 
             'selesai' => 'bg-green-100 text-green-800',
+            'ditolak' => 'bg-red-100 text-red-800',
         ];
         
         return $badges[$this->status] ?? 'bg-gray-100 text-gray-800';
+    }
+    
+    /**
+     * Get status label in Indonesian
+     */
+    public function getStatusLabelAttribute(): string
+    {
+        $labels = [
+            'diterima' => 'Diterima',
+            'proses' => 'Proses',
+            'selesai' => 'Selesai',
+            'ditolak' => 'Ditolak',
+        ];
+        
+        return $labels[$this->status] ?? ucfirst($this->status);
+    }
+
+    /**
+     * Get ticket number for display
+     */
+    public function getTicketNumberAttribute(): string
+    {
+        return '#' . $this->id;
     }
 }

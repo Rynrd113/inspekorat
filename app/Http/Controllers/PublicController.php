@@ -634,9 +634,10 @@ startxref
     public function storePengaduan(Request $request)
     {
         try {
+            // Validate with conditional rules for anonymous
             $validated = $request->validate([
-                'nama_pengadu' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
+                'nama_pengadu' => 'required_unless:is_anonymous,true|string|max:255',
+                'email' => 'required_unless:is_anonymous,true|email|max:255',
                 'telepon' => 'nullable|string|max:20',
                 'subjek' => 'required|string|max:255',
                 'isi_pengaduan' => 'required|string',
@@ -647,7 +648,7 @@ startxref
             ]);
 
             // Handle anonymous submissions
-            if ($request->has('is_anonymous') && $request->input('is_anonymous')) {
+            if ($request->boolean('is_anonymous')) {
                 $validated['nama_pengadu'] = 'Anonim';
                 $validated['email'] = 'anonim@system.local';
                 $validated['is_anonymous'] = true;
@@ -665,7 +666,7 @@ startxref
             }
             $validated['bukti_files'] = !empty($filePaths) ? $filePaths : null;
 
-            $validated['status'] = 'pending';
+            $validated['status'] = 'diterima';
             $validated['tanggal_pengaduan'] = now();
 
             $pengaduan = Pengaduan::create($validated);
@@ -677,11 +678,13 @@ startxref
                 return response()->json([
                     'success' => true,
                     'message' => 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.',
-                    'data' => ['id' => $pengaduan->id]
+                    'data' => ['id' => $pengaduan->id, 'ticket_id' => $pengaduan->id]
                 ]);
             }
 
-            return redirect()->route('public.pengaduan')->with('success', 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.');
+            return redirect()->route('public.pengaduan')
+                ->with('success', 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.')
+                ->with('ticket_id', $pengaduan->id);
         } catch (\Illuminate\Validation\ValidationException $e) {
             \Log::error('Validation error in storePengaduan', ['errors' => $e->errors()]);
 
@@ -711,6 +714,67 @@ startxref
 
             return back()->with('error', 'Terjadi kesalahan. Silakan coba lagi.')->withInput();
         }
+    }
+
+    /**
+     * Show pengaduan status check page (GET)
+     */
+    public function cekStatusPengaduan(Request $request): View
+    {
+        $ticket = $request->query('ticket');
+        $pengaduan = null;
+        $error = null;
+
+        if ($ticket) {
+            // Validate ticket format (should be numeric ID)
+            if (!ctype_digit($ticket)) {
+                $error = 'Nomor tiket tidak valid. Format: angka saja (contoh: 123)';
+            } else {
+                $pengaduan = Pengaduan::find($ticket);
+                
+                if (!$pengaduan) {
+                    $error = 'Pengaduan dengan nomor tiket #' . $ticket . ' tidak ditemukan.';
+                } elseif ($pengaduan->is_anonymous || $pengaduan->email === 'anonim@system.local') {
+                    $error = 'Pengaduan anonim tidak dapat dicek statusnya melalui fitur ini.';
+                }
+            }
+        }
+
+        return view('public.pengaduan-cek-status', compact('pengaduan', 'error', 'ticket'));
+    }
+
+    /**
+     * Handle pengaduan status check form submission (POST)
+     */
+    public function cekStatusPengaduanPost(Request $request)
+    {
+        $request->validate([
+            'ticket' => 'required|string|max:50',
+            'email' => 'required|email|max:255',
+        ]);
+
+        $ticket = $request->input('ticket');
+        $email = $request->input('email');
+
+        // Validate ticket format
+        if (!ctype_digit($ticket)) {
+            return back()->with('error', 'Nomor tiket tidak valid. Format: angka saja (contoh: 123)')->withInput();
+        }
+
+        $pengaduan = Pengaduan::where('id', $ticket)
+            ->where('email', $email)
+            ->first();
+
+        if (!$pengaduan) {
+            return back()->with('error', 'Pengaduan dengan nomor tiket #' . $ticket . ' dan email tersebut tidak ditemukan.')->withInput();
+        }
+
+        if ($pengaduan->is_anonymous || $pengaduan->email === 'anonim@system.local') {
+            return back()->with('error', 'Pengaduan anonim tidak dapat dicek statusnya melalui fitur ini.')->withInput();
+        }
+
+        // Redirect to GET route with ticket parameter for clean URL
+        return redirect()->route('public.pengaduan.cek-status', ['ticket' => $ticket]);
     }
 
     /**

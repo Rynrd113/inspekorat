@@ -14,7 +14,7 @@ $testData = [
     'subjek' => 'Test Pengaduan ' . date('H:i:s'),
     'isi_pengaduan' => 'Ini adalah test pengaduan untuk memastikan form berfungsi',
     'kategori' => 'pelayanan',
-    'status' => 'pending',
+    'status' => 'diterima',
     'tanggal_pengaduan' => now(),
     'is_anonymous' => false
 ];

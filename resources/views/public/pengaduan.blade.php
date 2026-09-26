@@ -44,6 +44,17 @@
         @if(session('success'))
             <x-alert type="success" class="mb-8" dismissible>
                 {{ session('success') }}
+                @if(session('ticket_id'))
+                    <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <p class="font-semibold text-green-800 mb-2">Nomor Tiket Anda:</p>
+                        <p class="text-2xl font-bold text-green-700">#{{ session('ticket_id') }}</p>
+                        <p class="text-sm text-green-600 mt-2">Simpan nomor tiket ini untuk mengecek status pengaduan Anda nanti.</p>
+                        <a href="{{ route('public.pengaduan.cek-status', ['ticket' => session('ticket_id')]) }}" 
+                           class="inline-block mt-3 text-green-600 hover:text-green-700 font-medium underline">
+                            Cek Status Pengaduan →
+                        </a>
+                    </div>
+                @endif
             </x-alert>
         @endif
         
@@ -65,11 +76,21 @@
 
                     <form id="pengaduan-form" action="{{ route('public.pengaduan.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                         @csrf
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        
+                        <!-- Anonymous Checkbox -->
+                        <div class="flex items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <input id="is_anonymous" name="is_anonymous" type="checkbox" class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded" onchange="toggleAnonymousFields()">
+                            <label for="is_anonymous" class="ml-2 block text-sm text-gray-900 cursor-pointer">
+                                <span class="font-medium">Kirim sebagai Anonim</span>
+                                <span class="text-gray-500 ml-2">(Identitas Anda akan disembunyikan)</span>
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="identity-fields">
                             <x-input 
                                 type="text" 
                                 name="nama_pengadu" 
-                                label="Nama Lengkap" 
+                                label="Nama Lengkap <span class='text-red-500'>*</span>" 
                                 placeholder="Masukkan nama lengkap Anda"
                                 required 
                                 id="nama_pengadu"
@@ -77,7 +98,7 @@
                             <x-input 
                                 type="email" 
                                 name="email" 
-                                label="Email" 
+                                label="Email <span class='text-red-500'>*</span>" 
                                 placeholder="nama@email.com"
                                 required 
                                 id="email"
@@ -288,7 +309,23 @@ document.getElementById('pengaduan-form').addEventListener('submit', async funct
         
         if (response.ok && result.success) {
             // Success
-            showAlert('success', result.message || 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.');
+            let successMessage = result.message || 'Pengaduan berhasil dikirim! Kami akan menindaklanjuti pengaduan Anda segera.';
+            
+            // Add ticket ID to message if available
+            if (result.data && result.data.ticket_id) {
+                successMessage += `<div class="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <p class="font-semibold text-green-800 mb-2">Nomor Tiket Anda:</p>
+                    <p class="text-2xl font-bold text-green-700">#${result.data.ticket_id}</p>
+                    <p class="text-sm text-green-600 mt-2">Simpan nomor tiket ini untuk mengecek status pengaduan Anda nanti.</p>
+                    <a href="{{ route('public.pengaduan.cek-status', ['ticket' => '__TICKET_ID__']) }}" 
+                       class="inline-block mt-3 text-green-600 hover:text-green-700 font-medium underline"
+                       onclick="this.href = this.href.replace('__TICKET_ID__', ${result.data.ticket_id})">
+                        Cek Status Pengaduan →
+                    </a>
+                </div>`;
+            }
+            
+            showAlert('success', successMessage);
             this.reset();
             document.getElementById('file-list').innerHTML = '';
         } else {
@@ -351,6 +388,38 @@ function showAlert(type, message) {
 // Reset form function
 function resetForm() {
     document.getElementById('pengaduan-form').reset();
+    // Reset anonymous fields visibility
+    toggleAnonymousFields();
+}
+
+// Toggle anonymous fields visibility
+function toggleAnonymousFields() {
+    const isAnonymous = document.getElementById('is_anonymous').checked;
+    const identityFields = document.getElementById('identity-fields');
+    const namaInput = document.getElementById('nama_pengadu');
+    const emailInput = document.getElementById('email');
+    const namaLabel = namaInput?.closest('div')?.querySelector('label');
+    const emailLabel = emailInput?.closest('div')?.querySelector('label');
+
+    if (isAnonymous) {
+        identityFields.style.display = 'none';
+        if (namaInput) {
+            namaInput.required = false;
+            namaInput.value = '';
+        }
+        if (emailInput) {
+            emailInput.required = false;
+            emailInput.value = '';
+        }
+    } else {
+        identityFields.style.display = 'grid';
+        if (namaInput) {
+            namaInput.required = true;
+        }
+        if (emailInput) {
+            emailInput.required = true;
+        }
+    }
 }
 
 // File upload handler

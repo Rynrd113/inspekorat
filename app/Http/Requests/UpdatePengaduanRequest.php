@@ -22,7 +22,7 @@ class UpdatePengaduanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'required|in:pending,proses,selesai',
+            'status' => 'required|in:diterima,proses,selesai,ditolak',
             'tanggapan' => 'nullable|string|min:5'
         ];
     }
@@ -34,7 +34,7 @@ class UpdatePengaduanRequest extends FormRequest
     {
         return [
             'status.required' => 'Status wajib dipilih.',
-            'status.in' => 'Status harus: pending, proses, atau selesai.',
+            'status.in' => 'Status harus: diterima, proses, selesai, atau ditolak.',
             'tanggapan.min' => 'Tanggapan minimal 5 karakter.',
         ];
     }
