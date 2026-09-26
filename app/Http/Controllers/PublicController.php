@@ -634,10 +634,13 @@ startxref
     public function storePengaduan(Request $request)
     {
         try {
+            // Check anonymous first (checkbox unchecked = not sent in request)
+            $isAnonymous = $request->boolean('is_anonymous');
+
             // Validate with conditional rules for anonymous
             $validated = $request->validate([
-                'nama_pengadu' => 'required_unless:is_anonymous,true|string|max:255',
-                'email' => 'required_unless:is_anonymous,true|email|max:255',
+                'nama_pengadu' => $isAnonymous ? 'nullable|string|max:255' : 'required|string|max:255',
+                'email' => $isAnonymous ? 'nullable|email|max:255' : 'required|email|max:255',
                 'telepon' => 'nullable|string|max:20',
                 'subjek' => 'required|string|max:255',
                 'isi_pengaduan' => 'required|string',
@@ -648,7 +651,7 @@ startxref
             ]);
 
             // Handle anonymous submissions
-            if ($request->boolean('is_anonymous')) {
+            if ($isAnonymous) {
                 $validated['nama_pengadu'] = 'Anonim';
                 $validated['email'] = 'anonim@system.local';
                 $validated['is_anonymous'] = true;
