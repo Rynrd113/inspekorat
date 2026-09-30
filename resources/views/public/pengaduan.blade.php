@@ -325,7 +325,7 @@ document.getElementById('pengaduan-form').addEventListener('submit', async funct
                 </div>`;
             }
             
-            showAlert('success', successMessage);
+            showToast('success', successMessage, 8000);
             this.reset();
             document.getElementById('file-list').innerHTML = '';
         } else {
@@ -342,7 +342,7 @@ document.getElementById('pengaduan-form').addEventListener('submit', async funct
         }
     } catch (error) {
         console.error('Error:', error);
-        showAlert('error', error.message);
+        showToast('error', error.message, 8000);
     } finally {
         // Re-enable button
         submitBtn.disabled = false;
@@ -350,39 +350,90 @@ document.getElementById('pengaduan-form').addEventListener('submit', async funct
     }
 });
 
-// Function untuk menampilkan alert
-function showAlert(type, message) {
-    const alertHtml = `
-        <div class="rounded-lg border p-4 mb-8 ${type === 'success' ? 'bg-green-50 border-green-200 text-green-800' : 'bg-red-50 border-red-200 text-red-800'}">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${type === 'success' ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' : 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z'}" />
-                    </svg>
-                </div>
-                <div class="ml-3 flex-1">${message}</div>
-                <div class="ml-auto pl-3">
-                    <button type="button" class="inline-flex rounded-md p-1.5 hover:bg-gray-100" onclick="this.parentElement.parentElement.parentElement.remove()">
-                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
+// Toast Notification System - Professional fixed position notifications
+function showToast(type, message, duration = 6000) {
+    // Create toast container if not exists
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'fixed top-4 right-4 z-50 flex flex-col gap-2 items-end max-w-sm w-full';
+        container.style.pointerEvents = 'none';
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `
+        toast-enter w-full max-w-sm min-w-[320px] px-4 py-3.5 rounded-xl shadow-lg border flex items-start gap-3
+        ${type === 'success' 
+            ? 'bg-white border-green-200 text-gray-800' 
+            : 'bg-white border-red-200 text-gray-800'
+        }
     `;
+    toast.style.pointerEvents = 'auto';
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(120%)';
+    toast.style.transition = 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+
+    const iconColor = type === 'success' ? 'text-green-500' : 'text-red-500';
+    const iconBg = type === 'success' ? 'bg-green-50' : 'bg-red-50';
+    const iconPath = type === 'success' 
+        ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' 
+        : 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z';
+    const title = type === 'success' ? 'Berhasil' : 'Error';
+
+    toast.innerHTML = `
+        <div class="flex-shrink-0 ${iconBg} rounded-full p-2">
+            <svg class="w-5 h-5 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${iconPath}" />
+            </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+            <p class="font-semibold text-gray-900 text-sm">${title}</p>
+            <div class="text-sm text-gray-600 mt-0.5 leading-relaxed">${message}</div>
+        </div>
+        <button type="button" class="flex-shrink-0 text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition-colors" onclick="dismissToast(this)">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Trigger animation
+    requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(0)';
+    });
+
+    // Auto dismiss
+    const dismissTimer = setTimeout(() => dismissToast(toast.querySelector('button')), duration);
+
+    // Pause on hover
+    toast.addEventListener('mouseenter', () => clearTimeout(dismissTimer));
+    toast.addEventListener('mouseleave', () => {
+        const newTimer = setTimeout(() => dismissToast(toast.querySelector('button')), 3000);
+        toast._dismissTimer = newTimer;
+    });
+}
+
+function dismissToast(btnOrToast) {
+    const toast = btnOrToast.closest('.toast-enter') || btnOrToast;
+    if (!toast || toast._dismissing) return;
+    toast._dismissing = true;
     
-    // Remove existing alerts
-    const existingAlerts = document.querySelectorAll('.rounded-lg.border.p-4.mb-8');
-    existingAlerts.forEach(alert => alert.remove());
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(120%)';
     
-    // Insert alert at the top of form container
-    const formCard = document.getElementById('pengaduan-form').closest('.lg\\:col-span-2');
-    formCard.insertAdjacentHTML('beforebegin', alertHtml);
-    
-    // Scroll to alert
-    const alert = formCard.previousElementSibling;
-    alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+        toast.remove();
+        // Remove container if empty
+        const container = document.getElementById('toast-container');
+        if (container && container.children.length === 0) {
+            container.remove();
+        }
+    }, 400);
 }
 
 // Reset form function
@@ -435,7 +486,7 @@ document.getElementById('bukti_files').addEventListener('change', function(e) {
         Array.from(files).forEach((file, index) => {
             const fileSize = file.size / 1024 / 1024; // MB
             if (fileSize > 5) {
-                showAlert('error', `File "${file.name}" terlalu besar. Maksimal 5MB`);
+                showToast('error', `File "${file.name}" terlalu besar. Maksimal 5MB`, 5000);
                 this.value = '';
                 return;
             }
