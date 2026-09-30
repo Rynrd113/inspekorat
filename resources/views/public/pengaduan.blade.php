@@ -79,7 +79,7 @@
                         
                         <!-- Anonymous Checkbox -->
                         <div class="flex items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
-                            <input id="is_anonymous" name="is_anonymous" type="checkbox" class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded" onchange="toggleAnonymousFields()">
+                            <input id="is_anonymous" name="is_anonymous" type="checkbox" value="1" class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded" onchange="toggleAnonymousFields()">
                             <label for="is_anonymous" class="ml-2 block text-sm text-gray-900 cursor-pointer">
                                 <span class="font-medium">Kirim sebagai Anonim</span>
                                 <span class="text-gray-500 ml-2">(Identitas Anda akan disembunyikan)</span>
@@ -90,17 +90,17 @@
                             <x-input 
                                 type="text" 
                                 name="nama_pengadu" 
-                                label="Nama Lengkap <span class='text-red-500'>*</span>" 
+                                label="Nama Lengkap" 
                                 placeholder="Masukkan nama lengkap Anda"
-                                required 
+                                :required="true"
                                 id="nama_pengadu"
                             />
                             <x-input 
                                 type="email" 
                                 name="email" 
-                                label="Email <span class='text-red-500'>*</span>" 
+                                label="Email" 
                                 placeholder="nama@email.com"
-                                required 
+                                :required="true"
                                 id="email"
                             />
                         </div>
